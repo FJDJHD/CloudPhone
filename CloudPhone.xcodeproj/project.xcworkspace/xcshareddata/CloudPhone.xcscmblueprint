@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "96565C9E54E0A2E6EF8EA9A406D40BF0D61F5557",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "96565C9E54E0A2E6EF8EA9A406D40BF0D61F5557" : 0,
+    "83AC4889FABDA4BEB919EBB03821545B7056B55D" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "A706B6B9-0731-49B5-86D6-7338A2565595",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "96565C9E54E0A2E6EF8EA9A406D40BF0D61F5557" : "CloudPhone\/",
+    "83AC4889FABDA4BEB919EBB03821545B7056B55D" : "columbus\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CloudPhone",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CloudPhone.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/203.195.196.37\/wc\/columbus.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "83AC4889FABDA4BEB919EBB03821545B7056B55D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:FJDJHD\/CloudPhone.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "96565C9E54E0A2E6EF8EA9A406D40BF0D61F5557"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 //  ViewController.h
 //  CloudPhone
 //
-//  Created by wangcong on 15/11/24.
+//  Created by wangcong on 15/11/25.
 //  Copyright © 2015年 iTal. All rights reserved.
 //
 
@@ -10,6 +10,4 @@
 
 @interface ViewController : UIViewController
 
-
 @end
-
