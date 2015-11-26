@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "Global.h"
+#import "RegisterLoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,8 +22,23 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    ViewController *controller = [[ViewController alloc]init];
-    self.window.rootViewController = controller;
+    RegisterLoginViewController *controller = [[RegisterLoginViewController alloc]init];
+    BaseNavigationController *registerLoginNavigationController = [[BaseNavigationController alloc]initWithRootViewController:controller];
+    
+    if (CURRENT_SYS_VERSION >= 7.0) {
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+        [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
+        
+    } else {
+        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
+        [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
+    }
+    
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
+    
+    self.window.rootViewController = registerLoginNavigationController;
     
     [self.window makeKeyAndVisible];
     return YES;

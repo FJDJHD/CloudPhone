@@ -1,25 +1,22 @@
 //
-//  ViewController.m
+//  ResetPasswordViewController.m
 //  CloudPhone
 //
-//  Created by wangcong on 15/11/25.
+//  Created by iTelDeng on 15/11/26.
 //  Copyright © 2015年 iTal. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ResetPasswordViewController.h"
 
-@interface ViewController ()
+@interface ResetPasswordViewController ()
 
 @end
 
-@implementation ViewController
+@implementation ResetPasswordViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor blueColor];
-    
-    
-    NSLog(@"xiugaIIFGDS");
+    self.title = @"设置新登录密码";
 }
 
 - (void)didReceiveMemoryWarning {

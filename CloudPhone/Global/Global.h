@@ -83,10 +83,11 @@
 #import "APIUrl.h"
 #import "CustomMBHud.h"
 #import "UIViewController+NavigationBar.h"
-
+#import "BaseNavigationController.h"
+#import "UIColor+Category.h"
+#import "ColorTool.h"
 @interface Global : NSObject
 
 +(instancetype)shareInstance;
-
 
 @end
