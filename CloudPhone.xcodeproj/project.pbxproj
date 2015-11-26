@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E4D36DC1C05559D001573E3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D36DB1C05559D001573E3 /* ViewController.m */; };
+		6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */; };
+		6E2E8A721C06A20E000E6C2D /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */; };
 		6E4D36E41C055D93001573E3 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D36E21C055D93001573E3 /* Global.m */; };
 		6E4D36F01C056102001573E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36EF1C056102001573E3 /* MobileCoreServices.framework */; };
 		6E4D36F21C056109001573E3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36F11C056109001573E3 /* Security.framework */; };
@@ -97,8 +98,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6E4D36DA1C05559D001573E3 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		6E4D36DB1C05559D001573E3 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		6E2E8A6D1C06A004000E6C2D /* RegisterLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterLoginViewController.h; sourceTree = "<group>"; };
+		6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterLoginViewController.m; sourceTree = "<group>"; };
+		6E2E8A701C06A20E000E6C2D /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		6E4D36E01C055D93001573E3 /* APIUrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIUrl.h; sourceTree = "<group>"; };
 		6E4D36E11C055D93001573E3 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		6E4D36E21C055D93001573E3 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
@@ -272,6 +275,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E2E8A6C1C069F8B000E6C2D /* LoginModular */ = {
+			isa = PBXGroup;
+			children = (
+				6E2E8A6D1C06A004000E6C2D /* RegisterLoginViewController.h */,
+				6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */,
+				6E2E8A701C06A20E000E6C2D /* RegisterViewController.h */,
+				6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */,
+			);
+			path = LoginModular;
+			sourceTree = "<group>";
+		};
 		6E4D36DF1C055D93001573E3 /* Global */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +300,7 @@
 		6E4D36E51C055EAE001573E3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6E2E8A6C1C069F8B000E6C2D /* LoginModular */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -561,8 +576,6 @@
 			children = (
 				6EB2ED511C04684A002799BD /* AppDelegate.h */,
 				6EB2ED521C04684A002799BD /* AppDelegate.m */,
-				6E4D36DA1C05559D001573E3 /* ViewController.h */,
-				6E4D36DB1C05559D001573E3 /* ViewController.m */,
 				6E4D36DF1C055D93001573E3 /* Global */,
 				6E4D36E61C055EAE001573E3 /* Models */,
 				6E4D36E71C055EAE001573E3 /* Views */,
@@ -748,7 +761,7 @@
 				6E4D37AB1C0568B1001573E3 /* MJRefreshGifHeader.m in Sources */,
 				6E4D37671C056384001573E3 /* UIImage+MultiFormat.m in Sources */,
 				6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */,
-				6E4D36DC1C05559D001573E3 /* ViewController.m in Sources */,
+				6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */,
 				6E4D37601C056384001573E3 /* SDWebImageDecoder.m in Sources */,
 				6E4D37251C0561A2001573E3 /* AFHTTPRequestOperationManager.m in Sources */,
 				6E4D376A1C056384001573E3 /* UIImageView+WebCache.m in Sources */,
@@ -784,6 +797,7 @@
 				6E4D372D1C0561A2001573E3 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				6E4D37AD1C0568B1001573E3 /* MJRefreshLegendFooter.m in Sources */,
 				6E4D37631C056384001573E3 /* SDWebImageManager.m in Sources */,
+				6E2E8A721C06A20E000E6C2D /* RegisterViewController.m in Sources */,
 				6E4D37681C056384001573E3 /* UIImage+WebP.m in Sources */,
 				6E4D378B1C056619001573E3 /* UIViewController+NavigationBar.m in Sources */,
 				6EB2ED501C04684A002799BD /* main.m in Sources */,
