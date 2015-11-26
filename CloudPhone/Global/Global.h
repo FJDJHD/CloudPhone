@@ -86,6 +86,8 @@
 #import "BaseNavigationController.h"
 #import "UIColor+Category.h"
 #import "ColorTool.h"
+
+
 @interface Global : NSObject
 
 +(instancetype)shareInstance;

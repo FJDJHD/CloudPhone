@@ -27,11 +27,13 @@
     
     if (CURRENT_SYS_VERSION >= 7.0) {
         [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setBarTintColor:appNavgationBackColor];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
         [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setTintColor:appNavgationBackColor];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     

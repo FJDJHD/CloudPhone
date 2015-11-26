@@ -9,6 +9,7 @@
 #import "RegisterViewController.h"
 #import "Global.h"
 #import "LoginPasswordViewController.h"
+
 static const int kTimeCount             = 60;
 
 
@@ -96,6 +97,7 @@ static const int kTimeCount             = 60;
     registerButton.frame = CGRectMake(10, CGRectGetMaxY(alertLabel.frame) + 10, MainWidth - 10*2.0, 44);
     [registerButton setTitle:@"注册" forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
+
     [registerButton setTitleColor:[UIColor colorWithHexString:@"#ffffff"] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
     
@@ -113,6 +115,10 @@ static const int kTimeCount             = 60;
     [customerAgreementButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:customerAgreementButton];
     
+    [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.view addSubview:registerButton];
+    
+
 }
 
 //发送验证码
@@ -132,6 +138,8 @@ static const int kTimeCount             = 60;
 - (void)customerAgreementClick{
     
 }
+
+
 
 //#pragma mark - 验证码定时器
 //
