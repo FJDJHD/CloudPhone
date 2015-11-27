@@ -16,6 +16,8 @@
 #define API_sendVerify                                   @"?s=/Home/User/sendVerify"
 
 
+//注册第二步
+#define API_register2                                   
 
 ////获取服务器信息
 //#define API_cloudbox_init                                @"/cloudbox_init"

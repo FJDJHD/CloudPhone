@@ -56,13 +56,7 @@
                     }
         
     }];
-    
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    [manager GET:@"http://cloud.itelland.com/?s" parameters:@"/Home/User/sendVerify/type/reg/mobile/13113689077" success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"JSON: %@", responseObject);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
+
     
     self.window.rootViewController = registerLoginNavigationController;
     
