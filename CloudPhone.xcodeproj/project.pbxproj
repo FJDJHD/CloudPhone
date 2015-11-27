@@ -78,6 +78,12 @@
 		6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EB2ED5A1C04684A002799BD /* Assets.xcassets */; };
 		6EB2ED691C04684B002799BD /* CloudPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED681C04684B002799BD /* CloudPhoneTests.m */; };
 		6EB2ED741C04684B002799BD /* CloudPhoneUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED731C04684B002799BD /* CloudPhoneUITests.m */; };
+		B4AB5C511C0836F300143D29 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C501C0836F300143D29 /* welcome@2x.png */; };
+		B4AB5C531C0847CE00143D29 /* pic_touxiang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */; };
+		B4AB5C551C0853B600143D29 /* pic_zhanghao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */; };
+		B4AB5C571C0853F600143D29 /* pic_mima@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C561C0853F600143D29 /* pic_mima@2x.png */; };
+		B4AB5C5A1C085B0700143D29 /* chance_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C581C085B0700143D29 /* chance_@2x.png */; };
+		B4AB5C5B1C085B0700143D29 /* chance_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C591C085B0700143D29 /* chance_selected@2x.png */; };
 		B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D11C06B0360001407D /* LoginViewController.m */; };
 		B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */; };
 		B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */; };
@@ -246,6 +252,12 @@
 		6EB2ED6F1C04684B002799BD /* CloudPhoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EB2ED731C04684B002799BD /* CloudPhoneUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudPhoneUITests.m; sourceTree = "<group>"; };
 		6EB2ED751C04684B002799BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B4AB5C501C0836F300143D29 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
+		B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_touxiang@2x.png"; sourceTree = "<group>"; };
+		B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_zhanghao@2x.png"; sourceTree = "<group>"; };
+		B4AB5C561C0853F600143D29 /* pic_mima@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_mima@2x.png"; sourceTree = "<group>"; };
+		B4AB5C581C085B0700143D29 /* chance_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chance_@2x.png"; sourceTree = "<group>"; };
+		B4AB5C591C085B0700143D29 /* chance_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chance_selected@2x.png"; sourceTree = "<group>"; };
 		B4DEF6D01C06B0360001407D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		B4DEF6D11C06B0360001407D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPasswordViewController.h; sourceTree = "<group>"; };
@@ -612,6 +624,7 @@
 				6E4D36E51C055EAE001573E3 /* Controllers */,
 				6E4D36E81C055EFE001573E3 /* Util */,
 				6E4D36E91C055F03001573E3 /* Vendor */,
+				B4AB5C4F1C0836EB00143D29 /* Resource */,
 				6EB2ED5A1C04684A002799BD /* Assets.xcassets */,
 				6EB2ED5F1C04684A002799BD /* Info.plist */,
 				6EB2ED4E1C04684A002799BD /* Supporting Files */,
@@ -643,6 +656,19 @@
 				6EB2ED751C04684B002799BD /* Info.plist */,
 			);
 			path = CloudPhoneUITests;
+			sourceTree = "<group>";
+		};
+		B4AB5C4F1C0836EB00143D29 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				B4AB5C581C085B0700143D29 /* chance_@2x.png */,
+				B4AB5C591C085B0700143D29 /* chance_selected@2x.png */,
+				B4AB5C501C0836F300143D29 /* welcome@2x.png */,
+				B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */,
+				B4AB5C561C0853F600143D29 /* pic_mima@2x.png */,
+				B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -749,7 +775,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4AB5C511C0836F300143D29 /* welcome@2x.png in Resources */,
+				B4AB5C551C0853B600143D29 /* pic_zhanghao@2x.png in Resources */,
+				B4AB5C5A1C085B0700143D29 /* chance_@2x.png in Resources */,
 				6E4D37A61C0568B1001573E3 /* MJRefresh.bundle in Resources */,
+				B4AB5C571C0853F600143D29 /* pic_mima@2x.png in Resources */,
+				B4AB5C5B1C085B0700143D29 /* chance_selected@2x.png in Resources */,
+				B4AB5C531C0847CE00143D29 /* pic_touxiang@2x.png in Resources */,
 				6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
