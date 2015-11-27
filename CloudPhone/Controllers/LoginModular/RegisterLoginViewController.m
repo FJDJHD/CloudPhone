@@ -11,6 +11,7 @@
 #import "RegisterViewController.h"
 #import "LoginViewController.h"
 
+
 @interface RegisterLoginViewController ()
 
 @end
@@ -19,33 +20,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   //
-    //
-    //
-    //
+    self.view.backgroundColor = [UIColor whiteColor];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"welcome@2x.png"]];
+    
+    logoImageView.frame = [UIScreen mainScreen].bounds;
+    [self.view addSubview:logoImageView];
+    
+
     
     //登录
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.backgroundColor = [UIColor lightGrayColor];
+    loginButton.backgroundColor = [ColorTool backgroundColor];
     loginButton.layer.cornerRadius = 2.0;
     loginButton.layer.masksToBounds = YES;
     loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    loginButton.frame = CGRectMake(20, SCREEN_HEIGHT - 200, MainWidth - 20*2.0, 40);
-    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    loginButton.frame = CGRectMake(20, SCREEN_HEIGHT - 200, MainWidth - 20*2.0, 45);
+    [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(loginButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     
     //注册
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.backgroundColor = [UIColor lightGrayColor];
+    registerButton.backgroundColor = [ColorTool backgroundColor];
     registerButton.layer.cornerRadius = 2.0;
     registerButton.layer.masksToBounds = YES;
     registerButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    registerButton.frame = CGRectMake(20, CGRectGetMaxY(loginButton.frame) + 25, MainWidth - 20*2.0, 40);
-    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
+    registerButton.frame = CGRectMake(20, CGRectGetMaxY(loginButton.frame) + 25, MainWidth - 20*2.0, 45);
+    [registerButton setTitle:@"注 册" forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [registerButton setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
     
 }
