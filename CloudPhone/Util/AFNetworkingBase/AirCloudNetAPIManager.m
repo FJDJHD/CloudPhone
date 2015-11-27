@@ -23,12 +23,8 @@
 - (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
                            WithBlock:(void (^)(id data, NSError *error))block {
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_sendVerify serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"servers"];
-//            block(resultData, nil);
-//        }else{
-//            block(nil, error);
-//        }
+
+        block(data,error);
     }];
 
 
