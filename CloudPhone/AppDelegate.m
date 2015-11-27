@@ -39,6 +39,10 @@
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
+    ///
+    //
+    //
+    //
     
 //    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
 //    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic
