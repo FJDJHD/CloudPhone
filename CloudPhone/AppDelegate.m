@@ -40,6 +40,19 @@
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
     
+//    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
+//    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic
+//                                        WithBlock:^(id data, NSError *error) {
+//                  DLog(@"data = %@",data);
+//    }];
+    
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager GET:@"http://cloud.itelland.com/?s" parameters:@"/Home/User/sendVerify/type/reg/mobile/13113689077" success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSLog(@"JSON: %@", responseObject);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+    
     self.window.rootViewController = registerLoginNavigationController;
     
     [self.window makeKeyAndVisible];

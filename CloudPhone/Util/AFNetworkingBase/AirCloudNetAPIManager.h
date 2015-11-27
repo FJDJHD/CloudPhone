@@ -13,6 +13,12 @@
 
 + (instancetype)sharedManager;
 
+//发送注册验证码
+- (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
+                         WithBlock:(void (^)(id data, NSError *error))block;
+
+
+
 ////获取服务器信息
 //- (void)getServersInfoOfParams:(NSDictionary *)params
 //                     WithBlock:(void (^)(id data, NSError *error))block;

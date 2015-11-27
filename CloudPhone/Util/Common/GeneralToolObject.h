@@ -20,4 +20,6 @@
 //字符串转字典
 - (NSDictionary *)parseJSONStringToNSDictionary:(NSString *)JSONString;
 
++ (NSString*)dictionaryToJson:(NSDictionary *)dic;
+
 @end

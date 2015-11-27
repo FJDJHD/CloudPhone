@@ -13,7 +13,7 @@
 
 
 #if Sesame_ENVIRONMENT==0
-#define HTTPURLPREFIX         @"http://203.195.196.37:8090"
+#define HTTPURLPREFIX         @"cloud.itelland.com"
 
 #elif Sesame_ENVIRONMENT==1
 #define HTTPURLPREFIX         @"http://192.168.1.103:8080"

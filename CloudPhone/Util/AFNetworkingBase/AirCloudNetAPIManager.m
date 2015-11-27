@@ -19,6 +19,23 @@
     return sharedManager;
 }
 
+//发送注册验证码
+- (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
+                           WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_sendVerify serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
+//        if (data) {
+//            id resultData = [data valueForKeyPath:@"servers"];
+//            block(resultData, nil);
+//        }else{
+//            block(nil, error);
+//        }
+    }];
+
+
+}
+
+
+
 ////获取服务器信息
 //- (void)getServersInfoOfParams:(NSDictionary *)params
 //                     WithBlock:(void (^)(id data, NSError *error))block {

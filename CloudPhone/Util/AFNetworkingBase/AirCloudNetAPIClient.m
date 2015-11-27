@@ -7,6 +7,7 @@
 //
 
 #import "AirCloudNetAPIClient.h"
+#import "GeneralToolObject.h"
 
 @implementation AirCloudNetAPIClient
 
@@ -27,8 +28,8 @@
         return nil;
     }
     // 这里服务器需要是这样的属性（post 请求，body是json格式）
-    self.requestSerializer =  [AFJSONRequestSerializer serializer];
-    
+//    self.requestSerializer =  [AFJSONRequestSerializer serializer];
+    self.requestSerializer = [AFHTTPRequestSerializer serializer];
     self.responseSerializer = [AFJSONResponseSerializer serializer];
     
     self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json", nil];
@@ -44,21 +45,31 @@
                  withMethodType:(int)NetworkMethod
                        andBlock:(void (^)(id data, NSError *error))block{
     
+    //域名拼接
     aPath = [aPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@%@",serviceType,aPath];;
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@%@",serviceType,aPath];
+    
+    //参数拼接
+//    NSMutableString *paramString = [NSMutableString string];
+//    for (NSString *key in params) {
+//        NSString *object=[params objectForKey:key];
+//        [paramString appendFormat:@"/%@/%@",key,object];
+//    }
+    
+    
     //发起请求
     switch (NetworkMethod) {
         case Get:{
             [self GET:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 DLog(@"\n===========response===========\n%@:\n%@", aPath, responseObject);
-                if ([[responseObject valueForKeyPath:@"result"] isEqualToString:@"success"]) {
-                    block(responseObject, nil);
-                 
-                    
-                } else {
-                    block(nil, [responseObject valueForKeyPath:@"reason"]);
-                    DLog(@"请求出错:%@",[responseObject valueForKeyPath:@"reason"]);
-                }
+//                if ([[responseObject valueForKeyPath:@"result"] isEqualToString:@"success"]) {
+//                    block(responseObject, nil);
+//                 
+//                    
+//                } else {
+//                    block(nil, [responseObject valueForKeyPath:@"reason"]);
+//                    DLog(@"请求出错:%@",[responseObject valueForKeyPath:@"reason"]);
+//                }
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 DLog(@"\n===========response===========\n%@:\n%@", aPath, error);
