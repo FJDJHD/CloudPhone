@@ -18,6 +18,11 @@
                          WithBlock:(void (^)(id data, NSError *error))block;
 
 
+//注册第二步
+- (void)registerStepTwoOfParams:(NSDictionary *)params
+                           WithBlock:(void (^)(id data, NSError *error))block;
+
+
 
 ////获取服务器信息
 //- (void)getServersInfoOfParams:(NSDictionary *)params

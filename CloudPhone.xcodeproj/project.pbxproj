@@ -73,6 +73,7 @@
 		6E4D37AF1C0568B1001573E3 /* UIScrollView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A11C0568B1001573E3 /* UIScrollView+MJExtension.m */; };
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
+		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
 		6EB2ED501C04684A002799BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED4F1C04684A002799BD /* main.m */; };
 		6EB2ED531C04684A002799BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED521C04684A002799BD /* AppDelegate.m */; };
 		6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EB2ED5A1C04684A002799BD /* Assets.xcassets */; };
@@ -234,6 +235,8 @@
 		6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		6E4D37A41C0568B1001573E3 /* UIView+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MJExtension.h"; sourceTree = "<group>"; };
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
+		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
+		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
 		6EB2ED4B1C04684A002799BD /* CloudPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EB2ED4F1C04684A002799BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6EB2ED511C04684A002799BD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -341,6 +344,8 @@
 		6E4D36E71C055EAE001573E3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E98972A1C083BD500B9D9E9 /* GuidePageView.h */,
+				6E98972B1C083BD500B9D9E9 /* GuidePageView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -791,6 +796,7 @@
 				6E4D37871C056619001573E3 /* BaseNavigationController.m in Sources */,
 				6E4D37AB1C0568B1001573E3 /* MJRefreshGifHeader.m in Sources */,
 				6E4D37671C056384001573E3 /* UIImage+MultiFormat.m in Sources */,
+				6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */,
 				6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */,
 				6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */,
 				6E4D37601C056384001573E3 /* SDWebImageDecoder.m in Sources */,

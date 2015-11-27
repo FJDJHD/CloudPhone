@@ -54,8 +54,13 @@
                             
                         }
                     }
-        
+
     }];
+    
+//    NSDictionary *dic = @{@"password":@"123456",@"repassword":@"123456"};
+//    [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
+//        DLog(@"data = %@",data);
+//    }];
 
     
     self.window.rootViewController = registerLoginNavigationController;

@@ -20,6 +20,16 @@
 #define MainHeight                  (SCREEN_HEIGHT - STATUS_NAV_BAR_HEIGHT)
 #define MainWidth                   SCREEN_WIDTH
 
+// Views
+#define WIDTH(view) view.frame.size.width
+#define HEIGHT(view) view.frame.size.height
+#define X(view) view.frame.origin.x
+#define Y(view) view.frame.origin.y
+#define LEFT(view) view.frame.origin.x
+#define TOP(view) view.frame.origin.y
+#define BOTTOM(view) (view.frame.origin.y + view.frame.size.height)
+#define RIGHT(view) (view.frame.origin.x + view.frame.size.width)
+
 
 //keyWindow
 #define KeyWindowView                 [[UIApplication sharedApplication] keyWindow].subviews[0]

@@ -21,7 +21,6 @@
     
     return sharedClient;
 }
-//http://cloud.itelland.com/?s=/Home/User/sendVerify&mobile=13113689077&type=reg
 
 - (id)init {
     self = [super init];
