@@ -19,10 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   //
-    //
-    //
-    //
     
     //登录
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
