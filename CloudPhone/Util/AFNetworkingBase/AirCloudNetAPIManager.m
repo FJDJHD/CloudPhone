@@ -26,10 +26,28 @@
 
         block(data,error);
     }];
-
-
 }
 
+//注册第一步
+- (void)registerStepOneOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_register serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//注册第二步
+- (void)registerStepTwoOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_register2 serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+
+}
 
 
 ////获取服务器信息

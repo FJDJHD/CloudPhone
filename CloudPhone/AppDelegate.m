@@ -9,8 +9,13 @@
 #import "AppDelegate.h"
 #import "Global.h"
 #import "RegisterLoginViewController.h"
+#import "BaseTabBarController.h"
+#import "MainPhoneViewController.h"
+#import "MainChatViewController.h"
+#import "MainDiscoverViewController.h"
+#import "MainMineViewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<UITabBarControllerDelegate>
 
 @end
 
@@ -21,6 +26,38 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    //[self loadLoginViewController];
+     [self loadMainViewController];
+    
+//    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
+//    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic WithBlock:^(id data, NSError *error) {
+//                    if (!error) {
+//                        NSDictionary *dic = (NSDictionary *)data;
+//                        
+//                        if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                            
+//                            DLog(@"------%@",[dic objectForKey:@"msg"]);
+//                            
+//                        } else {
+//                            DLog(@"服务器出错");
+//                            
+//                        }
+//                    }
+//
+//    }];
+    
+//    NSDictionary *dic = @{@"password":@"123456",@"repassword":@"123456"};
+//    [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
+//        DLog(@"data = %@",data);
+//    }];
+
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+
+#pragma mark - 创建登录module
+- (void)loadLoginViewController {
     
     RegisterLoginViewController *controller = [[RegisterLoginViewController alloc]init];
     BaseNavigationController *registerLoginNavigationController = [[BaseNavigationController alloc]initWithRootViewController:controller];
@@ -39,35 +76,58 @@
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
-    
-    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
-    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic WithBlock:^(id data, NSError *error) {
-                    if (!error) {
-                        NSDictionary *dic = (NSDictionary *)data;
-                        
-                        if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                            
-                            DLog(@"------%@",[dic objectForKey:@"msg"]);
-                            
-                        } else {
-                            DLog(@"服务器出错");
-                            
-                        }
-                    }
-        
-    }];
-    
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    [manager GET:@"http://cloud.itelland.com/?s" parameters:@"/Home/User/sendVerify/type/reg/mobile/13113689077" success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"JSON: %@", responseObject);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-    
     self.window.rootViewController = registerLoginNavigationController;
+}
+
+#pragma mark - 创建4大基本module
+- (void)loadMainViewController {
+    //电话
+    MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
+    phoneController.title = @"电话";
+    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    BaseNavigationController *phoneNav = [[BaseNavigationController alloc] initWithRootViewController:phoneController];
     
-    [self.window makeKeyAndVisible];
-    return YES;
+    
+    //聊天
+    MainChatViewController *chatController = [[MainChatViewController alloc] initWithNibName:nil bundle:nil];
+    chatController.title = @"聊天";
+    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    BaseNavigationController *chatNav = [[BaseNavigationController alloc] initWithRootViewController:chatController];
+    
+    //发现
+    MainDiscoverViewController *discoverController = [[MainDiscoverViewController alloc] initWithNibName:nil bundle:nil];
+    discoverController.title = @"发现";
+    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    BaseNavigationController *discoverNav = [[BaseNavigationController alloc] initWithRootViewController:discoverController];
+    
+    //我的
+    MainMineViewController *mineController = [[MainMineViewController alloc] initWithNibName:nil bundle:nil];
+    mineController.title = @"我的";
+    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我的" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    BaseNavigationController *mineNav = [[BaseNavigationController alloc] initWithRootViewController:mineController];
+    
+    // tab bar
+    BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
+    rootTabBarController.delegate = self;
+    rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
+    
+    if (CURRENT_SYS_VERSION >= 7.0) {
+        [[UINavigationBar appearance] setBarTintColor:appNavgationBackColor];
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+        [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
+        
+    } else {
+        [[UINavigationBar appearance] setTintColor:appNavgationBackColor];
+        [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
+    }
+    
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
+    //    //不需要tabbar下面文字，先隐藏掉
+    //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0),NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateNormal];
+    //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0), NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateSelected];
+    
+    self.window.rootViewController = rootTabBarController;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

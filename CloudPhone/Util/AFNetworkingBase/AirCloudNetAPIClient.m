@@ -21,7 +21,6 @@
     
     return sharedClient;
 }
-//http://cloud.itelland.com/?s=/Home/User/sendVerify&mobile=13113689077&type=reg
 
 - (id)init {
     self = [super init];
@@ -62,7 +61,8 @@
                 block(nil, error);
                 [self showError:error];
             }];
-            break;}
+            break;
+        }
         case Post:{
             
             [self POST:urlString parameters:params

@@ -10,8 +10,12 @@
 #import "Global.h"
 #import "RegisterViewController.h"
 #import "LoginViewController.h"
+#import "GuidePageView.h"
 
 @interface RegisterLoginViewController ()
+
+@property (nonatomic,strong) GuidePageView *guideView;
+
 
 @end
 
@@ -20,6 +24,50 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+
+    //读取沙盒数据
+    NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
+    NSString *key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];
+    NSString *value = [setting objectForKey:key];   //value为0表示已经看过引导页了，为空或者其他值是没有看过
+    
+    if (![value isEqualToString:@"0"]) {            //如果没有数据
+        UIImage *imagePage1 = [UIImage imageNamed:@"guide_page_1.png"];
+        UIImage *imagePage2 = [UIImage imageNamed:@"guide_page_2.png"];
+        UIImage *imagePage3 = [UIImage imageNamed:@"guide_page_3.png"];
+        NSArray *imagesArray = [NSArray arrayWithObjects:imagePage1, imagePage2, imagePage3, nil];
+        
+        if (Is3_5Inches()) {
+            _guideView = [[GuidePageView alloc] initWithImages:imagesArray andMargin:[[UIScreen mainScreen] bounds].size.height*0.05];
+        } else {
+            _guideView = [[GuidePageView alloc] initWithImages:imagesArray];
+        }
+        
+        [_guideView.startButton addTarget:self action:@selector(startButtonHandle:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_guideView];
+    } else {
+    
+        //加载登录界面
+        [self initUI];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = YES;
+
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+
+}
+
+#pragma 登录界面
+- (void)initUI {
     //添加背景图
     UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     bgImageView.image = [UIImage imageNamed:@"welcome"];
@@ -48,21 +96,28 @@
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [registerButton setTitleColor:[ColorTool textColor] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
+
+}
+#pragma mark - 引导页
+- (void)startButtonHandle:(UIButton *)sender{
+    //写入数据
+    NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
+    NSString * key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];
+    [setting setObject:[NSString stringWithFormat:@"0"] forKey:key];
+    [setting synchronize];
     
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBar.hidden = NO;
-
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         _guideView.transform = CGAffineTransformMakeTranslation(-WIDTH(_guideView), 0);
+                     } completion:^(BOOL finished) {
+                         if (finished) {
+                             _guideView.transform = CGAffineTransformIdentity;
+                             [_guideView removeFromSuperview];
+                             [self initUI];
+                         }
+                     }];
 }
 
 
@@ -79,7 +134,6 @@
     RegisterViewController *controller = [[RegisterViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
