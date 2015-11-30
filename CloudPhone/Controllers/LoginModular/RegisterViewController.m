@@ -10,8 +10,8 @@
 #import "Global.h"
 #import "LoginPasswordViewController.h"
 #import "GeneralToolObject.h"
-
-static const int kTimeCount             = 8;
+#import "RegisterAlertView.h"
+static const int kTimeCount             = 60;
 
 
 @interface RegisterViewController ()
@@ -128,16 +128,25 @@ static const int kTimeCount             = 8;
     self.selectButton = selectButton;
     
     
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(registerButton.frame) + 10, 160, 22)];
+    label.font = [UIFont systemFontOfSize:15.0];
+    label.textColor = [UIColor colorWithHexString:@"#8a8a8a"];
+    label.text = @"您已经同意iTel云电话的";
+    [self.view addSubview:label];
+
+    
     UIButton *customerAgreementButton = [UIButton buttonWithType:UIButtonTypeCustom];
     customerAgreementButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
-    customerAgreementButton.frame = CGRectMake(40, CGRectGetMaxY(registerButton.frame) + 10, MainWidth - 40, 22);
-    [customerAgreementButton setTitle:@"您已经同意iTel云电话的《用户许可协议》" forState:UIControlStateNormal];
+    customerAgreementButton.frame = CGRectMake(210, CGRectGetMaxY(registerButton.frame) + 10, 104, 22);
+    [customerAgreementButton setTitle:@"《用户许可协议》" forState:UIControlStateNormal];
     [customerAgreementButton addTarget:self action:@selector(customerAgreementClick) forControlEvents:UIControlEventTouchUpInside];
-    [customerAgreementButton setTitleColor:[UIColor colorWithHexString:@"#8a8a8a"] forState:UIControlStateNormal];
+    [customerAgreementButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:customerAgreementButton];
     
     [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
+    
+    
 
 }
 
@@ -181,6 +190,7 @@ static const int kTimeCount             = 8;
 
 //注册
 - (void)registerButtonClick {
+    
     if (_numberField.text.length == 0) {
         [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
     } else if (_verifyField.text.length == 0) {
@@ -197,6 +207,9 @@ static const int kTimeCount             = 8;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
                     DLog(@"------%@",[dic objectForKey:@"msg"]);
+                    
+                    RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
+                    [alertView show:self];
                     
                     //成功则推到下一个界面。。。。。。。。。。。。。
                     //    LoginPasswordViewController *loginPasswordController = [[LoginPasswordViewController alloc] init];

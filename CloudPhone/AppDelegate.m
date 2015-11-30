@@ -107,26 +107,26 @@
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
-    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"pic_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *phoneNav = [[BaseNavigationController alloc] initWithRootViewController:phoneController];
     
     
     //聊天
     MainChatViewController *chatController = [[MainChatViewController alloc] initWithNibName:nil bundle:nil];
     chatController.title = @"聊天";
-    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"pic_chat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *chatNav = [[BaseNavigationController alloc] initWithRootViewController:chatController];
     
     //发现
     MainDiscoverViewController *discoverController = [[MainDiscoverViewController alloc] initWithNibName:nil bundle:nil];
     discoverController.title = @"发现";
-    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"pic_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *discoverNav = [[BaseNavigationController alloc] initWithRootViewController:discoverController];
     
     //我的
     MainMineViewController *mineController = [[MainMineViewController alloc] initWithNibName:nil bundle:nil];
-    mineController.title = @"我的";
-    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我的" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    mineController.title = @"我";
+    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[[UIImage imageNamed:@"pic_mine"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *mineNav = [[BaseNavigationController alloc] initWithRootViewController:mineController];
     
     // tab bar

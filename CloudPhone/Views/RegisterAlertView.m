@@ -11,6 +11,8 @@
 #import "RegisterLoginViewController.h"
 #import "LoginViewController.h"
 
+
+#define ALTERTEXTFONT 14
 @interface RegisterAlertView()
 
 @property (nonatomic, strong) UIView *backgroudView;
@@ -70,17 +72,65 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame lable1:(NSString *)str1
-                               lable2:(NSString *)str2
+                       lable2:(NSString *)str2
                        lable3:(NSString *)str3 lable4:(NSString *)str4 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        self.frame = frame;
+        
+        _backgroudView = [[UIView alloc]initWithFrame:frame];
+        _backgroudView.backgroundColor = [UIColor blackColor];
+        _backgroudView.alpha = 0.6;
+        [self addSubview:_backgroudView];
+        
+        _alertView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth - 40, 300)];
+        _alertView.layer.cornerRadius = 5.0;
+        _alertView.layer.masksToBounds = YES;
+        _alertView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:_alertView];
+        
+        _label1 = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, _alertView.frame.size.width - 30*2, 30)];
+        _label1.numberOfLines = 10;
+        _label1.font = [UIFont systemFontOfSize:ALTERTEXTFONT];
+        _label1.textColor = [UIColor blackColor];
+        _label1.text = str1;
+        [_alertView addSubview:_label1];
+        
+        _label2 = [[UILabel alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(_label1.frame), _alertView.frame.size.width - 30*2, 30)];
+        _label2.numberOfLines = 10;
+        _label2.font = [UIFont systemFontOfSize:ALTERTEXTFONT];
+        _label2.textColor = [UIColor blackColor];
+        _label2.text = str2;
+        [_alertView addSubview:_label2];
+        
+        _label3 = [[UILabel alloc]initWithFrame:CGRectMake(70, CGRectGetMaxY(_label2.frame) + 20, _alertView.frame.size.width - 60*2, 50)];
+        _label3.numberOfLines = 10;
+        _label3.font = [UIFont systemFontOfSize:ALTERTEXTFONT];
+        _label3.textColor = [UIColor redColor];
+        _label3.text = str3;
+        [_alertView addSubview:_label3];
+        
+        _label4 = [[UILabel alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(_label3.frame) + 20 , _alertView.frame.size.width - 20*2, 30)];
+        _label4.numberOfLines = 10;
+        _label4.font = [UIFont systemFontOfSize:ALTERTEXTFONT];
+        _label4.textColor = [UIColor blackColor];
+        _label4.text = str4;
+        [_alertView addSubview:_label4];
         
         
-        
-    
+        UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        sureButton.backgroundColor = [ColorTool navigationColor];
+        sureButton.layer.cornerRadius = 2.0;
+        sureButton.layer.masksToBounds = YES;
+        sureButton.titleLabel.font = [UIFont systemFontOfSize:ALTERTEXTFONT];
+        sureButton.frame = CGRectMake(15, CGRectGetMaxY(_label4.frame) + 20, _alertView.frame.size.width - 15*2, 44);
+        [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+        [sureButton addTarget:self action:@selector(sureButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_alertView addSubview:sureButton];
     }
     return self;
-
 }
 
 

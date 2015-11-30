@@ -8,14 +8,12 @@
 
 #import "MainMineViewController.h"
 #import "Global.h"
-
+#import "PersonalViewController.h"
 @interface MainMineViewController ()<UITableViewDataSource,UITableViewDelegate>
-
+@property (nonatomic, strong) NSNumber  *remainingTime;
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *itemArray;
-
-
 @end
 
 @implementation MainMineViewController
@@ -23,7 +21,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _itemArray = @[@"免费话费",@"人物中心",@"人物中心",@"人物中心",@"人物中心"];
+        _itemArray = @[@"免费通话时长",@"任务中心",@"关于云电话",@"帮助与反馈",@"设置"];
         
     }
     return self;
@@ -31,6 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self.view addSubview:self.tableView];
 }
 
@@ -75,10 +74,12 @@
     if (indexPath.section == 0) {
         cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
         cell.textLabel.text = @"mingcehgn";
-        cell.detailTextLabel.text = @"ttt";
+        cell.detailTextLabel.text = @"00000000";
         
     } else {
-        cell.detailTextLabel.text = @"ttt";
+        if(indexPath.row == 0){
+           cell.detailTextLabel.text = [NSString stringWithFormat:@"剩余%@分钟",self.remainingTime] ;
+        }
         cell.textLabel.text = _itemArray[indexPath.row];
     }
     return cell;
@@ -115,6 +116,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        PersonalViewController *personalViewController = [[PersonalViewController alloc] init];
+        [self.navigationController pushViewController:personalViewController animated:YES];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning {
