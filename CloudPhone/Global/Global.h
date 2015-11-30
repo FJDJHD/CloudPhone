@@ -86,6 +86,7 @@
 #import "BaseNavigationController.h"
 #import "UIColor+Category.h"
 #import "ColorTool.h"
+#import "GeneralToolObject.h"
 
 
 @interface Global : NSObject

@@ -8,6 +8,7 @@
 
 #import "AirCloudNetAPIClient.h"
 #import "GeneralToolObject.h"
+#import "NSString+MD5.h"
 
 @implementation AirCloudNetAPIClient
 
@@ -28,11 +29,24 @@
         return nil;
     }
     // 这里服务器需要是这样的属性（post 请求，body是json格式）
-    self.requestSerializer =  [AFJSONRequestSerializer serializer];
+    self.requestSerializer =  [AFHTTPRequestSerializer serializer];
     self.responseSerializer = [AFJSONResponseSerializer serializer];
+    self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json",nil];
     
-    self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json", nil];
-    [self.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//    long timeInt =[[NSDate date] timeIntervalSince1970];
+//    NSString *imei = [GeneralToolObject CPUuidString];
+//    NSString *versionName = APP_VERSION;
+//    NSString *version = APP_BUNDLEID;
+//    
+//    NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
+//    NSString *md5VersionName = [versionName md5];
+//    NSString *md5imei = [imei md5];
+//    
+//    NSString *tokenq = [NSString stringWithFormat:@"%@%@%@itel2105@@$*",md5VersionName,md5imei,time];
+//    
+//    NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
+//    
+//    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@ mobile_model/iphone",versionName,version,imei,md5imei,time,tokens];
     self.securityPolicy.allowInvalidCertificates = YES;
     
     return self;

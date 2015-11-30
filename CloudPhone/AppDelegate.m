@@ -15,6 +15,10 @@
 #import "MainDiscoverViewController.h"
 #import "MainMineViewController.h"
 
+
+
+#import "NSString+MD5.h"
+
 @interface AppDelegate ()<UITabBarControllerDelegate>
 
 @end
@@ -27,30 +31,50 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    //[self loadLoginViewController];
-     [self loadMainViewController];
+
+//    [self loadLoginViewController];
+    [self loadMainViewController];
     
-//    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
-//    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic WithBlock:^(id data, NSError *error) {
-//                    if (!error) {
-//                        NSDictionary *dic = (NSDictionary *)data;
-//                        
-//                        if ([[dic objectForKey:@"status"] integerValue] == 1) {
-//                            
-//                            DLog(@"------%@",[dic objectForKey:@"msg"]);
-//                            
-//                        } else {
-//                            DLog(@"服务器出错");
-//                            
-//                        }
-//                    }
+//    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+//    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
+//    
+//    long timeInt =[[NSDate date] timeIntervalSince1970];
+//    NSString *imei = [GeneralToolObject CPUuidString];
+//    NSString *versionName = APP_VERSION;
+//    NSString *version = app_build;
+//    
+//    NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
+//    NSString *md5VersionName = [versionName md5];
+//    NSString *md5imei = [imei md5];
+//    
+//    NSString *tokenq = [NSString stringWithFormat:@"%@%@%@itel2105@@$*",md5VersionName,md5imei,time];
+//    
+//    NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
 //
+//    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@",versionName,version,imei,md5imei,time,tokens];
+//    DLog(@"value = %@",value);
+//    
+//    
+//    
+////    NSDictionary *dic = @{@"mobile":@"13113689076",@"type":@"reg"};
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json",nil];
+//    
+//    [manager.requestSerializer setValue:value forHTTPHeaderField:@"User-Agent"];
+//    
+//    [manager GET:@"http://cloud.itelland.com/?s=/Home/User/sendVerify&mobile=13113689077&type=reg" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        
+//        NSLog(@"operation = %@",operation);
+//        
+//        NSLog(@"JSON: %@ ----%@", responseObject,[responseObject objectForKey:@"msg"]);
+//        
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
 //    }];
     
-//    NSDictionary *dic = @{@"password":@"123456",@"repassword":@"123456"};
-//    [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
-//        DLog(@"data = %@",data);
-//    }];
+    
 
     [self.window makeKeyAndVisible];
     return YES;
@@ -84,26 +108,26 @@
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
-    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"pic_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *phoneNav = [[BaseNavigationController alloc] initWithRootViewController:phoneController];
     
     
     //聊天
     MainChatViewController *chatController = [[MainChatViewController alloc] initWithNibName:nil bundle:nil];
     chatController.title = @"聊天";
-    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"pic_chat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *chatNav = [[BaseNavigationController alloc] initWithRootViewController:chatController];
     
     //发现
     MainDiscoverViewController *discoverController = [[MainDiscoverViewController alloc] initWithNibName:nil bundle:nil];
     discoverController.title = @"发现";
-    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"pic_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *discoverNav = [[BaseNavigationController alloc] initWithRootViewController:discoverController];
     
     //我的
     MainMineViewController *mineController = [[MainMineViewController alloc] initWithNibName:nil bundle:nil];
-    mineController.title = @"我的";
-    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我的" image:[[UIImage imageNamed:@"tabbar_homepage_normal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    mineController.title = @"我";
+    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[[UIImage imageNamed:@"pic_mine"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *mineNav = [[BaseNavigationController alloc] initWithRootViewController:mineController];
     
     // tab bar

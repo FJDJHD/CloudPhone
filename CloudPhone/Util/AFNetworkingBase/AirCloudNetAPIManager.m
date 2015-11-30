@@ -7,6 +7,7 @@
 //
 
 #import "AirCloudNetAPIManager.h"
+#import "GeneralToolObject.h"
 
 @implementation AirCloudNetAPIManager
 
@@ -22,6 +23,8 @@
 //发送注册验证码
 - (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
                            WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_sendVerify serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
 
         block(data,error);
