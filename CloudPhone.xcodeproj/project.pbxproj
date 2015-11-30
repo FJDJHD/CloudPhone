@@ -91,6 +91,9 @@
 		6EC0BB4E1C0BE0EF00075A19 /* tabbar_homepage_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EC0BB4D1C0BE0EF00075A19 /* tabbar_homepage_selected@2x.png */; };
 		6EC0BB501C0BE3C700075A19 /* pic_retrun@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EC0BB4F1C0BE3C700075A19 /* pic_retrun@2x.png */; };
 		6EC0BB531C0BF14500075A19 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB521C0BF14500075A19 /* NSString+MD5.m */; };
+		6EC0BB591C0C568A00075A19 /* AddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB581C0C568A00075A19 /* AddressViewController.m */; };
+		6EC0BB5C1C0C585400075A19 /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB5B1C0C585400075A19 /* PersonModel.m */; };
+		6EC0BB5F1C0C6DA700075A19 /* NSString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */; };
 		B4AB5C511C0836F300143D29 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C501C0836F300143D29 /* welcome@2x.png */; };
 		B4AB5C531C0847CE00143D29 /* pic_touxiang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */; };
 		B4AB5C551C0853B600143D29 /* pic_zhanghao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */; };
@@ -285,6 +288,12 @@
 		6EC0BB4F1C0BE3C700075A19 /* pic_retrun@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_retrun@2x.png"; sourceTree = "<group>"; };
 		6EC0BB511C0BF14500075A19 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
 		6EC0BB521C0BF14500075A19 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		6EC0BB571C0C568A00075A19 /* AddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressViewController.h; sourceTree = "<group>"; };
+		6EC0BB581C0C568A00075A19 /* AddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressViewController.m; sourceTree = "<group>"; };
+		6EC0BB5A1C0C585400075A19 /* PersonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PersonModel.h; path = CloudPhone/Controllers/PhoneModular/PersonModel.h; sourceTree = SOURCE_ROOT; };
+		6EC0BB5B1C0C585400075A19 /* PersonModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PersonModel.m; path = CloudPhone/Controllers/PhoneModular/PersonModel.m; sourceTree = SOURCE_ROOT; };
+		6EC0BB5D1C0C6DA700075A19 /* NSString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Util.h"; sourceTree = "<group>"; };
+		6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Util.m"; sourceTree = "<group>"; };
 		B4AB5C501C0836F300143D29 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
 		B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_touxiang@2x.png"; sourceTree = "<group>"; };
 		B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_zhanghao@2x.png"; sourceTree = "<group>"; };
@@ -383,6 +392,8 @@
 		6E4D36E61C055EAE001573E3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6EC0BB5A1C0C585400075A19 /* PersonModel.h */,
+				6EC0BB5B1C0C585400075A19 /* PersonModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -570,6 +581,8 @@
 				B4DEF6E41C06F9470001407D /* UIColor+Category.m */,
 				6EC0BB511C0BF14500075A19 /* NSString+MD5.h */,
 				6EC0BB521C0BF14500075A19 /* NSString+MD5.m */,
+				6EC0BB5D1C0C6DA700075A19 /* NSString+Util.h */,
+				6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */,
 				B4DEF6E61C06FC3D0001407D /* ColorTool.h */,
 				B4DEF6E71C06FC3D0001407D /* ColorTool.m */,
 				6E4D37741C056619001573E3 /* GeneralToolObject.h */,
@@ -733,6 +746,8 @@
 			children = (
 				6EC0BB3E1C0BDEB700075A19 /* MainPhoneViewController.h */,
 				6EC0BB3F1C0BDEB700075A19 /* MainPhoneViewController.m */,
+				6EC0BB571C0C568A00075A19 /* AddressViewController.h */,
+				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
 			);
 			path = PhoneModular;
 			sourceTree = "<group>";
@@ -943,6 +958,7 @@
 				6E4D37841C056619001573E3 /* AirCloudNetAPIClient.m in Sources */,
 				6E4D37AA1C0568B1001573E3 /* MJRefreshGifFooter.m in Sources */,
 				6EC0BB431C0BDEB700075A19 /* MainPhoneViewController.m in Sources */,
+				6EC0BB5F1C0C6DA700075A19 /* NSString+Util.m in Sources */,
 				B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */,
 				6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */,
 				6EB2ED531C04684A002799BD /* AppDelegate.m in Sources */,
@@ -952,6 +968,7 @@
 				6E4D376B1C056384001573E3 /* UIView+WebCacheOperation.m in Sources */,
 				6E4D378A1C056619001573E3 /* UINavigationItem+margin.m in Sources */,
 				6E4D375F1C056384001573E3 /* SDWebImageCompat.m in Sources */,
+				6EC0BB591C0C568A00075A19 /* AddressViewController.m in Sources */,
 				6E4D37AE1C0568B1001573E3 /* MJRefreshLegendHeader.m in Sources */,
 				6E4D37271C0561A2001573E3 /* AFNetworkReachabilityManager.m in Sources */,
 				6E4D375C1C056384001573E3 /* MKAnnotationView+WebCache.m in Sources */,
@@ -965,6 +982,7 @@
 				6E4D372C1C0561A2001573E3 /* AFURLSessionManager.m in Sources */,
 				6E4D37AF1C0568B1001573E3 /* UIScrollView+MJExtension.m in Sources */,
 				B4DEF6E51C06F9470001407D /* UIColor+Category.m in Sources */,
+				6EC0BB5C1C0C585400075A19 /* PersonModel.m in Sources */,
 				6E4D37851C056619001573E3 /* AirCloudNetAPIManager.m in Sources */,
 				6E4D37621C056384001573E3 /* SDWebImageDownloaderOperation.m in Sources */,
 				6E4D372D1C0561A2001573E3 /* AFNetworkActivityIndicatorManager.m in Sources */,

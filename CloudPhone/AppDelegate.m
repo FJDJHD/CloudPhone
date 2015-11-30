@@ -31,8 +31,8 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-//    [self loadLoginViewController];
-    [self loadMainViewController];
+    [self loadLoginViewController];
+//    [self loadMainViewController];
     
 //    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
 //    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
