@@ -19,4 +19,11 @@
     return [UIColor colorWithHexString:@"efeff4"];
 }
 
++ (UIColor *)textColor{
+    return [UIColor colorWithHexString:@"#323232"];
+}
+
++(UIColor *)lightTextColor{
+    return [UIColor colorWithHexString:@"#c8c8c8"];
+}
 @end

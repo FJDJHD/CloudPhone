@@ -18,18 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [ColorTool backgroundColor];
     
     self.title = @"找回密码";
     
     UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 30, MainWidth, 88)];
     backView.backgroundColor = [UIColor whiteColor];
-    backView.layer.borderWidth = 0.5;
-    backView.layer.borderColor = [UIColor grayColor].CGColor;
     [self.view addSubview:backView];
     
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 44, MainWidth - 15, 1)];
-    lineView.backgroundColor = [UIColor lightGrayColor];
+    lineView.backgroundColor = [ColorTool backgroundColor];
     [backView addSubview:lineView];
     
     //手机号
@@ -62,7 +60,7 @@
     [backView addSubview:verifyField];
     
     _proveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _proveButton.backgroundColor = [UIColor grayColor];
+    _proveButton.backgroundColor = [UIColor colorWithHexString:@"#cccccc"];
     _proveButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
     _proveButton.frame = CGRectMake(CGRectGetMaxX(verifyField.frame), 44, MainWidth - CGRectGetMaxX(verifyField.frame), 44);
     
@@ -72,7 +70,7 @@
     [backView addSubview:_proveButton];
     
     //3分钟内有校
-    UILabel *alertLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(backView.frame) + 30, 150, 15)];
+    UILabel *alertLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(backView.frame) + 44, 150, 15)];
     alertLabel.font = [UIFont systemFontOfSize:12.0];
     alertLabel.textColor = [UIColor grayColor];
     alertLabel.text = @"验证码3分钟内有效";
@@ -84,7 +82,7 @@
     registerButton.layer.cornerRadius = 2.0;
     registerButton.layer.masksToBounds = YES;
     registerButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    registerButton.frame = CGRectMake(10, CGRectGetMaxY(alertLabel.frame) + 10, MainWidth - 10*2.0, 44);
+    registerButton.frame = CGRectMake(15, CGRectGetMaxY(alertLabel.frame) + 10, MainWidth - 15*2.0, 44);
     [registerButton setTitle:@"下一步" forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(nextButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -103,6 +101,10 @@
     ResetPasswordViewController *resetPasswordController = [[ResetPasswordViewController alloc] init];
     [self.navigationController pushViewController:resetPasswordController animated:YES];
     
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 

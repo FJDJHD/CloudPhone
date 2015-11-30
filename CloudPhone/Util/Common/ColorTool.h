@@ -16,4 +16,10 @@
 //背景颜色
 + (UIColor *)backgroundColor;
 
+//字体颜色
++ (UIColor *)textColor;
+
+//浅色字体颜色
++ (UIColor *)lightTextColor;
+
 @end
