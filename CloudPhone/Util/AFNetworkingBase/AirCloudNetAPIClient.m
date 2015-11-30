@@ -61,7 +61,8 @@
                 block(nil, error);
                 [self showError:error];
             }];
-            break;}
+            break;
+        }
         case Post:{
             
             [self POST:urlString parameters:params

@@ -17,6 +17,9 @@
 - (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
                          WithBlock:(void (^)(id data, NSError *error))block;
 
+//注册第一步
+- (void)registerStepOneOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block;
 
 //注册第二步
 - (void)registerStepTwoOfParams:(NSDictionary *)params

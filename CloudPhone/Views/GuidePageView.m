@@ -75,7 +75,7 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
         _markPageControl.numberOfPages = _pageCount;
         _markPageControl.currentPage = 0;
         _markPageControl.pageIndicatorTintColor = RGBA(255*0.667, 255*0.667, 255*0.667, 1);
-//        _markPageControl.currentPageIndicatorTintColor = XQBColorGreen;
+        _markPageControl.currentPageIndicatorTintColor = [UIColor orangeColor];
         [self addSubview:_markPageControl];
         
         

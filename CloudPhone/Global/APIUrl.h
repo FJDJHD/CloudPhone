@@ -15,6 +15,8 @@
 //发送注册验证码
 #define API_sendVerify                                   @"?s=/Home/User/sendVerify"
 
+//注册第一步
+#define API_register                                     @"?s=/Home/User/register"
 
 //注册第二步
 #define API_register2                                    @"s=/Home/User/register2"
