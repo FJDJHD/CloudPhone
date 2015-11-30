@@ -7,6 +7,8 @@
 //
 
 #import "GeneralToolObject.h"
+#import "Global.h"
+#import "NSString+MD5.h"
 
 @implementation GeneralToolObject
 
@@ -38,11 +40,40 @@
 
 + (NSString*)dictionaryToJson:(NSDictionary *)dic{
     
+    //不要json分隔行线 需要把NSJSONWritingPrettyPrinted 改成 “0“
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
 }
+
++ (NSString *)CPUuidString{
+    NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    return idfv;
+}
+
++ (NSString *)requestHeaderValue {
+    long timeInt =[[NSDate date] timeIntervalSince1970];
+    NSString *imei = [self CPUuidString];
+    NSString *versionName = APP_VERSION;
+    NSString *version = APP_BUNDLEID;
+    
+    NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
+    NSString *md5VersionName = [versionName md5];
+    NSString *md5imei = [imei md5];
+    
+    NSString *tokenq = [NSString stringWithFormat:@"%@%@%@itel2105@@$*",md5VersionName,md5imei,time];
+    
+    NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
+    
+    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@ mobile_model/iphone",versionName,version,imei,md5imei,time,tokens];
+    return value;
+}
+
+
+
+
+
 
 
 @end

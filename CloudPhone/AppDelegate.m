@@ -15,6 +15,10 @@
 #import "MainDiscoverViewController.h"
 #import "MainMineViewController.h"
 
+
+
+#import "NSString+MD5.h"
+
 @interface AppDelegate ()<UITabBarControllerDelegate>
 
 @end
@@ -27,30 +31,49 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [self loadLoginViewController];
-//    [self loadMainViewController];
+//    [self loadLoginViewController];
+    [self loadMainViewController];
     
-//    NSDictionary *dic = @{@"mobile":@"13113689077",@"type":@"reg"};
-//    [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic WithBlock:^(id data, NSError *error) {
-//                    if (!error) {
-//                        NSDictionary *dic = (NSDictionary *)data;
-//                        
-//                        if ([[dic objectForKey:@"status"] integerValue] == 1) {
-//                            
-//                            DLog(@"------%@",[dic objectForKey:@"msg"]);
-//                            
-//                        } else {
-//                            DLog(@"服务器出错");
-//                            
-//                        }
-//                    }
+//    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+//    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
+//    
+//    long timeInt =[[NSDate date] timeIntervalSince1970];
+//    NSString *imei = [GeneralToolObject CPUuidString];
+//    NSString *versionName = APP_VERSION;
+//    NSString *version = app_build;
+//    
+//    NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
+//    NSString *md5VersionName = [versionName md5];
+//    NSString *md5imei = [imei md5];
+//    
+//    NSString *tokenq = [NSString stringWithFormat:@"%@%@%@itel2105@@$*",md5VersionName,md5imei,time];
+//    
+//    NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
 //
+//    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@",versionName,version,imei,md5imei,time,tokens];
+//    DLog(@"value = %@",value);
+//    
+//    
+//    
+////    NSDictionary *dic = @{@"mobile":@"13113689076",@"type":@"reg"};
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json",nil];
+//    
+//    [manager.requestSerializer setValue:value forHTTPHeaderField:@"User-Agent"];
+//    
+//    [manager GET:@"http://cloud.itelland.com/?s=/Home/User/sendVerify&mobile=13113689077&type=reg" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        
+//        NSLog(@"operation = %@",operation);
+//        
+//        NSLog(@"JSON: %@ ----%@", responseObject,[responseObject objectForKey:@"msg"]);
+//        
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
 //    }];
     
-//    NSDictionary *dic = @{@"password":@"123456",@"repassword":@"123456"};
-//    [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
-//        DLog(@"data = %@",data);
-//    }];
+    
 
     [self.window makeKeyAndVisible];
     return YES;
