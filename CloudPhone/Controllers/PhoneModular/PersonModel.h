@@ -12,7 +12,7 @@
 
 @property (nonatomic,copy)   NSString *firstName;
 @property (nonatomic,copy)   NSString *lastName;
-@property (nonatomic,copy)   NSString *name1;
+@property (nonatomic,copy)   NSString *name1; //这个用排序用的，和phonename是一样的
 @property (nonatomic,copy)   NSString *phoneNumber;
 @property (nonatomic,copy)   NSString *phonename;
 @property (nonatomic,copy)   NSString *friendId;

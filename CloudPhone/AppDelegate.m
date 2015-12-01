@@ -31,8 +31,8 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [self loadLoginViewController];
-//    [self loadMainViewController];
+//    [self loadLoginViewController];
+    [self loadMainViewController];
     
 //    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
 //    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
@@ -73,7 +73,9 @@
 //        NSLog(@"Error: %@", error);
 //    }];
     
-    
+    //ios 8
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 
     [self.window makeKeyAndVisible];
     return YES;
@@ -152,6 +154,28 @@
     
     self.window.rootViewController = rootTabBarController;
 }
+
+
+
+#pragma mark 注册推送通知之后
+//在此接收设备令牌
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    NSLog(@"%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]             stringByReplacingOccurrencesOfString: @">" withString: @""]                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
+   
+}
+
+#pragma mark 获取device token失败后
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError:%@",error.localizedDescription);
+}
+
+#pragma mark 接收到推送通知之后
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    NSLog(@"receiveRemoteNotification,userInfo is %@",userInfo);
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -14,6 +14,9 @@
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *itemArray;
+
+@property (nonatomic, strong) NSMutableDictionary *testDic;
+
 @end
 
 @implementation MainMineViewController
@@ -31,6 +34,31 @@
     [super viewDidLoad];
 
     [self.view addSubview:self.tableView];
+    
+    //图片路径
+    NSString *iconPath = [self personalIconFilePath];
+    UIImage *image = [UIImage imageNamed:@"tabbar_homepage_selected.png"];
+    [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
+
+    //写入沙盒
+    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
+    [infoDic setValue:iconPath forKey:@"personalIcon"];
+    [infoDic setValue:@"王聪" forKey:@"personalName"];
+    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
+    BOOL result = [infoDic writeToFile:[self personalInfoFilePath] atomically:YES];
+    if (result) {
+        DLog(@"缓存成功");
+    }
+    
+    [self initData];
+}
+
+- (void)initData {
+
+    //先读取缓存
+    NSString *cachePath = [self personalInfoFilePath];
+    self.testDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
+    [_tableView reloadData];
 }
 
 - (UITableView *)tableView {
@@ -72,9 +100,13 @@
     cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"chance_selected@2x.png"]];
     
     if (indexPath.section == 0) {
-        cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
-        cell.textLabel.text = @"mingcehgn";
-        cell.detailTextLabel.text = @"00000000";
+        if ([self.testDic objectForKey:@"personalIcon"]) {
+            cell.imageView.image = [UIImage imageNamed:[self.testDic objectForKey:@"personalIcon"]];
+        } else {
+            cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+        }
+        cell.textLabel.text = [self.testDic objectForKey:@"personalName"];
+        cell.detailTextLabel.text = [self.testDic objectForKey:@"personalNumber"];;
         
     } else {
         if(indexPath.row == 0){
@@ -121,8 +153,24 @@
         PersonalViewController *personalViewController = [[PersonalViewController alloc] init];
         [self.navigationController pushViewController:personalViewController animated:YES];
     }
-
 }
+
+#pragma mark ---file read and write
+
+//个人头像保存在沙盒
+- (NSString *)personalIconFilePath {
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
+    return filePath;
+}
+
+//保存在plist文件中
+- (NSString *)personalInfoFilePath{
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
+    return filePath;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
