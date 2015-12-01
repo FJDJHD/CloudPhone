@@ -34,6 +34,7 @@
 //注册第一步
 - (void)registerStepOneOfParams:(NSDictionary *)params
                       WithBlock:(void (^)(id data, NSError *error))block {
+    
      [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_register serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
         
@@ -45,6 +46,8 @@
 - (void)registerStepTwoOfParams:(NSDictionary *)params
                       WithBlock:(void (^)(id data, NSError *error))block {
     
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_register2 serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
         
         block(data,error);
@@ -53,122 +56,123 @@
 }
 
 
-////获取服务器信息
-//- (void)getServersInfoOfParams:(NSDictionary *)params
-//                     WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_cloudbox_init serviceType:HTTPURLPREFIX_Vedio withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"servers"];
-//            block(resultData, nil);
-//        }else{
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////获取视频信息
-//- (void)getVedioInfoOfParams:(NSDictionary *)params
-//                   WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_get_main_page serviceType:HTTPURLPREFIX_Vedio withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"videos"];
-//            block(resultData, nil);
-//        }else{
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////获取视频URL信息
-//- (void)getVedioURLInfoOfParams:(NSDictionary *)params
-//                      WithBlock:(void (^)(id data, NSError *error))block {
-//    
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_get_playurl serviceType:HTTPURLPREFIX_Vedio withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"playurl"];
-//            block(resultData, nil);
-//        }else{
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////更新视频观看人数
-//- (void)getVedioWatchCountOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_update_view serviceType:HTTPURLPREFIX_Vedio withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"views"];
-//            block(resultData,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////获取手机验证码
-//- (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
-//                           WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_pre_register serviceType:HTTPURLPREFIX_AAA withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"veri_code"];
-//            block(resultData,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////提交验证码
-//- (void)submitVerifyOfParams:(NSDictionary *)params
-//                   WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_verify_code serviceType:HTTPURLPREFIX_AAA withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            block(data,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////提交注册信息
-//- (void)submitRegisterInfoOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_register serviceType:HTTPURLPREFIX_AAA withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            block(data,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////获取忘记密码验证码
-//- (void)getForgetPwdVerifyOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_request_vericode serviceType:HTTPURLPREFIX_AAA withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            id resultData = [data valueForKeyPath:@"veri_code"];
-//            block(resultData,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//}
-//
-////忘记密码修改密码
-//- (void)submitForgetPasswordOfParams:(NSDictionary *)params
-//                           WithBlock:(void (^)(id data, NSError *error))block {
-//    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_forget_password serviceType:HTTPURLPREFIX_AAA withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
-//        if (data) {
-//            block(data,nil);
-//        }else {
-//            block(nil, error);
-//        }
-//    }];
-//
-//}
+//用户名登录
+- (void)userLoginOfParams:(NSDictionary *)params
+                WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_login serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(nil, error);
+    }];
+}
 
+//用户退出
+- (void)userLogoutWithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_logout serviceType:HTTPURLPREFIX withParams:nil withMethodType:Get andBlock:^(id data, NSError *error){
+        
+        block(nil, error);
+    }];
+}
 
+//发送找回密码验证码
+- (void)sendFoundVerifyOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_sendFoundVerify serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//找回密码提交
+- (void)submitFoundPasswordOfParams:(NSDictionary *)params
+                          WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_forget_pwd serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//找回密码,重设密码
+- (void)rePasswordOfParams:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_forget_pwd2 serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//修改密码提交
+- (void)profileOfParams:(NSDictionary *)params
+              WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_profile serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//修改账户信息提交
+- (void)updateUserOfParams:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_updateUser serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//更新头像信息提交
+- (void)updatePhotoOfParams:(NSDictionary *)params
+                  WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_updatePhoto serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//用户中心首页
+- (void)getUserCenterOfParams:(NSDictionary *)params
+                    WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_getUserCenter serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
+
+//用户中心基本信息
+- (void)getUserCenterInfoOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_getUserCenter_info serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error){
+        
+        block(data,error);
+    }];
+}
 
 @end

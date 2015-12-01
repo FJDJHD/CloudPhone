@@ -23,9 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-
+  
     //读取沙盒数据
     NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
     NSString *key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];

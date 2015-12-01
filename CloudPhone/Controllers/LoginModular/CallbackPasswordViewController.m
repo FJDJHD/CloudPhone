@@ -9,18 +9,44 @@
 #import "CallbackPasswordViewController.h"
 #import "Global.h"
 #import "ResetPasswordViewController.h"
+static const int kTimeCount             = 60;
+
 
 @interface CallbackPasswordViewController ()
 @property (nonatomic, strong) UIButton *proveButton;
+@property (nonatomic, strong) UITextField *numberField;
+@property (nonatomic, strong) UITextField *verifyField;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic, strong) NSMutableAttributedString *proveAttStr;
+//“获取验证码”的定时器时间
+@property (nonatomic, strong) NSTimer *authCodeTimer;
+@property (nonatomic, assign) NSInteger timeCount;
 @end
 
 @implementation CallbackPasswordViewController
+
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        _timeCount = kTimeCount;
+        
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
     
     self.title = @"找回密码";
+    
+    //返回
+    UIButton *backButton = [self setBackBarButton];
+    [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self setBackBarButtonItem:backButton];
+
+
     
     UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 30, MainWidth, 88)];
     backView.backgroundColor = [UIColor whiteColor];
@@ -44,6 +70,7 @@
     numberField.borderStyle = UITextBorderStyleNone;
     numberField.keyboardType = UIKeyboardTypeNumberPad;
     [backView addSubview:numberField];
+    self.numberField = numberField;
     
     //验证码
     UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 60, 20)];
@@ -51,6 +78,7 @@
     verifyLabel.textColor = [UIColor blackColor];
     verifyLabel.text = @"验证码";
     [backView addSubview:verifyLabel];
+ 
     
     UITextField *verifyField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLabel.frame), 44, MainWidth - numberLabel.frame.size.width - 130, 44)];
     verifyField.placeholder = @"请输入短信验证码";
@@ -58,6 +86,8 @@
     verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
     verifyField.borderStyle = UITextBorderStyleNone;
     [backView addSubview:verifyField];
+    self.verifyField = verifyField;
+    
     
     _proveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _proveButton.backgroundColor = [UIColor colorWithHexString:@"#cccccc"];
@@ -90,16 +120,73 @@
 
 }
 
-//发送验证码
+//发送找回密码验证码
 - (void)proveButtonClick {
-    
+    if ([GeneralToolObject validateMobile:_numberField.text]) {
+        [self startAuthCodeTimmer];
+        
+        NSDictionary *dic = @{@"mobile":_numberField.text,@"type":@"forget_pwd"};
+        [[AirCloudNetAPIManager sharedManager] sendFoundVerifyOfParams:dic WithBlock:^(id data, NSError *error)  {
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                  UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"即将收到短信验证码，请注意查收" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    [alterView show];
+                    
+                } else {
+                    DLog(@"服务器出错%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    
+                }
+            } else {
+                //error
+                [self originalTimeCountButton]; //再把按钮还原回去
+            }
+        }];
+    } else if (_numberField.text.length == 0){
+        [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
+    } else {
+        [CustomMBHud customHudWindow:Login_sureCorrectNumber];
+    }
     
 }
 
-//下一步
+//下一步，找回密码提交
 - (void)nextButtonClick {
-    ResetPasswordViewController *resetPasswordController = [[ResetPasswordViewController alloc] init];
-    [self.navigationController pushViewController:resetPasswordController animated:YES];
+    
+    if (_numberField.text.length == 0) {
+        [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
+    } else if (_verifyField.text.length == 0) {
+        [CustomMBHud customHudWindow:Login_emptyVerifyNumber];
+    } else if ([GeneralToolObject validateMobile:_numberField.text]){
+        //在这里添加指示器
+        [self AddHUD];
+        NSDictionary *dic = @{@"mobile":self.numberField.text,@"verify_code":self.verifyField.text};
+        NSLog(@"%@",self.verifyField.text);
+        [[AirCloudNetAPIManager sharedManager] submitFoundPasswordOfParams:dic WithBlock:^(id data, NSError *error) {
+            //隐藏指示器
+            [self HUDHidden];
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    ResetPasswordViewController *resetPasswordController = [[ResetPasswordViewController alloc] init];
+                    [self.navigationController pushViewController:resetPasswordController animated:YES];
+                    
+                } else {
+                    DLog(@"%@",[dic objectForKey:@"msg"]);
+                     [self originalTimeCountButton]; //再把按钮还原回去
+                }
+            }
+        }];
+        
+    } else {
+        [CustomMBHud customHudWindow:Login_sureCorrectNumber];
+    }
+
+    
+    
     
 }
 
@@ -107,21 +194,70 @@
     [self.view endEditing:YES];
 }
 
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - nav
+- (void)popViewController {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - 验证码定时器
+
+- (void)startAuthCodeTimmer
+{
+    [self timeCountCutButton];
+    _authCodeTimer = [NSTimer  timerWithTimeInterval:1.0 target:self selector:@selector(timerFired)userInfo:nil repeats:YES];
+    [[NSRunLoop  currentRunLoop] addTimer:_authCodeTimer forMode:NSDefaultRunLoopMode];
 }
-*/
+
+- (void)timerFired {
+    //让按钮变成绿色可编辑状态
+    NSString *str = [NSString stringWithFormat:@"%ld", --_timeCount];
+    [self timeCountCutButton];
+    if ([str isEqualToString:@"0"]) {
+        [self originalTimeCountButton];
+    }
+}
+
+//倒计时的button
+- (void)timeCountCutButton {
+    _proveButton.userInteractionEnabled = NO;
+    _proveAttStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"重新发送(%ld)", _timeCount]];
+    
+    if (_timeCount>=10) {
+        [_proveAttStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 2)];
+    }else{
+        [_proveAttStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 1)];
+    }
+    
+    [_proveButton setAttributedTitle:_proveAttStr forState:UIControlStateNormal];
+    
+}
+
+//正常时候时的button
+- (void)originalTimeCountButton
+{
+    [_authCodeTimer setFireDate:[NSDate distantFuture]];//关闭定时器
+    _proveButton.userInteractionEnabled = YES;
+    _proveButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    _proveAttStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"发送验证码"]];
+    [_proveButton setAttributedTitle:_proveAttStr forState:UIControlStateNormal];
+    
+    _timeCount = kTimeCount;
+}
+
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
+
+
 
 @end

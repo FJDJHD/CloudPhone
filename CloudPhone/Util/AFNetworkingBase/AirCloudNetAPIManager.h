@@ -25,42 +25,42 @@
 - (void)registerStepTwoOfParams:(NSDictionary *)params
                            WithBlock:(void (^)(id data, NSError *error))block;
 
+//用户名登录
+- (void)userLoginOfParams:(NSDictionary *)params
+                WithBlock:(void (^)(id data, NSError *error))block;
 
+//用户退出
+- (void)userLogoutWithBlock:(void (^)(id data, NSError *error))block ;
 
-////获取服务器信息
-//- (void)getServersInfoOfParams:(NSDictionary *)params
-//                     WithBlock:(void (^)(id data, NSError *error))block;
-//
-////获取视频信息
-//- (void)getVedioInfoOfParams:(NSDictionary *)params
-//                     WithBlock:(void (^)(id data, NSError *error))block;
-//
-////获取视频URL信息
-//- (void)getVedioURLInfoOfParams:(NSDictionary *)params
-//                   WithBlock:(void (^)(id data, NSError *error))block;
-//
-////更新视频观看人数
-//- (void)getVedioWatchCountOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block;
-//
-////获取手机验证码
-//- (void)getPhoneNumberVerifyOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block;
-//
-////提交验证码
-//- (void)submitVerifyOfParams:(NSDictionary *)params
-//                   WithBlock:(void (^)(id data, NSError *error))block;
-//
-////提交注册信息
-//- (void)submitRegisterInfoOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block;
-//
-////获取忘记密码验证码
-//- (void)getForgetPwdVerifyOfParams:(NSDictionary *)params
-//                         WithBlock:(void (^)(id data, NSError *error))block;
-//
-////忘记密码修改密码
-//- (void)submitForgetPasswordOfParams:(NSDictionary *)params
-//                           WithBlock:(void (^)(id data, NSError *error))block;
+//发送找回密码验证码
+- (void)sendFoundVerifyOfParams:(NSDictionary *)params
+
+                      WithBlock:(void (^)(id data, NSError *error))block;
+//找回密码提交
+- (void)submitFoundPasswordOfParams:(NSDictionary *)params
+
+                          WithBlock:(void (^)(id data, NSError *error))block;
+//找回密码,重设密码
+- (void)rePasswordOfParams:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block;
+//修改密码提交
+- (void)profileOfParams:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block;
+
+//修改账户信息提交
+- (void)updateUserOfParams:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block;
+
+//更新头像信息提交
+- (void)updatePhotoOfParams:(NSDictionary *)params
+                  WithBlock:(void (^)(id data, NSError *error))block;
+
+//用户中心首页
+- (void)getUserCenterOfParams:(NSDictionary *)params
+                    WithBlock:(void (^)(id data, NSError *error))block;
+
+//用户中心基本信息
+- (void)getUserCenterInfoOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block;
 
 @end

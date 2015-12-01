@@ -29,4 +29,6 @@
 //请求头User-Agent的value
 + (NSString *)requestHeaderValue;
 
+//密码强度
++ (int) judgePasswordStrength:(NSString*) _password;
 @end
