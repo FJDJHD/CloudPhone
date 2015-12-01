@@ -19,38 +19,37 @@
 #define API_register                                     @"?s=/Home/User/register"
 
 //注册第二步
-#define API_register2                                    @"s=/Home/User/register2"
+#define API_register2                                    @"?s=/Home/User/register2"
 
-////获取服务器信息
-//#define API_cloudbox_init                                @"/cloudbox_init"
-//
-////获取视频信息
-//#define API_get_main_page                                @"/get_main_page"
-//
-////获取视频URL信息
-//#define API_get_playurl                                  @"/get_playurl"
-//
-////更新视频观看人数
-//#define API_update_view                                  @"/update_view"
-//
-////获取手机验证码
-//#define API_pre_register                                 @"/pre_register" //post
-//
-////提交验证码
-//#define API_verify_code                                  @"/verify_code" //post
-//
-////提交注册信息
-//#define API_register                                     @"/register" //post
-//
-////获取忘记密码验证码
-//#define API_request_vericode                             @"/request_vericode" //post
-//
-////忘记密码修改新密码
-//#define API_forget_password                              @"/forget_password" //post
+//用户名登录
+#define API_login                                        @"?s=/Home/User/login"//post
 
+//用户退出
+#define API_logout                                       @"?s=/Home/User/logout"
 
+//发送找回密码验证码
+#define API_sendFoundVerify                              @"?s=/Home/User/sendVerify"//post/get
 
+//找回密码提交
+#define API_forget_pwd                                  @"?s=/Home/User/forget_pwd" //post
 
+//找回密码，重设密码
+#define API_forget_pwd2                                 @"?s=/Home/User/forget_pwd2" //post
+
+//修改密码提交
+#define API_profile                                     @"?s=/Home/User/profile" //post
+
+//修改账户信息提交
+#define API_updateUser                                  @"?s=/Home/User/updateUser" //post
+
+//更新头像信息提交
+#define API_updatePhoto                                 @"?s=/Home/User/updatePhoto" //post
+
+//用户中心首页
+#define API_getUserCenter                               @"?s=/Home/User/index"
+
+//用户中心基本信息
+#define API_getUserCenter_info                          @"?s=/Home/User/index" //get
 
 
 #endif

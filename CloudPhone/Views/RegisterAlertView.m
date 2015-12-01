@@ -8,9 +8,8 @@
 
 #import "RegisterAlertView.h"
 #import "Global.h"
-#import "RegisterLoginViewController.h"
-#import "LoginViewController.h"
-
+#import "RegisterViewController.h"
+#import "LoginPasswordViewController.h"
 
 #define ALTERTEXTFONT 14
 @interface RegisterAlertView()
@@ -135,14 +134,14 @@
 
 
 - (void)sureButtonClick {
-    if ([self.tempController isKindOfClass:[RegisterLoginViewController class]]) {
-        NSLog(@"RegisterLoginViewController");
+    if ([self.tempController isKindOfClass:[RegisterViewController class]]) {
         [self dismiss];
-    } else if ([self.tempController isKindOfClass:[LoginViewController class]]) {
-        NSLog(@"RegisterLoginViewController");
+        LoginPasswordViewController *passVc = [[LoginPasswordViewController alloc] init];
+        [self.tempController.navigationController pushViewController:passVc animated:YES];
+    }else if ([self.tempController isKindOfClass:[LoginPasswordViewController class]]){
         [self dismiss];
+        DLog(@"enter mainVC");
     }
-
 }
 
 - (void)show:(UIViewController *)controller {

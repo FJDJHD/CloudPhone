@@ -13,7 +13,8 @@
 
 #define TEXTFONT 15.0
 @interface LoginViewController ()
-
+@property (nonatomic, strong) UITextField *numberField;
+@property (nonatomic, strong) UITextField *passwordField;
 @end
 
 @implementation LoginViewController
@@ -21,6 +22,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
+    //返回
+    UIButton *backButton = [self setBackBarButton];
+    [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self setBackBarButtonItem:backButton];
+
     
     self.title = @"登录";
     
@@ -51,6 +57,7 @@
     numberField.borderStyle = UITextBorderStyleNone;
     numberField.keyboardType = UIKeyboardTypeNumberPad;
     [backView addSubview:numberField];
+    self.numberField = numberField;
 
     //密码
     UIImageView *passwordImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 20, 20)];
@@ -63,6 +70,7 @@
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     passwordField.borderStyle = UITextBorderStyleNone;
     [backView addSubview:passwordField];
+    self.passwordField = passwordField;
     
     //忘记密码
     UIButton *forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -93,15 +101,47 @@
     [self.navigationController pushViewController:callbackPasswordController animated:YES];
 }
 
+//用户登录
 - (void)loginButtonClick{
     
+    if (self.numberField.text.length == 0 ) {
+        [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
+    }else if (self.passwordField.text.length == 0){
+        [CustomMBHud customHudWindow:Login_emptyPwdNumber];
+    }else{
+        NSDictionary *dic = @{@"mobile":self.numberField.text,@"password":self.passwordField.text};
+        [[AirCloudNetAPIManager sharedManager] userLoginOfParams:dic WithBlock:^(id data, NSError *error)
+        {
+            
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"登录成功------%@",[dic objectForKey:@"msg"]);
+                    
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    
+                }
+            }
+            
+        }];
+        
+    }
     
+
     
 }
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
+}
+
+#pragma mark - nav
+- (void)popViewController {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

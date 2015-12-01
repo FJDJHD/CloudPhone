@@ -11,7 +11,7 @@
 #import "LoginPasswordViewController.h"
 #import "GeneralToolObject.h"
 #import "RegisterAlertView.h"
-static const int kTimeCount             = 60;
+static const int kTimeCount             = 15;
 
 
 @interface RegisterViewController ()
@@ -21,6 +21,7 @@ static const int kTimeCount             = 60;
 @property (nonatomic, strong) UIButton *proveButton;
 @property (nonatomic, strong) UIButton *selectButton;
 @property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic, strong) NSMutableAttributedString *proveAttStr;
 
 //“获取验证码”的定时器时间
 @property (nonatomic, strong) NSTimer *authCodeTimer;
@@ -168,12 +169,13 @@ static const int kTimeCount             = 60;
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    
-                    DLog(@"------%@",[dic objectForKey:@"msg"]);
+                UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"即将收到短信验证码，请注意查收" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                [alterView show];
                     
                 } else {
-                    DLog(@"服务器出错%@",[dic objectForKey:@"msg"]);
-                    
+                    DLog(@"*****%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+             
                 }
             } else {
                 //error
@@ -188,7 +190,7 @@ static const int kTimeCount             = 60;
 
 }
 
-//注册
+//注册第一步
 - (void)registerButtonClick {
     
     if (_numberField.text.length == 0) {
@@ -198,7 +200,7 @@ static const int kTimeCount             = 60;
     } else if ([GeneralToolObject validateMobile:_numberField.text]){
         //在这里添加指示器
         [self AddHUD];
-        NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text};
+        NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text,@"imei":[GeneralToolObject CPUuidString],@"mobile_model":[[UIDevice currentDevice] model],@"mobile_type":@"iphone",@"reg_terrace":@"iOS",@"reg_id":@"111"};
         [[AirCloudNetAPIManager sharedManager] registerStepOneOfParams:dic WithBlock:^(id data, NSError *error) {
             //隐藏指示器
             [self HUDHidden];
@@ -206,17 +208,12 @@ static const int kTimeCount             = 60;
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    DLog(@"------%@",[dic objectForKey:@"msg"]);
-                    
-                    RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
+                RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
                     [alertView show:self];
-                    
-                    //成功则推到下一个界面。。。。。。。。。。。。。
-                    //    LoginPasswordViewController *loginPasswordController = [[LoginPasswordViewController alloc] init];
-                    //    [self.navigationController pushViewController:loginPasswordController animated:YES];
-                    
                 } else {
-                    DLog(@"服务器出错%@",[dic objectForKey:@"msg"]);
+                
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+
                 }
             }
         }];
@@ -260,9 +257,17 @@ static const int kTimeCount             = 60;
 
 //倒计时的button
 - (void)timeCountCutButton {
-    _proveButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
     _proveButton.userInteractionEnabled = NO;
-    [_proveButton setTitle:[NSString stringWithFormat:@"重新获取验证码%ld", _timeCount] forState:UIControlStateNormal];
+    _proveAttStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"重新发送(%ld)", _timeCount]];
+ 
+    if (_timeCount>=10) {
+        [_proveAttStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 2)];
+    }else{
+        [_proveAttStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 1)];
+    }
+    
+    [_proveButton setAttributedTitle:_proveAttStr forState:UIControlStateNormal];
+
 }
 
 //正常时候时的button
@@ -271,7 +276,9 @@ static const int kTimeCount             = 60;
     [_authCodeTimer setFireDate:[NSDate distantFuture]];//关闭定时器
     _proveButton.userInteractionEnabled = YES;
     _proveButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
-    [_proveButton setTitle:@"发送验证码" forState:UIControlStateNormal];
+    _proveAttStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"发送验证码"]];
+    [_proveButton setAttributedTitle:_proveAttStr forState:UIControlStateNormal];
+
     _timeCount = kTimeCount;
 }
 

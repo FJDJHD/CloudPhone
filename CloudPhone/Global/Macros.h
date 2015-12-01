@@ -86,6 +86,9 @@
 #define Login_NotExistPhoneNumber                  @"该手机用户不存在!"
 #define Login_emptyPwdNumber                       @"密码不能为空!"
 #define Login_sucessModifyPwdNumber                @"修改密码成功!"
+#define Login_sureEmptyPwdNumber                   @"确认密码不能为空!"
+#define Login_noSamePwdNumber                      @"输入密码不一致!"
+
 
 
 

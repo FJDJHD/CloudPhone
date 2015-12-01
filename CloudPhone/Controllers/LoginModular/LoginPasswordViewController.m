@@ -8,11 +8,14 @@
 
 #import "LoginPasswordViewController.h"
 #import "Global.h"
-
+#import "RegisterAlertView.h"
 
 #define TEXTFONT 13.0
-@interface LoginPasswordViewController ()
-
+@interface LoginPasswordViewController ()<UITextFieldDelegate>
+@property (nonatomic, strong) UITextField *repasswordField;
+@property (nonatomic, strong) UITextField *passwordFiled;
+@property (nonatomic, strong) NSMutableAttributedString *passwordLevelStr;
+@property (nonatomic, strong) UILabel *numberLevelLabel;
 @end
 
 @implementation LoginPasswordViewController
@@ -31,24 +34,28 @@
     [backView addSubview:lineView];
     
    
-    UILabel *numberLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 70, 20)];
-    numberLabel.font = [UIFont systemFontOfSize:TEXTFONT];
-    numberLabel.textColor = [ColorTool textColor];
-    numberLabel.text = @"输入密码";
-    [backView addSubview:numberLabel];
+    UILabel *passwordLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 70, 20)];
+    passwordLabel.font = [UIFont systemFontOfSize:TEXTFONT];
+    passwordLabel.textColor = [ColorTool textColor];
+    passwordLabel.text = @"输入密码";
+    [backView addSubview:passwordLabel];
     
-    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLabel.frame) - 10, 0, 95, 44)];
-    numberField.placeholder = @"请输入登录密码";
-    numberField.font = [UIFont systemFontOfSize:TEXTFONT];
-    numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    numberField.borderStyle = UITextBorderStyleNone;
-    numberField.keyboardType = UIKeyboardTypeNumberPad;
-    [backView addSubview:numberField];
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame) - 10, 0, 120, 44)];
+    passwordField.placeholder = @"请输入登录密码";
+    passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
+    passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    passwordField.borderStyle = UITextBorderStyleNone;
+    passwordField.keyboardType = UIKeyboardTypeNumberPad;
+    self.passwordFiled = passwordField;
+    self.passwordFiled.delegate = self;
+    [backView addSubview:passwordField];
     
-    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberField.frame) + 30, 0, 140, 44)];
+    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame) + 10 , 0, 140, 44)];
     numberLevelLabel.font = [UIFont systemFontOfSize:TEXTFONT];
     numberLevelLabel.textColor = [UIColor blackColor];
-    numberLevelLabel.text = @"密码等级 ：低/中/高";
+    self.numberLevelLabel = numberLevelLabel;
+    _passwordLevelStr = [[NSMutableAttributedString alloc] initWithString:@"密码等级:低/中/高"];
+    numberLevelLabel.attributedText = _passwordLevelStr;
     [backView addSubview:numberLevelLabel];
 
     UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 95, 20)];
@@ -57,12 +64,13 @@
     verifyLabel.text = @"再次输入密码";
     [backView addSubview:verifyLabel];
     
-    UITextField *verifyField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(verifyLabel.frame) - 10, 44, MainWidth - numberLabel.frame.size.width - 130, 44)];
-    verifyField.placeholder = @"请再次输入密码";
-    verifyField.font = [UIFont systemFontOfSize:TEXTFONT];
-    verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    verifyField.borderStyle = UITextBorderStyleNone;
-    [backView addSubview:verifyField];
+    UITextField *repasswordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(verifyLabel.frame) - 10, 44, MainWidth - verifyLabel.frame.size.width , 44)];
+    repasswordField.placeholder = @"请再次输入密码";
+    repasswordField.font = [UIFont systemFontOfSize:TEXTFONT];
+    repasswordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    repasswordField.borderStyle = UITextBorderStyleNone;
+    self.repasswordField = repasswordField;
+    [backView addSubview:repasswordField];
     
     
     //提交
@@ -80,7 +88,63 @@
 }
 
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (toBeString.length >= 1){
+        int result = [GeneralToolObject judgePasswordStrength:toBeString];
+        if (result == 0) {
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(7,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(9,1)];
+            }
+        else if(result == 1){
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(5,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor yellowColor] range:NSMakeRange(7,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(9,1)];
+            }
+        else if (result==2){
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(5,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(7,1)];
+            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(9,1)];
+            }
+         self.numberLevelLabel.attributedText = _passwordLevelStr;
+    }
+    return YES;
+}
+
+
+
+//注册第二步
 - (void)submitButtonClick{
+    if (self.passwordFiled.text.length == 0 ) {
+       [CustomMBHud customHudWindow:Login_emptyPwdNumber];
+    }else if (self.repasswordField.text.length == 0){
+       [CustomMBHud customHudWindow:Login_sureEmptyPwdNumber];
+    }else if (![self.passwordFiled.text isEqualToString:self.repasswordField.text]){
+        [CustomMBHud customHudWindow:Login_noSamePwdNumber];
+    }else{
+        NSDictionary *dic = @{@"password":self.passwordFiled.text,@"repassword":self.repasswordField.text};
+        [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
+            
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    RegisterAlertView *alertView = [[RegisterAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds lable:@"你好 ！登陆密码已经设置成功，为了你的账号安全，请妥善保管你的密码"];
+                    [alertView show:self];
+                    
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    
+                }
+            }
+            
+        }];
+            
+    }
     
 }
 
