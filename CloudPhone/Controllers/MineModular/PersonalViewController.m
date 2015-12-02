@@ -9,11 +9,14 @@
 #import "PersonalViewController.h"
 #import "Global.h"
 
-@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate>
+@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSDictionary *personalDic;
+
+@property (nonatomic, strong) NSTextAttachment *attchIcon;
+
 @end
 
 
@@ -111,16 +114,15 @@
     
     if (indexPath.section == 0) {
        
-        NSTextAttachment *attch = [[NSTextAttachment alloc] init];
-        attch.bounds = CGRectMake(0, 0, 40, 40);
+        _attchIcon = [[NSTextAttachment alloc] init];
+        _attchIcon.bounds = CGRectMake(0, 0, 40, 40);
         if ([self.personalDic objectForKey:@"personalIcon"]) {
-          attch.image = [UIImage imageNamed:@"mine_icon"];
+          _attchIcon.image = [UIImage imageNamed:@"mine_icon"];
         } else {
-          attch.image = [UIImage imageNamed:@"mine_icon"];
+          _attchIcon.image = [UIImage imageNamed:@"mine_icon"];
         }
-        NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
-        cell.detailTextLabel.attributedText = string;
-        
+        NSAttributedString *iconString = [NSAttributedString attributedStringWithAttachment:_attchIcon];
+        cell.detailTextLabel.attributedText = iconString;
        
         
     } else {
@@ -176,11 +178,52 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     if (indexPath.section == 0 && indexPath.row == 0) {
-//        PersonalViewController *personalViewController = [[PersonalViewController alloc] init];
-//        [self.navigationController pushViewController:personalViewController animated:YES];
+        UIActionSheet *changeIconSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从手机相册选择",nil];
+        [changeIconSheet showInView:self.view];
     }
+}
+
+#pragma mark - UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+        {
+            UIImagePickerController *pickController = [[UIImagePickerController alloc]init];
+            pickController.allowsEditing = YES;
+            pickController.delegate = self;
+            pickController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:pickController animated:YES completion:^{}];
+            
+        }
+            break;
+        case 1:
+        {
+            UIImagePickerController *pickController = [[UIImagePickerController alloc]init];
+            pickController.allowsEditing = YES;
+            pickController.delegate = self;
+            pickController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:pickController animated:YES completion:^{}];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+#pragma mark --UIImagePickerControllerDelegate
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    DLog(@"editing===========");
+    
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    
+    _attchIcon.image = image;
+    
+    //    [self upLoadImage:UIImageJPEGRepresentation(image, 0.05)];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 

@@ -74,6 +74,7 @@
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
 		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
+		6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA464371C0EA88400650524 /* PersonalNameViewController.m */; };
 		6EB2ED501C04684A002799BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED4F1C04684A002799BD /* main.m */; };
 		6EB2ED531C04684A002799BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED521C04684A002799BD /* AppDelegate.m */; };
 		6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EB2ED5A1C04684A002799BD /* Assets.xcassets */; };
@@ -271,6 +272,8 @@
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
 		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
+		6EA464361C0EA88400650524 /* PersonalNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalNameViewController.h; sourceTree = "<group>"; };
+		6EA464371C0EA88400650524 /* PersonalNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalNameViewController.m; sourceTree = "<group>"; };
 		6EB2ED4B1C04684A002799BD /* CloudPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EB2ED4F1C04684A002799BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6EB2ED511C04684A002799BD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -771,6 +774,8 @@
 				6EC0BB3C1C0BDEB700075A19 /* MainMineViewController.m */,
 				B4BE7CFB1C0C5C6E00D74D49 /* PersonalViewController.h */,
 				B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */,
+				6EA464361C0EA88400650524 /* PersonalNameViewController.h */,
+				6EA464371C0EA88400650524 /* PersonalNameViewController.m */,
 				B4BE7D041C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.h */,
 				B4BE7D051C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m */,
 				B4BE7D011C0C5E1900D74D49 /* TaskCenterViewController.h */,
@@ -1051,6 +1056,7 @@
 				6E4D37861C056619001573E3 /* GeneralToolObject.m in Sources */,
 				B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */,
 				B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */,
+				6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */,
 				6E4D37641C056384001573E3 /* SDWebImagePrefetcher.m in Sources */,
 				6E4D372C1C0561A2001573E3 /* AFURLSessionManager.m in Sources */,
 				6E4D37AF1C0568B1001573E3 /* UIScrollView+MJExtension.m in Sources */,
