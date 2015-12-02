@@ -65,7 +65,7 @@ static const int kTimeCount             = 60;
     
     UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLabel.frame), 0, MainWidth - CGRectGetMaxX(numberLabel.frame), 44)];
     numberField.placeholder = @"请输入手机号码";
-    numberField.font = [UIFont systemFontOfSize:14.0];
+    numberField.font = [UIFont systemFontOfSize:15.0];
     numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
     numberField.borderStyle = UITextBorderStyleNone;
     numberField.keyboardType = UIKeyboardTypeNumberPad;
@@ -82,7 +82,7 @@ static const int kTimeCount             = 60;
     
     UITextField *verifyField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLabel.frame), 44, MainWidth - numberLabel.frame.size.width - 130, 44)];
     verifyField.placeholder = @"请输入短信验证码";
-    verifyField.font = [UIFont systemFontOfSize:14.0];
+    verifyField.font = [UIFont systemFontOfSize:15.0];
     verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
     verifyField.borderStyle = UITextBorderStyleNone;
     [backView addSubview:verifyField];
@@ -91,7 +91,7 @@ static const int kTimeCount             = 60;
     
     _proveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _proveButton.backgroundColor = [UIColor colorWithHexString:@"#cccccc"];
-    _proveButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
+    _proveButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     _proveButton.frame = CGRectMake(CGRectGetMaxX(verifyField.frame), 44, MainWidth - CGRectGetMaxX(verifyField.frame), 44);
     
     [_proveButton setTitle:@"发送验证码" forState:UIControlStateNormal];
@@ -135,7 +135,7 @@ static const int kTimeCount             = 60;
                     [alterView show];
                     
                 } else {
-                    DLog(@"服务器出错%@",[dic objectForKey:@"msg"]);
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
                     
                 }

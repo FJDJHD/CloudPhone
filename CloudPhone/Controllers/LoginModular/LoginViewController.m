@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "Global.h"
 #import "CallbackPasswordViewController.h"
-
+#import "AppDelegate.h"
 
 #define TEXTFONT 15.0
 @interface LoginViewController ()
@@ -50,7 +50,7 @@
     [numberImageView setImage:[UIImage imageNamed:@"pic_zhanghao"]];
     [backView addSubview:numberImageView];
     
-    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, 0, MainWidth - CGRectGetMaxX(numberImageView.frame), 44)];
+    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, 0, MainWidth - CGRectGetMaxX(numberImageView.frame) - 10, 44)];
     numberField.placeholder = @"请输入手机号码";
     numberField.font = [UIFont systemFontOfSize:TEXTFONT];
     numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -64,7 +64,7 @@
     [passwordImageView setImage:[UIImage imageNamed:@"pic_mima"]];
     [backView addSubview:passwordImageView];
     
-    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 10, 44, MainWidth - passwordImageView.frame.size.width - 130, 44)];
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 10, 44, MainWidth - CGRectGetMaxX(passwordImageView.frame) - 10, 44)];
     passwordField.placeholder = @"请输入登录密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -117,7 +117,18 @@
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    [_numberField resignFirstResponder];
+                    [_passwordField resignFirstResponder];
                     DLog(@"登录成功------%@",[dic objectForKey:@"msg"]);
+                    
+                    //这里作为一个登录标志
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setObject:@"isLogined" forKey:isLoginKey];
+                    [defaults synchronize];
+                    
+                    //进入主页
+                    AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDele loadMainViewController];
                     
                 } else {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);

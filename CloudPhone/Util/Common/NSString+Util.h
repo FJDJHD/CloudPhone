@@ -11,6 +11,6 @@
 @interface NSString (Util)
 
 //去掉手机号的空格间隙等
-- (NSString*)initTelephoneWithReformat;
+- (NSString *)initTelephoneWithReformat;
 
 @end

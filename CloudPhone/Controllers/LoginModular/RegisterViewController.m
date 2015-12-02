@@ -11,7 +11,7 @@
 #import "LoginPasswordViewController.h"
 #import "GeneralToolObject.h"
 #import "RegisterAlertView.h"
-static const int kTimeCount             = 15;
+static const int kTimeCount             = 60;
 
 
 @interface RegisterViewController ()
@@ -101,7 +101,7 @@ static const int kTimeCount             = 15;
     
     //3分钟内有校
     UILabel *alertLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(backView.frame) + 10, 150, 12)];
-    alertLabel.font = [UIFont systemFontOfSize:15.0];
+    alertLabel.font = [UIFont systemFontOfSize:13.0];
     alertLabel.textColor = [UIColor colorWithHexString:@"#646464"];
     alertLabel.text = @"验证码3分钟内有效";
     [self.view addSubview:alertLabel];
@@ -122,10 +122,11 @@ static const int kTimeCount             = 15;
     //用户协议
     UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [selectButton setImage:[UIImage imageNamed:@"chance_"] forState:UIControlStateNormal];
+    [selectButton setImage:[UIImage imageNamed:@"chance_selected"] forState:UIControlStateSelected];
     [selectButton addTarget:self action:@selector(selectButtonClick) forControlEvents:UIControlEventTouchUpInside];
     selectButton.frame = CGRectMake(15, CGRectGetMaxY(registerButton.frame) + 10 , 20, 20);
     [self.view addSubview:selectButton];
-    selectButton.selected = NO;
+    selectButton.selected = YES;
     self.selectButton = selectButton;
     
     
@@ -146,7 +147,6 @@ static const int kTimeCount             = 15;
     
     [registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
-    
     
 
 }
@@ -192,7 +192,6 @@ static const int kTimeCount             = 15;
 
 //注册第一步
 - (void)registerButtonClick {
-    
     if (_numberField.text.length == 0) {
         [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
     } else if (_verifyField.text.length == 0) {
@@ -208,7 +207,9 @@ static const int kTimeCount             = 15;
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
+                    [_numberField resignFirstResponder];
+                    [_verifyField resignFirstResponder];
+                   RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
                     [alertView show:self];
                 } else {
                 
@@ -232,8 +233,7 @@ static const int kTimeCount             = 15;
 
 //选择用户协议
 - (void)selectButtonClick{
-    self.selectButton.selected = !self.selectButton.selected;
-    [self.selectButton setImage:[UIImage imageNamed:@"chance_selected"] forState:UIControlStateSelected];
+//    self.selectButton.selected = !self.selectButton.selected;
     
 }
 

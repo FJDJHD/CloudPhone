@@ -76,6 +76,9 @@
 #define appNavgationBackColor   [UIColor colorWithRed:79.0/255.0 green:176.0/255.0 blue:246.0/255.0 alpha:1.0]
 #define appDeepLableColor       RGB(51, 51, 51)
 
+/* --NSUserDefaults 的key --*/
+#define isLoginKey              @"isLoginKey"  //判断是否登录过(isLogined.....notLogined)
+
 
 #import <Foundation/Foundation.h>
 #import "Macros.h"

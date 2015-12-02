@@ -31,54 +31,26 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-//    [self loadLoginViewController];
-    [self loadMainViewController];
+    //加载界面视图
+    [self initViewController];
     
-//    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-//    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
-//    
-//    long timeInt =[[NSDate date] timeIntervalSince1970];
-//    NSString *imei = [GeneralToolObject CPUuidString];
-//    NSString *versionName = APP_VERSION;
-//    NSString *version = app_build;
-//    
-//    NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
-//    NSString *md5VersionName = [versionName md5];
-//    NSString *md5imei = [imei md5];
-//    
-//    NSString *tokenq = [NSString stringWithFormat:@"%@%@%@itel2105@@$*",md5VersionName,md5imei,time];
-//    
-//    NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
-//
-//    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@",versionName,version,imei,md5imei,time,tokens];
-//    DLog(@"value = %@",value);
-//    
-//    
-//    
-////    NSDictionary *dic = @{@"mobile":@"13113689076",@"type":@"reg"};
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/plain", @"text/javascript", @"text/json",nil];
-//    
-//    [manager.requestSerializer setValue:value forHTTPHeaderField:@"User-Agent"];
-//    
-//    [manager GET:@"http://cloud.itelland.com/?s=/Home/User/sendVerify&mobile=13113689077&type=reg" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        
-//        NSLog(@"operation = %@",operation);
-//        
-//        NSLog(@"JSON: %@ ----%@", responseObject,[responseObject objectForKey:@"msg"]);
-//        
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-    
-    //ios 8
+    //消息推送 ios 8
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)initViewController {
+    //这里作为一个登录标志
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *value = [defaults objectForKey:isLoginKey];
+    if ([value isEqualToString:@"isLogined"]) {
+        [self loadMainViewController];
+    } else {
+        [self loadLoginViewController];
+    }
 }
 
 #pragma mark - 创建登录module
@@ -89,18 +61,16 @@
     
     if (CURRENT_SYS_VERSION >= 7.0) {
         [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
-        [[UINavigationBar appearance] setBarTintColor:appNavgationBackColor];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
         [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
-        [[UINavigationBar appearance] setTintColor:appNavgationBackColor];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
     self.window.rootViewController = registerLoginNavigationController;
 }
 
@@ -137,17 +107,17 @@
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
     
     if (CURRENT_SYS_VERSION >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:appNavgationBackColor];
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
-        [[UINavigationBar appearance] setTintColor:appNavgationBackColor];
+        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil]];
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
     //    //不需要tabbar下面文字，先隐藏掉
     //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0),NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateNormal];
     //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0), NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateSelected];

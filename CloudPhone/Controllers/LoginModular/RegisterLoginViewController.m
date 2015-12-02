@@ -76,7 +76,7 @@
     loginButton.backgroundColor = [ColorTool backgroundColor];
     loginButton.layer.cornerRadius = 2.0;
     loginButton.layer.masksToBounds = YES;
-    loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    loginButton.titleLabel.font = [UIFont systemFontOfSize:18.0];
     loginButton.frame = CGRectMake(20, SCREEN_HEIGHT * 0.6, MainWidth - 20*2.0, 45);
     [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(loginButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -88,7 +88,7 @@
     registerButton.backgroundColor = [ColorTool backgroundColor];
     registerButton.layer.cornerRadius = 2.0;
     registerButton.layer.masksToBounds = YES;
-    registerButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:18.0];
     registerButton.frame = CGRectMake(20, CGRectGetMaxY(loginButton.frame) + 25, MainWidth - 20*2.0, 45);
     [registerButton setTitle:@"注 册" forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -100,7 +100,7 @@
 - (void)startButtonHandle:(UIButton *)sender{
     //写入数据
     NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
-    NSString * key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];
+    NSString *key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];
     [setting setObject:[NSString stringWithFormat:@"0"] forKey:key];
     [setting synchronize];
     

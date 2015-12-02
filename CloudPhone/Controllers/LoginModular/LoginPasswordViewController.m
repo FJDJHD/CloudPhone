@@ -10,7 +10,7 @@
 #import "Global.h"
 #import "RegisterAlertView.h"
 
-#define TEXTFONT 13.0
+#define TEXTFONT 15.0
 @interface LoginPasswordViewController ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *repasswordField;
 @property (nonatomic, strong) UITextField *passwordFiled;
@@ -25,6 +25,11 @@
     self.view.backgroundColor = [ColorTool backgroundColor];
     self.title = @"设置登录密码";
     
+    //返回
+    UIButton *backButton = [self setBackBarButton];
+    [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self setBackBarButtonItem:backButton];
+    
     //设置登录密码
     UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 44 , MainWidth, 88)];
     backView.backgroundColor = [UIColor whiteColor];
@@ -34,24 +39,23 @@
     [backView addSubview:lineView];
     
    
-    UILabel *passwordLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 70, 20)];
+    UILabel *passwordLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 65, 20)];
     passwordLabel.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordLabel.textColor = [ColorTool textColor];
     passwordLabel.text = @"输入密码";
     [backView addSubview:passwordLabel];
     
-    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame) - 10, 0, 120, 44)];
-    passwordField.placeholder = @"请输入登录密码";
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0, 120, 44)];
+    passwordField.placeholder = @"请输入密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     passwordField.borderStyle = UITextBorderStyleNone;
-    passwordField.keyboardType = UIKeyboardTypeNumberPad;
     self.passwordFiled = passwordField;
     self.passwordFiled.delegate = self;
     [backView addSubview:passwordField];
     
-    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame) + 10 , 0, 140, 44)];
-    numberLevelLabel.font = [UIFont systemFontOfSize:TEXTFONT];
+    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame) , 0, 140, 44)];
+    numberLevelLabel.font = [UIFont systemFontOfSize:14.0];
     numberLevelLabel.textColor = [UIColor blackColor];
     self.numberLevelLabel = numberLevelLabel;
     _passwordLevelStr = [[NSMutableAttributedString alloc] initWithString:@"密码等级:低/中/高"];
@@ -64,7 +68,7 @@
     verifyLabel.text = @"再次输入密码";
     [backView addSubview:verifyLabel];
     
-    UITextField *repasswordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(verifyLabel.frame) - 10, 44, MainWidth - verifyLabel.frame.size.width , 44)];
+    UITextField *repasswordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(verifyLabel.frame), 44, MainWidth - CGRectGetMaxX(verifyLabel.frame), 44)];
     repasswordField.placeholder = @"请再次输入密码";
     repasswordField.font = [UIFont systemFontOfSize:TEXTFONT];
     repasswordField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -132,6 +136,8 @@
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    [self.repasswordField resignFirstResponder];
+                    [self.repasswordField resignFirstResponder];
                     RegisterAlertView *alertView = [[RegisterAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds lable:@"你好 ！登陆密码已经设置成功，为了你的账号安全，请妥善保管你的密码"];
                     [alertView show:self];
                     
@@ -141,11 +147,17 @@
                     
                 }
             }
-            
         }];
-            
     }
-    
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+#pragma mark - nav
+- (void)popViewController {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

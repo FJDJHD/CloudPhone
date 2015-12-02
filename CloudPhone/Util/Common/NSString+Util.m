@@ -10,7 +10,7 @@
 
 @implementation NSString (Util)
 
-- (NSString*)initTelephoneWithReformat
+- (NSString *)initTelephoneWithReformat
 {
     
     if ([self containsString:@"-"])
