@@ -111,8 +111,8 @@
     }else{
         NSDictionary *dic = @{@"mobile":self.numberField.text,@"password":self.passwordField.text};
         [[AirCloudNetAPIManager sharedManager] userLoginOfParams:dic WithBlock:^(id data, NSError *error)
+         
         {
-            
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
                 
