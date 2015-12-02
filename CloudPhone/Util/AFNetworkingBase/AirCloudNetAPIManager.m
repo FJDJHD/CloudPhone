@@ -64,7 +64,7 @@
     
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_login serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
         
-        block(nil, error);
+        block(data, error);
     }];
 }
 
@@ -75,7 +75,7 @@
     
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_logout serviceType:HTTPURLPREFIX withParams:nil withMethodType:Get andBlock:^(id data, NSError *error){
         
-        block(nil, error);
+        block(data, error);
     }];
 }
 
