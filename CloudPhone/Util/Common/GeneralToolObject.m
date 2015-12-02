@@ -137,4 +137,41 @@
 }
 
 
+//个人头像保存在沙盒
++ (NSString *)personalIconFilePath {
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
+    return filePath;
+}
+
+//保存在plist文件中
++ (NSString *)personalInfoFilePath{
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
+    return filePath;
+}
+
+//个人信息写入沙盒
++ (void)writePersonalInfoToBox:(NSDictionary *)dic {
+    //写入沙盒
+//    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
+//    [infoDic setValue:iconPath forKey:@"personalIcon"];
+//    [infoDic setValue:@"王聪" forKey:@"personalName"];
+//    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
+    BOOL result = [dic writeToFile:[self personalInfoFilePath] atomically:YES];
+    if (result) {
+        DLog(@"缓存成功");
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
 @end

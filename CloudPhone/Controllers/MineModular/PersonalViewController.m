@@ -8,7 +8,9 @@
 
 #import "PersonalViewController.h"
 #import "Global.h"
-
+#import "PersonalNameViewController.h"
+#import "LoginViewController.h"
+#import "AppDelegate.h"
 @interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -23,7 +25,7 @@
 @implementation PersonalViewController
 - (NSArray *)itemArray{
     if (!_itemArray) {
-        _itemArray = @[@"昵称",@"性别",@"生日",@"手机",@"个性签名"];
+        _itemArray = @[@"昵称",@"性别",@"生日",@"手机",@"个性签名",@"退出登录"];
     }
     return _itemArray;
 }
@@ -35,6 +37,30 @@
     NSString *cachePath = [self personalInfoFilePath];
     self.personalDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
     [_tableView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //用户中心基本信息
+    
+    NSDictionary *dic = @{@"us2":@"us"};
+    
+    [[AirCloudNetAPIManager sharedManager] getUserCenterInfoOfParams:dic WithBlock:^(id data, NSError *error) {
+        
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                
+            }
+        }
+    }];
 }
 
 - (void)viewDidLoad {
@@ -181,6 +207,37 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         UIActionSheet *changeIconSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从手机相册选择",nil];
         [changeIconSheet showInView:self.view];
+    }else if (indexPath.section == 1 && indexPath.row == 0){
+        PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
+        [self.navigationController pushViewController:personalNameVC animated:YES];
+    }else if (indexPath.section == 1 && indexPath.row == self.itemArray.count - 1){
+        //退出登录
+               [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
+                   
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    
+                    //这里作为一个登录标志
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setObject:@"notLogined" forKey:isLoginKey];
+                    [defaults synchronize];
+                    
+                    //进入
+                    AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDele loadLoginViewController];
+                   
+                } else {
+                    DLog(@"*****%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                }
+            } else {
+                //error
+                DLog(@"*****%@",error);
+            }
+        }];
+
     }
 }
 

@@ -30,36 +30,42 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self requestPersonalCenter];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self.view addSubview:self.tableView];
     
-    //图片路径
-    NSString *iconPath = [self personalIconFilePath];
-    UIImage *image = [UIImage imageNamed:@"mine_icon"];
-    [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
-
-    //写入沙盒
-    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
-    [infoDic setValue:iconPath forKey:@"personalIcon"];
-    [infoDic setValue:@"王聪" forKey:@"personalName"];
-    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
-    BOOL result = [infoDic writeToFile:[self personalInfoFilePath] atomically:YES];
-    if (result) {
-        DLog(@"缓存成功");
-    }
+       [self.view addSubview:self.tableView];
     
-    [self initData];
+//    //图片路径
+//    NSString *iconPath = [self personalIconFilePath];
+//    UIImage *image = [UIImage imageNamed:@"mine_icon"];
+//    [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
+//
+//    //写入沙盒
+//    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
+//    [infoDic setValue:iconPath forKey:@"personalIcon"];
+//    [infoDic setValue:@"王聪" forKey:@"personalName"];
+//    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
+//    BOOL result = [infoDic writeToFile:[self personalInfoFilePath] atomically:YES];
+//    if (result) {
+//        DLog(@"缓存成功");
+//    }
+    
+//    [self initData];
 }
 
-- (void)initData {
-
-    //先读取缓存
-    NSString *cachePath = [self personalInfoFilePath];
-    self.testDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
-    [_tableView reloadData];
-}
+//- (void)initData {
+//
+//    //先读取缓存
+//    NSString *cachePath = [self personalInfoFilePath];
+//    self.testDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
+//    [_tableView reloadData];
+//}
 
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -106,7 +112,7 @@
             cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
         }
         cell.textLabel.text = [self.testDic objectForKey:@"personalName"];
-        cell.detailTextLabel.text = [self.testDic objectForKey:@"personalNumber"];;
+        cell.detailTextLabel.text = [self.testDic objectForKey:@"personalNumber"];
         
     } else {
         if(indexPath.row == 0){
@@ -153,6 +159,27 @@
         PersonalViewController *personalViewController = [[PersonalViewController alloc] init];
         [self.navigationController pushViewController:personalViewController animated:YES];
     }
+}
+
+- (void)requestPersonalCenter {
+
+    //用户中心首页
+    [[AirCloudNetAPIManager sharedManager] getUserCenterOfParams:nil WithBlock:^(id data, NSError *error) {
+        
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                
+                
+            }
+        }
+    }];
 }
 
 #pragma mark ---file read and write

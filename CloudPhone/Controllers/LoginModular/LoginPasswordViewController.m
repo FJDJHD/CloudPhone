@@ -141,6 +141,7 @@
                     RegisterAlertView *alertView = [[RegisterAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds lable:@"你好 ！登陆密码已经设置成功，为了你的账号安全，请妥善保管你的密码"];
                     [alertView show:self];
                     
+                    
                 } else {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];

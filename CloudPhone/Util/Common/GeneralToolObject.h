@@ -31,4 +31,13 @@
 
 //密码强度
 + (int) judgePasswordStrength:(NSString*) _password;
+
+//个人头像保存在沙盒
++ (NSString *)personalIconFilePath;
+
+//保存在plist文件中
++ (NSString *)personalInfoFilePath;
+
+//个人信息写入沙盒
++ (void)writePersonalInfoToBox:(NSDictionary *)dic;
 @end
