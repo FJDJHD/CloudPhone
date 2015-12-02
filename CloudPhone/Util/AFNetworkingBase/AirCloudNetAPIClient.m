@@ -125,41 +125,32 @@
     }
 }
 
-//- (void)saveCookieData:(AFHTTPRequestOperation *)operation{
-//
-//    NSDictionary *fields = [operation.response allHeaderFields];
-//    NSLog(@"fields = %@",[fields description]);
-//    
-//    NSString *allCookieStr = [fields objectForKey:@"Set-Cookie"];
-//    NSArray *array = [allCookieStr componentsSeparatedByString:@";"];
-//    NSString *cookie = array[0]; //取第一个值
-//    
-//    //保存到本地
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults setObject:cookie forKey:Code_CookieData];
-//    [defaults synchronize];
-//    
-//    [self.requestSerializer setValue:cookie forHTTPHeaderField:@"Cookie"];
-//    //请求首页视频信息
-//    if (cookie.length > 0) {
-//        [[NSNotificationCenter defaultCenter] postNotificationName:vedioInfoAfterCookie object:nil];
-//    }
-//}
+- (void)uploadImageWithPath:(NSString *)aPath
+                serviceType:(NSString *)serviceType
+                 withParams:(NSDictionary*)params
+                withImage:(UIImage *)image
+                   andBlock:(void (^)(id data, NSError *error))block {
+    //域名拼接
+    aPath = [aPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@%@",serviceType,aPath];
+    
+    [self POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+        NSString *filePath = [GeneralToolObject personalIconFilePath];
+//        UIImage *fileImage = [UIImage imageWithContentsOfFile:filePath];
+        NSData * data= UIImageJPEGRepresentation(image, 0.1);//UIImagePNGRepresentation(fileImage);
+        [formData appendPartWithFileData:data name:@"photo" fileName:filePath mimeType:@"image/png"];
+        
+    } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        NSLog(@"上传图片 = %@",responseObject);
+        block(responseObject,nil);
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"上传图片 = %@",error);
+        block(nil, error);
+    }];
 
-//+ (void)removeCookieData{
-//    NSURL *url = [NSURL URLWithString:HTTPURLPREFIX];
-//    if (url) {
-//        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
-//        for (int i = 0; i < [cookies count]; i++) {
-//            NSHTTPCookie *cookie = (NSHTTPCookie *)[cookies objectAtIndex:i];
-//            [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-//            DLog(@"\nDelete cookie: \n====================\n%@", cookie);
-//        }
-//    }
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    [defaults removeObjectForKey:Code_CookieData];
-//    [defaults synchronize];
-//}
+
+}
 
 #pragma mark - 显示错误
 

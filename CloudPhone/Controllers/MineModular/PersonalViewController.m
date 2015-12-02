@@ -11,6 +11,8 @@
 #import "PersonalNameViewController.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
+#import "UserModel.h"
+
 @interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -18,6 +20,9 @@
 @property (nonatomic, strong) NSDictionary *personalDic;
 
 @property (nonatomic, strong) NSTextAttachment *attchIcon;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic, strong) UserModel *user;
+
 
 @end
 
@@ -30,39 +35,6 @@
     return _itemArray;
 }
 
-
-- (void)initData {
-    
-    //先读取缓存
-    NSString *cachePath = [self personalInfoFilePath];
-    self.personalDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
-    [_tableView reloadData];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    //用户中心基本信息
-    
-    NSDictionary *dic = @{@"us2":@"us"};
-    
-    [[AirCloudNetAPIManager sharedManager] getUserCenterInfoOfParams:dic WithBlock:^(id data, NSError *error) {
-        
-        if (!error) {
-            NSDictionary *dic = (NSDictionary *)data;
-            
-            if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
-                
-            } else {
-                DLog(@"******%@",[dic objectForKey:@"msg"]);
-                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
-                
-            }
-        }
-    }];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
@@ -72,29 +44,19 @@
     UIButton *backButton = [self setBackBarButton];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
-
-
-
-    //图片路径
-    NSString *iconPath = [self personalIconFilePath];
-    UIImage *image = [UIImage imageNamed:@"tabbar_homepage_selected.png"];
-    [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
     
-    //写入沙盒
-    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
-    [infoDic setValue:iconPath forKey:@"personalIcon"];
-    [infoDic setValue:@"王聪" forKey:@"personalName"];
-    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
-    [infoDic setObject:@"小白" forKey:@"nickname"];
-    [infoDic setObject:@"男" forKey:@"gender"];
-    [infoDic setObject:@"20150302" forKey:@"birthDate"];
-    [infoDic setObject:@"火狐哈哈哈" forKey:@"signingMsg"];
-    BOOL result = [infoDic writeToFile:[self personalInfoFilePath] atomically:YES];
-    if (result) {
-        DLog(@"缓存成功");
-    }
+    
+    [self requestPersonalInfo];
+}
 
-    [self initData];
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+    [self HUDHidden];
 }
 
 
@@ -128,41 +90,61 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
         if (indexPath.section == 0) {
-            //手机号
-            UILabel *iconLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (60 - 20)/2.0, 60, 20)];
-            iconLabel.font = [UIFont systemFontOfSize:17.0];
-            iconLabel.text = @"头像";
-            [cell addSubview:iconLabel];
+            UIImage *image = [UIImage imageNamed:@"mine_icon"];
+            UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+            imageView.frame = CGRectMake(MainWidth - image.size.width - 30, (60 - image.size.height)/2.0, image.size.width, image.size.height);
+            imageView.tag = 100;
+            [cell addSubview:imageView];
         }
       
     }
     cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     
+    UserModel *model = self.user;
+    
     if (indexPath.section == 0) {
-       
-        _attchIcon = [[NSTextAttachment alloc] init];
-        _attchIcon.bounds = CGRectMake(0, 0, 40, 40);
-        if ([self.personalDic objectForKey:@"personalIcon"]) {
-          _attchIcon.image = [UIImage imageNamed:@"mine_icon"];
+        cell.textLabel.text = @"头像";
+        
+        UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
+        //头像
+        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
         } else {
-          _attchIcon.image = [UIImage imageNamed:@"mine_icon"];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
         }
-        NSAttributedString *iconString = [NSAttributedString attributedStringWithAttachment:_attchIcon];
-        cell.detailTextLabel.attributedText = iconString;
-       
         
     } else {
         cell.textLabel.text = self.itemArray[indexPath.row];
+        
+        
         if (indexPath.row == 0) {
-            cell.detailTextLabel.text = [self.personalDic objectForKey:@"nickname"];
+            //昵称
+            if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@""]) {
+                cell.detailTextLabel.text = @"请设置";
+            } else {
+                cell.detailTextLabel.text = model.userName;
+            }
+
         }else if (indexPath.row == 1){
-            cell.detailTextLabel.text = [self.personalDic objectForKey:@"gender"];
+            //性别
+            cell.detailTextLabel.text = model.userGender;
         }else if (indexPath.row == 2){
-            cell.detailTextLabel.text = [self.personalDic objectForKey:@"birthDate"];
+            //生日
+            cell.detailTextLabel.text = model.userBirthday;
         }else if (indexPath.row == 3){
-            cell.detailTextLabel.text = [self.personalDic objectForKey:@"personalNumber"];
+            //电话
+            if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
+                cell.detailTextLabel.text = @"电话";
+            } else {
+                cell.detailTextLabel.text = model.userNumber;
+            }
+
         }else{
-            cell.detailTextLabel.text = [self.personalDic objectForKey:@"signingMsg"];
+            //昵称
+            if (model.userSignature == nil || model.userSignature.length == 0 || [model.userSignature isEqualToString:@""]) {
+                cell.detailTextLabel.text = @"请设置";
+            } else {
+                cell.detailTextLabel.text = model.userSignature;
+            }
         }
         
     }
@@ -170,12 +152,6 @@
     return cell;
 }
 
-- (void)initDate{
-    //先读取缓存
-    NSString *cachePath = [self personalInfoFilePath];
-    self.personalDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
-    [_tableView reloadData];
-}
 
 #pragma mark - UITableviewDelegate
 
@@ -211,33 +187,8 @@
         PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
         [self.navigationController pushViewController:personalNameVC animated:YES];
     }else if (indexPath.section == 1 && indexPath.row == self.itemArray.count - 1){
-        //退出登录
-               [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
-                   
-            if (!error) {
-                NSDictionary *dic = (NSDictionary *)data;
-                
-                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    
-                    //这里作为一个登录标志
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    [defaults setObject:@"notLogined" forKey:isLoginKey];
-                    [defaults synchronize];
-                    
-                    //进入
-                    AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    [appDele loadLoginViewController];
-                   
-                } else {
-                    DLog(@"*****%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
-                }
-            } else {
-                //error
-                DLog(@"*****%@",error);
-            }
-        }];
-
+        //tuichu
+        [self requestLoginOut];
     }
 }
 
@@ -246,11 +197,17 @@
     switch (buttonIndex) {
         case 0:
         {
-            UIImagePickerController *pickController = [[UIImagePickerController alloc]init];
-            pickController.allowsEditing = YES;
-            pickController.delegate = self;
-            pickController.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self presentViewController:pickController animated:YES completion:^{}];
+            BOOL iscamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+            if (!iscamera) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"没有相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+                [alert show];
+                return;
+            }
+            UIImagePickerController *pick = [[UIImagePickerController alloc]init];
+            pick.delegate = self;
+            pick.sourceType = UIImagePickerControllerSourceTypeCamera;
+            pick.allowsEditing = YES;
+            [self presentViewController:pick animated:YES completion:NULL];
             
         }
             break;
@@ -276,29 +233,97 @@
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
-    _attchIcon.image = image;
-    
-    //    [self upLoadImage:UIImageJPEGRepresentation(image, 0.05)];
+    [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image WithBlock:^(id data, NSError *error) {
+        DLog(@"data = %@",data);
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                NSLog(@"上传图片成功");
+                UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
+                imageView.image = image;
+            } else {
+                [CustomMBHud customHudWindow:@"上传图片失败"];
+            }
+        }
+    }];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 
+- (void)requestPersonalInfo {
+    NSDictionary *dic = @{@"us2":@"us"};
+    [self AddHUD];
+    [[AirCloudNetAPIManager sharedManager] getUserCenterInfoOfParams:dic WithBlock:^(id data, NSError *error) {
+        [self HUDHidden];
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                NSDictionary *info = [dic objectForKey:@"data"];
+                if (info) {
+                    _user = [[UserModel alloc]init];
+                    _user.userNumber = [info objectForKey:@"mobile"];
+                    _user.userName = [info objectForKey:@"nick_name"];
+                    _user.userIcon = [info objectForKey:@"photo"];
+                    _user.userBirthday = [info objectForKey:@"birthday"];
+                    _user.userGender = [info objectForKey:@"gender"];
+                    _user.userSignature = [info objectForKey:@"signature"];
+                    [_tableView reloadData];
+                }
 
-#pragma mark ---file read and write
-
-//个人头像保存在沙盒
-- (NSString *)personalIconFilePath {
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
-    return filePath;
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                
+            }
+        }
+    }];
 }
 
-//保存在plist文件中
-- (NSString *)personalInfoFilePath{
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
-    return filePath;
+- (void)requestLoginOut {
+    //退出登录
+    [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
+        
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                
+                //这里作为一个登录标志
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:@"notLogined" forKey:isLoginKey];
+                [defaults synchronize];
+                
+                //进入
+                AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDele loadLoginViewController];
+                
+            } else {
+                DLog(@"*****%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+            }
+        } else {
+            //error
+            DLog(@"*****%@",error);
+        }
+    }];
+
+}
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
 }
 
 #pragma mark - nav

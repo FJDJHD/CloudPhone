@@ -9,6 +9,8 @@
 #import "MainMineViewController.h"
 #import "Global.h"
 #import "PersonalViewController.h"
+#import "UserModel.h"
+
 @interface MainMineViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSNumber  *remainingTime;
 @property (nonatomic, strong) UITableView *tableView;
@@ -16,6 +18,8 @@
 @property (nonatomic, strong) NSArray *itemArray;
 
 @property (nonatomic, strong) NSMutableDictionary *testDic;
+
+@property (nonatomic, strong) UserModel *user;
 
 @end
 
@@ -106,17 +110,30 @@
     cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     
     if (indexPath.section == 0) {
-        if ([self.testDic objectForKey:@"personalIcon"]) {
-            cell.imageView.image = [UIImage imageNamed:[self.testDic objectForKey:@"personalIcon"]];
+        UserModel *model = self.user;
+        //电话
+        if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
+            cell.detailTextLabel.text = @"";
         } else {
+            cell.detailTextLabel.text = model.userNumber;
+        }
+        //昵称
+        if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@""]) {
+            cell.textLabel.text = @"昵称";
+        } else {
+            cell.textLabel.text = model.userName;
+        }
+        //头像
+        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
+            cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+        } else {
+            DLog(@"SDwebimage");
             cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
         }
-        cell.textLabel.text = [self.testDic objectForKey:@"personalName"];
-        cell.detailTextLabel.text = [self.testDic objectForKey:@"personalNumber"];
         
     } else {
         if(indexPath.row == 0){
-           cell.detailTextLabel.text = [NSString stringWithFormat:@"剩余%@分钟",self.remainingTime] ;
+           cell.detailTextLabel.text = [NSString stringWithFormat:@"剩余123分钟"] ;
         }
         cell.textLabel.text = _itemArray[indexPath.row];
     }
@@ -168,15 +185,22 @@
         
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
-            
-            if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
-                
-                
-            } else {
-                DLog(@"******%@",[dic objectForKey:@"msg"]);
-                
-                
+            if (dic) {
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                    
+                    NSDictionary *info = [dic objectForKey:@"data"];
+                    if (info) {
+                        _user = [[UserModel alloc]init];
+                        _user.userNumber = [info objectForKey:@"mobile"];
+                        _user.userName = [info objectForKey:@"nick_name"];
+                        _user.userIcon = [info objectForKey:@"photo"];
+                        [_tableView reloadData];
+                    }
+                    
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                }
             }
         }
     }];

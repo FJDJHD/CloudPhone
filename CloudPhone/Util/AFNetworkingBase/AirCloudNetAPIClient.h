@@ -33,4 +33,10 @@ typedef enum {
                  withMethodType:(int)NetworkMethod
                        andBlock:(void (^)(id data, NSError *error))block;
 
+- (void)uploadImageWithPath:(NSString *)aPath
+                serviceType:(NSString *)serviceType
+                 withParams:(NSDictionary*)params
+                  withImage:(UIImage *)image
+                   andBlock:(void (^)(id data, NSError *error))block;
+
 @end

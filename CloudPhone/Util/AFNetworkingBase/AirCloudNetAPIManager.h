@@ -52,8 +52,8 @@
                  WithBlock:(void (^)(id data, NSError *error))block;
 
 //更新头像信息提交
-- (void)updatePhotoOfParams:(NSDictionary *)params
-                  WithBlock:(void (^)(id data, NSError *error))block;
+- (void)updatePhotoOfImage:(UIImage *)image
+                 WithBlock:(void (^)(id data, NSError *error))block;
 
 //用户中心首页
 - (void)getUserCenterOfParams:(NSDictionary *)params

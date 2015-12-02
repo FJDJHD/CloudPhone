@@ -15,6 +15,8 @@
 @interface LoginViewController ()
 @property (nonatomic, strong) UITextField *numberField;
 @property (nonatomic, strong) UITextField *passwordField;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+
 @end
 
 @implementation LoginViewController
@@ -109,10 +111,12 @@
     }else if (self.passwordField.text.length == 0){
         [CustomMBHud customHudWindow:Login_emptyPwdNumber];
     }else{
+        [self AddHUD];
         NSDictionary *dic = @{@"mobile":self.numberField.text,@"password":self.passwordField.text};
         [[AirCloudNetAPIManager sharedManager] userLoginOfParams:dic WithBlock:^(id data, NSError *error)
          
         {
+            [self HUDHidden];
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
                 
@@ -153,6 +157,18 @@
 #pragma mark - nav
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
 }
 
 

@@ -140,13 +140,13 @@
 }
 
 //更新头像信息提交
-- (void)updatePhotoOfParams:(NSDictionary *)params
+- (void)updatePhotoOfImage:(UIImage *)image
                   WithBlock:(void (^)(id data, NSError *error))block {
     
     [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
     
-    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_updatePhoto serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error){
-        
+    
+    [[AirCloudNetAPIClient sharedJsonClient] uploadImageWithPath:API_updatePhoto serviceType:HTTPURLPREFIX withParams:nil withImage:image andBlock:^(id data, NSError *error) {
         block(data,error);
     }];
 }

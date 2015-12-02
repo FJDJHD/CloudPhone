@@ -90,6 +90,7 @@
 #import "UIColor+Category.h"
 #import "ColorTool.h"
 #import "GeneralToolObject.h"
+#import "UIImageView+WebCache.h"
 
 
 @interface Global : NSObject

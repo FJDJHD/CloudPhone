@@ -45,7 +45,8 @@
     self.navigationItem.rightBarButtonItem = rightItem;
     
 
-    UITextField *setNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT, MainWidth, 30)];
+    UITextField *setNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 44)];
+    setNameField.borderStyle = UITextBorderStyleNone;
     setNameField.backgroundColor = [UIColor whiteColor];
     self.setNameField = setNameField;
     [self.view addSubview:setNameField];
