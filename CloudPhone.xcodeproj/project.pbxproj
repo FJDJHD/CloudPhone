@@ -106,6 +106,8 @@
 		B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D081C0C5E7800D74D49 /* AboutCloudPhoneViewController.m */; };
 		B4BE7D0C1C0C688A00D74D49 /* HelpAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */; };
 		B4BE7D0F1C0C68A700D74D49 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */; };
+		B4D9B98A1C0E9354006AFF43 /* mine_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D9B9891C0E9354006AFF43 /* mine_arrow@2x.png */; };
+		B4D9B98C1C0E9374006AFF43 /* mine_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D9B98B1C0E9374006AFF43 /* mine_icon@2x.png */; };
 		B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D11C06B0360001407D /* LoginViewController.m */; };
 		B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */; };
 		B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */; };
@@ -323,6 +325,8 @@
 		B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpAndFeedbackViewController.m; sourceTree = "<group>"; };
 		B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		B4D9B9891C0E9354006AFF43 /* mine_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_arrow@2x.png"; sourceTree = "<group>"; };
+		B4D9B98B1C0E9374006AFF43 /* mine_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_icon@2x.png"; sourceTree = "<group>"; };
 		B4DEF6D01C06B0360001407D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		B4DEF6D11C06B0360001407D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPasswordViewController.h; sourceTree = "<group>"; };
@@ -828,6 +832,8 @@
 				B4E63BBB1C0C364900EDFFD2 /* pic_chat@2x.png */,
 				B4E63BBC1C0C364900EDFFD2 /* pic_find@2x.png */,
 				B4E63BBD1C0C364900EDFFD2 /* pic_phone@2x.png */,
+				B4D9B9891C0E9354006AFF43 /* mine_arrow@2x.png */,
+				B4D9B98B1C0E9374006AFF43 /* mine_icon@2x.png */,
 			);
 			name = Mine;
 			path = "我页面的标注及切图";
@@ -938,6 +944,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4E63BC21C0C364900EDFFD2 /* pic_find@2x.png in Resources */,
+				B4D9B98A1C0E9354006AFF43 /* mine_arrow@2x.png in Resources */,
 				B4AB5C511C0836F300143D29 /* welcome@2x.png in Resources */,
 				6EC0BB4A1C0BE0B300075A19 /* guide_page_1@2x.png in Resources */,
 				B4AB5C551C0853B600143D29 /* pic_zhanghao@2x.png in Resources */,
@@ -947,6 +954,7 @@
 				B4E63BC31C0C364900EDFFD2 /* pic_phone@2x.png in Resources */,
 				6EC0BB491C0BE0B300075A19 /* guide_page_3@2x.png in Resources */,
 				B4AB5C571C0853F600143D29 /* pic_mima@2x.png in Resources */,
+				B4D9B98C1C0E9374006AFF43 /* mine_icon@2x.png in Resources */,
 				B4E63BC11C0C364900EDFFD2 /* pic_chat@2x.png in Resources */,
 				6EC0BB4E1C0BE0EF00075A19 /* tabbar_homepage_selected@2x.png in Resources */,
 				6EC0BB4C1C0BE0E100075A19 /* tabbar_homepage_normal@2x.png in Resources */,

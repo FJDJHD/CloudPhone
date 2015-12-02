@@ -37,7 +37,7 @@
     
     //图片路径
     NSString *iconPath = [self personalIconFilePath];
-    UIImage *image = [UIImage imageNamed:@"tabbar_homepage_selected.png"];
+    UIImage *image = [UIImage imageNamed:@"mine_icon"];
     [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
 
     //写入沙盒
@@ -97,7 +97,7 @@
         }
         cell.detailTextLabel.font = [UIFont systemFontOfSize:15.0];
     }
-    cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"chance_selected@2x.png"]];
+    cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     
     if (indexPath.section == 0) {
         if ([self.testDic objectForKey:@"personalIcon"]) {
