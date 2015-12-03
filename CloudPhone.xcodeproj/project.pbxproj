@@ -73,6 +73,7 @@
 		6E4D37AF1C0568B1001573E3 /* UIScrollView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A11C0568B1001573E3 /* UIScrollView+MJExtension.m */; };
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
+		6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E722F541C0FEC9200A21557 /* DailNumberCell.m */; };
 		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
 		6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA464371C0EA88400650524 /* PersonalNameViewController.m */; };
 		6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643A1C0EE44A00650524 /* PersonModel.m */; };
@@ -275,6 +276,8 @@
 		6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		6E4D37A41C0568B1001573E3 /* UIView+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MJExtension.h"; sourceTree = "<group>"; };
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
+		6E722F531C0FEC9200A21557 /* DailNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailNumberCell.h; sourceTree = "<group>"; };
+		6E722F541C0FEC9200A21557 /* DailNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailNumberCell.m; sourceTree = "<group>"; };
 		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
 		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
 		6EA464361C0EA88400650524 /* PersonalNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalNameViewController.h; sourceTree = "<group>"; };
@@ -445,6 +448,8 @@
 				6E98972B1C083BD500B9D9E9 /* GuidePageView.m */,
 				6EC0BB311C0BDDC600075A19 /* RegisterAlertView.h */,
 				6EC0BB321C0BDDC600075A19 /* RegisterAlertView.m */,
+				6E722F531C0FEC9200A21557 /* DailNumberCell.h */,
+				6E722F541C0FEC9200A21557 /* DailNumberCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1032,6 +1037,7 @@
 				6E4D37AC1C0568B1001573E3 /* MJRefreshHeader.m in Sources */,
 				6E4D37A71C0568B1001573E3 /* MJRefreshComponent.m in Sources */,
 				6E4D378C1C056619001573E3 /* CustomMBHud.m in Sources */,
+				6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */,
 				6E4D37281C0561A2001573E3 /* AFSecurityPolicy.m in Sources */,
 				6E4D37871C056619001573E3 /* BaseNavigationController.m in Sources */,
 				6E4D37AB1C0568B1001573E3 /* MJRefreshGifHeader.m in Sources */,

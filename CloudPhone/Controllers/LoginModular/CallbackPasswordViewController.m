@@ -177,6 +177,7 @@ static const int kTimeCount             = 60;
                 } else {
                     DLog(@"%@",[dic objectForKey:@"msg"]);
                      [self originalTimeCountButton]; //再把按钮还原回去
+                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
                 }
             }
         }];

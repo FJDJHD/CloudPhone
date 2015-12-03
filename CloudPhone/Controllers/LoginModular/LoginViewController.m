@@ -76,7 +76,7 @@
     
     //忘记密码
     UIButton *forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    forgetPasswordButton.titleLabel.font = [UIFont systemFontOfSize:TEXTFONT];
+    forgetPasswordButton.titleLabel.font = [UIFont systemFontOfSize:14];
     forgetPasswordButton.frame = CGRectMake(MainWidth - 15 - 80, CGRectGetMaxY(backView.frame) + 10, 100, 32);
     [forgetPasswordButton setTitle:@"忘记密码 ？" forState:UIControlStateNormal];
     forgetPasswordButton.titleLabel.textColor = [UIColor colorWithHexString:@"#4c4c4c"];
