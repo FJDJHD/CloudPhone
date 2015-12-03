@@ -51,5 +51,7 @@
 //用户中心基本信息
 #define API_getUserCenter_info                          @"?s=/Home/User/index" //get
 
+//帮助与反馈
+#define API_getHelpCenter_info                          @"?s=/Home/User/helpFeedback"//get
 
 #endif

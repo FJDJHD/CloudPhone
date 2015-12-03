@@ -40,7 +40,7 @@
     self.title = @"通讯录";
     
     //导航栏返回按钮
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
@@ -49,6 +49,7 @@
     addressButton.frame = CGRectMake(0, 0, 44, 44);
     addressButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [addressButton setTitle:@"添加" forState:UIControlStateNormal];
+    addressButton.titleLabel.textColor = [UIColor blackColor];
     [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;

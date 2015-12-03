@@ -25,7 +25,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:0];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
 

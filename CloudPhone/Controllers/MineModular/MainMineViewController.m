@@ -48,8 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-       [self.view addSubview:self.tableView];
+    [self.view addSubview:self.tableView];
     
 //    //图片路径
 //    NSString *iconPath = [self personalIconFilePath];
@@ -83,6 +82,7 @@
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [ColorTool backgroundColor];
     }
     return _tableView;
 }
@@ -272,12 +272,6 @@
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
     return filePath;
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 

@@ -34,7 +34,7 @@
     self.title = @"关于云电话";
     [self.view addSubview:self.tableView];
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
@@ -60,6 +60,7 @@
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [ColorTool backgroundColor];
     }
     return _tableView;
 }
@@ -77,6 +78,13 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
     }
     cell.textLabel.text = self.itemArray[indexPath.row];
+    if (indexPath.row == 0) {
+        //当前版本号
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        cell.detailTextLabel.text = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+        cell.detailTextLabel.textColor = [UIColor blackColor];
+        cell.accessoryView = [[UIView alloc] init];
+    }
     if (indexPath.row == 2) {
         cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     }

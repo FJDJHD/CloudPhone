@@ -41,7 +41,7 @@
     self.title = @"设置";
     [self.view addSubview:self.tableView];
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
 }
@@ -53,6 +53,7 @@
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [ColorTool backgroundColor];
     }
     return _tableView;
 }

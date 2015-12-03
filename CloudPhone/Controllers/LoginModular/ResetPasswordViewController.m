@@ -22,7 +22,7 @@
     self.title = @"设置新登录密码";
     
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:0];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
 
@@ -45,7 +45,8 @@
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [self.navigationController pushViewController:[LoginViewController new] animated:YES];
+                    UIViewController *controller = self.navigationController.viewControllers[1];
+                    [self.navigationController popToViewController:controller animated:YES];
                 } else {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];

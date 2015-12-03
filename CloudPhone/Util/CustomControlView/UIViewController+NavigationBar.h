@@ -46,7 +46,7 @@
  *
  *  @return 返回UIButton
  */
-- (UIButton *)setBackBarButton;
+- (UIButton *)setBackBarButton:(int)flag;
 
 /**
  *  设置导航栏的View

@@ -175,4 +175,14 @@
     }];
 }
 
+//帮助与反馈
+- (void)getHelpCenterInfoOfParams:(NSDictionary *)params
+                        WithBlock:(void(^)(id data, NSError *error))block{
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_getHelpCenter_info serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+    
+}
+
 @end

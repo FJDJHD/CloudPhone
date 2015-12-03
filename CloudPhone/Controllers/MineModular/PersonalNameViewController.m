@@ -30,7 +30,7 @@
     self.title = @"昵称";
 
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:0];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     

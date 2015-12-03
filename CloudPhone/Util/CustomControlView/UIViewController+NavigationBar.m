@@ -106,8 +106,14 @@
     #endif
 }
 
-- (UIButton *)setBackBarButton{
-    UIImage *image = [UIImage imageNamed:@"pic_retrun.png"];
+- (UIButton *)setBackBarButton:(int)flag{
+    UIImage *image = [[UIImage alloc]init];
+    if (flag == 0) {
+        image = [UIImage imageNamed:@"back_whilte"];
+    }else {
+        image = [UIImage imageNamed:@"back"];
+    }
+   
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
     [backButton setImage:image forState:UIControlStateNormal];
     [backButton setExclusiveTouch:YES];

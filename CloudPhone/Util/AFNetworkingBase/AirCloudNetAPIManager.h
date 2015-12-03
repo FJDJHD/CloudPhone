@@ -62,5 +62,7 @@
 //用户中心基本信息
 - (void)getUserCenterInfoOfParams:(NSDictionary *)params
                         WithBlock:(void (^)(id data, NSError *error))block;
-
+//帮助与反馈
+- (void)getHelpCenterInfoOfParams:(NSDictionary *)params
+                        WithBlock:(void(^)(id data, NSError *error))block;
 @end

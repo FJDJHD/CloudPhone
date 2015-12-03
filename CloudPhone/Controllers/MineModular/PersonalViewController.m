@@ -47,7 +47,7 @@
     self.title = @"账号";
     [self.view addSubview:self.tableView];
       //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
@@ -72,6 +72,7 @@
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [ColorTool backgroundColor];
     }
     return _tableView;
 }
@@ -148,13 +149,16 @@
                 cell.detailTextLabel.text = model.userNumber;
             }
 
-        }else{
-            //昵称
+        }else if(indexPath.row == 4){
+            //个性签名
             if (model.userSignature == nil || model.userSignature.length == 0 || [model.userSignature isEqualToString:@""]) {
                 cell.detailTextLabel.text = @"请设置";
             } else {
                 cell.detailTextLabel.text = model.userSignature;
             }
+        }else{
+            //退出
+            cell.accessoryView = [[UIView alloc] init];
         }
         
     }
@@ -227,8 +231,7 @@
         [self.navigationController pushViewController:birthVC animated:YES];
         
     }else if (indexPath.section == 1 && indexPath.row == 3){
-      //
-        
+      //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
         PersonSignatureViewController *signatuireVC = [PersonSignatureViewController new];
         signatuireVC.modifySignatureBlock = ^(NSString *text){
@@ -239,9 +242,16 @@
         
     }else if (indexPath.section == 1 && indexPath.row == self.itemArray.count - 1){
         //退出
-        [self requestLoginOut];
+        UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:@"是否退出当前账号？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alterView show];
     }
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+    [self requestLoginOut];
+    }
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -285,8 +295,10 @@
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
+    [self AddHUD];
     [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image WithBlock:^(id data, NSError *error) {
         DLog(@"data = %@",data);
+        [self HUDHidden];
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             if ([[dic objectForKey:@"status"] integerValue] == 1) {

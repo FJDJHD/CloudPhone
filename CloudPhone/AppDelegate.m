@@ -79,26 +79,26 @@
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
-    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"pic_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tabbar_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_phoneSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *phoneNav = [[BaseNavigationController alloc] initWithRootViewController:phoneController];
     
     
     //聊天
     MainChatViewController *chatController = [[MainChatViewController alloc] initWithNibName:nil bundle:nil];
     chatController.title = @"聊天";
-    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"pic_chat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    chatController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"聊天" image:[[UIImage imageNamed:@"tabbar_chat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_chatSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *chatNav = [[BaseNavigationController alloc] initWithRootViewController:chatController];
     
     //发现
     MainDiscoverViewController *discoverController = [[MainDiscoverViewController alloc] initWithNibName:nil bundle:nil];
     discoverController.title = @"发现";
-    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"pic_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"tabbar_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_findSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *discoverNav = [[BaseNavigationController alloc] initWithRootViewController:discoverController];
     
     //我的
     MainMineViewController *mineController = [[MainMineViewController alloc] initWithNibName:nil bundle:nil];
     mineController.title = @"我";
-    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[[UIImage imageNamed:@"pic_mine"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_homepage_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[[UIImage imageNamed:@"tabbar_mine"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_mineSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *mineNav = [[BaseNavigationController alloc] initWithRootViewController:mineController];
     
     // tab bar
@@ -107,17 +107,17 @@
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
     
     if (CURRENT_SYS_VERSION >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool backgroundColor]];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
-        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setTintColor:[ColorTool backgroundColor]];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
+                                                           [UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
     //    //不需要tabbar下面文字，先隐藏掉
     //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0),NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateNormal];
     //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0), NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateSelected];

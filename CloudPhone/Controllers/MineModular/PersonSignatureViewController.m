@@ -32,7 +32,7 @@
     self.title = @"个性签名";
     
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
@@ -54,7 +54,6 @@
 }
 
 - (void)saveNameClick{
-
     NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setNameField.text};
     [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
         

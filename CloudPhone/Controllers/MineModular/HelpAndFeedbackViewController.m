@@ -12,38 +12,34 @@
 @interface HelpAndFeedbackViewController()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSDictionary *personalDic;
-
+@property (nonatomic, strong) NSMutableArray *helpMutableArray;
 @property (nonatomic, strong) NSTextAttachment *attchIcon;
+
 
 @end
 
 
 @implementation HelpAndFeedbackViewController
 
-- (NSArray *)itemArray{
-    if (!_itemArray) {
-        _itemArray = @[@"使用云电话会不会收费？",@"使用云电话会不会消耗流量？",@"怎么做才能获取免费通话时长？",@"如何使用回拨？"];
-    }
-    return _itemArray;
-}
 
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+    self.helpMutableArray = [NSMutableArray array];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [ColorTool backgroundColor];
+
     self.title = @"帮助与反馈";
     [self.view addSubview:self.tableView];
     //返回
-    UIButton *backButton = [self setBackBarButton];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
+    
+    [self requestHelpCenterInfo];
 }
 
 
@@ -53,6 +49,7 @@
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [ColorTool backgroundColor];
     }
     return _tableView;
 }
@@ -65,7 +62,7 @@
     if (section == 0) {
         return 1;
     }else{
-        return  self.itemArray.count;
+        return  self.helpMutableArray.count;
     }
 }
 
@@ -87,7 +84,7 @@
     }
     
     if (indexPath.section != 0) {
-        cell.textLabel.text = self.itemArray[indexPath.row];
+        cell.textLabel.text = [self.helpMutableArray[indexPath.row] objectForKey:@"title"];
         cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     }
     
@@ -132,9 +129,35 @@
     
 }
 
+- (void)requestHelpCenterInfo{
+    
+    [[AirCloudNetAPIManager sharedManager] getHelpCenterInfoOfParams:nil WithBlock:^(id data, NSError *error){
+        
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"------%@",[dic objectForKey:@"msg"]);
+                self.helpMutableArray = [dic objectForKey:@"data"];
+                [self.tableView reloadData];
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:@"数据请求失败"];
+                
+                
+            }
+        }
+        
+    }];
+}
+
+
+
 
 #pragma mark - nav
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+
 @end
