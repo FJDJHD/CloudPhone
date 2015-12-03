@@ -1,20 +1,21 @@
 //
-//  PersonalNameViewController.m
+//  PersonBirthdayViewController.m
 //  CloudPhone
 //
-//  Created by wangcong on 15/12/2.
+//  Created by iTelDeng on 15/12/3.
 //  Copyright © 2015年 iTal. All rights reserved.
 //
 
-#import "PersonalNameViewController.h"
+#import "PersonBirthdayViewController.h"
+
 #import "Global.h"
 
-@interface PersonalNameViewController()
+@interface PersonBirthdayViewController()
 @property (nonatomic, strong)   UITextField *setNameField;
 
 @end
 
-@implementation PersonalNameViewController
+@implementation PersonBirthdayViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -27,8 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
-    self.title = @"昵称";
-
+    self.title = @"生日";
+    
     //返回
     UIButton *backButton = [self setBackBarButton];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
@@ -40,11 +41,11 @@
     saveButton.frame = CGRectMake(0, 0, 44, 44);
     saveButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-    [saveButton addTarget:self action:@selector(saveNameClick) forControlEvents:UIControlEventTouchUpInside];
+    [saveButton addTarget:self action:@selector(saveClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     self.navigationItem.rightBarButtonItem = rightItem;
     
-
+    
     UITextField *setNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 44)];
     setNameField.borderStyle = UITextBorderStyleNone;
     setNameField.backgroundColor = [UIColor whiteColor];
@@ -52,35 +53,33 @@
     [self.view addSubview:setNameField];
 }
 
-- (void)saveNameClick{
+- (void)saveClick{
     
-    NSDictionary *dic = @{@"field":@"nick_name",@"fieval":self.setNameField.text};
+    NSDictionary *dic = @{@"field":@"birthday",@"fieval":self.setNameField.text};
     [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
         
-         if (!error) {
-             NSDictionary *dic = (NSDictionary *)data;
-             
-             if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                 [_setNameField resignFirstResponder];
-
-                 DLog(@"昵称修改成功------%@",[dic objectForKey:@"msg"]);
-                 [CustomMBHud customHudWindow:@"昵称修改成功"];
-                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                     [self popViewController];
-                     if (self.modifyNameBlock) {
-                         self.modifyNameBlock(self.setNameField.text);
-                     }
-                  
-                 });
-                 
-             } else {
-                 DLog(@"******%@",[dic objectForKey:@"msg"]);
-                 [CustomMBHud customHudWindow:@"昵称修改失败"];
-                 
-             }
-         }
-         
-     }];
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                [_setNameField resignFirstResponder];
+                [CustomMBHud customHudWindow:@"修改成功"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self popViewController];
+                    if (self.modifyBirthBlock) {
+                        self.modifyBirthBlock(self.setNameField.text);
+                    }
+                    
+                });
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:@"修改失败"];
+                
+            }
+        }
+        
+    }];
     
 }
 
@@ -89,5 +88,4 @@
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 @end

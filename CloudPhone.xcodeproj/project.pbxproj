@@ -96,6 +96,10 @@
 		6EC0BB531C0BF14500075A19 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB521C0BF14500075A19 /* NSString+MD5.m */; };
 		6EC0BB591C0C568A00075A19 /* AddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB581C0C568A00075A19 /* AddressViewController.m */; };
 		6EC0BB5F1C0C6DA700075A19 /* NSString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */; };
+		B44E906E1C0FD28D00CFC003 /* about_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E906D1C0FD28D00CFC003 /* about_logo@2x.png */; };
+		B44E90711C0FD41700CFC003 /* PersonGenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */; };
+		B44E90741C0FD44900CFC003 /* PersonBirthdayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */; };
+		B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */; };
 		B4AB5C511C0836F300143D29 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C501C0836F300143D29 /* welcome@2x.png */; };
 		B4AB5C531C0847CE00143D29 /* pic_touxiang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */; };
 		B4AB5C551C0853B600143D29 /* pic_zhanghao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */; };
@@ -313,6 +317,13 @@
 		6EC0BB581C0C568A00075A19 /* AddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressViewController.m; sourceTree = "<group>"; };
 		6EC0BB5D1C0C6DA700075A19 /* NSString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Util.h"; sourceTree = "<group>"; };
 		6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Util.m"; sourceTree = "<group>"; };
+		B44E906D1C0FD28D00CFC003 /* about_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about_logo@2x.png"; sourceTree = "<group>"; };
+		B44E906F1C0FD41700CFC003 /* PersonGenderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonGenderViewController.h; sourceTree = "<group>"; };
+		B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonGenderViewController.m; sourceTree = "<group>"; };
+		B44E90721C0FD44900CFC003 /* PersonBirthdayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonBirthdayViewController.h; sourceTree = "<group>"; };
+		B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonBirthdayViewController.m; sourceTree = "<group>"; };
+		B44E90751C0FD4B000CFC003 /* PersonSignatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonSignatureViewController.h; sourceTree = "<group>"; };
+		B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonSignatureViewController.m; sourceTree = "<group>"; };
 		B4AB5C501C0836F300143D29 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
 		B4AB5C521C0847CE00143D29 /* pic_touxiang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_touxiang@2x.png"; sourceTree = "<group>"; };
 		B4AB5C541C0853B600143D29 /* pic_zhanghao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_zhanghao@2x.png"; sourceTree = "<group>"; };
@@ -781,6 +792,12 @@
 				B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */,
 				6EA464361C0EA88400650524 /* PersonalNameViewController.h */,
 				6EA464371C0EA88400650524 /* PersonalNameViewController.m */,
+				B44E906F1C0FD41700CFC003 /* PersonGenderViewController.h */,
+				B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */,
+				B44E90721C0FD44900CFC003 /* PersonBirthdayViewController.h */,
+				B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */,
+				B44E90751C0FD4B000CFC003 /* PersonSignatureViewController.h */,
+				B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */,
 				B4BE7D041C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.h */,
 				B4BE7D051C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m */,
 				B4BE7D011C0C5E1900D74D49 /* TaskCenterViewController.h */,
@@ -837,6 +854,7 @@
 		B4E63BB71C0C364900EDFFD2 /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				B44E906D1C0FD28D00CFC003 /* about_logo@2x.png */,
 				B4E63BB91C0C364900EDFFD2 /* icon@2x.png */,
 				B4E63BBA1C0C364900EDFFD2 /* pic_mine@2x.png */,
 				B4E63BBB1C0C364900EDFFD2 /* pic_chat@2x.png */,
@@ -968,6 +986,7 @@
 				B4E63BC11C0C364900EDFFD2 /* pic_chat@2x.png in Resources */,
 				6EC0BB4E1C0BE0EF00075A19 /* tabbar_homepage_selected@2x.png in Resources */,
 				6EC0BB4C1C0BE0E100075A19 /* tabbar_homepage_normal@2x.png in Resources */,
+				B44E906E1C0FD28D00CFC003 /* about_logo@2x.png in Resources */,
 				B4AB5C5B1C085B0700143D29 /* chance_selected@2x.png in Resources */,
 				B4E63BBF1C0C364900EDFFD2 /* icon@2x.png in Resources */,
 				6EC0BB481C0BE0B300075A19 /* guide_page_2@2x.png in Resources */,
@@ -1006,6 +1025,7 @@
 				6E4D372F1C0561A2001573E3 /* UIAlertView+AFNetworking.m in Sources */,
 				6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */,
 				6E4D36E41C055D93001573E3 /* Global.m in Sources */,
+				B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */,
 				6EC0BB401C0BDEB700075A19 /* MainChatViewController.m in Sources */,
 				B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */,
 				6E4D37651C056384001573E3 /* UIButton+WebCache.m in Sources */,
@@ -1048,6 +1068,7 @@
 				6E4D372A1C0561A2001573E3 /* AFURLRequestSerialization.m in Sources */,
 				6E4D37261C0561A2001573E3 /* AFHTTPSessionManager.m in Sources */,
 				6E4D373A1C05628C001573E3 /* MBProgressHUD.m in Sources */,
+				B44E90711C0FD41700CFC003 /* PersonGenderViewController.m in Sources */,
 				6E4D376B1C056384001573E3 /* UIView+WebCacheOperation.m in Sources */,
 				6E4D378A1C056619001573E3 /* UINavigationItem+margin.m in Sources */,
 				6E4D375F1C056384001573E3 /* SDWebImageCompat.m in Sources */,
@@ -1063,6 +1084,7 @@
 				B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */,
 				B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */,
 				6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */,
+				B44E90741C0FD44900CFC003 /* PersonBirthdayViewController.m in Sources */,
 				6E4D37641C056384001573E3 /* SDWebImagePrefetcher.m in Sources */,
 				6E4D372C1C0561A2001573E3 /* AFURLSessionManager.m in Sources */,
 				6E4D37AF1C0568B1001573E3 /* UIScrollView+MJExtension.m in Sources */,

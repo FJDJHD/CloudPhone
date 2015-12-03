@@ -11,6 +11,12 @@
 #import "PersonalViewController.h"
 #import "UserModel.h"
 
+#import "HelpAndFeedbackViewController.h"
+#import "AboutCloudPhoneViewController.h"
+#import "SettingViewController.h"
+#import "TaskCenterViewController.h"
+#import "FreeCallPhoneTimesViewController.h"
+
 @interface MainMineViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) NSNumber  *remainingTime;
 @property (nonatomic, strong) UITableView *tableView;
@@ -102,33 +108,58 @@
     if (!cell) {
         if (indexPath.section == 0) {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+            UIImage *image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+            UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+            imageView.layer.cornerRadius = image.size.height/2.0;
+            imageView.layer.masksToBounds = YES;
+            imageView.frame = CGRectMake(15, 10, image.size.width, image.size.height);
+            imageView.tag = 200;
+            [cell addSubview:imageView];
+            
+            UILabel *userLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, 15, 200, 30)];
+            userLable.font = [UIFont systemFontOfSize:18];
+            userLable.textAlignment = NSTextAlignmentLeft;
+            userLable.textColor = [UIColor blackColor];
+            userLable.tag = 201;
+            [cell addSubview:userLable];
+            
+            UILabel *mobileLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10 , 45, 200, 30)];
+            mobileLable.font = [UIFont systemFontOfSize:16];
+            mobileLable.textAlignment = NSTextAlignmentLeft;
+            mobileLable.textColor = [UIColor lightGrayColor];
+            mobileLable.tag = 202;
+            [cell addSubview:mobileLable];
+
         } else {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
         }
+        
         cell.detailTextLabel.font = [UIFont systemFontOfSize:15.0];
     }
-    cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
+    
+        cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     
     if (indexPath.section == 0) {
         UserModel *model = self.user;
+        UIImageView *imageView = (UIImageView *)[cell viewWithTag:200];
+        UILabel *userLable = (UILabel *)[cell viewWithTag:201];
+        UILabel *mobileLable = (UILabel *)[cell viewWithTag:202];
         //电话
         if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
-            cell.detailTextLabel.text = @"";
+            mobileLable.text = @"";
         } else {
-            cell.detailTextLabel.text = model.userNumber;
+            mobileLable.text = model.userNumber;
         }
         //昵称
         if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@""]) {
-            cell.textLabel.text = @"昵称";
+            userLable.text = @"昵称";
         } else {
-            cell.textLabel.text = model.userName;
+            userLable.text = model.userName;
         }
         //头像
         if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
-            cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
         } else {
-            DLog(@"SDwebimage");
-            cell.imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"pic_touxiang@2x.png"]];
         }
         
     } else {
@@ -169,14 +200,35 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0 && indexPath.row == 0) {
         PersonalViewController *personalViewController = [[PersonalViewController alloc] init];
         [self.navigationController pushViewController:personalViewController animated:YES];
+    }else if (indexPath.section == 1 && indexPath.row == 0){
+        FreeCallPhoneTimesViewController *freeVC = [FreeCallPhoneTimesViewController new];
+        [self.navigationController pushViewController:freeVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 1){
+        TaskCenterViewController *taskVC = [TaskCenterViewController new];
+        [self.navigationController pushViewController:taskVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 2){
+        AboutCloudPhoneViewController *aboutVC = [AboutCloudPhoneViewController new];
+        [self.navigationController pushViewController:aboutVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 3){
+        HelpAndFeedbackViewController *helpVC = [HelpAndFeedbackViewController new];
+        [self.navigationController pushViewController:helpVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 4){
+        SettingViewController *setVC = [SettingViewController new];
+        [self.navigationController pushViewController:setVC animated:YES];
+        
     }
 }
+
 
 - (void)requestPersonalCenter {
 

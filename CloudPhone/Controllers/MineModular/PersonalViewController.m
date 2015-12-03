@@ -8,10 +8,16 @@
 
 #import "PersonalViewController.h"
 #import "Global.h"
-#import "PersonalNameViewController.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
 #import "UserModel.h"
+
+#import "PersonalNameViewController.h"
+#import "PersonGenderViewController.h"
+#import "PersonBirthdayViewController.h"
+#import "PersonSignatureViewController.h"
+
+
 
 @interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
@@ -98,7 +104,11 @@
         }
       
     }
-    cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
+    if (!(indexPath.section == 1 && indexPath.row == 3)) {
+        cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
+    } else {
+        cell.accessoryView = [[UIView alloc]init];
+    }
     
     UserModel *model = self.user;
     
@@ -185,11 +195,53 @@
         [changeIconSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 0){
         PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
+        personalNameVC.modifyNameBlock = ^(NSString *name){
+            UITableViewCell *nameCell = [tableView cellForRowAtIndexPath:indexPath];
+            nameCell.detailTextLabel.text = name;
+            
+        };
         [self.navigationController pushViewController:personalNameVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 1){
+        PersonGenderViewController *genderVC = [PersonGenderViewController new];
+        genderVC.modifyGenderBlock = ^(NSInteger gender){
+            UITableViewCell *genderCell = [tableView cellForRowAtIndexPath:indexPath];
+            if (gender == 0) {
+                genderCell.detailTextLabel.text = @"保密";
+            }else if (gender == 1)
+            {
+                genderCell.detailTextLabel.text = @"男";
+            }else{
+                genderCell.detailTextLabel.text = @"女";
+            }
+        };
+        
+        [self.navigationController pushViewController:genderVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 2){
+        PersonBirthdayViewController *birthVC = [PersonBirthdayViewController new];
+        birthVC.modifyBirthBlock = ^(NSString *birth){
+            UITableViewCell *textCell = [tableView cellForRowAtIndexPath:indexPath];
+            textCell.detailTextLabel.text = birth;
+        };
+        [self.navigationController pushViewController:birthVC animated:YES];
+        
+    }else if (indexPath.section == 1 && indexPath.row == 3){
+      //
+        
+    }else if (indexPath.section == 1 && indexPath.row == 4){
+        PersonSignatureViewController *signatuireVC = [PersonSignatureViewController new];
+        signatuireVC.modifySignatureBlock = ^(NSString *text){
+            UITableViewCell *textCell = [tableView cellForRowAtIndexPath:indexPath];
+            textCell.detailTextLabel.text = text;
+        };
+        [self.navigationController pushViewController:signatuireVC animated:YES];
+        
     }else if (indexPath.section == 1 && indexPath.row == self.itemArray.count - 1){
-        //tuichu
+        //退出
         [self requestLoginOut];
     }
+
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -286,8 +338,9 @@
 
 - (void)requestLoginOut {
     //退出登录
+    [self AddHUD];
     [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
-        
+        [self HUDHidden];
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             

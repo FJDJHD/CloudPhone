@@ -1,20 +1,22 @@
 //
-//  PersonalNameViewController.m
+//  PersonSignatureViewController.m
 //  CloudPhone
 //
-//  Created by wangcong on 15/12/2.
+//  Created by iTelDeng on 15/12/3.
 //  Copyright © 2015年 iTal. All rights reserved.
 //
 
-#import "PersonalNameViewController.h"
+#import "PersonSignatureViewController.h"
+
+
 #import "Global.h"
 
-@interface PersonalNameViewController()
-@property (nonatomic, strong)   UITextField *setNameField;
+@interface PersonSignatureViewController()
+@property (nonatomic, strong)   UITextView *setNameField;
 
 @end
 
-@implementation PersonalNameViewController
+@implementation PersonSignatureViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -27,8 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
-    self.title = @"昵称";
-
+    self.title = @"个性签名";
+    
     //返回
     UIButton *backButton = [self setBackBarButton];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
@@ -44,43 +46,41 @@
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     self.navigationItem.rightBarButtonItem = rightItem;
     
-
-    UITextField *setNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 44)];
-    setNameField.borderStyle = UITextBorderStyleNone;
+    
+   UITextView *setNameField = [[UITextView alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 200)];
     setNameField.backgroundColor = [UIColor whiteColor];
     self.setNameField = setNameField;
     [self.view addSubview:setNameField];
 }
 
 - (void)saveNameClick{
-    
-    NSDictionary *dic = @{@"field":@"nick_name",@"fieval":self.setNameField.text};
+
+    NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setNameField.text};
     [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
         
-         if (!error) {
-             NSDictionary *dic = (NSDictionary *)data;
-             
-             if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                 [_setNameField resignFirstResponder];
-
-                 DLog(@"昵称修改成功------%@",[dic objectForKey:@"msg"]);
-                 [CustomMBHud customHudWindow:@"昵称修改成功"];
-                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                     [self popViewController];
-                     if (self.modifyNameBlock) {
-                         self.modifyNameBlock(self.setNameField.text);
-                     }
-                  
-                 });
-                 
-             } else {
-                 DLog(@"******%@",[dic objectForKey:@"msg"]);
-                 [CustomMBHud customHudWindow:@"昵称修改失败"];
-                 
-             }
-         }
-         
-     }];
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                [_setNameField resignFirstResponder];
+                [CustomMBHud customHudWindow:@"个性签名修改成功"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self popViewController];
+                    if (self.modifySignatureBlock) {
+                        self.modifySignatureBlock(self.setNameField.text);
+                    }
+                    
+                });
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:@"个性签名修改失败"];
+                
+                
+            }
+        }
+        
+    }];
     
 }
 
@@ -89,5 +89,4 @@
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 @end

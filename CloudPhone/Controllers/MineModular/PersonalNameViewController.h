@@ -10,4 +10,6 @@
 
 @interface PersonalNameViewController : UIViewController
 
+@property (nonatomic,copy) void (^modifyNameBlock)(NSString *);
+
 @end
