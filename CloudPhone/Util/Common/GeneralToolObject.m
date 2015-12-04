@@ -56,8 +56,8 @@
 + (NSString *)requestHeaderValue {
     long timeInt =[[NSDate date] timeIntervalSince1970];
     NSString *imei = [self CPUuidString];
-    NSString *versionName = APP_VERSION;
-    NSString *version = APP_BUNDLEID;
+    NSString *versionName = APP_BUNDLEID;
+    NSString *version = APP_VERSION;
     
     NSString *time = [NSString stringWithFormat:@"%ld",timeInt];
     NSString *md5VersionName = [versionName md5];
@@ -67,7 +67,7 @@
     
     NSString *tokens = [NSString stringWithFormat:@"%@",[tokenq md5]];
     
-    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@ mobile_model/iphone",versionName,version,imei,md5imei,time,tokens];
+    NSString *value = [NSString stringWithFormat:@"itel_version/%@ version/%@ from/ios imei/%@ key/%@ time/%@ token/%@ mobile_model/iPhone mobile_type/iphone",versionName,version,imei,md5imei,time,tokens];
     return value;
 }
 

@@ -48,30 +48,30 @@
     
     
     UIButton *manButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    manButton.frame = CGRectMake(5, 200, 50, 44);
+    manButton.frame = CGRectMake(0, STATUS_NAV_BAR_HEIGHT, MainWidth, 44);
+    manButton.backgroundColor = [UIColor whiteColor];
     manButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [manButton setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
-    [manButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [manButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [manButton setTitle:@"男" forState:UIControlStateNormal];
     [manButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     manButton.tag = 1;
     [self.view addSubview:manButton];
     
     UIButton *womanButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    womanButton.frame = CGRectMake(50, 200, 50, 44);
+    womanButton.frame = CGRectMake(0, CGRectGetMaxY(manButton.frame), MainWidth, 44);
+    womanButton.backgroundColor = [UIColor whiteColor];
     womanButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [womanButton setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
-    [womanButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [womanButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [womanButton setTitle:@"女" forState:UIControlStateNormal];
     [womanButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     womanButton.tag = 2;
     [self.view addSubview:womanButton];
     
     UIButton *unsetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    unsetButton.frame = CGRectMake(120, 200, 50, 44);
+    unsetButton.frame = CGRectMake(0, CGRectGetMaxY(womanButton.frame), MainWidth, 44);
+    unsetButton.backgroundColor = [UIColor whiteColor];
     unsetButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [unsetButton setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
-    [unsetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [unsetButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [unsetButton setTitle:@"未设置" forState:UIControlStateNormal];
     [unsetButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     unsetButton.tag = 0;

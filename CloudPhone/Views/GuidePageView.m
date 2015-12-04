@@ -46,7 +46,8 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
         _pageCount = imagesArray.count;
         
         UIImageView *bgimageView = [[UIImageView alloc] initWithFrame:self.frame];
-        bgimageView.image = [UIImage imageNamed:@"guide_bg.png"];
+        bgimageView.contentMode = UIViewContentModeScaleAspectFill;
+       // bgimageView.image = [UIImage imageNamed:@"guide_bg.png"];
         [self addSubview:bgimageView];
         
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
@@ -60,31 +61,26 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
             UIImage *pageImage = [imagesArray objectAtIndex:i];
             
             if (Is3_5Inches()) {
-//                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 30, pageImage.size.width, pageImage.size.height)];
                  UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i, 0, pageImage.size.width, pageImage.size.height)];
                 [imageView setImage:pageImage];
                 [scrollView addSubview:imageView];
             } else {
-//                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, margin, pageImage.size.width, pageImage.size.height)];
-                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i, 0, pageImage.size.width, pageImage.size.height)];
+                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
                 [imageView setImage:pageImage];
                 [scrollView addSubview:imageView];
             }
         }
         
         self.markPageControl = [[UIPageControl alloc] init];
-//        _markPageControl.center = CGPointMake(WIDTH(scrollView)/2, HEIGHT(scrollView)-margin-kStartButtonHeight/2);
         _markPageControl.center = CGPointMake(WIDTH(scrollView)/2, SCREEN_HEIGHT - 50);
         _markPageControl.numberOfPages = _pageCount;
         _markPageControl.currentPage = 0;
         _markPageControl.pageIndicatorTintColor = RGBA(255*0.667, 255*0.667, 255*0.667, 1);
         _markPageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
         [self addSubview:_markPageControl];
-        
-        
+    
         self.startButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        _startButton.frame = CGRectMake((WIDTH(scrollView)-kMarkBackgroundViewWidth)/2+WIDTH(scrollView)*(_pageCount-1), HEIGHT(scrollView)-margin-kStartButtonHeight, kMarkBackgroundViewWidth, kStartButtonHeight);
-          _startButton.frame = CGRectMake((MainWidth - kMarkBackgroundViewWidth)/2.0 +WIDTH(scrollView)*(_pageCount-1), SCREEN_HEIGHT - 150, kMarkBackgroundViewWidth, kStartButtonHeight);
+        _startButton.frame = CGRectMake((MainWidth - kMarkBackgroundViewWidth)/2.0 +WIDTH(scrollView)*(_pageCount-1), SCREEN_HEIGHT - 150, kMarkBackgroundViewWidth, kStartButtonHeight);
         [_startButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
         [_startButton setTitle:@"立 即 体 验" forState:UIControlStateNormal];
         [_startButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -115,23 +111,8 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    if (1 < _pageCount) {
-//        if (WIDTH(scrollView)*(_pageCount-2) + ((WIDTH(scrollView) - kMarkBackgroundViewWidth)/4) <= scrollView.contentOffset.x) {
-//            if (!_startButton.hidden) {
-//                _markPageControl.hidden = YES;
-//            }
-//        } else {
-//            if (!_startButton.hidden) {
-//                _markPageControl.hidden = NO;
-//            }
-//        }
-//    }
-//    if (0 < scrollView.contentOffset.x && scrollView.contentOffset.x <= WIDTH(scrollView)*(_pageCount-1)) {
-//        _markPageControl.currentPage = scrollView.contentOffset.x/WIDTH(scrollView);
-//    }
-    
     if (1 < _pageCount) {
-        if (WIDTH(scrollView)*(_pageCount-2) + WIDTH(scrollView) <= scrollView.contentOffset.x) {
+        if (WIDTH(scrollView)*(_pageCount-2) + ((WIDTH(scrollView) - kMarkBackgroundViewWidth)/4) <= scrollView.contentOffset.x) {
             if (!_startButton.hidden) {
                 _markPageControl.hidden = YES;
             }
@@ -141,20 +122,9 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
             }
         }
     }
-
-
     if (0 < scrollView.contentOffset.x && scrollView.contentOffset.x <= WIDTH(scrollView)*(_pageCount-1)) {
         _markPageControl.currentPage = scrollView.contentOffset.x/WIDTH(scrollView);
     }
-    
-//    NSLog(@"-----%f----%f---%f",WIDTH(scrollView)*(_pageCount-2),WIDTH(scrollView),scrollView.contentOffset.x);
-//    
-//    if (_markPageControl.currentPage == 2) {
-//        _markPageControl.hidden = YES;
-//    } else {
-//        _markPageControl.hidden = NO;
-//    }
-
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
