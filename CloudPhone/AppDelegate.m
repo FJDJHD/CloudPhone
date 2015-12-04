@@ -19,13 +19,10 @@
 
 #import "NSString+MD5.h"
 
-@interface AppDelegate ()<UITabBarControllerDelegate>
-
+@interface AppDelegate ()
 @end
 
 @implementation AppDelegate
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -33,14 +30,14 @@
     
     //加载界面视图
     [self initViewController];
-    
     //消息推送 ios 8
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+
 
 - (void)initViewController {
     //这里作为一个登录标志
@@ -55,7 +52,6 @@
 
 #pragma mark - 创建登录module
 - (void)loadLoginViewController {
-    
     RegisterLoginViewController *controller = [[RegisterLoginViewController alloc]init];
     BaseNavigationController *registerLoginNavigationController = [[BaseNavigationController alloc]initWithRootViewController:controller];
     
@@ -76,6 +72,7 @@
 
 #pragma mark - 创建4大基本module
 - (void)loadMainViewController {
+
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
@@ -124,8 +121,6 @@
     
     self.window.rootViewController = rootTabBarController;
 }
-
-
 
 #pragma mark 注册推送通知之后
 //在此接收设备令牌

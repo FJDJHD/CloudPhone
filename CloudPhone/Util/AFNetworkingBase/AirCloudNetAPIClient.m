@@ -9,7 +9,8 @@
 #import "AirCloudNetAPIClient.h"
 #import "GeneralToolObject.h"
 #import "NSString+MD5.h"
-
+@interface AirCloudNetAPIClient()<UIAlertViewDelegate>
+@end
 @implementation AirCloudNetAPIClient
 
 + (AirCloudNetAPIClient *)sharedJsonClient {
@@ -71,11 +72,35 @@
                 if ([[responseObject objectForKey:@"status"] integerValue] == 0) {
                     NSDictionary *dataDic = [responseObject objectForKey:@"data"];
                     if (dataDic) {
-                        if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
-                            //退出
-                            [GeneralToolObject userLoginOut];
-                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                            [alert show];
+                        if ([dataDic objectForKey:@"is_login"]) {
+                            if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
+                                //退出
+                                [GeneralToolObject userLoginOut];
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                [alert show];
+                            }
+                            
+                        }else if ([dataDic objectForKey:@"is_update"]){
+                            if ([[dataDic objectForKey:@"is_update"] integerValue] == 1) {
+                                //版本更新
+                                UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"应用程序有新版本，请更新" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                alterView.tag = 1001;
+                                [alterView show];
+                            }
+                        }else if ([dataDic objectForKey:@"is_mainiain"]){
+                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
+                                //系统维护中
+                                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wating"]];
+                                imageView.frame = [UIScreen mainScreen].bounds;
+                                [[[UIApplication sharedApplication] keyWindow].rootViewController.view addSubview:imageView];
+                                
+                            }
+                        }else if ([dataDic objectForKey:@"is_mainiain"]){
+                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
+                                //系统关闭
+                                UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"系统关闭" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                [alterView show];
+                            }
                         }
                     }
                 }
@@ -97,12 +122,35 @@
                  if ([[responseObject objectForKey:@"status"] integerValue] == 0) {
                      NSDictionary *dataDic = [responseObject objectForKey:@"data"];
                      if (dataDic) {
-                         if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
-                             //退出
-                             [GeneralToolObject userLoginOut];
-                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                             [alert show];
-                         }
+                         if ([dataDic objectForKey:@"is_login"]) {
+                             if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
+                                 //退出
+                                 [GeneralToolObject userLoginOut];
+                                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                 [alert show];
+                             }
+                             
+                         }else if ([dataDic objectForKey:@"is_update"]){
+                             if ([[dataDic objectForKey:@"is_update"] integerValue] == 1) {
+                                 //版本更新
+                                 UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"应用程序有新版本，请更新" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                 alterView.tag = 1001;
+                                 [alterView show];
+                            }
+                        }else if ([dataDic objectForKey:@"is_mainiain"]){
+                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
+                                //系统维护中
+                                UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wating"]];
+                                imageView.frame = [UIScreen mainScreen].bounds;
+                                [[[UIApplication sharedApplication] keyWindow].rootViewController.view addSubview:imageView];
+                            }
+                        }else if ([dataDic objectForKey:@"is_mainiain"]){
+                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
+                                //系统关闭
+                                UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"系统关闭" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                 [alterView show];
+                            }
+                        }
                      }
                  }
                  block(responseObject,nil);
@@ -191,6 +239,34 @@
 - (void)showError:(NSError *)error{
     [CustomMBHud customHudWindow:NetWorking_NoNetWork];
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == 1001) {
+        //更新版本
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.baidu.com/"]];
+        //更新版本
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/xiao-qu-bao/id890385562?mt=8"]];
+        
+        
+        [[AirCloudNetAPIManager sharedManager] getHelpCenterInfoOfParams:nil WithBlock:^(id data, NSError *error){
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"------%@",[dic objectForKey:@"msg"]);
+                    
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:@"数据请求失败"];
+                    
+                    
+                }
+            }
+            
+        }];
+
+
+    }
 }
 
 @end

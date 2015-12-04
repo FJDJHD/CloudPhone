@@ -46,7 +46,8 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
         _pageCount = imagesArray.count;
         
         UIImageView *bgimageView = [[UIImageView alloc] initWithFrame:self.frame];
-        bgimageView.image = [UIImage imageNamed:@"guide_bg.png"];
+        bgimageView.contentMode = UIViewContentModeScaleAspectFill;
+       // bgimageView.image = [UIImage imageNamed:@"guide_bg.png"];
         [self addSubview:bgimageView];
         
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
@@ -60,11 +61,11 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
             UIImage *pageImage = [imagesArray objectAtIndex:i];
             
             if (Is3_5Inches()) {
-                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 30, pageImage.size.width, pageImage.size.height)];
+                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
                 [imageView setImage:pageImage];
                 [scrollView addSubview:imageView];
             } else {
-                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, margin, pageImage.size.width, pageImage.size.height)];
+                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
                 [imageView setImage:pageImage];
                 [scrollView addSubview:imageView];
             }
@@ -80,7 +81,7 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
         
         
         self.startButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _startButton.frame = CGRectMake((WIDTH(scrollView)-kMarkBackgroundViewWidth)/2+WIDTH(scrollView)*(_pageCount-1), HEIGHT(scrollView)-margin-kStartButtonHeight, kMarkBackgroundViewWidth, kStartButtonHeight);
+        _startButton.frame = CGRectMake((WIDTH(scrollView)-kMarkBackgroundViewWidth)/2+WIDTH(scrollView)*(_pageCount-1), CGRectGetMaxY(_markPageControl.frame) - 100, kMarkBackgroundViewWidth, kStartButtonHeight);
         [_startButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
         [_startButton setTitle:@"立 即 体 验" forState:UIControlStateNormal];
         [_startButton setTitleColor:RGB(75, 200, 160) forState:UIControlStateNormal];
