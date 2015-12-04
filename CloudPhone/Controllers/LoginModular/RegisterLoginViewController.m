@@ -36,7 +36,8 @@
         NSArray *imagesArray = [NSArray arrayWithObjects:imagePage1, imagePage2, imagePage3, nil];
         
         if (Is3_5Inches()) {
-            _guideView = [[GuidePageView alloc] initWithImages:imagesArray andMargin:[[UIScreen mainScreen] bounds].size.height*0.05];
+//            _guideView = [[GuidePageView alloc] initWithImages:imagesArray andMargin:[[UIScreen mainScreen] bounds].size.height*0.05];
+            _guideView = [[GuidePageView alloc] initWithImages:imagesArray];
         } else {
             _guideView = [[GuidePageView alloc] initWithImages:imagesArray];
         }
@@ -104,18 +105,22 @@
     [setting setObject:[NSString stringWithFormat:@"0"] forKey:key];
     [setting synchronize];
     
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         _guideView.transform = CGAffineTransformMakeTranslation(-WIDTH(_guideView), 0);
-                     } completion:^(BOOL finished) {
-                         if (finished) {
-                             _guideView.transform = CGAffineTransformIdentity;
-                             [_guideView removeFromSuperview];
-                             [self initUI];
-                         }
-                     }];
+    _guideView.hidden = YES;
+    [_guideView removeFromSuperview];
+    [self initUI];
+    
+//    [UIView animateWithDuration:0.3
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         _guideView.transform = CGAffineTransformMakeTranslation(-WIDTH(_guideView), 0);
+//                     } completion:^(BOOL finished) {
+//                         if (finished) {
+//                             _guideView.transform = CGAffineTransformIdentity;
+//                             [_guideView removeFromSuperview];
+//                             [self initUI];
+//                         }
+//                     }];
 }
 
 
