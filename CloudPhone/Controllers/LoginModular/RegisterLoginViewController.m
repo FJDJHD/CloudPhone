@@ -36,7 +36,6 @@
         NSArray *imagesArray = [NSArray arrayWithObjects:imagePage1, imagePage2, imagePage3, nil];
         
         if (Is3_5Inches()) {
-            _guideView = [[GuidePageView alloc] initWithImages:imagesArray];
             _guideView = [[GuidePageView alloc] initWithImages:imagesArray andMargin:[[UIScreen mainScreen] bounds].size.height*0];
         } else {
             _guideView = [[GuidePageView alloc] initWithImages:imagesArray];

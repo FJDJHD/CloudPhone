@@ -61,7 +61,7 @@ static const CGFloat kIconTopMarginScale        = 0.125f;
             UIImage *pageImage = [imagesArray objectAtIndex:i];
             
             if (Is3_5Inches()) {
-                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i, 0, pageImage.size.width, pageImage.size.height)];
+                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(WIDTH(scrollView)*i+WIDTH(scrollView)/2-pageImage.size.width/2, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
                 [imageView setImage:pageImage];
                 [scrollView addSubview:imageView];
             } else {
