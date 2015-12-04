@@ -26,20 +26,24 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.helpMutableArray = [NSMutableArray array];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.title = @"帮助与反馈";
+    self.helpMutableArray = [NSMutableArray array];
+
+
     [self.view addSubview:self.tableView];
     //返回
     UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    [self requestHelpCenterInfo];
+
+    
+   [self requestHelpCenterInfo];
 }
 
 
