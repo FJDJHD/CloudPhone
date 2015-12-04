@@ -30,7 +30,7 @@
     self.title = @"昵称";
 
     //返回
-    UIButton *backButton = [self setBackBarButton:0];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
@@ -40,6 +40,7 @@
     saveButton.frame = CGRectMake(0, 0, 44, 44);
     saveButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+    [saveButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [saveButton addTarget:self action:@selector(saveNameClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -50,6 +51,7 @@
     setNameField.backgroundColor = [UIColor whiteColor];
     self.setNameField = setNameField;
     [self.view addSubview:setNameField];
+    [setNameField becomeFirstResponder];
 }
 
 - (void)saveNameClick{

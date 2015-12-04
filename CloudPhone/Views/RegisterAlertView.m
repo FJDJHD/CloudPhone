@@ -144,13 +144,7 @@
         [self dismiss];
         DLog(@"enter mainVC");
         //这里作为一个登录标志
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:@"isLogined" forKey:isLoginKey];
-        [defaults synchronize];
-        
-        //进入主页
-        AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        [appDele loadMainViewController];
+        [GeneralToolObject userLogin];
     }
 }
 

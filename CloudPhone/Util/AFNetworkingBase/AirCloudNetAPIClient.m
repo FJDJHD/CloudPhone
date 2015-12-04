@@ -67,8 +67,19 @@
         case Get:{
             [self GET:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 DLog(@"\n===========response===========\n%@:\n%@", aPath, responseObject);
-                    block(responseObject,nil);
-             
+                
+                if ([[responseObject objectForKey:@"status"] integerValue] == 0) {
+                    NSDictionary *dataDic = [responseObject objectForKey:@"data"];
+                    if (dataDic) {
+                        if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
+                            //退出
+                            [GeneralToolObject userLoginOut];
+                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                            [alert show];
+                        }
+                    }
+                }
+                block(responseObject, nil);
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 DLog(@"\n===========response===========\n%@:\n%@", aPath, error);
@@ -82,6 +93,18 @@
             [self POST:urlString parameters:params
              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 DLog(@"\n===========response===========\n%@:\n%@", aPath, responseObject);
+                 
+                 if ([[responseObject objectForKey:@"status"] integerValue] == 0) {
+                     NSDictionary *dataDic = [responseObject objectForKey:@"data"];
+                     if (dataDic) {
+                         if ([[dataDic objectForKey:@"is_login"] integerValue] == 0) {
+                             //退出
+                             [GeneralToolObject userLoginOut];
+                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                             [alert show];
+                         }
+                     }
+                 }
                  block(responseObject,nil);
 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

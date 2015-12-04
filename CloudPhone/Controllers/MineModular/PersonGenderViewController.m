@@ -40,6 +40,7 @@
     saveButton.frame = CGRectMake(0, 0, 44, 44);
     saveButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+    [saveButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [saveButton addTarget:self action:@selector(saveClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     self.navigationItem.rightBarButtonItem = rightItem;

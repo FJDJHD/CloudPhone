@@ -40,4 +40,10 @@
 
 //个人信息写入沙盒
 + (void)writePersonalInfoToBox:(NSDictionary *)dic;
+
++ (void)userLogin;
+
++ (void)userLoginOut;
+
+
 @end

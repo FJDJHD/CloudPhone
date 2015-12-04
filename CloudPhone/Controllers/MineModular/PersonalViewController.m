@@ -358,14 +358,8 @@
             
             if ([[dic objectForKey:@"status"] integerValue] == 1) {
                 
-                //这里作为一个登录标志
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setObject:@"notLogined" forKey:isLoginKey];
-                [defaults synchronize];
-                
-                //进入
-                AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                [appDele loadLoginViewController];
+                //这里退出
+                [GeneralToolObject userLoginOut];
                 
             } else {
                 DLog(@"*****%@",[dic objectForKey:@"msg"]);
