@@ -30,9 +30,9 @@
     NSString *value = [setting objectForKey:key];   //value为0表示已经看过引导页了，为空或者其他值是没有看过
     
     if (![value isEqualToString:@"0"]) {            //如果没有数据
-        UIImage *imagePage1 = [UIImage imageNamed:@"guide_page_1.png"];
-        UIImage *imagePage2 = [UIImage imageNamed:@"guide_page_2.png"];
-        UIImage *imagePage3 = [UIImage imageNamed:@"guide_page_3.png"];
+        UIImage *imagePage1 = [UIImage imageNamed:@"guide_page_11.png"];
+        UIImage *imagePage2 = [UIImage imageNamed:@"guide_page_22.png"];
+        UIImage *imagePage3 = [UIImage imageNamed:@"guide_page_33.png"];
         NSArray *imagesArray = [NSArray arrayWithObjects:imagePage1, imagePage2, imagePage3, nil];
         
         if (Is3_5Inches()) {
