@@ -92,6 +92,7 @@
 		6EC0BB531C0BF14500075A19 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB521C0BF14500075A19 /* NSString+MD5.m */; };
 		6EC0BB591C0C568A00075A19 /* AddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB581C0C568A00075A19 /* AddressViewController.m */; };
 		6EC0BB5F1C0C6DA700075A19 /* NSString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */; };
+		B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF01B1C1580790077FAC9 /* ChatCell.m */; };
 		B44E90711C0FD41700CFC003 /* PersonGenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */; };
 		B44E90741C0FD44900CFC003 /* PersonBirthdayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */; };
 		B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */; };
@@ -124,6 +125,16 @@
 		B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D081C0C5E7800D74D49 /* AboutCloudPhoneViewController.m */; };
 		B4BE7D0C1C0C688A00D74D49 /* HelpAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */; };
 		B4BE7D0F1C0C68A700D74D49 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */; };
+		B4D76A151C1523360095CB9F /* DialingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D76A141C1523360095CB9F /* DialingViewController.m */; };
+		B4D76A1F1C1523970095CB9F /* callphone_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A171C1523970095CB9F /* callphone_bg@2x.png */; };
+		B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A181C1523970095CB9F /* callphone_callback@2x.png */; };
+		B4D76A211C1523970095CB9F /* callphone_friendiconbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */; };
+		B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */; };
+		B4D76A231C1523970095CB9F /* callphone_hangup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */; };
+		B4D76A241C1523970095CB9F /* callphone_keyboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */; };
+		B4D76A251C1523970095CB9F /* callphone_recode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */; };
+		B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */; };
+		B4D76A291C1559060095CB9F /* UIButton+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D76A281C1559060095CB9F /* UIButton+Category.m */; };
 		B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D11C06B0360001407D /* LoginViewController.m */; };
 		B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */; };
 		B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */; };
@@ -319,6 +330,8 @@
 		6EC0BB581C0C568A00075A19 /* AddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressViewController.m; sourceTree = "<group>"; };
 		6EC0BB5D1C0C6DA700075A19 /* NSString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Util.h"; sourceTree = "<group>"; };
 		6EC0BB5E1C0C6DA700075A19 /* NSString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Util.m"; sourceTree = "<group>"; };
+		B40FF01A1C1580790077FAC9 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
+		B40FF01B1C1580790077FAC9 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		B44E906F1C0FD41700CFC003 /* PersonGenderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonGenderViewController.h; sourceTree = "<group>"; };
 		B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonGenderViewController.m; sourceTree = "<group>"; };
 		B44E90721C0FD44900CFC003 /* PersonBirthdayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonBirthdayViewController.h; sourceTree = "<group>"; };
@@ -360,6 +373,18 @@
 		B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpAndFeedbackViewController.m; sourceTree = "<group>"; };
 		B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		B4D76A131C1523360095CB9F /* DialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialingViewController.h; sourceTree = "<group>"; };
+		B4D76A141C1523360095CB9F /* DialingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialingViewController.m; sourceTree = "<group>"; };
+		B4D76A171C1523970095CB9F /* callphone_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_bg@2x.png"; sourceTree = "<group>"; };
+		B4D76A181C1523970095CB9F /* callphone_callback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_callback@2x.png"; sourceTree = "<group>"; };
+		B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_friendiconbg@2x.png"; sourceTree = "<group>"; };
+		B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_handsfree@2x.png"; sourceTree = "<group>"; };
+		B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_hangup@2x.png"; sourceTree = "<group>"; };
+		B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_keyboard@2x.png"; sourceTree = "<group>"; };
+		B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_recode@2x.png"; sourceTree = "<group>"; };
+		B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_silence@2x.png"; sourceTree = "<group>"; };
+		B4D76A271C1559060095CB9F /* UIButton+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Category.h"; sourceTree = "<group>"; };
+		B4D76A281C1559060095CB9F /* UIButton+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Category.m"; sourceTree = "<group>"; };
 		B4DEF6D01C06B0360001407D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		B4DEF6D11C06B0360001407D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPasswordViewController.h; sourceTree = "<group>"; };
@@ -458,6 +483,8 @@
 				6EC0BB321C0BDDC600075A19 /* RegisterAlertView.m */,
 				6E722F531C0FEC9200A21557 /* DailNumberCell.h */,
 				6E722F541C0FEC9200A21557 /* DailNumberCell.m */,
+				B40FF01A1C1580790077FAC9 /* ChatCell.h */,
+				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -632,6 +659,8 @@
 			children = (
 				B4DEF6E31C06F9470001407D /* UIColor+Category.h */,
 				B4DEF6E41C06F9470001407D /* UIColor+Category.m */,
+				B4D76A271C1559060095CB9F /* UIButton+Category.h */,
+				B4D76A281C1559060095CB9F /* UIButton+Category.m */,
 				6EC0BB511C0BF14500075A19 /* NSString+MD5.h */,
 				6EC0BB521C0BF14500075A19 /* NSString+MD5.m */,
 				6EC0BB5D1C0C6DA700075A19 /* NSString+Util.h */,
@@ -832,6 +861,8 @@
 				6EC0BB3F1C0BDEB700075A19 /* MainPhoneViewController.m */,
 				6EC0BB571C0C568A00075A19 /* AddressViewController.h */,
 				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
+				B4D76A131C1523360095CB9F /* DialingViewController.h */,
+				B4D76A141C1523360095CB9F /* DialingViewController.m */,
 			);
 			path = PhoneModular;
 			sourceTree = "<group>";
@@ -839,6 +870,7 @@
 		B44E90CC1C103FC500CFC003 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				B4D76A161C1523970095CB9F /* dialing */,
 				B44E90CD1C103FC500CFC003 /* login */,
 				B44E90D51C103FC500CFC003 /* Mine */,
 				B44E90D91C103FC500CFC003 /* other */,
@@ -905,6 +937,21 @@
 			children = (
 			);
 			path = tempImage;
+			sourceTree = "<group>";
+		};
+		B4D76A161C1523970095CB9F /* dialing */ = {
+			isa = PBXGroup;
+			children = (
+				B4D76A171C1523970095CB9F /* callphone_bg@2x.png */,
+				B4D76A181C1523970095CB9F /* callphone_callback@2x.png */,
+				B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */,
+				B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */,
+				B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */,
+				B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */,
+				B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */,
+				B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */,
+			);
+			path = dialing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1012,9 +1059,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B44E90EF1C103FC500CFC003 /* welcome@2x.png in Resources */,
+				B4D76A1F1C1523970095CB9F /* callphone_bg@2x.png in Resources */,
 				B44E90ED1C103FC500CFC003 /* pic_touxiang@2x.png in Resources */,
 				B44E90F21C103FC500CFC003 /* mine_icon@2x.png in Resources */,
+				B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */,
+				B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */,
 				6E4D37A61C0568B1001573E3 /* MJRefresh.bundle in Resources */,
+				B4D76A231C1523970095CB9F /* callphone_hangup@2x.png in Resources */,
 				B44E91071C113E8100CFC003 /* wating@2x.png in Resources */,
 				B44E90EA1C103FC500CFC003 /* chance_selected@2x.png in Resources */,
 				B44E90FB1C103FC500CFC003 /* tabbar_phoneSelected@2x.png in Resources */,
@@ -1024,16 +1075,20 @@
 				B44E90F41C103FC500CFC003 /* tabbar_chat@2x.png in Resources */,
 				B44E90F91C103FC500CFC003 /* tabbar_mineSelected@2x.png in Resources */,
 				B44E90E91C103FC500CFC003 /* chance_@2x.png in Resources */,
+				B4D76A251C1523970095CB9F /* callphone_recode@2x.png in Resources */,
 				B44E90F81C103FC500CFC003 /* tabbar_mine@2x.png in Resources */,
 				B44E91031C113E5200CFC003 /* guide_page_22@2x.png in Resources */,
 				6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */,
 				B44E90EC1C103FC500CFC003 /* pic_mima@2x.png in Resources */,
 				B44E90F31C103FC500CFC003 /* back@2x.png in Resources */,
+				B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */,
 				B44E90FA1C103FC500CFC003 /* tabbar_phone@2x.png in Resources */,
 				B44E91051C113E5200CFC003 /* guide_page_11@2x.png in Resources */,
+				B4D76A211C1523970095CB9F /* callphone_friendiconbg@2x.png in Resources */,
 				6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */,
 				B44E90F61C103FC500CFC003 /* tabbar_find@2x.png in Resources */,
 				B44E90F11C103FC500CFC003 /* mine_arrow@2x.png in Resources */,
+				B4D76A241C1523970095CB9F /* callphone_keyboard@2x.png in Resources */,
 				B44E90EB1C103FC500CFC003 /* icon@2x.png in Resources */,
 				B44E90F01C103FC500CFC003 /* about_logo@2x.png in Resources */,
 				B44E90F51C103FC500CFC003 /* tabbar_chatSelected@2x.png in Resources */,
@@ -1064,6 +1119,7 @@
 				6E4D37661C056384001573E3 /* UIImage+GIF.m in Sources */,
 				6E4D37321C0561A2001573E3 /* UIProgressView+AFNetworking.m in Sources */,
 				6E4D37301C0561A2001573E3 /* UIButton+AFNetworking.m in Sources */,
+				B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */,
 				6E4D37881C056619001573E3 /* BaseTabBarController.m in Sources */,
 				6E4D37331C0561A2001573E3 /* UIRefreshControl+AFNetworking.m in Sources */,
 				6E4D372F1C0561A2001573E3 /* UIAlertView+AFNetworking.m in Sources */,
@@ -1078,6 +1134,7 @@
 				6E4D378C1C056619001573E3 /* CustomMBHud.m in Sources */,
 				6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */,
 				6E4D37281C0561A2001573E3 /* AFSecurityPolicy.m in Sources */,
+				B4D76A151C1523360095CB9F /* DialingViewController.m in Sources */,
 				6E4D37871C056619001573E3 /* BaseNavigationController.m in Sources */,
 				6E4D37AB1C0568B1001573E3 /* MJRefreshGifHeader.m in Sources */,
 				6E4D37671C056384001573E3 /* UIImage+MultiFormat.m in Sources */,
@@ -1121,6 +1178,7 @@
 				6E4D37AE1C0568B1001573E3 /* MJRefreshLegendHeader.m in Sources */,
 				6E4D37271C0561A2001573E3 /* AFNetworkReachabilityManager.m in Sources */,
 				6E4D375C1C056384001573E3 /* MKAnnotationView+WebCache.m in Sources */,
+				B4D76A291C1559060095CB9F /* UIButton+Category.m in Sources */,
 				B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */,
 				6E4D372B1C0561A2001573E3 /* AFURLResponseSerialization.m in Sources */,
 				6EC0BB411C0BDEB700075A19 /* MainDiscoverViewController.m in Sources */,

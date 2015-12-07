@@ -51,6 +51,8 @@
     manButton.frame = CGRectMake(0, STATUS_NAV_BAR_HEIGHT, MainWidth, 44);
     manButton.backgroundColor = [UIColor whiteColor];
     manButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    manButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    manButton.layer.borderWidth = 0.5;
     [manButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [manButton setTitle:@"男" forState:UIControlStateNormal];
     [manButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -61,6 +63,8 @@
     womanButton.frame = CGRectMake(0, CGRectGetMaxY(manButton.frame), MainWidth, 44);
     womanButton.backgroundColor = [UIColor whiteColor];
     womanButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    womanButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    womanButton.layer.borderWidth = 0.5;
     [womanButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [womanButton setTitle:@"女" forState:UIControlStateNormal];
     [womanButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -71,6 +75,8 @@
     unsetButton.frame = CGRectMake(0, CGRectGetMaxY(womanButton.frame), MainWidth, 44);
     unsetButton.backgroundColor = [UIColor whiteColor];
     unsetButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    unsetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    unsetButton.layer.borderWidth = 0.5;
     [unsetButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [unsetButton setTitle:@"未设置" forState:UIControlStateNormal];
     [unsetButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -82,7 +88,7 @@
 
 - (void)ButtonClick:(UIButton *)button{
     self.selectedButton = button;
-    NSLog(@"%@",[NSNumber numberWithInteger:self.selectedButton.tag]);
+    [self saveClick];
 }
 
 - (void)saveClick{

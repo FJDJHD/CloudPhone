@@ -317,7 +317,7 @@
 
 
 - (void)requestPersonalInfo {
-    NSDictionary *dic = @{@"us2":@"us"};
+    NSDictionary *dic = @{@"us":@"us"};
     [self AddHUD];
     [[AirCloudNetAPIManager sharedManager] getUserCenterInfoOfParams:dic WithBlock:^(id data, NSError *error) {
         [self HUDHidden];
