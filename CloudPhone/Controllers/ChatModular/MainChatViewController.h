@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
-@interface MainChatViewController : UIViewController
+
+@interface MainChatViewController : UIViewController<NSFetchedResultsControllerDelegate> {
+
+    NSFetchedResultsController *fetchedResultsController;
+}
+
 
 @end

@@ -16,6 +16,10 @@
 @property (nonatomic, strong) UITextField *passwordFiled;
 @property (nonatomic, strong) NSMutableAttributedString *passwordLevelStr;
 @property (nonatomic, strong) UILabel *numberLevelLabel;
+
+@property (nonatomic, strong) MBProgressHUD *HUD;
+
+
 @end
 
 @implementation LoginPasswordViewController
@@ -122,6 +126,8 @@
 
 //注册第二步
 - (void)submitButtonClick{
+    [self.passwordFiled resignFirstResponder];
+    [self.repasswordField resignFirstResponder];
     if (self.passwordFiled.text.length == 0 ) {
        [CustomMBHud customHudWindow:Login_emptyPwdNumber];
     }else if (self.repasswordField.text.length == 0){
@@ -129,15 +135,22 @@
     }else if (![self.passwordFiled.text isEqualToString:self.repasswordField.text]){
         [CustomMBHud customHudWindow:Login_noSamePwdNumber];
     }else{
+        [self AddHUD];
         NSDictionary *dic = @{@"password":self.passwordFiled.text,@"repassword":self.repasswordField.text};
         [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {
-            
+            [self HUDHidden];
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [self.repasswordField resignFirstResponder];
-                    [self.repasswordField resignFirstResponder];
+                   
+                    //保存帐号和密码，做xmpp连接用
+                    [GeneralToolObject saveuserNumber:self.userNumber password:self.passwordFiled.text];
+                    
+                    //判断是注册xmpp
+                    [GeneralToolObject appDelegate].isXMPPRegister = YES;
+                    
+                    //这里直接进入主界面(写在alertView里面进去了)
                     RegisterAlertView *alertView = [[RegisterAlertView alloc] initWithFrame:[UIScreen mainScreen].bounds lable:@"你好 ！登陆密码已经设置成功，为了你的账号安全，请妥善保管你的密码"];
                     [alertView show:self];
                     
@@ -161,7 +174,17 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
 
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

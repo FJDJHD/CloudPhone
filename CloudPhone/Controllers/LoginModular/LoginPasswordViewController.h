@@ -10,4 +10,7 @@
 
 @interface LoginPasswordViewController : UIViewController
 
+
+@property (nonatomic, copy) NSString *userNumber;
+
 @end

@@ -9,7 +9,6 @@
 #import "GeneralToolObject.h"
 #import "Global.h"
 #import "NSString+MD5.h"
-#import "AppDelegate.h"
 
 @implementation GeneralToolObject
 
@@ -187,9 +186,16 @@
     [appDele loadLoginViewController];
 }
 
++ (void)saveuserNumber:(NSString *)num password:(NSString *)pwd {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:num forKey:UserNumber];
+    [defaults setObject:pwd forKey:UserPassword];
+    [defaults synchronize];
+}
 
-
-
++ (AppDelegate *)appDelegate {
+    return (AppDelegate *)[UIApplication sharedApplication].delegate;
+}
 
 
 

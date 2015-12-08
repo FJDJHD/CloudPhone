@@ -16,10 +16,30 @@
 #import "MainMineViewController.h"
 
 
+#import "GCDAsyncSocket.h"
+#import "XMPP.h"
+#import "XMPPLogging.h"
+#import "XMPPReconnect.h"
+#import "XMPPCapabilitiesCoreDataStorage.h"
+#import "XMPPRosterCoreDataStorage.h"
+#import "XMPPvCardAvatarModule.h"
+#import "XMPPvCardCoreDataStorage.h"
 
-#import "NSString+MD5.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
+#import <CFNetwork/CFNetwork.h>
+
+
 
 @interface AppDelegate ()
+
+- (void)setupStream;
+- (void)teardownStream;
+
+- (void)goOnline;
+- (void)goOffline;
+
+
 @end
 
 @implementation AppDelegate
@@ -27,6 +47,9 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    //初始化xmpp各种类
+    [self setupStream];
     
     //加载界面视图
     [self initViewController];
@@ -44,7 +67,9 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *value = [defaults objectForKey:isLoginKey];
     if ([value isEqualToString:@"isLogined"]) {
+        
         [self loadMainViewController];
+        
     } else {
         [self loadLoginViewController];
     }
@@ -72,6 +97,9 @@
 
 #pragma mark - 创建4大基本module
 - (void)loadMainViewController {
+    
+    //开始连接xmpp
+    [self connect];
 
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
@@ -100,7 +128,7 @@
     
     // tab bar
     BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
-    rootTabBarController.delegate = self;
+//    rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
     
     if (CURRENT_SYS_VERSION >= 7.0) {
@@ -129,39 +157,287 @@
     NSLog(@"%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]             stringByReplacingOccurrencesOfString: @">" withString: @""]                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
    
 }
-
-#pragma mark 获取device token失败后
+// 获取device token失败后
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     NSLog(@"didFailToRegisterForRemoteNotificationsWithError:%@",error.localizedDescription);
 }
-
-#pragma mark 接收到推送通知之后
+// 接收到推送通知之后
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"receiveRemoteNotification,userInfo is %@",userInfo);
 }
 
 
+#pragma mark - XMPP模块。。。。全部放在这里
 
+- (XMPPStream *)xmppStream {
+    if (!xmppStream) {
+        xmppStream = [[XMPPStream alloc] init];
+        [xmppStream setHostName:XMPPIP];
+        [xmppStream setHostPort:XMPPPORT];
+    }
+    return xmppStream;
+}
+
+- (XMPPRosterCoreDataStorage *)xmppRosterStorage {
+    if (!xmppRosterStorage) {
+        xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
+    }
+    return xmppRosterStorage;
+}
+
+- (XMPPRoster *)xmppRoster {
+    if (!xmppRoster) {
+        xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
+        xmppRoster.autoFetchRoster = YES;
+        xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+
+    }
+    return xmppRoster;
+}
+
+- (void)setupStream {
+
+    xmppStream = [[XMPPStream alloc] init];
+    [xmppStream setHostName:XMPPIP];
+    [xmppStream setHostPort:XMPPPORT];
+    
+    xmppReconnect = [[XMPPReconnect alloc] init];
+    
+    xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
+    
+    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
+    
+    xmppRoster.autoFetchRoster = YES;
+    xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+
+    
+    xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
+    xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:xmppvCardStorage];
+    
+    xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:xmppvCardTempModule];
+    
+    
+    xmppCapabilitiesStorage = [XMPPCapabilitiesCoreDataStorage sharedInstance];
+    xmppCapabilities = [[XMPPCapabilities alloc] initWithCapabilitiesStorage:xmppCapabilitiesStorage];
+    
+    xmppCapabilities.autoFetchHashedCapabilities = YES;
+    xmppCapabilities.autoFetchNonHashedCapabilities = NO;
+    
+    [xmppReconnect         activate:xmppStream];
+    [xmppRoster            activate:xmppStream];
+    [xmppvCardTempModule   activate:xmppStream];
+    [xmppvCardAvatarModule activate:xmppStream];
+    [xmppCapabilities      activate:xmppStream];
+    
+    [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+
+}
+
+- (void)goOnline {
+    DLog(@"goOnline");
+    XMPPPresence *presence = [XMPPPresence presence]; // type="available" is implicit
+    [xmppStream sendElement:presence];
+}
+
+- (void)goOffline {
+    DLog(@"goOnline");
+    XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
+    [xmppStream sendElement:presence];
+}
+
+//建立连接
+- (BOOL)connect {
+    
+    if ([xmppStream isConnected]) {
+        [self disconnect];
+    }
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    
+    [xmppStream setMyJID:[XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",number,XMPPSevser]]];
+//@"user1@hileyou.com"]];//
+    NSError *error = nil;
+    if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error]) {
+    
+        DLog(@"连接openfilre错误:%@",error);
+        return NO;
+    }
+    return YES;
+}
+
+- (void)disconnect {
+    [self goOffline];
+    [xmppStream disconnect];
+}
+
+- (void)teardownStream {
+    [xmppStream removeDelegate:self];
+    [xmppRoster removeDelegate:self];
+    
+    [xmppReconnect         deactivate];
+    [xmppRoster            deactivate];
+    [xmppvCardTempModule   deactivate];
+    [xmppvCardAvatarModule deactivate];
+    [xmppCapabilities      deactivate];
+    
+    [xmppStream disconnect];
+    
+    xmppStream = nil;
+    xmppReconnect = nil;
+    xmppRoster = nil;
+    xmppRosterStorage = nil;
+    xmppvCardStorage = nil;
+    xmppvCardTempModule = nil;
+    xmppvCardAvatarModule = nil;
+    xmppCapabilities = nil;
+    xmppCapabilitiesStorage = nil;
+}
+
+#pragma mark - XMPPStreamDelegate
+- (void)xmppStream:(XMPPStream *)sender socketDidConnect:(GCDAsyncSocket *)socket {
+    DLog(@"socket连接成功socketDidConnect");
+}
+
+- (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
+    DLog(@"连接失败xmppStreamDidDisconnect");
+}
+
+//连接上openfire，开始注册登录
+- (void)xmppStreamDidConnect:(XMPPStream *)sender {
+    DLog(@"xmppStreamDidConnect,准备注册或登录");
+    NSError *error = nil;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *password = [defaults objectForKey:UserPassword];
+    NSString *number = [defaults objectForKey:UserNumber];
+    
+    NSString *failNumber = [defaults objectForKey:RegisterFail]; //注册失败的情况
+    if (failNumber) {
+        NSArray *array = [failNumber componentsSeparatedByString:@"l"];
+        if (array.count > 0) {
+            NSString *numStr = array[1];
+            if ([numStr isEqualToString:number]) {
+                self.isXMPPRegister = YES;
+            }
+        }
+    }
+   
+    
+    if (self.isXMPPRegister == YES) {
+        DLog(@"注册xmpp");
+        //注册
+        if (![sender registerWithPassword:password error:&error]) {
+            DLog(@"注册error = %@",error);
+        }
+    } else {
+        DLog(@"登录xmpp");
+        //登录
+        if (![sender authenticateWithPassword:password error:&error]) {
+            DLog(@"登录error = %@",error);
+        }
+    }
+}
+
+//认证成功
+- (void)xmppStreamDidAuthenticate:(XMPPStream *)sender {
+    DLog(@"服务端认证完成");
+    [self goOnline]; //标志上线
+    
+}
+//认证失败
+- (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error {
+    DLog(@"服务端认证失败%@",error);
+}
+
+//注册成功
+- (void)xmppStreamDidRegister:(XMPPStream *)sender {
+    DLog(@"注册成功");
+    [self goOnline]; //标志上线
+}
+
+//注册失败
+- (void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error {
+    DLog(@"注册失败");
+    //如果第一次注册失败 再加一个状态判断（下次继续注册），有点蛋疼
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    [defaults setObject:[NSString stringWithFormat:@"fail%@",number] forKey:RegisterFail];   //这个和自己注册失败的手机号关联起来
+    [defaults synchronize];
+    
+}
+
+- (void)xmppStream:(XMPPStream *)sender didSendIQ:(XMPPIQ *)iq{
+    DLog(@"didSendIQ====%@",iq.description);
+}
+
+//获取好友。。。
+- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq{
+    DLog(@"didReceiveIQ----%@",iq.description);
+    return YES;
+}
+
+#pragma mark XMPPRosterDelegate
+//接受好友请求时候调用
+- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
+
+}
+
+
+
+
+
+#pragma mark XMPPCoreData
+- (NSManagedObjectContext *)managedObjectContext_roster{
+    return [xmppRosterStorage mainThreadManagedObjectContext];
+}
+
+- (NSManagedObjectContext *)managedObjectContext_capabilities{
+    return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark - 应用程序生命周期
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+
+}
+
+- (void)dealloc
+{
+    [self teardownStream];
 }
 
 @end

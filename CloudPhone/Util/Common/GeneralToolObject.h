@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AppDelegate.h"
 
 @interface GeneralToolObject : NSObject
 
@@ -44,6 +45,10 @@
 + (void)userLogin;
 
 + (void)userLoginOut;
+
++ (void)saveuserNumber:(NSString *)num password:(NSString *)pwd;
+
++ (AppDelegate *)appDelegate;
 
 
 @end

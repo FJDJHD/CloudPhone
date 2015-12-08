@@ -14,12 +14,20 @@
 
 #if Sesame_ENVIRONMENT==0
 #define HTTPURLPREFIX         @"http://cloud.itelland.com/"
+#define XMPPIP                @"121.199.0.89"
+#define XMPPPORT              5222
+#define XMPPSevser            @"@cloud.com"
+
 
 #elif Sesame_ENVIRONMENT==1
 #define HTTPURLPREFIX         @"http://192.168.1.103:8080"
 
+
 #elif Sesame_ENVIRONMENT==2
 #define HTTPURLPREFIX         @"http://dasudian.com:8090"
+
+
+
 
 
 #elif Sesame_ENVIRONMENT==3
@@ -77,8 +85,10 @@
 #define appDeepLableColor       RGB(51, 51, 51)
 
 /* --NSUserDefaults 的key --*/
-#define isLoginKey              @"isLoginKey"  //判断是否登录过(isLogined.....notLogined)
-
+#define isLoginKey                @"isLoginKey"  //判断是否登录过(isLogined.....notLogined)
+#define UserNumber                @"UserNumber"  //手机号码 （作为xmpp的聊天昵称）
+#define UserPassword              @"UserPassword"  //
+#define RegisterFail              @"RegisterFail"  //xmpp注册失败
 
 #import <Foundation/Foundation.h>
 #import "Macros.h"

@@ -78,7 +78,7 @@
                                 [GeneralToolObject userLoginOut];
                                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"你的帐号在另一台设备登录" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                                 [alert show];
-                            }
+                            } 
                             
                         }else if ([dataDic objectForKey:@"is_update"]){
                             if ([[dataDic objectForKey:@"is_update"] integerValue] == 1) {

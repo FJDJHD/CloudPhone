@@ -26,6 +26,7 @@
 @property (nonatomic, strong) UILabel *label3;
 @property (nonatomic, strong) UILabel *label4;
 
+@property (nonatomic, copy) NSString *tempNumber;
 
 @end
 
@@ -73,11 +74,13 @@
 
 - (instancetype)initWithFrame:(CGRect)frame lable1:(NSString *)str1
                        lable2:(NSString *)str2
-                       lable3:(NSString *)str3 lable4:(NSString *)str4 {
+                       lable3:(NSString *)str3 lable4:(NSString *)str4 number:(NSString *)num{
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.frame = frame;
+        
+        self.tempNumber = num;
         
         _backgroudView = [[UIView alloc]initWithFrame:frame];
         _backgroudView.backgroundColor = [UIColor blackColor];
@@ -138,11 +141,12 @@
     if ([self.tempController isKindOfClass:[RegisterViewController class]]) {
         [self dismiss];
         LoginPasswordViewController *passVc = [[LoginPasswordViewController alloc] init];
+        passVc.userNumber = self.tempNumber;
         [self.tempController.navigationController pushViewController:passVc animated:YES];
         
     }else if ([self.tempController isKindOfClass:[LoginPasswordViewController class]]){
         [self dismiss];
-        DLog(@"enter mainVC");
+        DLog(@"这里直接进入主界面");
         //这里作为一个登录标志
         [GeneralToolObject userLogin];
     }

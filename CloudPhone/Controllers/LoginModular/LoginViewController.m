@@ -105,6 +105,8 @@
 
 //用户登录
 - (void)loginButtonClick{
+    [_numberField resignFirstResponder];
+    [_passwordField resignFirstResponder];
     
     if (self.numberField.text.length == 0 ) {
         [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
@@ -121,14 +123,28 @@
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [_numberField resignFirstResponder];
-                    [_passwordField resignFirstResponder];
                     DLog(@"登录成功------%@",[dic objectForKey:@"msg"]);
                     
+                    //保存帐号和密码，做xmpp连接用
+                    [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
                     //这里作为一个登录标志
                     [GeneralToolObject userLogin];
                     
                 } else {
+                    
+                    NSDictionary *dataDic = [dic objectForKey:@"data"];
+                    if (dataDic) {
+                        if ([dataDic objectForKey:@"is_login"]) {
+                            if ([[dataDic objectForKey:@"is_login"] integerValue] == 1) {
+                               
+                                //保存帐号和密码，做xmpp连接用
+                                [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
+                                //登录进去（单独在这里判断下，登录后删除应用情况）
+                                [GeneralToolObject userLogin];
+                                return;
+                            }
+                        }
+                    }
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
                     

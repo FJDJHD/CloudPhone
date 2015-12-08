@@ -209,7 +209,7 @@ static const int kTimeCount             = 60;
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
                     [_numberField resignFirstResponder];
                     [_verifyField resignFirstResponder];
-                   RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码"];
+                    RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码" number:_numberField.text];
                     [alertView show:self];
                 } else {
                 
