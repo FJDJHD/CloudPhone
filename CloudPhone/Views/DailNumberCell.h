@@ -16,4 +16,8 @@
 
 @property (nonatomic, strong) UILabel *dailNumberLabel;
 
+@property (nonatomic, strong) UILabel *dailTimeLabel;
+
+@property (nonatomic, setter=isToday:) UILabel *dailDateLable;
+
 @end

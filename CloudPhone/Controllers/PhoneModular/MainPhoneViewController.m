@@ -9,7 +9,8 @@
 #import "MainPhoneViewController.h"
 #import "Global.h"
 #import "AddressViewController.h"
-
+#import "DialingViewController.h"
+#import "DailNumberCell.h"
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -39,6 +40,7 @@
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }
@@ -58,11 +60,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *ID = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    DailNumberCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        cell = [[DailNumberCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    cell.textLabel.text = @"姓名";
+    cell.dailNameLabel.text = @"刘美兰";
     return cell;
 }
 
@@ -70,6 +72,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    DialingViewController *dialingVC = [DialingViewController new];
+    [self presentViewController:dialingVC animated:YES completion:nil];
 }
 
 

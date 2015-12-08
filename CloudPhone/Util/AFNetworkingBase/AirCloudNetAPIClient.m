@@ -95,12 +95,6 @@
                                 [[[UIApplication sharedApplication] keyWindow].rootViewController.view addSubview:imageView];
                                 
                             }
-                        }else if ([dataDic objectForKey:@"is_mainiain"]){
-                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
-                                //系统关闭
-                                UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"系统关闭" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                                [alterView show];
-                            }
                         }
                     }
                 }
@@ -143,12 +137,6 @@
                                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wating"]];
                                 imageView.frame = [UIScreen mainScreen].bounds;
                                 [[[UIApplication sharedApplication] keyWindow].rootViewController.view addSubview:imageView];
-                            }
-                        }else if ([dataDic objectForKey:@"is_mainiain"]){
-                            if ([[dataDic objectForKey:@"is_mainiain"] integerValue] == 1) {
-                                //系统关闭
-                                UIAlertView  *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"系统关闭" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                                 [alterView show];
                             }
                         }
                      }
@@ -243,27 +231,26 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (alertView.tag == 1001) {
-        //更新版本
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.baidu.com/"]];
+       
         //更新版本
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/xiao-qu-bao/id890385562?mt=8"]];
         
         
-        [[AirCloudNetAPIManager sharedManager] getHelpCenterInfoOfParams:nil WithBlock:^(id data, NSError *error){
-            if (!error) {
-                NSDictionary *dic = (NSDictionary *)data;
-                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    DLog(@"------%@",[dic objectForKey:@"msg"]);
-                    
-                } else {
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:@"数据请求失败"];
-                    
-                    
-                }
-            }
-            
-        }];
+//      [[AirCloudNetAPIManager sharedManager] getHelpCenterInfoOfParams:nil WithBlock:^(id data, NSError *error){
+//            if (!error) {
+//                NSDictionary *dic = (NSDictionary *)data;
+//                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                    DLog(@"------%@",[dic objectForKey:@"msg"]);
+//                    
+//                } else {
+//                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+//                    [CustomMBHud customHudWindow:@"数据请求失败"];
+//                    
+//                    
+//                }
+//            }
+//            
+//        }];
 
 
     }

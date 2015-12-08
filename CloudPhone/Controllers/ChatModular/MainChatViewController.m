@@ -188,9 +188,9 @@
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
