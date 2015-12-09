@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "XMPPFramework.h"
+#import "XMPP.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate> {
 
@@ -21,6 +23,10 @@
     XMPPvCardAvatarModule *xmppvCardAvatarModule;  //好友头像
     XMPPCapabilities *xmppCapabilities;
     XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
+    
+    
+    XMPPMessageArchiving *xmppMessageArchiving;  /** 消息归档 */
+    XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;  /** 消息归档存储 */
 
 }
 
@@ -32,6 +38,11 @@
 @property (nonatomic, strong, readonly) XMPPvCardAvatarModule *xmppvCardAvatarModule;
 @property (nonatomic, strong, readonly) XMPPCapabilities *xmppCapabilities;
 @property (nonatomic, strong, readonly) XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
+
+/** 消息归档 */
+@property (nonatomic, strong, readonly) XMPPMessageArchiving *xmppMessageArchiving;
+/** 消息归档存储 */
+@property (nonatomic, strong, readonly) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
 
 @property (nonatomic, assign) BOOL isXMPPRegister;
 

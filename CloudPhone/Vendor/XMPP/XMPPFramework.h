@@ -40,3 +40,11 @@
 
 #import "XMPPMUC.h"
 #import "XMPPRoomCoreDataStorage.h"
+
+
+// 消息归档
+#import "XMPPMessageArchiving.h"
+// 消息数据存储
+#import "XMPPMessageArchivingCoreDataStorage.h"
+
+

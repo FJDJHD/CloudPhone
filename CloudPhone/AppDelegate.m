@@ -43,6 +43,18 @@
 @end
 
 @implementation AppDelegate
+
+@synthesize xmppStream;
+@synthesize xmppReconnect;
+@synthesize xmppRoster;
+@synthesize xmppRosterStorage;
+@synthesize xmppvCardTempModule;
+@synthesize xmppvCardAvatarModule;
+@synthesize xmppCapabilities;
+@synthesize xmppCapabilitiesStorage;
+@synthesize xmppMessageArchiving;
+@synthesize xmppMessageArchivingCoreDataStorage;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -168,33 +180,6 @@
 
 
 #pragma mark - XMPP模块。。。。全部放在这里
-
-- (XMPPStream *)xmppStream {
-    if (!xmppStream) {
-        xmppStream = [[XMPPStream alloc] init];
-        [xmppStream setHostName:XMPPIP];
-        [xmppStream setHostPort:XMPPPORT];
-    }
-    return xmppStream;
-}
-
-- (XMPPRosterCoreDataStorage *)xmppRosterStorage {
-    if (!xmppRosterStorage) {
-        xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
-    }
-    return xmppRosterStorage;
-}
-
-- (XMPPRoster *)xmppRoster {
-    if (!xmppRoster) {
-        xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
-        xmppRoster.autoFetchRoster = YES;
-        xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
-
-    }
-    return xmppRoster;
-}
-
 - (void)setupStream {
 
     xmppStream = [[XMPPStream alloc] init];
@@ -223,11 +208,18 @@
     xmppCapabilities.autoFetchHashedCapabilities = YES;
     xmppCapabilities.autoFetchNonHashedCapabilities = NO;
     
+    // 消息模块(如果支持多个用户，使用单例，所有的聊天记录会保存在一个数据库中)
+    xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    xmppMessageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:xmppMessageArchivingCoreDataStorage];
+    
+    
     [xmppReconnect         activate:xmppStream];
     [xmppRoster            activate:xmppStream];
     [xmppvCardTempModule   activate:xmppStream];
     [xmppvCardAvatarModule activate:xmppStream];
     [xmppCapabilities      activate:xmppStream];
+    
+    [xmppMessageArchiving activate:xmppStream];
     
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -272,29 +264,6 @@
     [xmppStream disconnect];
 }
 
-- (void)teardownStream {
-    [xmppStream removeDelegate:self];
-    [xmppRoster removeDelegate:self];
-    
-    [xmppReconnect         deactivate];
-    [xmppRoster            deactivate];
-    [xmppvCardTempModule   deactivate];
-    [xmppvCardAvatarModule deactivate];
-    [xmppCapabilities      deactivate];
-    
-    [xmppStream disconnect];
-    
-    xmppStream = nil;
-    xmppReconnect = nil;
-    xmppRoster = nil;
-    xmppRosterStorage = nil;
-    xmppvCardStorage = nil;
-    xmppvCardTempModule = nil;
-    xmppvCardAvatarModule = nil;
-    xmppCapabilities = nil;
-    xmppCapabilitiesStorage = nil;
-}
-
 #pragma mark - XMPPStreamDelegate
 - (void)xmppStream:(XMPPStream *)sender socketDidConnect:(GCDAsyncSocket *)socket {
     DLog(@"socket连接成功socketDidConnect");
@@ -323,8 +292,6 @@
             }
         }
     }
-   
-    
     if (self.isXMPPRegister == YES) {
         DLog(@"注册xmpp");
         //注册
@@ -354,7 +321,10 @@
 //注册成功
 - (void)xmppStreamDidRegister:(XMPPStream *)sender {
     DLog(@"注册成功");
-    [self goOnline]; //标志上线
+    //登录
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *password = [defaults objectForKey:UserPassword];
+    [xmppStream authenticateWithPassword:password error:NULL];
 }
 
 //注册失败
@@ -379,14 +349,50 @@
 }
 
 #pragma mark XMPPRosterDelegate
-//接受好友请求时候调用
+//接受好友请求时候调用，就是有人加你好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
+    
+    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
+    
+    
+    //这里暂时用ios8的方法。。。。。。。。
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES
+         ];
+    }]];
 
+    UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    [alertController presentViewController:alert animated:YES completion:nil];
+
+    
 }
 
 
 
-
+- (void)teardownStream {
+    [xmppStream removeDelegate:self];
+    [xmppRoster removeDelegate:self];
+    
+    [xmppReconnect         deactivate];
+    [xmppRoster            deactivate];
+    [xmppvCardTempModule   deactivate];
+    [xmppvCardAvatarModule deactivate];
+    [xmppCapabilities      deactivate];
+    
+    [xmppStream disconnect];
+    
+    xmppStream = nil;
+    xmppReconnect = nil;
+    xmppRoster = nil;
+    xmppRosterStorage = nil;
+    xmppvCardStorage = nil;
+    xmppvCardTempModule = nil;
+    xmppvCardAvatarModule = nil;
+    xmppCapabilities = nil;
+    xmppCapabilitiesStorage = nil;
+}
 
 #pragma mark XMPPCoreData
 - (NSManagedObjectContext *)managedObjectContext_roster{
@@ -396,20 +402,6 @@
 - (NSManagedObjectContext *)managedObjectContext_capabilities{
     return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

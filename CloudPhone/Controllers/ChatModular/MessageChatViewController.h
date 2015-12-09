@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Global.h"
+
 
 @interface MessageChatViewController : UIViewController
 
-
 @property (nonatomic, copy) NSString *chatUser;
+@property (nonatomic, strong) XMPPJID *chatJID;
 
 @end

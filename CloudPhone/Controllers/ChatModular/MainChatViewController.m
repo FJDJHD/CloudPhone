@@ -10,10 +10,13 @@
 #import "AppDelegate.h"
 #import "Global.h"
 #import "MessageChatViewController.h"
+#import <CoreData/CoreData.h>
 
-@interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+@interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
 
 @end
 
@@ -35,7 +38,7 @@
     //添加列表试图
     [self.view addSubview:self.tableView];
     
-    [fetchedResultsController performFetch:NULL];
+    [self.fetchedResultsController performFetch:NULL];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,9 +100,20 @@
 
     MessageChatViewController *controller = [[MessageChatViewController alloc]init];
     controller.chatUser = user.displayName;
+    controller.chatJID = user.jid;
     [self.navigationController pushViewController:controller animated:YES];
     
 }
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        XMPPJID *jid = user.jid;
+        [[self appDelegate].xmppRoster removeUser:jid];
+    }
+}
+
 
 - (void)configurePhotoForCell:(UITableViewCell *)cell user:(XMPPUserCoreDataStorageObject *)user{
     if (user.photo != nil){
@@ -121,7 +135,7 @@
 
 //这里需要用到查询结果调度器(写完了结果调度器之后要切记在viewdidload页面首次加载中加上一句，否则不干活
 - (NSFetchedResultsController *)fetchedResultsController{
-    if (fetchedResultsController == nil){
+    if (_fetchedResultsController == nil){
         NSManagedObjectContext *moc = [[GeneralToolObject appDelegate] managedObjectContext_roster];
         
         // 指定查询的实体
@@ -141,26 +155,25 @@
         [fetchRequest setFetchBatchSize:10];
         
         // 实例化结果控制器
-        fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                        managedObjectContext:moc
                                                                          sectionNameKeyPath:@"sectionNum"
                                                                                   cacheName:nil];
-        [fetchedResultsController setDelegate:self];
+        [_fetchedResultsController setDelegate:self];
         
         NSError *error = nil;
-        if (![fetchedResultsController performFetch:&error]){
+        if (![_fetchedResultsController performFetch:&error]){
             DLog(@"Error performing fetch: %@", error);
         }
         
     }
-    return fetchedResultsController;
+    return _fetchedResultsController;
 }
 
 - (void)addressButtonClick {
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
-
 }
 
 //添加好友。。。。。
