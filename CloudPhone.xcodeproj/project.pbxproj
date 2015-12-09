@@ -284,6 +284,11 @@
 		6EC3ECB01C16E50B00B27B18 /* photo_nomal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EC3ECAF1C16E50B00B27B18 /* photo_nomal@2x.png */; };
 		6EC3ECB41C16E99C00B27B18 /* btn_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6EC3ECB31C16E99C00B27B18 /* btn_more@2x.png */; };
 		B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF01B1C1580790077FAC9 /* ChatCell.m */; };
+		B40FF0221C1672200077FAC9 /* FriendDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */; };
+		B40FF0241C16804E0077FAC9 /* person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0231C16804E0077FAC9 /* person@2x.png */; };
+		B40FF0261C1688DB0077FAC9 /* freephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0251C1688DB0077FAC9 /* freephone@2x.png */; };
+		B40FF02A1C16892B0077FAC9 /* sendmsg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0291C16892B0077FAC9 /* sendmsg@2x.png */; };
+		B40FF02C1C16E0EF0077FAC9 /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF02B1C16E0EE0077FAC9 /* Foundation+Log.m */; };
 		B44E90711C0FD41700CFC003 /* PersonGenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */; };
 		B44E90741C0FD44900CFC003 /* PersonBirthdayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */; };
 		B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */; };
@@ -896,6 +901,12 @@
 		6EC3ECB31C16E99C00B27B18 /* btn_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_more@2x.png"; sourceTree = "<group>"; };
 		B40FF01A1C1580790077FAC9 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		B40FF01B1C1580790077FAC9 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		B40FF0201C1672200077FAC9 /* FriendDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendDetailViewController.h; sourceTree = "<group>"; };
+		B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendDetailViewController.m; sourceTree = "<group>"; };
+		B40FF0231C16804E0077FAC9 /* person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "person@2x.png"; sourceTree = "<group>"; };
+		B40FF0251C1688DB0077FAC9 /* freephone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "freephone@2x.png"; sourceTree = "<group>"; };
+		B40FF0291C16892B0077FAC9 /* sendmsg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sendmsg@2x.png"; sourceTree = "<group>"; };
+		B40FF02B1C16E0EE0077FAC9 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
 		B44E906F1C0FD41700CFC003 /* PersonGenderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonGenderViewController.h; sourceTree = "<group>"; };
 		B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonGenderViewController.m; sourceTree = "<group>"; };
 		B44E90721C0FD44900CFC003 /* PersonBirthdayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonBirthdayViewController.h; sourceTree = "<group>"; };
@@ -1246,6 +1257,7 @@
 				B4DEF6E71C06FC3D0001407D /* ColorTool.m */,
 				6E4D37741C056619001573E3 /* GeneralToolObject.h */,
 				6E4D37751C056619001573E3 /* GeneralToolObject.m */,
+				B40FF02B1C16E0EE0077FAC9 /* Foundation+Log.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2377,6 +2389,8 @@
 				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
 				B4D76A131C1523360095CB9F /* DialingViewController.h */,
 				B4D76A141C1523360095CB9F /* DialingViewController.m */,
+				B40FF0201C1672200077FAC9 /* FriendDetailViewController.h */,
+				B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */,
 			);
 			path = PhoneModular;
 			sourceTree = "<group>";
@@ -2558,6 +2572,9 @@
 		B44E90E41C103FC500CFC003 /* tempImage */ = {
 			isa = PBXGroup;
 			children = (
+				B40FF0231C16804E0077FAC9 /* person@2x.png */,
+				B40FF0251C1688DB0077FAC9 /* freephone@2x.png */,
+				B40FF0291C16892B0077FAC9 /* sendmsg@2x.png */,
 			);
 			path = tempImage;
 			sourceTree = "<group>";
@@ -2684,6 +2701,7 @@
 				B44E90EF1C103FC500CFC003 /* welcome@2x.png in Resources */,
 				B4D76A1F1C1523970095CB9F /* callphone_bg@2x.png in Resources */,
 				B44E90ED1C103FC500CFC003 /* pic_touxiang@2x.png in Resources */,
+				B40FF0261C1688DB0077FAC9 /* freephone@2x.png in Resources */,
 				B44E90F21C103FC500CFC003 /* mine_icon@2x.png in Resources */,
 				6EC3EC6C1C16DE6D00B27B18 /* girl_beg@2x.gif in Resources */,
 				B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */,
@@ -2698,6 +2716,7 @@
 				6EC3ECA01C16E47000B27B18 /* camera_nomal@2x.png in Resources */,
 				6EC3EC691C16DE6D00B27B18 /* EmojiGirl.plist in Resources */,
 				B44E90FB1C103FC500CFC003 /* tabbar_phoneSelected@2x.png in Resources */,
+				B40FF0241C16804E0077FAC9 /* person@2x.png in Resources */,
 				6EBA8D981C15248C00BAE5DD /* build-libidn.sh in Resources */,
 				6EC3ECAA1C16E4A900B27B18 /* btn_key@2x.png in Resources */,
 				B44E90EE1C103FC500CFC003 /* pic_zhanghao@2x.png in Resources */,
@@ -2720,6 +2739,7 @@
 				6EC3ECB01C16E50B00B27B18 /* photo_nomal@2x.png in Resources */,
 				B44E90EC1C103FC500CFC003 /* pic_mima@2x.png in Resources */,
 				B44E90F31C103FC500CFC003 /* back@2x.png in Resources */,
+				B40FF02A1C16892B0077FAC9 /* sendmsg@2x.png in Resources */,
 				B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */,
 				B44E90FA1C103FC500CFC003 /* tabbar_phone@2x.png in Resources */,
 				6EC3ECA41C16E49300B27B18 /* btn_pic@2x.png in Resources */,
@@ -2839,6 +2859,7 @@
 				6EBA8D691C15248B00BAE5DD /* XMPPMessageArchiving_Message_CoreDataObject.m in Sources */,
 				6E4D376A1C056384001573E3 /* UIImageView+WebCache.m in Sources */,
 				6EC3EC9B1C16E2A400B27B18 /* UIColor+YTBacal.m in Sources */,
+				B40FF02C1C16E0EF0077FAC9 /* Foundation+Log.m in Sources */,
 				6EBA8D851C15248C00BAE5DD /* RFImageToDataTransformer.m in Sources */,
 				6EBA8D3E1C15248B00BAE5DD /* XMPPRoomHybridStorage.m in Sources */,
 				6E4D37291C0561A2001573E3 /* AFURLConnectionOperation.m in Sources */,
@@ -3003,6 +3024,7 @@
 				6E2E8A721C06A20E000E6C2D /* RegisterViewController.m in Sources */,
 				6E4D37681C056384001573E3 /* UIImage+WebP.m in Sources */,
 				6EC0BB531C0BF14500075A19 /* NSString+MD5.m in Sources */,
+				B40FF0221C1672200077FAC9 /* FriendDetailViewController.m in Sources */,
 				6E4D378B1C056619001573E3 /* UIViewController+NavigationBar.m in Sources */,
 				6E8AA9AC1C16B1EF003F1C45 /* XHConfigurationHelper.m in Sources */,
 				6EBA8D881C15248C00BAE5DD /* XMPPStringPrep.m in Sources */,
