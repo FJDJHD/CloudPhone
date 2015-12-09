@@ -11,6 +11,7 @@
 #import "AddressViewController.h"
 #import "DialingViewController.h"
 #import "DailNumberCell.h"
+#import "FriendDetailViewController.h"
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -73,8 +74,10 @@
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    DialingViewController *dialingVC = [DialingViewController new];
-    [self presentViewController:dialingVC animated:YES completion:nil];
+//    DialingViewController *dialingVC = [DialingViewController new];
+//    [self presentViewController:dialingVC animated:YES completion:nil];
+    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+    [self.navigationController pushViewController:friDetailVC animated:YES];
 }
 
 

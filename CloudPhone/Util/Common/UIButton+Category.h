@@ -10,4 +10,5 @@
 
 @interface UIButton (Category)
 - (void) setImage:(UIImage *)image withTitle:(NSString *)title forState:(UIControlState)stateType;
+
 @end

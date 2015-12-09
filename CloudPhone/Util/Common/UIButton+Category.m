@@ -7,7 +7,7 @@
 //
 
 #import "UIButton+Category.h"
-
+#import "Global.h"
 @implementation UIButton (Category)
 
 - (void) setImage:(UIImage *)image withTitle:(NSString *)title forState:(UIControlState)stateType {
@@ -31,4 +31,5 @@
                                               0.0)];
     [self setTitle:title forState:stateType];
 }
+
 @end
