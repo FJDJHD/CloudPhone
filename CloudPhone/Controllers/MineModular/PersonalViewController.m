@@ -36,7 +36,7 @@
 @implementation PersonalViewController
 - (NSArray *)itemArray{
     if (!_itemArray) {
-        _itemArray = @[@"昵称",@"性别",@"生日",@"手机",@"个性签名",@"退出登录"];
+        _itemArray = @[@"昵称",@"性别",@"生日",@"手机",@"个性签名"];
     }
     return _itemArray;
 }
@@ -118,7 +118,7 @@
         
         UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
         //头像
-        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
+        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"] || [model.userIcon isEqual:[NSNull null]]) {
         } else {
             [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
         }
@@ -156,11 +156,7 @@
             } else {
                 cell.detailTextLabel.text = model.userSignature;
             }
-        }else{
-            //退出
-            cell.accessoryView = [[UIView alloc] init];
         }
-        
     }
 
     return cell;
@@ -240,19 +236,9 @@
         };
         [self.navigationController pushViewController:signatuireVC animated:YES];
         
-    }else if (indexPath.section == 1 && indexPath.row == self.itemArray.count - 1){
-        //退出
-        UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:@"是否退出当前账号？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        [alterView show];
-    }
-
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-    [self requestLoginOut];
     }
 }
+
 
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -364,30 +350,6 @@
     }];
 }
 
-- (void)requestLoginOut {
-    //退出登录
-    [self AddHUD];
-    [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
-        [self HUDHidden];
-        if (!error) {
-            NSDictionary *dic = (NSDictionary *)data;
-            
-            if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                
-                //这里退出
-                [GeneralToolObject userLoginOut];
-                
-            } else {
-                DLog(@"*****%@",[dic objectForKey:@"msg"]);
-                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
-            }
-        } else {
-            //error
-            DLog(@"*****%@",error);
-        }
-    }];
-
-}
 
 #pragma mark - MBProgressHUD Show or Hidden
 - (void)AddHUD {

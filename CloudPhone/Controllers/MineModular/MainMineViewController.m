@@ -144,6 +144,7 @@
         UIImageView *imageView = (UIImageView *)[cell viewWithTag:200];
         UILabel *userLable = (UILabel *)[cell viewWithTag:201];
         UILabel *mobileLable = (UILabel *)[cell viewWithTag:202];
+        NSLog(@"model.userNumber = %@  %@",model.userNumber,[model.userNumber class]);
         //电话
         if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
             mobileLable.text = @"";
@@ -151,7 +152,7 @@
             mobileLable.text = model.userNumber;
         }
         //昵称
-        if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@""]) {
+        if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@"" ]) {
             userLable.text = @"昵称";
         } else {
             userLable.text = model.userName;
