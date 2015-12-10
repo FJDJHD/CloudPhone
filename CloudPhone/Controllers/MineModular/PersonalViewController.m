@@ -118,7 +118,7 @@
         
         UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
         //头像
-        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
+        if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"] || [model.userIcon isEqual:[NSNull null]]) {
         } else {
             [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
         }
