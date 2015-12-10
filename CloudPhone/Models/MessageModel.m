@@ -7,9 +7,6 @@
 //
 
 #import "MessageModel.h"
-
-
-
 @implementation MessageModel
 
 

@@ -13,12 +13,19 @@ typedef enum {
     kMessageModelTypeMe
 } MessageModelType;
 
+typedef enum {
+    kTextMessage,  //文字
+    kImageMessage  //图片
+} MessageType;
+
 @interface MessageModel : NSObject
 
 @property (nonatomic, copy) NSString *text;
 
-@property (nonatomic, strong) NSAttributedString *attachStr;
+@property (nonatomic, strong) UIImage *image;
 
 @property (nonatomic, assign) MessageModelType type;
+
+@property (nonatomic,assign) MessageType messageType;
 
 @end

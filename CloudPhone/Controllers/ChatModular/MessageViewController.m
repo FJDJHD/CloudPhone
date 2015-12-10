@@ -7,9 +7,12 @@
 //
 
 #import "MessageViewController.h"
-#import "Global.h"
 #import "DXMessageToolBar.h"
 #import "ChatSendHelper.h"
+#import "MessageCell.h"
+#import "UIImage+ResizeImage.h"
+#import "XMPPMessage+Tools.h"
+
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -19,12 +22,27 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
+@property (nonatomic, strong) CellFrameModel *cellModel;
+
+@property (nonatomic, strong) MessageModel *messageModel;
+
 @end
 
 @implementation MessageViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [ColorTool backgroundColor];
+
+    //导航栏返回按钮
+    UIButton *backButton = [self setBackBarButton:1];
+    [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self setBackBarButtonItem:backButton];
+    
+    self.title = self.chatUser ? self.chatUser : @"会话";
+    
+    _cellModel = [[CellFrameModel alloc]init];
+    _messageModel = [[MessageModel alloc]init];
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.chatToolBar];
@@ -39,6 +57,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
+ 
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
     [self scrollViewToBottom:NO];
 }
 
@@ -49,7 +73,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [[UIView alloc]init];
-        _tableView.backgroundColor = RGBA(248, 248, 248, 1);
+        _tableView.backgroundColor = [ColorTool backgroundColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _tableView;
@@ -103,16 +127,36 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 5;
+    return self.fetchedResultsController.fetchedObjects.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *ID = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    static NSString *ID = @"cell";
+    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
+    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    // 如果存进去了，就把字符串转化成简洁的节点后保存
+    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
+        message.messageStr = [message.message compactXMLString];
+        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
+    }
+    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+    if ([message.body isEqualToString:@"image"]) {
+        UIImage *image = [UIImage imageWithContentsOfFile:path];
+        _messageModel.image = image;
+        _messageModel.messageType = kImageMessage; //图片类型
+    } else {
+       _messageModel.messageType = kTextMessage; //文字类型
+    }
+    _messageModel.text = message.body;
+    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+    _cellModel.message = _messageModel;
+    cell.cellFrame = _cellModel;
+    
     return cell;
 }
 
@@ -120,17 +164,27 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    return 60;
+    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    _messageModel.text = message.body;
+    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+    
+    _cellModel.message = _messageModel;
+    return _cellModel.cellHeight ? _cellModel.cellHeight : 44.0;
+        
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self keyBoardHidden];
+
+}
 
 
 #pragma mark - NSFetchedResultsControllerDelegate
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
-    NSLog(@"上下文改变");
+    DLog(@"上下文改变");
     [self.tableView reloadData];
-    
     [self scrollViewToBottom:YES];
 }
 
@@ -152,8 +206,8 @@
 - (void)didSendText:(NSString *)text
 {
     if (text && text.length > 0) {
-        //        [self sendTextMessage:text];
         DLog(@"%@",text);
+        [ChatSendHelper sendTextMessageWithString:text toUsername:self.chatUser];
     }
 }
 
@@ -185,15 +239,17 @@
 - (void)moreViewPhotoAction:(DXChatBarMoreView *)moreView
 {
     // 隐藏键盘
-    [self keyBoardHidden];
-    
-    DLog(@"照相");
+    DLog(@"照片");
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate = self;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (void)moreViewTakePicAction:(DXChatBarMoreView *)moreView
 {
     [self keyBoardHidden];
-    DLog(@"照片");
+    DLog(@"照相");
+
 }
 
 - (void)moreViewLocationAction:(DXChatBarMoreView *)moreView
@@ -214,6 +270,16 @@
     [self keyBoardHidden];
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    
+    //发送照片
+    [ChatSendHelper sendImageMessageWithImage:image toUsername:self.chatJID];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Methd
 - (void)scrollViewToBottom:(BOOL)animated
 {
@@ -227,6 +293,11 @@
 -(void)keyBoardHidden
 {
     [self.chatToolBar endEditing:YES];
+}
+
+- (void)popViewController {
+
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

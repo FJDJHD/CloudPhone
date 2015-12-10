@@ -7,6 +7,7 @@
 //
 
 #import "CellFrameModel.h"
+#import "UIImage+ResizeImage.h"
 
 #define padding 10
 #define iconW   40
@@ -28,15 +29,24 @@
     CGFloat iconFrameH = iconH;
     _iconFrame = CGRectMake(iconFrameX, iconFrameY, iconFrameW, iconFrameH);
     
-    //内容frame
     //3.内容的Frame
-    CGSize textMaxSize = CGSizeMake(textW, MAXFLOAT);
-    NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:14.0]};
-    CGSize textSize = [_message.text boundingRectWithSize:textMaxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;
-    CGSize textRealSize = CGSizeMake(textSize.width + textPadding * 2, textSize.height +textPadding * 2);
     CGFloat textFrameY = iconFrameY;
-    CGFloat textFrameX = message.type ? (2 * padding + iconFrameW) : (frame.size.width - 2 * padding - iconFrameW - textRealSize.width);
-    _textFrame = (CGRect){textFrameX,textFrameY,textRealSize};
+ 
+    if (_message.messageType == kImageMessage) {
+        //图片的frame
+        _message.image = [_message.image scaleImageWithWidth:200];
+        CGFloat textFrameX = message.type ? (2 * padding + iconFrameW) : (frame.size.width - 2 * padding - iconFrameW - _message.image.size.width);
+        _textFrame = CGRectMake(textFrameX, textFrameY, _message.image.size.width, _message.image.size.height);
+    } else {
+        //文字的frame
+        CGSize textMaxSize = CGSizeMake(textW, MAXFLOAT);
+        NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0]};
+        CGSize textSize = [_message.text boundingRectWithSize:textMaxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;
+        CGSize textRealSize = CGSizeMake(textSize.width + textPadding * 2, textSize.height +textPadding * 2);
+        CGFloat textFrameX = message.type ? (2 * padding + iconFrameW) : (frame.size.width - 2 * padding - iconFrameW - textRealSize.width);
+        _textFrame = (CGRect){textFrameX,textFrameY,textRealSize};
+    
+    }
     
     //cell 的高度
     _cellHeight = MAX(CGRectGetMaxY(_iconFrame), CGRectGetMaxY(_textFrame)) + padding;

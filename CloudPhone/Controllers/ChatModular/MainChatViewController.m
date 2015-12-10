@@ -12,8 +12,7 @@
 #import "MessageChatViewController.h"
 #import <CoreData/CoreData.h>
 
-
-#import "TestViewController.h"
+#import "MessageViewController.h"
 
 @interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -102,7 +101,12 @@
     
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
 
-    MessageChatViewController *controller = [[MessageChatViewController alloc]init];
+//    MessageChatViewController *controller = [[MessageChatViewController alloc]init];
+//    controller.chatUser = user.displayName;
+//    controller.chatJID = user.jid;
+//    [self.navigationController pushViewController:controller animated:YES];
+    
+    MessageViewController *controller = [[MessageViewController alloc]init];
     controller.chatUser = user.displayName;
     controller.chatJID = user.jid;
     [self.navigationController pushViewController:controller animated:YES];
@@ -178,12 +182,10 @@
 }
 
 - (void)addressButtonClick {
-//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
-//    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//    [alert show];
-    
-    TestViewController *controller = [[TestViewController alloc]init];
-    [self.navigationController pushViewController:controller animated:YES];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+
 }
 
 //添加好友。。。。。

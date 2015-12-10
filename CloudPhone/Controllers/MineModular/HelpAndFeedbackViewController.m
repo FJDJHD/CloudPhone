@@ -140,7 +140,6 @@
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                DLog(@"------%@",[dic objectForKey:@"msg"]);
                 self.helpMutableArray = [dic objectForKey:@"data"];
                 [self.tableView reloadData];
             } else {
