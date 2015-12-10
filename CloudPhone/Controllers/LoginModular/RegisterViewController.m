@@ -174,7 +174,7 @@ static const int kTimeCount             = 60;
                     
                 } else {
                     DLog(@"*****%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
              
                 }
             } else {
@@ -213,7 +213,7 @@ static const int kTimeCount             = 60;
                     [alertView show:self];
                 } else {
                 
-                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
 
                 }
             }

@@ -32,7 +32,7 @@
 //                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
 //                        DLog(@"****");
 //                    } else {
-//                        DLog(@"******%@",[dic objectForKey:@"msg"]);
+//                        DLog(@"******%@",[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]);
 //                    }
 //                }
 //            }];

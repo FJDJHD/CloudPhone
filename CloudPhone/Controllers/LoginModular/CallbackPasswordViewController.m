@@ -135,8 +135,7 @@ static const int kTimeCount             = 60;
                     [alterView show];
                     
                 } else {
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
                     
                 }
             } else {
@@ -176,9 +175,8 @@ static const int kTimeCount             = 60;
                     [self.navigationController pushViewController:resetPasswordController animated:YES];
                     
                 } else {
-                    DLog(@"%@",[dic objectForKey:@"msg"]);
                      [self originalTimeCountButton]; //再把按钮还原回去
-                     [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                     [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
                 }
             }
         }];

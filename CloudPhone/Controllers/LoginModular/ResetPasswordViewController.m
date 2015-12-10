@@ -50,7 +50,7 @@
                     [self.navigationController popToViewController:controller animated:YES];
                 } else {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+                    [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
                     
                 }
             }

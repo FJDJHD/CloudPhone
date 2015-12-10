@@ -146,7 +146,6 @@
                             }
                         }
                     }
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
 //                    [[[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
                     
