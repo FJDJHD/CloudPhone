@@ -103,6 +103,7 @@
 #import "GeneralToolObject.h"
 #import "UIImageView+WebCache.h"
 #import "UIButton+Category.h"
+#import "AppDelegate.h"
 
 @interface Global : NSObject
 

@@ -12,6 +12,9 @@
 #import "MessageChatViewController.h"
 #import <CoreData/CoreData.h>
 
+
+#import "TestViewController.h"
+
 @interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -175,9 +178,12 @@
 }
 
 - (void)addressButtonClick {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+//    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+//    [alert show];
+    
+    TestViewController *controller = [[TestViewController alloc]init];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 //添加好友。。。。。
