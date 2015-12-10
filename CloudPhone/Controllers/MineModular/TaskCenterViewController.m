@@ -11,6 +11,7 @@
 @interface TaskCenterViewController()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong)   UIView *shareBar;
 @end
 
 @implementation TaskCenterViewController
@@ -65,37 +66,19 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
         if (indexPath.section == 1 && indexPath.row == 1) {
-            NSArray *imageArray = [NSArray array];
-            imageArray = @[@"mine_penyouquan",@"mine_qqspace",@"mine_qq",@"mine_weixin"];
-            NSArray *nameArray = [NSArray array];
-            nameArray = @[@"盆友圈",@"空间",@"QQ",@"微信"];
-            
             UIView *shareBar= [[UIView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 120)];
             shareBar.backgroundColor = [UIColor whiteColor];
+            self.shareBar = shareBar;
+            [self setShareBar];
             [cell addSubview:shareBar];
-            
-            for (int i = 0; i < imageArray.count; i++) {
-                int col = i % 2;
-                int row = i / 2;
-                CGFloat  btWidth = 40;
-                CGFloat  btHeight = 40.0;
-                CGFloat  btX = col ? MainWidth - 89 - btWidth : 34 - 15;
-                CGFloat  btY = 10 + row * (btHeight + 20);
-                
-                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-                button.frame = CGRectMake(btX, btY, btWidth, btHeight);
-                [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] forState:UIControlStateNormal];
-                [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
-                [shareBar addSubview:button];
-            }
         }
     }
-     
     
     if (indexPath.section == 0 ) {
     cell.textLabel.text = @"登录签到每次奖励5分钟";
     cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     } else  if (indexPath.section == 1 && indexPath.row == 0){
+    cell.backgroundColor = [UIColor colorWithHexString:@"#f8f8f8"];
     cell.textLabel.text = @"分享云电话，奖励30分钟";
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(MainWidth - 60, 10, 40, 30)];
     label.textColor = [UIColor colorWithHexString:@"#049ff1"];
@@ -105,16 +88,58 @@
     return cell;
 }
 
-
+- (void)setShareBar{
+    NSArray *imageArray = [NSArray array];
+    imageArray = @[@"mine_penyouquan",@"mine_qqspace",@"mine_qq",@"mine_weixin"];
+    NSArray *nameArray = [NSArray array];
+    nameArray = @[@"盆友圈",@"空间",@"QQ",@"微信"];
+    
+    UIView *line= [[UIView alloc] initWithFrame:CGRectMake(15, 60, MainWidth - 2*15, 1)];
+    line.backgroundColor = [UIColor colorWithHexString:@"#e2e2e2"];
+    [self.shareBar addSubview:line];
+    
+    for (int i = 0; i < imageArray.count; i++) {
+        int col = i % 2;
+        int row = i / 2;
+        CGFloat  btWidth = 40;
+        CGFloat  btHeight = 40.0;
+        CGFloat  btX = col ? MainWidth - 89 - btWidth : 34 - 15;
+        CGFloat  btY = 10 + row * (btHeight + 20);
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(btX, btY, btWidth, btHeight);
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+        [self.shareBar addSubview:button];
+        
+        CGRect textLableFrame = CGRectMake(CGRectGetMaxX(button.frame) + 5, btY, 50, 25);
+        UILabel *textLabel = [[UILabel alloc]initWithFrame:textLableFrame];
+        textLabel.font = [UIFont systemFontOfSize:16.0];
+        textLabel.text = nameArray[i];
+        textLabel.textColor = [UIColor blackColor];
+        [self.shareBar addSubview:textLabel];
+        
+        CGRect detailTextLableFrame = CGRectMake(CGRectGetMaxX(button.frame) + 5,CGRectGetMaxY(textLabel.frame), 50, 10);
+        UILabel *detailTextLable = [[UILabel alloc]initWithFrame:detailTextLableFrame];
+        detailTextLable.text = @"+10分钟";
+        detailTextLable.font = [UIFont systemFontOfSize:10.0];
+        detailTextLable.textColor = [UIColor blackColor];
+        [self.shareBar addSubview:detailTextLable];
+        
+    }
+}
 
 #pragma mark - UITableviewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 10;
+    if (section == 0) {
+        return 10;
+    }
+    return 5;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0;
+    return 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -167,6 +192,30 @@
 - (void)popViewController {
 
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+/**
+ *  下面两个方法解决cell分割线不到左边界的问题
+ */
+-(void)viewDidLayoutSubviews {
+    
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+        
+    }
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])  {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat{
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]){
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
 }
 
 @end

@@ -9,12 +9,12 @@
 #import "SettingViewController.h"
 #import "Global.h"
 
-@interface SettingViewController()<UITableViewDataSource,UITableViewDelegate>
+@interface SettingViewController()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSDictionary *personalDic;
-
+@property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) NSTextAttachment *attchIcon;
 
 @end
@@ -24,7 +24,7 @@
 
 - (NSArray *)itemArray{
     if (!_itemArray) {
-        _itemArray = @[@"拨打设置",@"拨打设置",@"拨打设置",@"拨打设置"];
+        _itemArray = @[@"拨打设置",@"提醒设置",@"隐私安全",@"消息设置",@"清除缓存"];
     }
     return _itemArray;
 }
@@ -33,6 +33,12 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    [self HUDHidden];
 }
 
 - (void)viewDidLoad {
@@ -64,9 +70,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
-        return 1;
+        return self.itemArray.count;
     }else{
-        return  self.itemArray.count;
+        return  1;
     }
 }
 
@@ -77,17 +83,16 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
-        if (indexPath.section == 0) {
-            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0,MainWidth,60)];
+        if (indexPath.section != 0) {
+            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0,MainWidth,45)];
             label.font = [UIFont systemFontOfSize:17.0];
-            label.text = @"大家都在问的问题哦";
+            label.text = @"退出登录";
             label.textAlignment = NSTextAlignmentCenter;
             [cell addSubview:label];
         }
-        
     }
     
-    if (indexPath.section != 0) {
+    if (indexPath.section == 0) {
         cell.textLabel.text = self.itemArray[indexPath.row];
         cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     }
@@ -110,29 +115,69 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 5;
+        return 20;
     }
     return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    return 60;
+    return 45;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        
-        NSLog(@"%ld",indexPath.row);
-        
-    }else {
-        NSLog(@"%ld",indexPath.row);
+    if (indexPath.section == 1) {
+    //退出
+    UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:@"是否退出当前账号？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alterView show];
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        [self requestLoginOut];
+    }
+}
+
+- (void)requestLoginOut {
+    //退出登录
+    [self AddHUD];
+    [[AirCloudNetAPIManager sharedManager] userLogoutWithBlock:^(id data, NSError *error){
+        [self HUDHidden];
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                
+                //这里退出
+                [GeneralToolObject userLoginOut];
+                
+            } else {
+                DLog(@"*****%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:[dic objectForKey:@"msg"]];
+            }
+        } else {
+            //error
+            DLog(@"*****%@",error);
+        }
+    }];
     
 }
 
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
 
 #pragma mark - nav
 - (void)popViewController {
