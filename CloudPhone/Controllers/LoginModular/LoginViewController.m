@@ -127,6 +127,7 @@
                     
                     //保存帐号和密码，做xmpp连接用
                     [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
+                  
                     //这里作为一个登录标志
                     [GeneralToolObject userLogin];
                     

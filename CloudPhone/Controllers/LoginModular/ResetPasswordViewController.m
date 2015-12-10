@@ -45,6 +45,7 @@
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    
                     UIViewController *controller = self.navigationController.viewControllers[1];
                     [self.navigationController popToViewController:controller animated:YES];
                 } else {

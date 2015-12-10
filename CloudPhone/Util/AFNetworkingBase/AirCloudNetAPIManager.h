@@ -53,6 +53,7 @@
 
 //更新头像信息提交
 - (void)updatePhotoOfImage:(UIImage *)image
+                    params:(NSDictionary *)params
                  WithBlock:(void (^)(id data, NSError *error))block;
 
 //用户中心首页
@@ -64,6 +65,18 @@
                         WithBlock:(void (^)(id data, NSError *error))block;
 //帮助与反馈
 - (void)getHelpCenterInfoOfParams:(NSDictionary *)params
-
                         WithBlock:(void(^)(id data, NSError *error))block;
+
+//存储openfire发送消息(文字)
+- (void)saveSendMessageOfParams:(NSDictionary *)params
+                        WithBlock:(void(^)(id data, NSError *error))block;
+
+//存储openfire发送消息(图片)
+- (void)saveSendPhotoOfImage:(UIImage *)image
+                 params:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block;
+
+
+
+
 @end

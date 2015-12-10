@@ -85,10 +85,11 @@
 #define appDeepLableColor       RGB(51, 51, 51)
 
 /* --NSUserDefaults 的key --*/
-#define isLoginKey                @"isLoginKey"  //判断是否登录过(isLogined.....notLogined)
-#define UserNumber                @"UserNumber"  //手机号码 （作为xmpp的聊天昵称）
+#define isLoginKey                @"isLoginKey"    //判断是否登录过(isLogined.....notLogined)
+#define UserNumber                @"UserNumber"    //手机号码 （作为xmpp的聊天昵称）
 #define UserPassword              @"UserPassword"  //
 #define RegisterFail              @"RegisterFail"  //xmpp注册失败
+#define ResetPassword             @"ResetPassword" //重置密码
 
 #import <Foundation/Foundation.h>
 #import "Macros.h"

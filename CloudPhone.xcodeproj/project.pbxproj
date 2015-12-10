@@ -75,6 +75,12 @@
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
 		6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E722F541C0FEC9200A21557 /* DailNumberCell.m */; };
+		6E8121FB1C17DE7F000B9103 /* chat_recive_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E8121FA1C17DE7F000B9103 /* chat_recive_nor@2x.png */; };
+		6E8121FD1C17DE91000B9103 /* chat_send_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E8121FC1C17DE91000B9103 /* chat_send_nor@2x.png */; };
+		6E8122001C17DF60000B9103 /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8121FF1C17DF60000B9103 /* MessageModel.m */; };
+		6E8122031C17E044000B9103 /* CellFrameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8122021C17E044000B9103 /* CellFrameModel.m */; };
+		6E8122061C1805D4000B9103 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8122051C1805D4000B9103 /* MessageCell.m */; };
+		6E8122091C18087D000B9103 /* UIImage+ResizeImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8122081C18087D000B9103 /* UIImage+ResizeImage.m */; };
 		6E8AA9941C166E45003F1C45 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9931C166E45003F1C45 /* XMPPTool.m */; };
 		6E8AA9971C168A78003F1C45 /* XMPPMessage+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9961C168A78003F1C45 /* XMPPMessage+Tools.m */; };
 		6E8AA99A1C168ABC003F1C45 /* NSFileManager+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9991C168ABC003F1C45 /* NSFileManager+Tools.m */; };
@@ -490,6 +496,16 @@
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		6E722F531C0FEC9200A21557 /* DailNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailNumberCell.h; sourceTree = "<group>"; };
 		6E722F541C0FEC9200A21557 /* DailNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailNumberCell.m; sourceTree = "<group>"; };
+		6E8121FA1C17DE7F000B9103 /* chat_recive_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_recive_nor@2x.png"; sourceTree = "<group>"; };
+		6E8121FC1C17DE91000B9103 /* chat_send_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_send_nor@2x.png"; sourceTree = "<group>"; };
+		6E8121FE1C17DF60000B9103 /* MessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageModel.h; sourceTree = "<group>"; };
+		6E8121FF1C17DF60000B9103 /* MessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageModel.m; sourceTree = "<group>"; };
+		6E8122011C17E044000B9103 /* CellFrameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellFrameModel.h; sourceTree = "<group>"; };
+		6E8122021C17E044000B9103 /* CellFrameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellFrameModel.m; sourceTree = "<group>"; };
+		6E8122041C1805D4000B9103 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
+		6E8122051C1805D4000B9103 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
+		6E8122071C18087D000B9103 /* UIImage+ResizeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeImage.h"; sourceTree = "<group>"; };
+		6E8122081C18087D000B9103 /* UIImage+ResizeImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeImage.m"; sourceTree = "<group>"; };
 		6E8AA9921C166E45003F1C45 /* XMPPTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPTool.h; sourceTree = "<group>"; };
 		6E8AA9931C166E45003F1C45 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
 		6E8AA9951C168A78003F1C45 /* XMPPMessage+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XMPPMessage+Tools.h"; sourceTree = "<group>"; };
@@ -1066,6 +1082,8 @@
 				6E722F541C0FEC9200A21557 /* DailNumberCell.m */,
 				B40FF01A1C1580790077FAC9 /* ChatCell.h */,
 				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
+				6E8122041C1805D4000B9103 /* MessageCell.h */,
+				6E8122051C1805D4000B9103 /* MessageCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1363,6 +1381,8 @@
 		6E8AA9AD1C16B2A5003F1C45 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				6E8121FA1C17DE7F000B9103 /* chat_recive_nor@2x.png */,
+				6E8121FC1C17DE91000B9103 /* chat_send_nor@2x.png */,
 				6EC3ECB31C16E99C00B27B18 /* btn_more@2x.png */,
 				6EC3ECAF1C16E50B00B27B18 /* photo_nomal@2x.png */,
 				6EC3ECAD1C16E4DA00B27B18 /* btn_facecancel@2x.png */,
@@ -1383,6 +1403,10 @@
 				6EA4643A1C0EE44A00650524 /* PersonModel.m */,
 				6EA4643D1C0EE46B00650524 /* UserModel.h */,
 				6EA4643E1C0EE46B00650524 /* UserModel.m */,
+				6E8121FE1C17DF60000B9103 /* MessageModel.h */,
+				6E8121FF1C17DF60000B9103 /* MessageModel.m */,
+				6E8122011C17E044000B9103 /* CellFrameModel.h */,
+				6E8122021C17E044000B9103 /* CellFrameModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2338,6 +2362,8 @@
 				6EC0BB361C0BDEB700075A19 /* MainChatViewController.m */,
 				6EBA8DA41C156B1A00BAE5DD /* MessageChatViewController.h */,
 				6EBA8DA51C156B1A00BAE5DD /* MessageChatViewController.m */,
+				6E8122071C18087D000B9103 /* UIImage+ResizeImage.h */,
+				6E8122081C18087D000B9103 /* UIImage+ResizeImage.m */,
 			);
 			path = ChatModular;
 			sourceTree = "<group>";
@@ -2724,6 +2750,7 @@
 				6EC3EC6A1C16DE6D00B27B18 /* EmojiPanda.plist in Resources */,
 				B44E90F71C103FC500CFC003 /* tabbar_findSelected@2x.png in Resources */,
 				6EC3EC6B1C16DE6D00B27B18 /* EmojiSutra.plist in Resources */,
+				6E8121FD1C17DE91000B9103 /* chat_send_nor@2x.png in Resources */,
 				B44E91041C113E5200CFC003 /* guide_page_33@2x.png in Resources */,
 				6EBA8D931C15248C00BAE5DD /* README.txt in Resources */,
 				B44E90F41C103FC500CFC003 /* tabbar_chat@2x.png in Resources */,
@@ -2752,6 +2779,7 @@
 				B4D76A241C1523970095CB9F /* callphone_keyboard@2x.png in Resources */,
 				B44E90EB1C103FC500CFC003 /* icon@2x.png in Resources */,
 				B44E90F01C103FC500CFC003 /* about_logo@2x.png in Resources */,
+				6E8121FB1C17DE7F000B9103 /* chat_recive_nor@2x.png in Resources */,
 				B44E90F51C103FC500CFC003 /* tabbar_chatSelected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2824,6 +2852,7 @@
 				6E4D37A71C0568B1001573E3 /* MJRefreshComponent.m in Sources */,
 				6EBA8D6A1C15248B00BAE5DD /* XMPPMessageArchivingCoreDataStorage.m in Sources */,
 				6E4D378C1C056619001573E3 /* CustomMBHud.m in Sources */,
+				6E8122001C17DF60000B9103 /* MessageModel.m in Sources */,
 				6EBA8D531C15248B00BAE5DD /* XMPPvCardTempTel.m in Sources */,
 				6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */,
 				6E8AA9A61C16B008003F1C45 /* XHVoiceRecordHUD.m in Sources */,
@@ -2939,6 +2968,7 @@
 				6EBA8D6E1C15248B00BAE5DD /* XMPPPresence+XEP_0172.m in Sources */,
 				6EBA8D8B1C15248C00BAE5DD /* DDAbstractDatabaseLogger.m in Sources */,
 				6EBA8D111C15248B00BAE5DD /* XMPPPlainAuthentication.m in Sources */,
+				6E8122061C1805D4000B9103 /* MessageCell.m in Sources */,
 				6E4D376B1C056384001573E3 /* UIView+WebCacheOperation.m in Sources */,
 				6EBA8D631C15248B00BAE5DD /* XMPPCapabilitiesCoreDataStorage.m in Sources */,
 				6EC3EC741C16DE6D00B27B18 /* YTEmojiBottom.m in Sources */,
@@ -2958,6 +2988,7 @@
 				6EBA8D601C15248B00BAE5DD /* XMPPTransports.m in Sources */,
 				6EBA8D541C15248B00BAE5DD /* NSXMLElement+XEP_0059.m in Sources */,
 				6EC3EC8E1C16DEEA00B27B18 /* YTDeviceTest.m in Sources */,
+				6E8122091C18087D000B9103 /* UIImage+ResizeImage.m in Sources */,
 				6EBA8D341C15248B00BAE5DD /* XMPPIQ+JabberRPCResonse.m in Sources */,
 				6EBA8D2E1C15248B00BAE5DD /* XMPPResourceMemoryStorageObject.m in Sources */,
 				6EBA8D781C15248C00BAE5DD /* XMPPTime.m in Sources */,
@@ -3026,6 +3057,7 @@
 				6EC0BB531C0BF14500075A19 /* NSString+MD5.m in Sources */,
 				B40FF0221C1672200077FAC9 /* FriendDetailViewController.m in Sources */,
 				6E4D378B1C056619001573E3 /* UIViewController+NavigationBar.m in Sources */,
+				6E8122031C17E044000B9103 /* CellFrameModel.m in Sources */,
 				6E8AA9AC1C16B1EF003F1C45 /* XHConfigurationHelper.m in Sources */,
 				6EBA8D881C15248C00BAE5DD /* XMPPStringPrep.m in Sources */,
 				6EBA8D251C15248B00BAE5DD /* XMPPOutgoingFileTransfer.m in Sources */,

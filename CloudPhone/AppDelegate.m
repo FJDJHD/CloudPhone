@@ -249,7 +249,6 @@
     NSString *number = [defaults objectForKey:UserNumber];
     
     [xmppStream setMyJID:[XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",number,XMPPSevser]]];
-//@"user1@hileyou.com"]];//
     NSError *error = nil;
     if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error]) {
     
@@ -279,7 +278,6 @@
     NSError *error = nil;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *password = [defaults objectForKey:UserPassword];
     NSString *number = [defaults objectForKey:UserNumber];
     
     NSString *failNumber = [defaults objectForKey:RegisterFail]; //注册失败的情况
@@ -295,13 +293,13 @@
     if (self.isXMPPRegister == YES) {
         DLog(@"注册xmpp");
         //注册
-        if (![sender registerWithPassword:password error:&error]) {
+        if (![sender registerWithPassword:number error:&error]) {
             DLog(@"注册error = %@",error);
         }
     } else {
         DLog(@"登录xmpp");
         //登录
-        if (![sender authenticateWithPassword:password error:&error]) {
+        if (![sender authenticateWithPassword:number error:&error]) {
             DLog(@"登录error = %@",error);
         }
     }
@@ -311,7 +309,6 @@
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender {
     DLog(@"服务端认证完成");
     [self goOnline]; //标志上线
-    
 }
 //认证失败
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error {
@@ -323,8 +320,8 @@
     DLog(@"注册成功");
     //登录
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *password = [defaults objectForKey:UserPassword];
-    [xmppStream authenticateWithPassword:password error:NULL];
+    NSString *number = [defaults objectForKey:UserNumber];
+    [xmppStream authenticateWithPassword:number error:NULL];
 }
 
 //注册失败

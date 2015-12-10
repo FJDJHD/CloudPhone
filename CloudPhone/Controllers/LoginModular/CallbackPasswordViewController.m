@@ -172,6 +172,7 @@ static const int kTimeCount             = 60;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
                     ResetPasswordViewController *resetPasswordController = [[ResetPasswordViewController alloc] init];
+                    resetPasswordController.resetNumber = _numberField.text;
                     [self.navigationController pushViewController:resetPasswordController animated:YES];
                     
                 } else {

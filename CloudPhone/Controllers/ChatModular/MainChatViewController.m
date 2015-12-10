@@ -72,12 +72,13 @@
     static NSString *ID = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
     }
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
     //名称
-    cell.textLabel.text = user.displayName;
+    NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
+    cell.textLabel.text = array[0] ? array[0] : @"";
     
     //头像
     [self configurePhotoForCell:cell user:user];
@@ -120,10 +121,13 @@
         cell.imageView.image = user.photo;
     }else{
         NSData *photoData = [[[GeneralToolObject appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
-        if (photoData != nil)
+        if (photoData != nil){
             cell.imageView.image = [UIImage imageWithData:photoData];
-        else
+        }
+        else {
             cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+
+        }
     }
 }
 

@@ -35,7 +35,8 @@ typedef enum {
 
 - (void)uploadImageWithPath:(NSString *)aPath
                 serviceType:(NSString *)serviceType
-                 withParams:(NSDictionary*)params
+                 withParams:(NSDictionary *)params
+           withImageContent:(NSString *)content
                   withImage:(UIImage *)image
                    andBlock:(void (^)(id data, NSError *error))block;
 

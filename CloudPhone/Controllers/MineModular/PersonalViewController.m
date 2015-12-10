@@ -296,7 +296,22 @@
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
     [self AddHUD];
-    [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image WithBlock:^(id data, NSError *error) {
+//    [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image WithBlock:^(id data, NSError *error) {
+//        DLog(@"data = %@",data);
+//        [self HUDHidden];
+//        if (!error) {
+//            NSDictionary *dic = (NSDictionary *)data;
+//            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                NSLog(@"上传图片成功");
+//                UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//                UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
+//                imageView.image = image;
+//            } else {
+//                [CustomMBHud customHudWindow:@"上传图片失败"];
+//            }
+//        }
+//    }];
+    [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image params:nil WithBlock:^(id data, NSError *error) {
         DLog(@"data = %@",data);
         [self HUDHidden];
         if (!error) {
@@ -310,6 +325,7 @@
                 [CustomMBHud customHudWindow:@"上传图片失败"];
             }
         }
+
     }];
     
     [picker dismissViewControllerAnimated:YES completion:nil];

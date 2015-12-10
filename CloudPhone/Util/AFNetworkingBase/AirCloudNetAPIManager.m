@@ -141,12 +141,10 @@
 
 //更新头像信息提交
 - (void)updatePhotoOfImage:(UIImage *)image
-                  WithBlock:(void (^)(id data, NSError *error))block {
-    
+                    params:(NSDictionary *)params
+                 WithBlock:(void (^)(id data, NSError *error))block {
     [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
-    
-    
-    [[AirCloudNetAPIClient sharedJsonClient] uploadImageWithPath:API_updatePhoto serviceType:HTTPURLPREFIX withParams:nil withImage:image andBlock:^(id data, NSError *error) {
+    [[AirCloudNetAPIClient sharedJsonClient] uploadImageWithPath:API_updatePhoto serviceType:HTTPURLPREFIX withParams:params withImageContent:@"photo" withImage:image andBlock:^(id data, NSError *error) {
         block(data,error);
     }];
 }
@@ -183,6 +181,32 @@
         block(data,error);
     }];
     
+}
+
+//存储openfire发送消息
+- (void)saveSendMessageOfParams:(NSDictionary *)params
+                      WithBlock:(void(^)(id data, NSError *error))block {
+
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_sendOpenireMessage serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+}
+
+//存储openfire发送消息(图片)
+- (void)saveSendPhotoOfImage:(UIImage *)image
+                  params:(NSDictionary *)params
+                   WithBlock:(void (^)(id data, NSError *error))block; {
+    
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+
+    [[AirCloudNetAPIClient sharedJsonClient] uploadImageWithPath:API_sendOpenireMessage serviceType:HTTPURLPREFIX withParams:params withImageContent:@"content" withImage:image andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+    
+//    [[AirCloudNetAPIClient sharedJsonClient] uploadImageWithPath:API_sendOpenireMessage serviceType:HTTPURLPREFIX withParams:@"content" withImage:image andBlock:^(id data, NSError *error) {
+//        block(data,error);
+//    }];
 }
 
 

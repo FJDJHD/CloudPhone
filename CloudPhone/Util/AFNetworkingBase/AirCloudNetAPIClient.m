@@ -186,8 +186,9 @@
 
 - (void)uploadImageWithPath:(NSString *)aPath
                 serviceType:(NSString *)serviceType
-                 withParams:(NSDictionary*)params
-                withImage:(UIImage *)image
+                 withParams:(NSDictionary *)params
+           withImageContent:(NSString *)content
+                  withImage:(UIImage *)image
                    andBlock:(void (^)(id data, NSError *error))block {
     //域名拼接
     aPath = [aPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -196,9 +197,8 @@
     [self POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         NSString *filePath = [GeneralToolObject personalIconFilePath];
-//        UIImage *fileImage = [UIImage imageWithContentsOfFile:filePath];
         NSData * data= UIImageJPEGRepresentation(image, 0.1);//UIImagePNGRepresentation(fileImage);
-        [formData appendPartWithFileData:data name:@"photo" fileName:filePath mimeType:@"image/png"];
+        [formData appendPartWithFileData:data name:content fileName:filePath mimeType:@"image/png"];
         
     } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSLog(@"上传图片 = %@",responseObject);

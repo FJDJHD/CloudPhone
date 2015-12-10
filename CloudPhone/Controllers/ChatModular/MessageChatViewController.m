@@ -9,6 +9,8 @@
 #import "MessageChatViewController.h"
 #import "XMPPMessage+Tools.h"
 #import "YTKeyBoardView.h"
+#import "MessageCell.h"
+#import "UIImage+ResizeImage.h"
 
 @interface MessageChatViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate,YTKeyBoardDelegate>
 
@@ -17,6 +19,13 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @property (nonatomic, strong) YTKeyBoardView *keyBoard;
+
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic, strong) CellFrameModel *cellModel;
+
+@property (nonatomic, strong) MessageModel *messageModel;
+
 
 
 
@@ -27,6 +36,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = self.chatUser ? self.chatUser : @"会话";
+    
+    _dataArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _cellModel = [[CellFrameModel alloc]init];
+    _messageModel = [[MessageModel alloc]init];
+    
     //导航栏返回按钮
     UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
@@ -53,11 +67,18 @@
 
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    [super viewDidAppear:animated];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.fetchedResultsController.fetchedObjects.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+}
+
 - (UITableView *)tableView {
     if (!_tableView) {
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.rowHeight = 300;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -78,45 +99,70 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *ID = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
+        cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
     // 取出当前行的消息
-    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    
+//    //判断是发出消息还是接受消息
+//    NSString *outgoMessage = (message.outgoing.intValue == 1) ? @"Send" : @"Recive";
     
-    //判断是发出消息还是接受消息
-    NSString *outgoMessage = (message.outgoing.intValue == 1) ? @"Send" : @"Recive";
-    // 如果存进去了，就把字符串转化成简洁的节点后保存
-    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-        message.messageStr = [message.message compactXMLString];
-        
-        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-    }
     
-    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+        XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if ([message.body isEqualToString:@"image"]) {
-        
-        
-        UIImage *image = [UIImage imageWithContentsOfFile:path];
-        
-        NSTextAttachment *attach = [[NSTextAttachment alloc]init];
-        
-        attach.image = image;//[image scaleImageWithWidth:200];
-        
-        NSAttributedString *attachStr = [NSAttributedString attributedStringWithAttachment:attach];
-        
-        cell.textLabel.attributedText = attachStr;
-        
-        [self.view endEditing:YES];
-        
-    } else {
+        // 如果存进去了，就把字符串转化成简洁的节点后保存
+        if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
+            message.messageStr = [message.message compactXMLString];
+            
+            [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
+        }
+        NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+        if ([message.body isEqualToString:@"image"]) {
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            NSTextAttachment *attach = [[NSTextAttachment alloc]init];
+            attach.image = [image scaleImageWithWidth:100];
+            NSAttributedString *attachStr = [NSAttributedString attributedStringWithAttachment:attach];
+            
+            _messageModel.attachStr = attachStr;
+        }
     
-        cell.textLabel.text = message.body;
-    }
+    
+        _messageModel.text = message.body;
+        _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+        
+        _cellModel.message = _messageModel;
+        cell.cellFrame = _cellModel;
+    
 
     return cell;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+//    if (_dataArray.count > 0) {
+//        CellFrameModel *model = _dataArray[indexPath.row];
+//        
+//        return model.cellHeight;
+//    }
+    
+    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    _messageModel.text = message.body;
+    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+    
+    _cellModel.message = _messageModel;
+    if ([message.body isEqualToString:@"image"]) {
+        return 120;
+    } else {
+        return _cellModel.cellHeight ? _cellModel.cellHeight : 44.0;
+
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+
+    [self.view endEditing:YES];
 }
 
 - (void)testButtonClick {
@@ -128,9 +174,9 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    NSData *data= UIImageJPEGRepresentation(image, 0.5);
     
-    [self sendMessageWithData:data bodyName:@"image"];
+    
+    [self keyBoardView:_keyBoard sendResous:image];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -179,10 +225,77 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     NSLog(@"上下文改变");
     [self.tableView reloadData];
+    
+     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.fetchedResultsController.fetchedObjects.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 }
 
 
 #pragma mark - key board delegate
+- (void)keyBoardView:(YTKeyBoardView *)keyBoard sendResous:(id)resous{
+    if (!resous) return;
+    NSString *string = @"";
+    NSArray *array = [self.chatUser componentsSeparatedByString:XMPPSevser];
+    if ([resous isKindOfClass:[NSString class]]) {
+        string = resous;
+        //发送xmpp信息
+        [self xmppSendMessage:string];
+        //保存到自己服务器数据库
+       
+        [[AirCloudNetAPIManager sharedManager] saveSendMessageOfParams:@{@"mobile" : array[0],@"content" : string} WithBlock:^(id data, NSError *error) {
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"****");
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                }
+            }
+        }];
+
+        
+    }else if ([resous isKindOfClass:[UIImage class]]){
+        
+        NSData *data= UIImageJPEGRepresentation(resous, 0.5);
+        
+        [self sendMessageWithData:data bodyName:@"image"];
+        [[AirCloudNetAPIManager sharedManager] saveSendPhotoOfImage:resous params:@{@"mobile" : array[0]} WithBlock:^(id data, NSError *error) {
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"****");
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                }
+            }
+        }];
+        
+//        [[AirCloudNetAPIManager sharedManager] saveSendPhotoOfImage:resous WithBlock:^(id data, NSError *error) {
+//            if (!error) {
+//                NSDictionary *dic = (NSDictionary *)data;
+//                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                    DLog(@"上传图片成功");
+//                  
+//                } else {
+//                    DLog(@"上传图片失败");
+//                }
+//            }
+//        }];
+        
+//        UIImage *image = resous;
+//        CGRect rect = CGRectZero;
+//        rect.size = image.size;
+//        UIView *view = [[UIView alloc]initWithFrame:rect];
+//        rect.origin.x = (self.view.bounds.size.width - rect.size.width)*0.5f;
+//        UIImageView *imageView = [[UIImageView alloc]initWithFrame:rect];
+//        imageView.image = image;
+//        [view addSubview:imageView];
+//        self.tableView.tableFooterView = view;
+//        string = [NSString stringWithFormat:@"image:size->%@ ⬇️ 有图片展示",NSStringFromCGSize(image.size)];
+    }else{
+        return;
+    }
+}
+
 - (void)keyBoardView:(YTKeyBoardView *)keyBoard ChangeDuration:(CGFloat)durtaion{
     if (self.fetchedResultsController.fetchedObjects.count == 0) return;
     [UIView animateWithDuration:durtaion animations:^{
@@ -204,9 +317,26 @@
     if (type == YTMoreViewTypeActionCamera) {
         m = @"相机";
     }else{
+        //相册
         m = @"相册";
+        UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+        picker.delegate = self;
+        [self presentViewController:picker animated:YES completion:nil];
+
     }
-    [self keyBoardView:keyBoard sendResous:m];
+}
+
+- (void)xmppSendMessage:(NSString *)string {
+    
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:string];
+    NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+    [message addAttributeWithName:@"type" stringValue:@"chat"];
+    NSString *to = self.chatUser;
+    [message addAttributeWithName:@"to" stringValue:to];
+    [message addChild:body];
+    [[[self appDelegate] xmppStream] sendElement:message];
+    
 }
 
 - (CGRect)tableViewFrame{
