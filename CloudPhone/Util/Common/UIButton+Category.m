@@ -11,8 +11,6 @@
 @implementation UIButton (Category)
 
 - (void) setImage:(UIImage *)image withTitle:(NSString *)title forState:(UIControlState)stateType {
-    
-    
     CGSize titleSize = [title sizeWithFont:[UIFont systemFontOfSize:16.0]];
     [self.imageView setContentMode:UIViewContentModeCenter];
     [self setImageEdgeInsets:UIEdgeInsetsMake(0.0,
@@ -22,10 +20,8 @@
     [self setImage:image forState:stateType];
     
     [self.titleLabel setContentMode:UIViewContentModeCenter];
-    [self.titleLabel setBackgroundColor:[UIColor clearColor]];
     [self.titleLabel setFont:[UIFont systemFontOfSize:16.0]];
-    [self.titleLabel setTextColor:[UIColor whiteColor]];
-    [self setTitleEdgeInsets:UIEdgeInsetsMake(100.0,
+    [self setTitleEdgeInsets:UIEdgeInsetsMake(105.0,
                                               -image.size.width,
                                               0.0,
                                               0.0)];

@@ -74,10 +74,10 @@
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    DialingViewController *dialingVC = [DialingViewController new];
-//    [self presentViewController:dialingVC animated:YES completion:nil];
-    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
-    [self.navigationController pushViewController:friDetailVC animated:YES];
+    DialingViewController *dialingVC = [DialingViewController new];
+    [self presentViewController:dialingVC animated:YES completion:nil];
+//    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+//    [self.navigationController pushViewController:friDetailVC animated:YES];
 }
 
 

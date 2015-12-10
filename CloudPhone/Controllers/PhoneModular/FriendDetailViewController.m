@@ -296,6 +296,7 @@
     [self.coverView removeFromSuperview];
 }
 
+
 #pragma mark - nav
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];

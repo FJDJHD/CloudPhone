@@ -82,9 +82,6 @@
         
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(btX, btY, btWidth, btHeight)];
         button.tag = i;
-        [button.imageView setContentMode:UIViewContentModeCenter];
-        button.titleLabel.backgroundColor = [UIColor blueColor];
-        [button.titleLabel setContentMode:UIViewContentModeCenter];
         [button.titleLabel setTextColor:[UIColor whiteColor]];
         [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
         [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateNormal];
@@ -95,9 +92,8 @@
     
 }
 
-- (void)clickButton:(id)sender{
-    UIButton *clickButton = sender;
-    switch (clickButton.tag) {
+- (void)clickButton:(UIButton *)sender{
+    switch (sender.tag) {
         case 0:{
             //静音
             DLog(@"0");
