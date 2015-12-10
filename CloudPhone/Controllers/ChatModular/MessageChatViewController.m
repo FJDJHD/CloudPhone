@@ -120,12 +120,12 @@
         }
         NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
         if ([message.body isEqualToString:@"image"]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:path];
-            NSTextAttachment *attach = [[NSTextAttachment alloc]init];
-            attach.image = [image scaleImageWithWidth:100];
-            NSAttributedString *attachStr = [NSAttributedString attributedStringWithAttachment:attach];
+//            UIImage *image = [UIImage imageWithContentsOfFile:path];
+//            NSTextAttachment *attach = [[NSTextAttachment alloc]init];
+//            attach.image = [image scaleImageWithWidth:100];
+//            NSAttributedString *attachStr = [NSAttributedString attributedStringWithAttachment:attach];
             
-            _messageModel.attachStr = attachStr;
+//            _messageModel.attachStr = attachStr;
         }
     
     
@@ -153,7 +153,7 @@
     
     _cellModel.message = _messageModel;
     if ([message.body isEqualToString:@"image"]) {
-        return 120;
+        return 220;
     } else {
         return _cellModel.cellHeight ? _cellModel.cellHeight : 44.0;
 

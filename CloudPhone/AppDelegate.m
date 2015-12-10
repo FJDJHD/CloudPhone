@@ -76,7 +76,7 @@
 
 - (void)initViewController {
     //这里作为一个登录标志
-// [self loadMainViewController];
+//    [self loadMainViewController];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *value = [defaults objectForKey:isLoginKey];
     if ([value isEqualToString:@"isLogined"]) {

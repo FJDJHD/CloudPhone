@@ -21,13 +21,28 @@
     [message addAttributeWithName:@"to" stringValue:to];
     [message addChild:body];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
-
+    
+    //发回自己服务器
+//    if (username.length > 0) {
+//        NSArray *array = [username componentsSeparatedByString:XMPPSevser];
+//        if (array.count > 0) {
+//            [[AirCloudNetAPIManager sharedManager] saveSendMessageOfParams:@{@"mobile" : array[0],@"content" : str} WithBlock:^(id data, NSError *error) {
+//                if (!error) {
+//                    NSDictionary *dic = (NSDictionary *)data;
+//                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                        DLog(@"****");
+//                    } else {
+//                        DLog(@"******%@",[dic objectForKey:@"msg"]);
+//                    }
+//                }
+//            }];
+//        }
+//    }
 }
 
 
 //发送图片
-+ (void)sendImageMessageWithImage:(UIImage *)image toUsername:(XMPPJID *)jid; {
-    
++ (void)sendImageMessageWithImage:(UIImage *)image toUsername:(XMPPJID *)jid {
     NSData *data= UIImageJPEGRepresentation(image, 0.5);
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
     [message addBody:@"image"];
@@ -38,6 +53,23 @@
     //包含子节点
     [message addChild:attachment];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+    
+    //发回自己服务器
+//    if (jid.user.length > 0) {
+//        NSArray *array = [jid.user componentsSeparatedByString:XMPPSevser];
+//        if (array.count > 0) {
+//            [[AirCloudNetAPIManager sharedManager] saveSendPhotoOfImage:image params:@{@"mobile" : array[0]} WithBlock:^(id data, NSError *error) {
+//                if (!error) {
+//                    NSDictionary *dic = (NSDictionary *)data;
+//                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                        DLog(@"****");
+//                    } else {
+//                        DLog(@"******%@",[dic objectForKey:@"msg"]);
+//                    }
+//                }
+//            }];
+//        }
+//    }
 }
 
 

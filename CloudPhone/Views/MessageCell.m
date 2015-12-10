@@ -33,7 +33,7 @@
         
         _textView = [UIButton buttonWithType:UIButtonTypeCustom];
         _textView.titleLabel.numberOfLines = 0;
-        _textView.titleLabel.font = [UIFont systemFontOfSize:13];
+        _textView.titleLabel.font = [UIFont systemFontOfSize:15];
         _textView.contentEdgeInsets = UIEdgeInsetsMake(textPadding, textPadding, textPadding, textPadding);
         [self addSubview:_textView];
         
@@ -50,15 +50,21 @@
     _textView.frame = cellFrame.textFrame;
     NSString *textBg = message.type ? @"chat_recive_nor" : @"chat_send_nor";
     UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
-    
+
     [_textView setTitleColor:textColor forState:UIControlStateNormal];
     [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
-    if ([message.text isEqualToString:@"image"]) {
-        [_textView setAttributedTitle:message.attachStr forState:UIControlStateNormal];
-
+    
+    if (message.messageType == kImageMessage) {
+        //图片
+        [_textView setImage:message.image forState:UIControlStateNormal];
+        [_textView setTitle:nil forState:UIControlStateNormal];
     } else {
+        //文字
+        [_textView setImage:nil forState:UIControlStateNormal];
         [_textView setTitle:message.text forState:UIControlStateNormal];
+
     }
+ 
     
 }
 
