@@ -31,16 +31,31 @@
     [self setupAppBar];
 }
 
+
+- (void)setupImageView{
+    CGFloat imageW = self.scrollView.frame.size.width;
+    CGFloat imageH = 140;
+    // 添加图片
+    for (int i = 0; i < self.imagesArray.count; i++) {
+        CGFloat imageX = i * imageW;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, 0.0, imageW, imageH)];
+        [imageView setImage:[UIImage imageNamed:self.imagesArray[i]]];
+        [self.scrollView addSubview:imageView];
+    }
+}
+
 - (void)setupScrollView {
     CGFloat scrollViewX = 0;
     CGFloat scrollViewY = STATUS_NAV_BAR_HEIGHT;
     CGFloat scrollViewH = 140;
-    CGFloat scrollViewW = MainWidth;
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(scrollViewX, scrollViewY, scrollViewW, scrollViewH)];
+    CGFloat scrollViewW = self.view.frame.size.width;
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView.frame =  CGRectMake(scrollViewX, scrollViewY, scrollViewW, scrollViewH);
     scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.contentSize = CGSizeMake(self.imagesArray.count * scrollViewW, -1);
+    scrollView.contentSize = CGSizeMake(self.imagesArray.count * scrollViewW, 0);
     scrollView.pagingEnabled = YES;
     self.scrollView = scrollView;
+    scrollView.tag = 1001;
     self.scrollView.delegate = self;
     [self setupImageView];
     [self.view addSubview:scrollView];
@@ -58,18 +73,6 @@
     self.pageControl = pageControl;
 }
 
-- (void)setupImageView{
-    CGFloat imageW = MainWidth;
-    CGFloat imageH = self.scrollView.frame.size.height;
-    CGFloat imageY = 0;
-    // 添加图片
-    for (int i = 0; i < self.imagesArray.count; i++) {
-        CGFloat imageX = i * imageW;
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
-        [imageView setImage:[UIImage imageNamed:self.imagesArray[i]]];
-        [self.scrollView addSubview:imageView];
-    }
-}
 
 //scrollView滚动时调用
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -80,11 +83,14 @@
 }
 // 开始拖拽的时候调用
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    [self removeTimer];
+    if (scrollView.tag == 1001) {
+         [self removeTimer];
+    }
+   
 }
 //拖拽结束调用
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    [self addTimer];
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{    
+      [self addTimer];
 }
 
 - (void)nextImage{
@@ -115,6 +121,7 @@
     nameArray = @[@"瞄瞄购",@"小费",@"外卖",@"银行",@"航班",@"电影",@" "];
     
     UIScrollView *appBar= [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.scrollView.frame), MainWidth, 300)];
+    appBar.tag = 1002;
     appBar.contentSize = CGSizeMake(0, 500);
     [self.view addSubview:appBar];
 

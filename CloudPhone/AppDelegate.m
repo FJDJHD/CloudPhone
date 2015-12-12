@@ -332,7 +332,7 @@
     DLog(@"注册失败");
     //改成登录试试
     self.isXMPPRegister = NO;
-    [self connect];
+//    [self connect];
     //如果第一次注册失败 再加一个状态判断（下次继续注册），有点蛋疼
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    NSString *number = [defaults objectForKey:UserNumber];

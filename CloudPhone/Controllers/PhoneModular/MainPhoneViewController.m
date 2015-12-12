@@ -25,10 +25,9 @@
     [super viewDidLoad];
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    addressButton.frame = CGRectMake(0, 0, 44, 44);
-    addressButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [addressButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [addressButton setTitle:@"通讯" forState:UIControlStateNormal];
+    UIImage *image = [UIImage imageNamed:@"phone_friends"];
+    addressButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [addressButton setBackgroundImage:image forState:UIControlStateNormal];
     [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;

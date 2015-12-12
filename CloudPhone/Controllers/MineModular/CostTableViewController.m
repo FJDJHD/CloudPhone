@@ -70,51 +70,53 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
-    }
-    
-    if (indexPath.row != self.callStyleArray.count) {
-    UILabel *callStyelLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, (MainWidth - 30) / 3.0, 45)];
-    callStyelLabel.text = self.callStyleArray[indexPath.row];
-    callStyelLabel.textColor = [UIColor colorWithHexString:@"#909090"];
-    callStyelLabel.textAlignment = NSTextAlignmentCenter;
-    self.callStyelLabel = callStyelLabel;
-    [cell addSubview:callStyelLabel];
-    
-    UILabel *friendStyleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(callStyelLabel.frame), 0, (MainWidth - 30) / 3.0, 45)];
-    friendStyleLabel.text = self.friendStyleArray[indexPath.row];
-    friendStyleLabel.textAlignment = NSTextAlignmentCenter;
-    [cell addSubview:friendStyleLabel];
         
-    UILabel *networkLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(friendStyleLabel.frame), 0, (MainWidth - 30) / 3.0, 45)];
-    networkLabel.text = self.networkArray[indexPath.row];
-    networkLabel.textAlignment = NSTextAlignmentCenter;
-    [cell addSubview:networkLabel];
-    }else{
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, MainWidth, 45)];
-        label.textAlignment = NSTextAlignmentLeft;
-        label.text = @"备注：以上功能全部免费";
-        label.textColor = [UIColor lightGrayColor];
-        label.font = [UIFont systemFontOfSize:14];
-        [cell addSubview:label];
-    }
-    
-    if (indexPath.row == 0) {
-        cell.backgroundColor = [UIColor colorWithHexString:@"#f8f8f8"];
-        self.callStyelLabel.textColor = [UIColor blackColor];
-    }else{
-        cell.backgroundColor = [UIColor whiteColor];
         if (indexPath.row != self.callStyleArray.count) {
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.callStyelLabel.frame), 0, 1, 45)];
-        line.backgroundColor = [UIColor lightGrayColor];
-        [cell addSubview:line];
-        
-        UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.friendStyleLabel.frame), 0, 1, 45)];
-        line2.backgroundColor = [UIColor redColor];
-        [cell addSubview:line2];
+            UILabel *callStyelLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, (MainWidth - 30) / 3.0, 45)];
+            callStyelLabel.text = self.callStyleArray[indexPath.row];
+            callStyelLabel.textColor = [UIColor colorWithHexString:@"#909090"];
+            callStyelLabel.textAlignment = NSTextAlignmentCenter;
+            self.callStyelLabel = callStyelLabel;
+            [cell addSubview:callStyelLabel];
+            
+            UILabel *friendStyleLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(callStyelLabel.frame), 0, (MainWidth - 30) / 3.0, 45)];
+            friendStyleLabel.text = self.friendStyleArray[indexPath.row];
+            friendStyleLabel.textAlignment = NSTextAlignmentCenter;
+            self.friendStyleLabel = friendStyleLabel;
+            [cell addSubview:friendStyleLabel];
+            
+            UILabel *networkLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(friendStyleLabel.frame), 0, (MainWidth - 30) / 3.0, 45)];
+            networkLabel.text = self.networkArray[indexPath.row];
+            networkLabel.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:networkLabel];
+        }else{
+            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(15, 0, MainWidth, 45)];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.text = @"备注：以上功能全部免费";
+            label.textColor = [UIColor lightGrayColor];
+            label.font = [UIFont systemFontOfSize:14];
+            [cell addSubview:label];
         }
+        
+        if (indexPath.row != 0) {
+            cell.backgroundColor = [UIColor whiteColor];
+            if (indexPath.row != self.callStyleArray.count) {
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.callStyelLabel.frame), 0, 1, 45)];
+            line.backgroundColor = [UIColor lightGrayColor];
+            [cell addSubview:line];
+            
+            UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.friendStyleLabel.frame), 0, 1, 45)];
+            line2.backgroundColor = [UIColor lightGrayColor];
+            [cell addSubview:line2];
+            }
 
+        }else{
+            cell.backgroundColor = [UIColor colorWithHexString:@"#f8f8f8"];
+            self.callStyelLabel.textColor = [UIColor blackColor];
+        }
     }
-    return cell;
+    
+        return cell;
 }
 
 

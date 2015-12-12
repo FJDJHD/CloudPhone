@@ -35,7 +35,7 @@
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"告诉话仔，您遇到了什么问题？";
     label.textColor = [UIColor colorWithHexString:@"#049ff1"];
-    label.font = [UIFont systemFontOfSize:20];
+    label.font = [UIFont systemFontOfSize:18];
     self.tableView.tableHeaderView = label;
 
 }
@@ -62,7 +62,8 @@
     }
     cell.textLabel.text = self.tipsArray[indexPath.row];
     UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(MainWidth - 25, 0, 15, 15)];
-    [button setBackgroundImage:[UIImage imageNamed:@"btn_facecancel"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"mine_buttonbg"] forState:UIControlStateNormal];
+#warning fix image
     [button setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateSelected];
     button.selected = NO;
     cell.accessoryView = button;
