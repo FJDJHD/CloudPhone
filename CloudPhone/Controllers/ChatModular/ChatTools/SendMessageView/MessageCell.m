@@ -63,7 +63,7 @@
         //语音
         [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
         [_textView setImage:nil forState:UIControlStateNormal];
-        [_textView setTitle:@"语音" forState:UIControlStateNormal];
+        [_textView setTitle:[NSString stringWithFormat:@"%@''",message.voiceTime] forState:UIControlStateNormal];
         
     } else {
         //文字

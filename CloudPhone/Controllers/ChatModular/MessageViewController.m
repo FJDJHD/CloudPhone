@@ -141,7 +141,7 @@
     cell.textView.tag = indexPath.row;
 
     XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
+    DLog(@"message = %@",message);
     
     // 如果存进去了，就把字符串转化成简洁的节点后保存
     if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
@@ -153,10 +153,14 @@
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         _messageModel.image = image;
         _messageModel.messageType = kImageMessage; //图片类型
+        
     } else if ([message.body hasPrefix:@"audio"]) {
-        NSArray *arr = [message.body componentsSeparatedByString:@"audio"];
-        if (arr.count > 0) {
-            _messageModel.voiceFilepath = arr[1];
+        NSArray *temp = [message.body componentsSeparatedByString:@"audio"];
+        NSString *voiceInfo = temp.count > 0 ? temp[1] : @"";
+        if (![voiceInfo isEqualToString:@""]) {
+            NSArray *array = [voiceInfo componentsSeparatedByString:@"&"];
+            _messageModel.voiceTime = array.count > 0 ? array[0] : 0;
+            _messageModel.voiceFilepath = array.count > 0 ? array[1] : @"";
         }
         _messageModel.messageType = kVoiceMessage; //语音类型
     
@@ -267,10 +271,10 @@
     __weak typeof(self) weakSelf = self;
     [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
         if (!error) {
+            
             //发送录音
             NSData *data = [NSData dataWithContentsOfFile:recordPath];
-            
-            [ChatSendHelper sendVoiceMessageWithAudio:data filePath:recordPath toUsername:self.chatJID];
+            [ChatSendHelper sendVoiceMessageWithAudio:data filePath:recordPath time:aDuration toUsername:self.chatJID];
             
         }else {
             [CustomMBHud customHudWindow:@"录音时间太短"];

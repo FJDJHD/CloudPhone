@@ -30,6 +30,8 @@ typedef enum {
 
 //语音
 @property (nonatomic, copy) NSString *voiceFilepath;
+@property (nonatomic, copy) NSString *voiceTime;
+
 
 //自己还是别人
 @property (nonatomic, assign) MessageModelType type;

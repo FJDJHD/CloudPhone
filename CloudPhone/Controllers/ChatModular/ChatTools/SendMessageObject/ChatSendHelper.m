@@ -73,10 +73,10 @@
 }
 
 //发送语音
-+ (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path toUsername:(XMPPJID *)jid {
++ (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path time:(NSInteger)duration toUsername:(XMPPJID *)jid {
 
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
-    [message addBody:[NSString stringWithFormat:@"audio%@",path]];
+    [message addBody:[NSString stringWithFormat:@"audio%ld&%@",(long)duration,path]];//时间路径都放这
     //转化base64编码
     NSString *base64Str = [data base64EncodedStringWithOptions:0];
     //设置节点内容
