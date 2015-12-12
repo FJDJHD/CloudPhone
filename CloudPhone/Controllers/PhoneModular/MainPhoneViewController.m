@@ -12,6 +12,7 @@
 #import "DialingViewController.h"
 #import "DailNumberCell.h"
 #import "FriendDetailViewController.h"
+#import "ItelDialingViewController.h"
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -73,11 +74,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0) {
+        DialingViewController *dialingVC = [DialingViewController new];
+        [self presentViewController:dialingVC animated:YES completion:nil];
+    }else if (indexPath.row == 1){
+        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+        [self.navigationController pushViewController:friDetailVC animated:YES];
+    }else{
+        [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
+    }
     
-    DialingViewController *dialingVC = [DialingViewController new];
-    [self presentViewController:dialingVC animated:YES completion:nil];
-//    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
-//    [self.navigationController pushViewController:friDetailVC animated:YES];
 }
 
 
