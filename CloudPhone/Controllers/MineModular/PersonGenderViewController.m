@@ -78,7 +78,7 @@
     unsetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     unsetButton.layer.borderWidth = 0.5;
     [unsetButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [unsetButton setTitle:@"未设置" forState:UIControlStateNormal];
+    [unsetButton setTitle:@"保密" forState:UIControlStateNormal];
     [unsetButton addTarget:self action:@selector(ButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     unsetButton.tag = 0;
     [self.view addSubview:unsetButton];

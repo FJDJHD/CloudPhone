@@ -505,12 +505,23 @@
 		B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D081C0C5E7800D74D49 /* AboutCloudPhoneViewController.m */; };
 		B4BE7D0C1C0C688A00D74D49 /* HelpAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */; };
 		B4BE7D0F1C0C68A700D74D49 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */; };
+		B4D04DA41C1A7936008BD608 /* SpitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */; };
+		B4D04DA71C1A8117008BD608 /* ItelDialingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */; };
+		B4D04DAE1C1AA50D008BD608 /* phone_iconcover@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DA81C1AA50D008BD608 /* phone_iconcover@3x.png */; };
+		B4D04DAF1C1AA50D008BD608 /* phone_iconcover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DA91C1AA50D008BD608 /* phone_iconcover@2x.png */; };
+		B4D04DB01C1AA50D008BD608 /* phone_itelhangup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DAA1C1AA50D008BD608 /* phone_itelhangup@2x.png */; };
+		B4D04DB11C1AA50D008BD608 /* phone_itelhangup@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DAB1C1AA50D008BD608 /* phone_itelhangup@3x.png */; };
+		B4D04DB21C1AA50D008BD608 /* phone_point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DAC1C1AA50D008BD608 /* phone_point@2x.png */; };
+		B4D04DB31C1AA50D008BD608 /* phone_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DAD1C1AA50D008BD608 /* phone_point@3x.png */; };
+		B4D04DB61C1AA531008BD608 /* phone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DB41C1AA531008BD608 /* phone_icon@2x.png */; };
+		B4D04DB71C1AA531008BD608 /* phone_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DB51C1AA531008BD608 /* phone_icon@3x.png */; };
+		B4D04DBA1C1AA6B8008BD608 /* callphone_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DB81C1AA6B8008BD608 /* callphone_bg@2x.png */; };
+		B4D04DBB1C1AA6B8008BD608 /* callphone_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DB91C1AA6B8008BD608 /* callphone_bg@3x.png */; };
 		B4D19A0E1C1807D90087D0D5 /* find_adv02@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D19A091C1807D90087D0D5 /* find_adv02@2x.png */; };
 		B4D19A0F1C1807D90087D0D5 /* find_adv03@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D19A0A1C1807D90087D0D5 /* find_adv03@2x.png */; };
 		B4D19A141C18086B0087D0D5 /* find_adv01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D19A121C18086B0087D0D5 /* find_adv01@2x.png */; };
 		B4D19A151C18086B0087D0D5 /* find_adv01@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D19A131C18086B0087D0D5 /* find_adv01@3x.png */; };
 		B4D76A151C1523360095CB9F /* DialingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D76A141C1523360095CB9F /* DialingViewController.m */; };
-		B4D76A1F1C1523970095CB9F /* callphone_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A171C1523970095CB9F /* callphone_bg@2x.png */; };
 		B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A181C1523970095CB9F /* callphone_callback@2x.png */; };
 		B4D76A211C1523970095CB9F /* callphone_friendiconbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */; };
 		B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */; };
@@ -1364,13 +1375,26 @@
 		B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpAndFeedbackViewController.m; sourceTree = "<group>"; };
 		B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpitTableViewController.h; sourceTree = "<group>"; };
+		B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpitTableViewController.m; sourceTree = "<group>"; };
+		B4D04DA51C1A8117008BD608 /* ItelDialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItelDialingViewController.h; sourceTree = "<group>"; };
+		B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItelDialingViewController.m; sourceTree = "<group>"; };
+		B4D04DA81C1AA50D008BD608 /* phone_iconcover@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_iconcover@3x.png"; sourceTree = "<group>"; };
+		B4D04DA91C1AA50D008BD608 /* phone_iconcover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_iconcover@2x.png"; sourceTree = "<group>"; };
+		B4D04DAA1C1AA50D008BD608 /* phone_itelhangup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_itelhangup@2x.png"; sourceTree = "<group>"; };
+		B4D04DAB1C1AA50D008BD608 /* phone_itelhangup@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_itelhangup@3x.png"; sourceTree = "<group>"; };
+		B4D04DAC1C1AA50D008BD608 /* phone_point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_point@2x.png"; sourceTree = "<group>"; };
+		B4D04DAD1C1AA50D008BD608 /* phone_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_point@3x.png"; sourceTree = "<group>"; };
+		B4D04DB41C1AA531008BD608 /* phone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_icon@2x.png"; sourceTree = "<group>"; };
+		B4D04DB51C1AA531008BD608 /* phone_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_icon@3x.png"; sourceTree = "<group>"; };
+		B4D04DB81C1AA6B8008BD608 /* callphone_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_bg@2x.png"; sourceTree = "<group>"; };
+		B4D04DB91C1AA6B8008BD608 /* callphone_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_bg@3x.png"; sourceTree = "<group>"; };
 		B4D19A091C1807D90087D0D5 /* find_adv02@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_adv02@2x.png"; sourceTree = "<group>"; };
 		B4D19A0A1C1807D90087D0D5 /* find_adv03@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_adv03@2x.png"; sourceTree = "<group>"; };
 		B4D19A121C18086B0087D0D5 /* find_adv01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_adv01@2x.png"; sourceTree = "<group>"; };
 		B4D19A131C18086B0087D0D5 /* find_adv01@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_adv01@3x.png"; sourceTree = "<group>"; };
 		B4D76A131C1523360095CB9F /* DialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialingViewController.h; sourceTree = "<group>"; };
 		B4D76A141C1523360095CB9F /* DialingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialingViewController.m; sourceTree = "<group>"; };
-		B4D76A171C1523970095CB9F /* callphone_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_bg@2x.png"; sourceTree = "<group>"; };
 		B4D76A181C1523970095CB9F /* callphone_callback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_callback@2x.png"; sourceTree = "<group>"; };
 		B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_friendiconbg@2x.png"; sourceTree = "<group>"; };
 		B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_handsfree@2x.png"; sourceTree = "<group>"; };
@@ -3202,6 +3226,8 @@
 				B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */,
 				B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */,
 				B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */,
+				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
+				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 			);
 			path = MineModular;
 			sourceTree = "<group>";
@@ -3217,6 +3243,8 @@
 				B4D76A141C1523360095CB9F /* DialingViewController.m */,
 				B40FF0201C1672200077FAC9 /* FriendDetailViewController.h */,
 				B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */,
+				B4D04DA51C1A8117008BD608 /* ItelDialingViewController.h */,
+				B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */,
 			);
 			path = PhoneModular;
 			sourceTree = "<group>";
@@ -3450,7 +3478,16 @@
 		B4D76A161C1523970095CB9F /* dialing */ = {
 			isa = PBXGroup;
 			children = (
-				B4D76A171C1523970095CB9F /* callphone_bg@2x.png */,
+				B4D04DB41C1AA531008BD608 /* phone_icon@2x.png */,
+				B4D04DB51C1AA531008BD608 /* phone_icon@3x.png */,
+				B4D04DA81C1AA50D008BD608 /* phone_iconcover@3x.png */,
+				B4D04DA91C1AA50D008BD608 /* phone_iconcover@2x.png */,
+				B4D04DAA1C1AA50D008BD608 /* phone_itelhangup@2x.png */,
+				B4D04DAB1C1AA50D008BD608 /* phone_itelhangup@3x.png */,
+				B4D04DAC1C1AA50D008BD608 /* phone_point@2x.png */,
+				B4D04DAD1C1AA50D008BD608 /* phone_point@3x.png */,
+				B4D04DB81C1AA6B8008BD608 /* callphone_bg@2x.png */,
+				B4D04DB91C1AA6B8008BD608 /* callphone_bg@3x.png */,
 				B4D76A181C1523970095CB9F /* callphone_callback@2x.png */,
 				B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */,
 				B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */,
@@ -3580,7 +3617,6 @@
 				B4DAD40A1C18175D0092BF8F /* find_bank@2x.png in Resources */,
 				6E7D7A2C1C192CCC00B42140 /* call_out_h.png in Resources */,
 				6E7D7A201C192CCC00B42140 /* VoiceSearchFeedback016.png in Resources */,
-				B4D76A1F1C1523970095CB9F /* callphone_bg@2x.png in Resources */,
 				6E7D7A8A1C192CCC00B42140 /* chat_sender_audio_playing_003@2x.png in Resources */,
 				B44E90ED1C103FC500CFC003 /* pic_touxiang@2x.png in Resources */,
 				6E7D7A231C192CCC00B42140 /* VoiceSearchFeedback017@2x.png in Resources */,
@@ -3600,6 +3636,7 @@
 				6E7D7A251C192CCC00B42140 /* VoiceSearchFeedback018@2x.png in Resources */,
 				B4DAD3F71C1817180092BF8F /* find_add@3x.png in Resources */,
 				6E7D7A271C192CCC00B42140 /* VoiceSearchFeedback019@2x.png in Resources */,
+				B4D04DAF1C1AA50D008BD608 /* phone_iconcover@2x.png in Resources */,
 				B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */,
 				6E7D7A121C192CCC00B42140 /* VoiceSearchFeedback009.png in Resources */,
 				6E7D7A6C1C192CCC00B42140 /* chatBar_more_cameraSelected.png in Resources */,
@@ -3612,6 +3649,7 @@
 				6E7D7A3B1C192CCC00B42140 /* chatBar_more_faceSelected@2x.png in Resources */,
 				6E7D7A721C192CCC00B42140 /* chatBar_more_photo.png in Resources */,
 				6EC3ECA21C16E48B00B27B18 /* btn_say@2x.png in Resources */,
+				B4D04DB31C1AA50D008BD608 /* phone_point@3x.png in Resources */,
 				6E7D7A111C192CCC00B42140 /* VoiceSearchFeedback008@2x.png in Resources */,
 				6EC3ECAE1C16E4DA00B27B18 /* btn_facecancel@2x.png in Resources */,
 				B47C2E241C193434000E2964 /* mine_savecosticon@2x.png in Resources */,
@@ -3652,6 +3690,7 @@
 				6E7D7A4C1C192CCC00B42140 /* chatBar_faceSelected.png in Resources */,
 				6EC3ECAA1C16E4A900B27B18 /* btn_key@2x.png in Resources */,
 				6E7D7A321C192CCC00B42140 /* callBg@2x.png in Resources */,
+				B4D04DB21C1AA50D008BD608 /* phone_point@2x.png in Resources */,
 				6E7D7A631C192CCC00B42140 /* chatBar_colorMore_locationSelected@2x.png in Resources */,
 				B44E90EE1C103FC500CFC003 /* pic_zhanghao@2x.png in Resources */,
 				6EC3EC6D1C16DE6D00B27B18 /* grinning@2x.png in Resources */,
@@ -3660,6 +3699,7 @@
 				6E7D7A1C1C192CCC00B42140 /* VoiceSearchFeedback014.png in Resources */,
 				B497DDE41C183F1700AF9BEB /* mine_qq@3x.png in Resources */,
 				B44E90F71C103FC500CFC003 /* tabbar_findSelected@2x.png in Resources */,
+				B4D04DB01C1AA50D008BD608 /* phone_itelhangup@2x.png in Resources */,
 				6E7D7A591C192CCC00B42140 /* chatBar_recordBg@2x.png in Resources */,
 				B4DAD3FB1C1817220092BF8F /* find_film@3x.png in Resources */,
 				6E7D7A191C192CCC00B42140 /* VoiceSearchFeedback012@2x.png in Resources */,
@@ -3673,6 +3713,7 @@
 				B44E91041C113E5200CFC003 /* guide_page_33@2x.png in Resources */,
 				6E7D7A021C192CCC00B42140 /* VoiceSearchFeedback001.png in Resources */,
 				6E7D7A871C192CCC00B42140 /* chat_sender_audio_playing_002.png in Resources */,
+				B4D04DAE1C1AA50D008BD608 /* phone_iconcover@3x.png in Resources */,
 				6EBA8D931C15248C00BAE5DD /* README.txt in Resources */,
 				6E7D7A491C192CCC00B42140 /* messageSendFail@2x.png in Resources */,
 				6E7D7AE91C1982C600B42140 /* chat_send_nor@2x.png in Resources */,
@@ -3690,6 +3731,8 @@
 				6E7D7A8B1C192CCC00B42140 /* chat_sender_audio_playing_full.png in Resources */,
 				6E7D7A2B1C192CCC00B42140 /* call_out@2x.png in Resources */,
 				6E7D7A141C192CCC00B42140 /* VoiceSearchFeedback010.png in Resources */,
+				B4D04DB71C1AA531008BD608 /* phone_icon@3x.png in Resources */,
+				B4D04DB11C1AA50D008BD608 /* phone_itelhangup@3x.png in Resources */,
 				6E7D7A161C192CCC00B42140 /* VoiceSearchFeedback011.png in Resources */,
 				6E7D7A311C192CCC00B42140 /* call_silence_h@2x.png in Resources */,
 				6E7D7A051C192CCC00B42140 /* VoiceSearchFeedback002@2x.png in Resources */,
@@ -3705,6 +3748,7 @@
 				6E7D7A7B1C192CCC00B42140 /* chat_receiver_audio_playing002.png in Resources */,
 				B44E90F81C103FC500CFC003 /* tabbar_mine@2x.png in Resources */,
 				6E7D7A891C192CCC00B42140 /* chat_sender_audio_playing_003.png in Resources */,
+				B4D04DBB1C1AA6B8008BD608 /* callphone_bg@3x.png in Resources */,
 				6E7D7A5E1C192CCC00B42140 /* chatBar_colorMore_audioCall@2x.png in Resources */,
 				6E7D7A761C192CCC00B42140 /* messageToolbarBg@2x.png in Resources */,
 				B4DAD3F61C1817180092BF8F /* find_add@2x.png in Resources */,
@@ -3722,6 +3766,7 @@
 				B497DDE31C183F1700AF9BEB /* mine_qq@2x.png in Resources */,
 				6EC3ECB41C16E99C00B27B18 /* btn_more@2x.png in Resources */,
 				6EC3ECB01C16E50B00B27B18 /* photo_nomal@2x.png in Resources */,
+				B4D04DB61C1AA531008BD608 /* phone_icon@2x.png in Resources */,
 				6E7D7A4B1C192CCC00B42140 /* chatBar_face@2x.png in Resources */,
 				6E7D7A031C192CCC00B42140 /* VoiceSearchFeedback001@2x.png in Resources */,
 				6E7D7A501C192CCC00B42140 /* chatBar_keyboardSelected.png in Resources */,
@@ -3749,6 +3794,7 @@
 				6E7D7A641C192CCC00B42140 /* chatBar_colorMore_photo@2x.png in Resources */,
 				6E7D7A431C192CCC00B42140 /* chat_location_detail_disclosureHL@2x.png in Resources */,
 				6E7D7A241C192CCC00B42140 /* VoiceSearchFeedback018.png in Resources */,
+				B4D04DBA1C1AA6B8008BD608 /* callphone_bg@2x.png in Resources */,
 				6E7D7A811C192CCC00B42140 /* chat_receiver_bg.png in Resources */,
 				B497DDDA1C183EE900AF9BEB /* mine_penyouquan@3x.png in Resources */,
 				B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */,
@@ -3824,6 +3870,7 @@
 			files = (
 				6EC3EC7A1C16DE6D00B27B18 /* YTTextView.m in Sources */,
 				6E4D37661C056384001573E3 /* UIImage+GIF.m in Sources */,
+				B4D04DA71C1A8117008BD608 /* ItelDialingViewController.m in Sources */,
 				6EBA8D461C15248B00BAE5DD /* XMPPRoom.m in Sources */,
 				6E7D7AE01C1934F400B42140 /* DXRecordView.m in Sources */,
 				6EBA8D761C15248C00BAE5DD /* XMPPPing.m in Sources */,
@@ -3922,6 +3969,7 @@
 				6E4D37311C0561A2001573E3 /* UIImageView+AFNetworking.m in Sources */,
 				6EBA8D3F1C15248B00BAE5DD /* XMPPRoomMessageHybridCoreDataStorageObject.m in Sources */,
 				6EBA8D121C15248B00BAE5DD /* XMPPSCRAMSHA1Authentication.m in Sources */,
+				B4D04DA41C1A7936008BD608 /* SpitTableViewController.m in Sources */,
 				6E4D375D1C056384001573E3 /* NSData+ImageContentType.m in Sources */,
 				6E4D37611C056384001573E3 /* SDWebImageDownloader.m in Sources */,
 				6EBA8D3D1C15248B00BAE5DD /* XMPPRoomHybrid.xcdatamodeld in Sources */,

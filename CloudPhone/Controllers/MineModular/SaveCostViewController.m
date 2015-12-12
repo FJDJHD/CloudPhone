@@ -7,6 +7,7 @@
 //
 
 #import "SaveCostViewController.h"
+#import "SpitTableViewController.h"
 #import "Global.h"
 #define LABELX 110
 @implementation SaveCostViewController
@@ -95,7 +96,7 @@
 }
 
 - (void)buttonClick{
-    
+    [self.navigationController pushViewController:[SpitTableViewController new] animated:YES];
 }
 
 - (void)popViewController {
