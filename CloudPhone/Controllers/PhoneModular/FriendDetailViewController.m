@@ -61,12 +61,9 @@
     
     UIButton *dialDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
     dialDetailButton.frame = CGRectMake(61, CGRectGetMaxY(self.nameLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
-    dialDetailButton.backgroundColor = [UIColor whiteColor];
     dialDetailButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    dialDetailButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    dialDetailButton.layer.borderWidth = 0.5;
     [dialDetailButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [dialDetailButton setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+    [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
     [dialDetailButton setTitle:@"通话详情" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
     [dialDetailButton addTarget:self action:@selector(dialDetailButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -75,12 +72,9 @@
     
     UIButton *detailInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     detailInfoButton.frame = CGRectMake(CGRectGetMaxX(dialDetailButton.frame), CGRectGetMaxY(self.nameLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
-    detailInfoButton.backgroundColor = [UIColor whiteColor];
-    detailInfoButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     detailInfoButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    detailInfoButton.layer.borderWidth = 0.5;
     [detailInfoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [detailInfoButton setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+    [detailInfoButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
     [detailInfoButton setTitle:@"详情信息" forState:UIControlStateNormal];
     detailInfoButton.selected = NO;
     [detailInfoButton addTarget:self action:@selector(detailInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -274,6 +268,14 @@
     self.dialDetailButton.selected = NO;
     self.tableView.hidden = NO;
     self.dialDetailTableView.hidden = YES;
+    
+    self.detailInfoButton.backgroundColor = [UIColor whiteColor];
+    self.detailInfoButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
+    self.detailInfoButton.layer.borderWidth = 0.5;
+    
+    self.dialDetailButton.backgroundColor = [ColorTool backgroundColor];
+    self.dialDetailButton.layer.borderWidth = 0;
+    
 
 }
 
@@ -282,6 +284,14 @@
     self.dialDetailButton.selected = YES;
     self.tableView.hidden = YES;
     self.dialDetailTableView.hidden = NO;
+    
+    self.dialDetailButton.backgroundColor = [UIColor whiteColor];
+    self.dialDetailButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
+    self.dialDetailButton.layer.borderWidth = 0.5;
+
+    
+    self.detailInfoButton.backgroundColor = [ColorTool backgroundColor];
+    self.detailInfoButton.layer.borderWidth = 0;
 }
 
 - (void)modifyButtonClick{

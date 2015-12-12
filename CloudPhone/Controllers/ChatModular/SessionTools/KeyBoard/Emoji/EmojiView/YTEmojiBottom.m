@@ -50,10 +50,10 @@
     }
 }
 
-- (void)setContentSize:(CGSize)contentSize{
-    contentSize.width = MAX(contentSize.width+(EMOJI_BOTTOM_BUTTON_WIDTH*1.5f), self.bounds.size.width+1);
-    [super setContentSize:contentSize];
-}
+//- (void)setContentSize:(CGSize)contentSize{
+////    contentSize.width = MAX(contentSize.width+(EMOJI_BOTTOM_BUTTON_WIDTH*1.5f), self.bounds.size.width+1);
+////    [super setContentSize:contentSize];
+//}
 
 @end
 

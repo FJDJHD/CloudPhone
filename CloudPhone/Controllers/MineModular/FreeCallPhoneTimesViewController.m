@@ -118,9 +118,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 1) {
+    if (indexPath.row == 2) {
         [self.navigationController pushViewController:[SaveCostViewController new] animated:YES];
-    }else if (indexPath.row == 2){
+    }else if (indexPath.row == 1){
         [self.navigationController pushViewController:[CostTableViewController new] animated:YES];
     }
    
