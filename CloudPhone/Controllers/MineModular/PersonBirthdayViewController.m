@@ -55,7 +55,7 @@
     
     //日期选择器
     UIDatePicker *datePicker = [[UIDatePicker alloc] init];
-    datePicker.frame = CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 30, MainWidth, 44);
+    datePicker.frame = CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 30, MainWidth, 150);
     datePicker.backgroundColor = [UIColor whiteColor];
     datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     datePicker.datePickerMode = UIDatePickerModeDate;
