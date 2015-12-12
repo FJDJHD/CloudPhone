@@ -9,7 +9,8 @@
 #import "MainDiscoverViewController.h"
 #import "Global.h"
 @interface MainDiscoverViewController ()<UIScrollViewDelegate>
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *appBar;
+@property (nonatomic, strong) UIScrollView *adScrollView;
 @property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSArray *imagesArray;
@@ -26,49 +27,59 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupScrollView];
-    [self setupPageControl];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self setupAppBar];
+    [self setupadScrollView];
+    [self setupPageControl];
+
 }
 
+- (void)setupAppBar{
+    UIScrollView *appBar= [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, MainHeight)];
+    appBar.tag = 1002;
+    appBar.contentSize = CGSizeMake(0, MainHeight * 1.5);
+    self.appBar  = appBar;
+    [self.view addSubview:appBar];
+    [self setAllButtons];
+}
 
 - (void)setupImageView{
-    CGFloat imageW = self.scrollView.frame.size.width;
+    CGFloat imageW = self.adScrollView.frame.size.width;
     CGFloat imageH = 140;
     // 添加图片
     for (int i = 0; i < self.imagesArray.count; i++) {
         CGFloat imageX = i * imageW;
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, 0.0, imageW, imageH)];
         [imageView setImage:[UIImage imageNamed:self.imagesArray[i]]];
-        [self.scrollView addSubview:imageView];
+        [self.adScrollView addSubview:imageView];
     }
 }
 
-- (void)setupScrollView {
-    CGFloat scrollViewX = 0;
-    CGFloat scrollViewY = STATUS_NAV_BAR_HEIGHT;
-    CGFloat scrollViewH = 140;
-    CGFloat scrollViewW = self.view.frame.size.width;
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-    scrollView.frame =  CGRectMake(scrollViewX, scrollViewY, scrollViewW, scrollViewH);
-    scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.contentSize = CGSizeMake(self.imagesArray.count * scrollViewW, 0);
-    scrollView.pagingEnabled = YES;
-    self.scrollView = scrollView;
-    scrollView.tag = 1001;
-    self.scrollView.delegate = self;
+- (void)setupadScrollView {
+    CGFloat adScrollViewX = 0;
+    CGFloat adScrollViewY = STATUS_NAV_BAR_HEIGHT;
+    CGFloat adScrollViewH = 140;
+    CGFloat adScrollViewW = self.view.frame.size.width;
+    UIScrollView *adScrollView = [[UIScrollView alloc] init];
+    adScrollView.frame =  CGRectMake(adScrollViewX, adScrollViewY, adScrollViewW, adScrollViewH);
+    adScrollView.showsHorizontalScrollIndicator = NO;
+    adScrollView.contentSize = CGSizeMake(self.imagesArray.count * adScrollViewW, 0);
+    adScrollView.pagingEnabled = YES;
+    self.adScrollView = adScrollView;
+    adScrollView.tag = 1001;
+    self.adScrollView.delegate = self;
     [self setupImageView];
-    [self.view addSubview:scrollView];
+    [self.appBar addSubview:adScrollView];
     [self addTimer];
 }
 
 - (void)setupPageControl{
     UIPageControl *pageControl = [[UIPageControl alloc] init];
-    [self.view addSubview:pageControl];
+    [self.appBar addSubview:pageControl];
     pageControl.numberOfPages = self.imagesArray.count;
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
-    CGFloat pageControlY = self.scrollView.frame.size.height + self.scrollView.frame.origin.y - 20;
+    CGFloat pageControlY = self.adScrollView.frame.size.height + self.adScrollView.frame.origin.y - 20;
     pageControl.center = CGPointMake(self.view.frame.size.width / 2, pageControlY);
     self.pageControl = pageControl;
 }
@@ -89,7 +100,7 @@
    
 }
 //拖拽结束调用
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{    
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
       [self addTimer];
 }
 
@@ -101,8 +112,8 @@
     else{
         page++;
     }
-    CGFloat x = page * self.scrollView.frame.size.width;
-    self.scrollView.contentOffset = CGPointMake(x, 0);
+    CGFloat x = page * self.adScrollView.frame.size.width;
+    self.adScrollView.contentOffset = CGPointMake(x, 0);
 }
 //开启定时器
 - (void)addTimer{
@@ -113,18 +124,12 @@
     [self.timer invalidate];
 }
 
-- (void)setupAppBar{
-    
+
+- (void)setAllButtons{
     NSArray *imageArray = [NSArray array];
     imageArray = @[@"find_miaomiao",@"find_tips",@"find_takeout",@"find_bank",@"find_flight",@"find_film",@"find_add"];
     NSArray *nameArray = [NSArray array];
     nameArray = @[@"瞄瞄购",@"小费",@"外卖",@"银行",@"航班",@"电影",@" "];
-    
-    UIScrollView *appBar= [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.scrollView.frame), MainWidth, 300)];
-    appBar.tag = 1002;
-    appBar.contentSize = CGSizeMake(0, 500);
-    [self.view addSubview:appBar];
-
     
     for (int i = 0; i < imageArray.count; i++) {
         int col = i % 3;
@@ -132,7 +137,7 @@
         CGFloat  btWidth = (MainWidth - 25 * 2 - 15 * 2) / 3.0;
         CGFloat  btHeight = btWidth;
         CGFloat  btX = 25 + col * (btWidth +15);
-        CGFloat  btY = 15 + row * (btWidth + 20 + 10);
+        CGFloat  btY = CGRectGetMaxY(self.adScrollView.frame) + 15 + row * (btWidth + 20 + 10);
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(btX, btY, btWidth, btHeight);
@@ -141,7 +146,7 @@
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
-        [appBar addSubview:button];
+        [self.appBar addSubview:button];
    }
 }
 

@@ -144,7 +144,6 @@
         UIImageView *imageView = (UIImageView *)[cell viewWithTag:200];
         UILabel *userLable = (UILabel *)[cell viewWithTag:201];
         UILabel *mobileLable = (UILabel *)[cell viewWithTag:202];
-        NSLog(@"model.userNumber = %@  %@",model.userNumber,[model.userNumber class]);
         //电话
         if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
             mobileLable.text = @"";
@@ -159,6 +158,7 @@
         }
         //头像
         if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
+            
         } else {
             [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"pic_touxiang@2x.png"]];
         }

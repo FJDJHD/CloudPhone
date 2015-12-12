@@ -11,20 +11,12 @@
 
 #import "Global.h"
 
-@interface PersonSignatureViewController()
-@property (nonatomic, strong)   UITextView *setNameField;
+@interface PersonSignatureViewController()<UITextViewDelegate>
+@property (nonatomic, strong)   UITextView *setNameView;
 
 @end
 
 @implementation PersonSignatureViewController
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        
-    }
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,26 +40,34 @@
     self.navigationItem.rightBarButtonItem = rightItem;
     
     
-   UITextView *setNameField = [[UITextView alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 200)];
-    setNameField.backgroundColor = [UIColor whiteColor];
-    self.setNameField = setNameField;
-    [self.view addSubview:setNameField];
+   UITextView *setNameView = [[UITextView alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 20, MainWidth, 100)];
+    setNameView.backgroundColor = [UIColor whiteColor];
+    setNameView.font = [UIFont systemFontOfSize:20];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.setNameView = setNameView;
+    self.setNameView.delegate = self;
+    [self.view addSubview:setNameView];
+}
+
+- (void)textViewDidChangeSelection:(UITextView *)textView
+{
+    self.setNameView.text = textView.text;
 }
 
 - (void)saveNameClick{
-    NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setNameField.text};
+    NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setNameView.text};
     [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
         
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             
             if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                [_setNameField resignFirstResponder];
+                [_setNameView resignFirstResponder];
                 [CustomMBHud customHudWindow:@"个性签名修改成功"];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self popViewController];
                     if (self.modifySignatureBlock) {
-                        self.modifySignatureBlock(self.setNameField.text);
+                        self.modifySignatureBlock(self.setNameView.text);
                     }
                     
                 });
