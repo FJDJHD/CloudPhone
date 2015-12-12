@@ -10,6 +10,7 @@
 		6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E27AB081C10505800909F19 /* back_whilte@2x.png */; };
 		6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */; };
 		6E2E8A721C06A20E000E6C2D /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */; };
+		6E41FF341C1AD03200FD3C79 /* BuddleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E41FF331C1AD03100FD3C79 /* BuddleButton.m */; };
 		6E4D36E41C055D93001573E3 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D36E21C055D93001573E3 /* Global.m */; };
 		6E4D36F01C056102001573E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36EF1C056102001573E3 /* MobileCoreServices.framework */; };
 		6E4D36F21C056109001573E3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36F11C056109001573E3 /* Security.framework */; };
@@ -563,6 +564,8 @@
 		6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterLoginViewController.m; sourceTree = "<group>"; };
 		6E2E8A701C06A20E000E6C2D /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		6E41FF321C1AD03100FD3C79 /* BuddleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuddleButton.h; sourceTree = "<group>"; };
+		6E41FF331C1AD03100FD3C79 /* BuddleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddleButton.m; sourceTree = "<group>"; };
 		6E4D36E01C055D93001573E3 /* APIUrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIUrl.h; sourceTree = "<group>"; };
 		6E4D36E11C055D93001573E3 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		6E4D36E21C055D93001573E3 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
@@ -1501,6 +1504,8 @@
 				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
 				6E8122041C1805D4000B9103 /* MessageCell.h */,
 				6E8122051C1805D4000B9103 /* MessageCell.m */,
+				6E41FF321C1AD03100FD3C79 /* BuddleButton.h */,
+				6E41FF331C1AD03100FD3C79 /* BuddleButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3149,10 +3154,10 @@
 				6E8AA99C1C16AF68003F1C45 /* SessionTools */,
 				6EC0BB351C0BDEB700075A19 /* MainChatViewController.h */,
 				6EC0BB361C0BDEB700075A19 /* MainChatViewController.m */,
-				6EBA8DA41C156B1A00BAE5DD /* MessageChatViewController.h */,
-				6EBA8DA51C156B1A00BAE5DD /* MessageChatViewController.m */,
 				6E7D7A8F1C19311100B42140 /* MessageViewController.h */,
 				6E7D7A901C19311100B42140 /* MessageViewController.m */,
+				6EBA8DA41C156B1A00BAE5DD /* MessageChatViewController.h */,
+				6EBA8DA51C156B1A00BAE5DD /* MessageChatViewController.m */,
 				6E7D79191C19225C00B42140 /* TestViewController.h */,
 				6E7D791A1C19225C00B42140 /* TestViewController.m */,
 			);
@@ -3844,6 +3849,7 @@
 				6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */,
 				6E4D36E41C055D93001573E3 /* Global.m in Sources */,
 				6EBA8D511C15248B00BAE5DD /* XMPPvCardTempLabel.m in Sources */,
+				6E41FF341C1AD03200FD3C79 /* BuddleButton.m in Sources */,
 				6EBA8D521C15248B00BAE5DD /* XMPPvCardTempModule.m in Sources */,
 				B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */,
 				6EC3EC9D1C16E2A400B27B18 /* UIImage+YTGif.m in Sources */,
@@ -4240,7 +4246,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f50f9979-fd9f-43de-84f0-4a6bfc946edb";
+				PROVISIONING_PROFILE = "76ea7342-0981-42be-9646-58155abc1439";
 			};
 			name = Debug;
 		};
@@ -4271,7 +4277,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f50f9979-fd9f-43de-84f0-4a6bfc946edb";
+				PROVISIONING_PROFILE = "76ea7342-0981-42be-9646-58155abc1439";
 			};
 			name = Release;
 		};

@@ -72,6 +72,20 @@
 //    }
 }
 
+//发送语音
++ (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path toUsername:(XMPPJID *)jid {
+
+    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
+    [message addBody:[NSString stringWithFormat:@"audio%@",path]];
+    //转化base64编码
+    NSString *base64Str = [data base64EncodedStringWithOptions:0];
+    //设置节点内容
+    XMPPElement *attachment = [XMPPElement elementWithName:@"attachment" stringValue:base64Str];
+    //包含子节点
+    [message addChild:attachment];
+    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+
+}
 
 
 @end

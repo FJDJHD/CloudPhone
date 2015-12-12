@@ -18,5 +18,8 @@
 //发送图片
 + (void)sendImageMessageWithImage:(UIImage *)image toUsername:(XMPPJID *)jid;
 
+//发送语音
++ (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path toUsername:(XMPPJID *)jid;
+
 
 @end

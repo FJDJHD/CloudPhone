@@ -55,7 +55,7 @@
 #define API_getHelpCenter_info                          @"?s=/Home/User/helpFeedback"//get
 
 //存储openfire发送的消息
-#define API_sendOpenireMessage                          @"?s=/Home/User/sendOpenireMessage"
+#define API_sendOpenireMessage                          @"?s=/Home/SendMessage/sendOpenireMessage"
 
 
 #endif

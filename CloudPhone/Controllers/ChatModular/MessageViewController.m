@@ -12,7 +12,9 @@
 #import "MessageCell.h"
 #import "UIImage+ResizeImage.h"
 #import "XMPPMessage+Tools.h"
-
+#import <AVFoundation/AVFoundation.h>
+#import "EMCDDeviceManager.h"
+#import "EMAudioPlayerUtil.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -55,7 +57,6 @@
     
 }
 - (void)viewWillAppear:(BOOL)animated {
-    
     [super viewWillAppear:animated];
  
 }
@@ -149,9 +150,18 @@
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         _messageModel.image = image;
         _messageModel.messageType = kImageMessage; //图片类型
+        
+    } else if ([message.body hasPrefix:@"audio"]) {
+        NSArray *arr = [message.body componentsSeparatedByString:@"audio"];
+        if (arr.count > 0) {
+            _messageModel.voiceFilepath = arr[1];
+        }
+        _messageModel.messageType = kVoiceMessage; //语音类型
+    
     } else {
        _messageModel.messageType = kTextMessage; //文字类型
     }
+    NSLog(@"message = %@",message);
     _messageModel.text = message.body;
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     _cellModel.message = _messageModel;
@@ -162,6 +172,24 @@
 
 
 #pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+ XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if ([message.body hasPrefix:@"audio"]) {
+        NSArray *arr = [message.body componentsSeparatedByString:@"audio"];
+        if (arr.count > 0) {
+            [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:arr[1] completion:^(NSError *error) {
+                if (!error) {
+                    DLog(@"播放语音");
+                } else {
+                    DLog(@"播放error ＝ %@",error);
+                }}];
+        }
+    } else {
+        return;
+    }
+}
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -170,13 +198,12 @@
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     
     _cellModel.message = _messageModel;
-    return _cellModel.cellHeight ? _cellModel.cellHeight : 44.0;
+    return _cellModel.cellHeight;
         
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self keyBoardHidden];
-
 }
 
 
@@ -185,8 +212,9 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     DLog(@"上下文改变");
     [self.tableView reloadData];
-    [self scrollViewToBottom:YES];
+    [self scrollViewToBottom:NO];
 }
+
 
 #pragma mark -DXMessageToolBarDelegate
 - (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView{
@@ -216,7 +244,22 @@
  */
 - (void)didStartRecordingVoiceAction:(UIView *)recordView
 {
-    
+    if ([self canRecord]) {
+        DXRecordView *tmpView = (DXRecordView *)recordView;
+        tmpView.center = self.view.center;
+        [self.view addSubview:tmpView];
+        [self.view bringSubviewToFront:recordView];
+        int x = arc4random() % 100000;
+        NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+        NSString *fileName = [NSString stringWithFormat:@"%f%d",(double)time,x];
+        [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName
+                                                                 completion:^(NSError *error)
+         {
+             if (error) {
+                 DLog(@"failure to start recording");
+             }
+         }];
+    }
 }
 
 /**
@@ -224,6 +267,7 @@
  */
 - (void)didCancelRecordingVoiceAction:(UIView *)recordView
 {
+    [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
 }
 
 /**
@@ -231,7 +275,23 @@
  */
 - (void)didFinishRecoingVoiceAction:(UIView *)recordView
 {
-    
+    __weak typeof(self) weakSelf = self;
+    [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
+        if (!error) {
+            //发送录音
+            NSData *data = [NSData dataWithContentsOfFile:recordPath];
+            
+            [ChatSendHelper sendVoiceMessageWithAudio:data filePath:recordPath toUsername:self.chatJID];
+            
+        }else {
+            [CustomMBHud customHudWindow:@"录音时间太短"];
+            weakSelf.chatToolBar.recordButton.enabled = NO;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                weakSelf.chatToolBar.recordButton.enabled = YES;
+            });
+        }
+    }];
+   
 }
 
 #pragma mark - EMChatBarMoreViewDelegate
@@ -243,6 +303,7 @@
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     picker.delegate = self;
     [self presentViewController:picker animated:YES completion:nil];
+    [self keyBoardHidden];
 }
 
 - (void)moreViewTakePicAction:(DXChatBarMoreView *)moreView
@@ -286,9 +347,27 @@
     if (self.tableView.contentSize.height > self.tableView.frame.size.height)
     {
         CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
+        
         [self.tableView setContentOffset:offset animated:animated];
     }
 }
+
+- (BOOL)canRecord
+{
+    __block BOOL bCanRecord = YES;
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
+    {
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
+            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
+                bCanRecord = granted;
+            }];
+        }
+    }
+    
+    return bCanRecord;
+}
+
 // 点击背景隐藏
 -(void)keyBoardHidden
 {

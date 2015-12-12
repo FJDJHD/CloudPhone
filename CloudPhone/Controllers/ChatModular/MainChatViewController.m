@@ -80,7 +80,9 @@
     
     //名称
     NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
-    cell.textLabel.text = array[0] ? array[0] : @"";
+    if (array.count > 0) {
+        cell.textLabel.text = array[0] ? array[0] : @"";
+    }
     
     //头像
     [self configurePhotoForCell:cell user:user];
@@ -146,38 +148,32 @@
 
 //这里需要用到查询结果调度器(写完了结果调度器之后要切记在viewdidload页面首次加载中加上一句，否则不干活
 - (NSFetchedResultsController *)fetchedResultsController{
-    if (_fetchedResultsController == nil){
-        NSManagedObjectContext *moc = [[GeneralToolObject appDelegate] managedObjectContext_roster];
-        
-        // 指定查询的实体
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
-                                                  inManagedObjectContext:moc];
-        
-        // 在线状态排序
-        NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
-        // 显示的名称排序
-        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
-         // 添加排序
-        NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
-        
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:entity];
-        [fetchRequest setSortDescriptors:sortDescriptors];
-        [fetchRequest setFetchBatchSize:10];
-        
-        // 实例化结果控制器
-        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                       managedObjectContext:moc
-                                                                         sectionNameKeyPath:@"sectionNum"
-                                                                                  cacheName:nil];
-        [_fetchedResultsController setDelegate:self];
-        
-        NSError *error = nil;
-        if (![_fetchedResultsController performFetch:&error]){
-            DLog(@"Error performing fetch: %@", error);
-        }
-        
+    // 推荐写法，减少嵌套的层次
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
     }
+    // 指定查询的实体
+    NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"XMPPUserCoreDataStorageObject"];
+    
+    // 在线状态排序
+    NSSortDescriptor *sort1 = [NSSortDescriptor sortDescriptorWithKey:@"sectionNum" ascending:YES];
+    // 显示的名称排序
+    NSSortDescriptor *sort2 = [NSSortDescriptor sortDescriptorWithKey:@"displayName" ascending:YES];
+    
+    // 添加排序
+    request.sortDescriptors = @[sort1,sort2];
+    
+    // 添加谓词过滤器
+    request.predicate = [NSPredicate predicateWithFormat:@"!(subscription CONTAINS 'none')"];
+    
+    // 添加上下文
+    NSManagedObjectContext *ctx = [[GeneralToolObject appDelegate] managedObjectContext_roster];
+    
+    // 实例化结果控制器
+    _fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:ctx sectionNameKeyPath:nil cacheName:nil];
+    
+    // 设置他的代理
+    _fetchedResultsController.delegate = self;
     return _fetchedResultsController;
 }
 
@@ -199,7 +195,7 @@
         
         BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
         if (contains) {
-            [[[UIAlertView alloc] initWithTitle:@"提示" message:@"desUser已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+            [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
             return;
         }
         [[self appDelegate].xmppRoster subscribePresenceToUser:jid];

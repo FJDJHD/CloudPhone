@@ -280,16 +280,16 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
     
-    NSString *failNumber = [defaults objectForKey:RegisterFail]; //注册失败的情况
-    if (failNumber) {
-        NSArray *array = [failNumber componentsSeparatedByString:@"l"];
-        if (array.count > 0) {
-            NSString *numStr = array[1];
-            if ([numStr isEqualToString:number]) {
-                self.isXMPPRegister = YES;
-            }
-        }
-    }
+//    NSString *failNumber = [defaults objectForKey:RegisterFail]; //注册失败的情况
+//    if (failNumber) {
+//        NSArray *array = [failNumber componentsSeparatedByString:@"l"];
+//        if (array.count > 0) {
+//            NSString *numStr = array[1];
+//            if ([numStr isEqualToString:number]) {
+//                self.isXMPPRegister = YES;
+//            }
+//        }
+//    }
     if (self.isXMPPRegister == YES) {
         DLog(@"注册xmpp");
         //注册
@@ -313,6 +313,9 @@
 //认证失败
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error {
     DLog(@"服务端认证失败%@",error);
+    //改成注册试试
+    self.isXMPPRegister = YES;
+    [self connect];
 }
 
 //注册成功
@@ -327,11 +330,14 @@
 //注册失败
 - (void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error {
     DLog(@"注册失败");
+    //改成登录试试
+    self.isXMPPRegister = NO;
+    [self connect];
     //如果第一次注册失败 再加一个状态判断（下次继续注册），有点蛋疼
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *number = [defaults objectForKey:UserNumber];
-    [defaults setObject:[NSString stringWithFormat:@"fail%@",number] forKey:RegisterFail];   //这个和自己注册失败的手机号关联起来
-    [defaults synchronize];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSString *number = [defaults objectForKey:UserNumber];
+//    [defaults setObject:[NSString stringWithFormat:@"fail%@",number] forKey:RegisterFail];   //这个和自己注册失败的手机号关联起来
+//    [defaults synchronize];
     
 }
 
