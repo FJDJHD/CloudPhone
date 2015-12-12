@@ -10,12 +10,11 @@
 #import "UIImage+ResizeImage.h"
 #import "Global.h"
 #import "EMCDDeviceManager.h"
-#import "BuddleButton.h"
 
 @interface MessageCell() {
 
     UIImageView *_iconView;
-    BuddleButton *_textView;
+//    BuddleButton *_textView;
 }
 
 @end
@@ -36,7 +35,7 @@
         _textView = [BuddleButton buttonWithType:UIButtonTypeCustom];
         _textView.titleLabel.numberOfLines = 0;
         _textView.titleLabel.font = [UIFont systemFontOfSize:15];
-//        [_textView addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_textView addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         _textView.contentEdgeInsets = UIEdgeInsetsMake(textPadding, textPadding, textPadding, textPadding);
         [self addSubview:_textView];
         
@@ -48,8 +47,6 @@
     _cellFrame = cellFrame;
     MessageModel *message = cellFrame.message;
     
-    _textView.model = message; //判断点击的，给button加一个属性
-
     NSString *textBg = message.type ? @"chat_recive_nor" : @"chat_send_nor";
     UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
 
@@ -68,36 +65,75 @@
         [_textView setImage:nil forState:UIControlStateNormal];
         [_textView setTitle:@"语音" forState:UIControlStateNormal];
         
-    }else {
+    } else {
         //文字
         [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
         [_textView setImage:nil forState:UIControlStateNormal];
         [_textView setTitle:message.text forState:UIControlStateNormal];
+    }
+    
+    //这里给button传语音沙盒路径
+    _textView.voicePath = message.voiceFilepath;
+    //消息类型
+    _textView.messageType = message.messageType;
+    
+}
 
+- (void)buttonClick:(UIButton *)sender {
+    
+    BuddleButton *tempButton = (BuddleButton *)sender;
+    if (tempButton.messageType == kImageMessage) {
+        //图片
+    }else if (tempButton.messageType == kVoiceMessage) {
+        //语音
+        [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:tempButton.voicePath completion:^(NSError *error) {
+            if (!error) {
+                DLog(@"播放语音");
+            } else {
+                DLog(@"播放error ＝ %@",error);
+            }
+        }];
+        
+    } else {
+        
+        //文字
     }
 }
 
-//- (void)buttonClick:(UIButton *)sender {
+//- (void)cellDataForModel:(CellFrameModel *)cellFrame indexPath:(NSIndexPath *)index {
+//    _cellFrame = cellFrame;
+//    MessageModel *message = cellFrame.message;
 //    
-//    BuddleButton *tempButton = (BuddleButton *)sender;
-//    DLog(@"tempButton.model.text = %@",tempButton.model.text);
-//    if (tempButton.model.messageType == kImageMessage) {
+//    _textView.model = message; //判断点击的，给button加一个属性
+//    
+//    NSString *textBg = message.type ? @"chat_recive_nor" : @"chat_send_nor";
+//    UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
+//    
+//    _iconView.frame = cellFrame.iconFrame;
+//    _textView.frame = cellFrame.textFrame;
+//    [_textView setTitleColor:textColor forState:UIControlStateNormal];
+//    
+//    if (message.messageType == kImageMessage) {
 //        //图片
-//    }else if (tempButton.model.messageType == kVoiceMessage) {
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:message.image forState:UIControlStateNormal];
+//        [_textView setTitle:nil forState:UIControlStateNormal];
+//    } else if (message.messageType == kVoiceMessage) {
 //        //语音
-//        [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:tempButton.model.voiceFilepath completion:^(NSError *error) {
-//            if (!error) {
-//                DLog(@"播放语音");
-//            } else {
-//                DLog(@"播放error ＝ %@",error);
-//            }
-//        }];
-//
-//    } else {
-//    
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:nil forState:UIControlStateNormal];
+//        [_textView setTitle:@"语音" forState:UIControlStateNormal];
+//        
+//    }else {
 //        //文字
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:nil forState:UIControlStateNormal];
+//        [_textView setTitle:message.text forState:UIControlStateNormal];
+//        
 //    }
 //}
+
+
 
 
 @end

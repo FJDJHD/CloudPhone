@@ -9,7 +9,6 @@
 #import "MainChatViewController.h"
 #import "AppDelegate.h"
 #import "Global.h"
-#import "MessageChatViewController.h"
 #import <CoreData/CoreData.h>
 
 #import "MessageViewController.h"
@@ -103,11 +102,6 @@
     
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
 
-//    MessageChatViewController *controller = [[MessageChatViewController alloc]init];
-//    controller.chatUser = user.displayName;
-//    controller.chatJID = user.jid;
-//    [self.navigationController pushViewController:controller animated:YES];
-    
     MessageViewController *controller = [[MessageViewController alloc]init];
     controller.chatUser = user.displayName;
     controller.chatJID = user.jid;

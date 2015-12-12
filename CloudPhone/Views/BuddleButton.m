@@ -10,12 +10,27 @@
 
 @implementation BuddleButton
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+//- (instancetype)init {
+//
+//    if (self = [super init]) {
+//        [self addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return self;
+//}
+//
+//- (instancetype)initWithFrame:(CGRect)frame {
+//
+//    if (self = [super initWithFrame:frame]) {
+//        [self addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return self;
+//}
+
+//- (void)buttonClick:(UIButton *)sender {
+//
+//    if (self.action) {
+//        self.action(self);
+//    }
+//}
 
 @end

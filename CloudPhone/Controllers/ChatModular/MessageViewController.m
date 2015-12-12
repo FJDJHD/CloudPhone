@@ -138,7 +138,10 @@
     if (!cell) {
         cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
+    cell.textView.tag = indexPath.row;
+
     XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     
     // 如果存进去了，就把字符串转化成简洁的节点后保存
     if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
@@ -150,7 +153,6 @@
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         _messageModel.image = image;
         _messageModel.messageType = kImageMessage; //图片类型
-        
     } else if ([message.body hasPrefix:@"audio"]) {
         NSArray *arr = [message.body componentsSeparatedByString:@"audio"];
         if (arr.count > 0) {
@@ -161,7 +163,6 @@
     } else {
        _messageModel.messageType = kTextMessage; //文字类型
     }
-    NSLog(@"message = %@",message);
     _messageModel.text = message.body;
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     _cellModel.message = _messageModel;
@@ -173,20 +174,8 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
- XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    if ([message.body hasPrefix:@"audio"]) {
-        NSArray *arr = [message.body componentsSeparatedByString:@"audio"];
-        if (arr.count > 0) {
-            [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:arr[1] completion:^(NSError *error) {
-                if (!error) {
-                    DLog(@"播放语音");
-                } else {
-                    DLog(@"播放error ＝ %@",error);
-                }}];
-        }
-    } else {
-        return;
-    }
+   
+
 }
 
 
