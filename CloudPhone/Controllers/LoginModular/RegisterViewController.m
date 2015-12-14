@@ -161,21 +161,18 @@ static const int kTimeCount             = 60;
 //发送验证码
 - (void)proveButtonClick {
     if ([GeneralToolObject validateMobile:_numberField.text]) {
-        [self startAuthCodeTimmer];
-        
         NSDictionary *dic = @{@"mobile":_numberField.text,@"type":@"reg"};
         [[AirCloudNetAPIManager sharedManager] getPhoneNumberVerifyOfParams:dic WithBlock:^(id data, NSError *error) {
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
-                
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                [self startAuthCodeTimmer];
                 UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"即将收到短信验证码，请注意查收" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                 [alterView show];
                     
                 } else {
                     DLog(@"*****%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
-             
                 }
             } else {
                 //error

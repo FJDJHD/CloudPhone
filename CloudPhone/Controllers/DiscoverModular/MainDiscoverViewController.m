@@ -31,7 +31,7 @@
     [self setupAppBar];
     [self setupadScrollView];
     [self setupPageControl];
-
+    [self setAllButtons];
 }
 
 - (void)setupAppBar{
@@ -40,7 +40,6 @@
     appBar.contentSize = CGSizeMake(0, MainHeight * 1.5);
     self.appBar  = appBar;
     [self.view addSubview:appBar];
-    [self setAllButtons];
 }
 
 - (void)setupImageView{
@@ -84,7 +83,6 @@
     self.pageControl = pageControl;
 }
 
-
 //scrollView滚动时调用
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     CGFloat scrollviewW =  scrollView.frame.size.width;
@@ -124,7 +122,6 @@
     [self.timer invalidate];
 }
 
-
 - (void)setAllButtons{
     NSArray *imageArray = [NSArray array];
     imageArray = @[@"find_miaomiao",@"find_tips",@"find_takeout",@"find_bank",@"find_flight",@"find_film",@"find_add"];
@@ -149,7 +146,6 @@
         [self.appBar addSubview:button];
    }
 }
-
 
 - (void)clickButton:(UIButton *)sender{
     switch (sender.tag) {
@@ -192,7 +188,6 @@
         default:
             break;
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {

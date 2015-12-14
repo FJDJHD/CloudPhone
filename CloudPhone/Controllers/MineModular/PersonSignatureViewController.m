@@ -1,4 +1,5 @@
-//
+
+ //
 //  PersonSignatureViewController.m
 //  CloudPhone
 //
@@ -49,8 +50,7 @@
     [self.view addSubview:setNameView];
 }
 
-- (void)textViewDidChangeSelection:(UITextView *)textView
-{
+- (void)textViewDidEndEditing:(UITextView *)textView{
     self.setNameView.text = textView.text;
 }
 

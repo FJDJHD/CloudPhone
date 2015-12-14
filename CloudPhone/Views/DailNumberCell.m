@@ -36,14 +36,14 @@
         [self addSubview:_dailNumberLabel];
         
         
-        CGRect timeLableFrame = CGRectMake(CGRectGetMaxX(_dailNumberLabel.frame) + 10, 10, 40, 20);
+        CGRect timeLableFrame = CGRectMake(CGRectGetMaxX(_dailNumberLabel.frame) + 40, 10, 40, 20);
         _dailTimeLabel = [[UILabel alloc]initWithFrame:timeLableFrame];
         _dailTimeLabel.text = @"10:00";
         _dailTimeLabel.font = [UIFont systemFontOfSize:14.0];
         _dailTimeLabel.textColor = [UIColor blackColor];
         [self addSubview:_dailTimeLabel];
         
-        CGRect dateLableFrame = CGRectMake(CGRectGetMaxX(_dailNumberLabel.frame) + 10, CGRectGetMaxY(_dailTimeLabel.frame), 40, 20);
+        CGRect dateLableFrame = CGRectMake(CGRectGetMaxX(_dailNumberLabel.frame) + 40, CGRectGetMaxY(_dailTimeLabel.frame), 40, 20);
         _dailDateLable = [[UILabel alloc]initWithFrame:dateLableFrame];
         _dailDateLable.text = @"11-24";
         _dailDateLable.font = [UIFont systemFontOfSize:14.0];
@@ -51,9 +51,8 @@
         [self addSubview:_dailDateLable];
 
         
-        
-        UIImage *arrowImg = [UIImage imageNamed:@"mine_icon"];
-        CGRect arrowImageFrame = CGRectMake(MainWidth - 60, (60 - arrowImg.size.height)/2.0 , arrowImg.size.width, arrowImg.size.height);
+        UIImage *arrowImg = [UIImage imageNamed:@"mine_arrow"];
+        CGRect arrowImageFrame = CGRectMake(MainWidth - 20, (60 - arrowImg.size.height)/2.0 , arrowImg.size.width, arrowImg.size.height);
         UIImageView  *arrowImgView = [[UIImageView alloc]initWithImage:arrowImg];
         arrowImgView.frame = arrowImageFrame;
         [self addSubview:arrowImgView];

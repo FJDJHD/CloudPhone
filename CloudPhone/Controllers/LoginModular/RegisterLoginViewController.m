@@ -11,7 +11,7 @@
 #import "RegisterViewController.h"
 #import "LoginViewController.h"
 #import "GuidePageView.h"
-
+#import "LoginPasswordViewController.h"
 @interface RegisterLoginViewController ()
 
 @property (nonatomic,strong) GuidePageView *guideView;
@@ -134,6 +134,7 @@
 
 //注册
 - (void)registerButtonClick {
+   // [self.navigationController pushViewController:[LoginPasswordViewController new] animated:YES];
     RegisterViewController *controller = [[RegisterViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
 }
