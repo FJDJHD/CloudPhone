@@ -24,7 +24,6 @@
     XMPPCapabilities *xmppCapabilities;
     XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
     
-    
     XMPPMessageArchiving *xmppMessageArchiving;  /** 消息归档 */
     XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;  /** 消息归档存储 */
 

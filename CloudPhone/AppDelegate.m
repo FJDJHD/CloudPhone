@@ -185,6 +185,7 @@
     xmppStream = [[XMPPStream alloc] init];
     [xmppStream setHostName:XMPPIP];
     [xmppStream setHostPort:XMPPPORT];
+    xmppStream.enableBackgroundingOnSocket = YES;
     
     xmppReconnect = [[XMPPReconnect alloc] init];
     
@@ -269,7 +270,7 @@
 }
 
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error {
-    DLog(@"连接失败xmppStreamDidDisconnect");
+    DLog(@"连接失败xmppStreamDidDisconnect = %@",error);
 }
 
 //连接上openfire，开始注册登录
@@ -351,6 +352,20 @@
     return YES;
 }
 
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
+
+    //程序运行在前台，消息正常显示
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
+        DLog(@"message = %@",message);
+    }else{//如果程序在后台运行，收到消息以通知类型来显示
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.alertAction = @"Ok";
+        localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",@"test",@"This is a test message"];//通知主体
+        localNotification.applicationIconBadgeNumber = 1;//标记数
+        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];//发送通知
+    }
+}
+
 #pragma mark XMPPRosterDelegate
 //接受好友请求时候调用，就是有人加你好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
@@ -368,8 +383,12 @@
 
     UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     [alertController presentViewController:alert animated:YES completion:nil];
+}
 
-    
+//上传头像反馈
+-(void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule didReceivevCardTemp:(XMPPvCardTemp *)vCardTemp forJID:(XMPPJID *)jid
+{
+    DLog(@"dsfsdfsdfa");
 }
 
 

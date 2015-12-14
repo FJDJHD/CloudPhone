@@ -52,6 +52,7 @@
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }

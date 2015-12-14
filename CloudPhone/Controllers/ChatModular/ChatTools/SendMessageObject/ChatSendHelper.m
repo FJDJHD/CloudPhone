@@ -7,6 +7,7 @@
 //
 
 #import "ChatSendHelper.h"
+#import "XMPPvCardTemp.h"
 
 @implementation ChatSendHelper
 
@@ -86,6 +87,34 @@
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
 
 }
+
+//修改xmpp用户头像
++ (void)modify {
+
+    NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
+    NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
+    NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
+    NSData *dataFromImage = UIImageJPEGRepresentation(nil, 0.7f);
+    NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
+    [photoXML addChild:typeXML];
+    [photoXML addChild:binvalXML];
+    [vCardXML addChild:photoXML];
+    XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
+    
+    if (myvCardTemp) {
+        myvCardTemp.photo = dataFromImage;
+        [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
+    } else {
+        XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
+        [newvCardTemp setNickname:@"nick"];
+        [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
+    }
+}
+
+
+
+
+
 
 
 @end

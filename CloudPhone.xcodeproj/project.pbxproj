@@ -4369,12 +4369,12 @@
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrwb",
 				);
 				OTHER_LDFLAGS = (
-					"-ObjC",
 					"-lxml2",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "76ea7342-0981-42be-9646-58155abc1439";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4400,12 +4400,12 @@
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrwb",
 				);
 				OTHER_LDFLAGS = (
-					"-ObjC",
 					"-lxml2",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "76ea7342-0981-42be-9646-58155abc1439";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

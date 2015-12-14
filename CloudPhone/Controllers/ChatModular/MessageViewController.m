@@ -41,7 +41,9 @@
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    self.title = self.chatUser ? self.chatUser : @"会话";
+    NSArray *array = [self.chatUser componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
+    self.title = array[0] ? array[0] : @"会话";
+
     
     _cellModel = [[CellFrameModel alloc]init];
     _messageModel = [[MessageModel alloc]init];
