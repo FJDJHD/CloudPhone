@@ -231,12 +231,6 @@
     }
 }
 
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 2001) {
-     //    DLog(@"%ld",buttonIndex);
-    }
-}
 
 
 #pragma mark - UIActionSheetDelegate

@@ -193,7 +193,10 @@ static const int kTimeCount             = 60;
         [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
     } else if (_verifyField.text.length == 0) {
         [CustomMBHud customHudWindow:Login_emptyVerifyNumber];
-    } else if ([GeneralToolObject validateMobile:_numberField.text]){
+    } else if (self.selectButton.selected == NO){
+        UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:nil message:@"您还未同意用户许可协议，请选择用户协议" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alterView show];
+    }else if ([GeneralToolObject validateMobile:_numberField.text]){
         //在这里添加指示器
         [self AddHUD];
         NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text,@"imei":[GeneralToolObject CPUuidString],@"mobile_model":[[UIDevice currentDevice] model],@"mobile_type":@"iphone",@"reg_terrace":@"iOS",@"reg_id":@"111"};
@@ -219,8 +222,6 @@ static const int kTimeCount             = 60;
     } else {
         [CustomMBHud customHudWindow:Login_sureCorrectNumber];
     }
-
-
 }
 
 //用户许可协议
@@ -230,7 +231,7 @@ static const int kTimeCount             = 60;
 
 //选择用户协议
 - (void)selectButtonClick{
-//    self.selectButton.selected = !self.selectButton.selected;
+    self.selectButton.selected = !self.selectButton.selected;
     
 }
 
