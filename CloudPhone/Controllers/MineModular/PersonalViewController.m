@@ -13,13 +13,12 @@
 #import "UserModel.h"
 
 #import "PersonalNameViewController.h"
-#import "PersonGenderViewController.h"
 #import "PersonBirthdayViewController.h"
 #import "PersonSignatureViewController.h"
 
 
 
-@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
@@ -192,32 +191,25 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0 && indexPath.row == 0) {
         UIActionSheet *changeIconSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从手机相册选择",nil];
+        changeIconSheet.tag = 1001;
         [changeIconSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 0){
-        PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
-        personalNameVC.modifyNameBlock = ^(NSString *name){
-            UITableViewCell *nameCell = [tableView cellForRowAtIndexPath:indexPath];
-            nameCell.detailTextLabel.text = name;
-            
-        };
-        [self.navigationController pushViewController:personalNameVC animated:YES];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        alert.tag = 2001;
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert show];
+       
+//        PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
+//        personalNameVC.modifyNameBlock = ^(NSString *name){
+//            UITableViewCell *nameCell = [tableView cellForRowAtIndexPath:indexPath];
+//            nameCell.detailTextLabel.text = name;
+//        };
+//        [self.navigationController pushViewController:personalNameVC animated:YES];
         
     }else if (indexPath.section == 1 && indexPath.row == 1){
-        PersonGenderViewController *genderVC = [PersonGenderViewController new];
-        genderVC.modifyGenderBlock = ^(NSInteger gender){
-            UITableViewCell *genderCell = [tableView cellForRowAtIndexPath:indexPath];
-            if (gender == 0) {
-                genderCell.detailTextLabel.text = @"保密";
-            }else if (gender == 1)
-            {
-                genderCell.detailTextLabel.text = @"男";
-            }else{
-                genderCell.detailTextLabel.text = @"女";
-            }
-        };
-        
-        [self.navigationController pushViewController:genderVC animated:YES];
-        
+        UIActionSheet *changeGenderSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"保密",@"男",@"女",nil];
+        changeGenderSheet.tag = 1002;
+        [changeGenderSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 2){
         PersonBirthdayViewController *birthVC = [PersonBirthdayViewController new];
         birthVC.modifyBirthBlock = ^(NSString *birth){
@@ -239,9 +231,17 @@
     }
 }
 
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == 2001) {
+     //    DLog(@"%ld",buttonIndex);
+    }
+}
+
 
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (actionSheet.tag == 1001) {
     switch (buttonIndex) {
         case 0:
         {
@@ -271,7 +271,32 @@
             
         default:
             break;
+       }
+        
+    }else if (actionSheet.tag == 1002){
+        NSDictionary *dic = @{@"field":@"gender",@"fieval":[NSNumber numberWithInteger:buttonIndex]};
+        [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    DLog(@"性别修改成功------%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:@"修改成功"];
+                    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+                    if (buttonIndex == 0) {
+                        cell.detailTextLabel.text = @"保密";
+                    }else if (buttonIndex == 1){
+                        cell.detailTextLabel.text = @"男";
+                    }else{
+                        cell.detailTextLabel.text = @"女";
+                        }
+                    };
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:@"修改失败"];
+            }
+        }];
     }
+
 }
 
 #pragma mark --UIImagePickerControllerDelegate

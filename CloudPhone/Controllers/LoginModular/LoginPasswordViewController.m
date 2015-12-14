@@ -15,8 +15,8 @@
 @property (nonatomic, strong) UITextField *repasswordField;
 @property (nonatomic, strong) UITextField *passwordFiled;
 @property (nonatomic, strong) NSMutableAttributedString *passwordLevelStr;
+@property (nonatomic, strong) UILabel *levelLabel;
 @property (nonatomic, strong) UILabel *numberLevelLabel;
-
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
 
@@ -49,7 +49,7 @@
     passwordLabel.text = @"输入密码";
     [backView addSubview:passwordLabel];
     
-    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0, 120, 44)];
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0, 150, 44)];
     passwordField.placeholder = @"请输入密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -58,13 +58,21 @@
     self.passwordFiled.delegate = self;
     [backView addSubview:passwordField];
     
-    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame) , 0, 140, 44)];
+    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame), 0, 65, 44)];
     numberLevelLabel.font = [UIFont systemFontOfSize:14.0];
     numberLevelLabel.textColor = [UIColor blackColor];
+    numberLevelLabel.text = @"密码等级:";
+    numberLevelLabel.hidden = YES;
     self.numberLevelLabel = numberLevelLabel;
-    _passwordLevelStr = [[NSMutableAttributedString alloc] initWithString:@"密码等级:低/中/高"];
-    numberLevelLabel.attributedText = _passwordLevelStr;
     [backView addSubview:numberLevelLabel];
+    
+    UILabel *levelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLevelLabel.frame), 0, 25, 44)];
+    levelLabel.font = [UIFont systemFontOfSize:14.0];
+    levelLabel.textColor = [UIColor redColor];
+    levelLabel.text = @"低";
+    levelLabel.hidden = YES;
+    self.levelLabel = levelLabel;
+    [backView addSubview:levelLabel];
 
     UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 95, 20)];
     verifyLabel.font = [UIFont systemFontOfSize:TEXTFONT];
@@ -96,28 +104,26 @@
 }
 
 
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
     if (toBeString.length >= 1){
+        self.levelLabel.hidden = NO;
+        self.numberLevelLabel.hidden = NO;
         int result = [GeneralToolObject judgePasswordStrength:toBeString];
         if (result == 0) {
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(7,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(9,1)];
+            self.levelLabel.text = @"低";
             }
         else if(result == 1){
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(5,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor yellowColor] range:NSMakeRange(7,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(9,1)];
+             self.levelLabel.text = @"中";
             }
         else if (result==2){
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(5,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(7,1)];
-            [self.passwordLevelStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(9,1)];
+             self.levelLabel.text = @"高";
             }
-         self.numberLevelLabel.attributedText = _passwordLevelStr;
+        
+    }else{
+        self.levelLabel.hidden = YES;
+        self.numberLevelLabel.hidden = YES;
     }
     return YES;
 }
