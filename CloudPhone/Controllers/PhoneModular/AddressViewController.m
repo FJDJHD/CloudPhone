@@ -63,6 +63,7 @@
     searchBar.placeholder = @"搜索";
     
     
+
     [self.view addSubview:searchBar];
     //添加表视图
     [self.view addSubview:self.tableView];
@@ -350,6 +351,12 @@
 #pragma mark UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     [self.searchBar setShowsCancelButton:YES animated:YES];
+    for (UIView *view in [_searchBar.subviews[0] subviews]) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *cancelBtn = (UIButton *)view;
+            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        }
+    }
     return YES;
 }
 
@@ -364,7 +371,7 @@
     NSLog(@"---%@",searchBar.text);
     searchBar.text = nil;
     [self.searchBar resignFirstResponder];
-    
+    [self.searchBar setShowsCancelButton:NO animated:YES];
 }
 
 // 当搜索内容变化时，执行该方法。很有用，可以实现时实搜索
