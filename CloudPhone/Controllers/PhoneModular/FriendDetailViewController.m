@@ -66,6 +66,9 @@
     [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
     [dialDetailButton setTitle:@"通话详情" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
+    dialDetailButton.backgroundColor = [UIColor whiteColor];
+    dialDetailButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
+    dialDetailButton.layer.borderWidth = 0.5;
     [dialDetailButton addTarget:self action:@selector(dialDetailButtonClick) forControlEvents:UIControlEventTouchUpInside];
     self.dialDetailButton = dialDetailButton;
     [self.view addSubview:dialDetailButton];
@@ -85,8 +88,6 @@
     [self.view insertSubview:self.tableView belowSubview:buttonBg];
     [self.view insertSubview:self.dialDetailTableView belowSubview:buttonBg];
    
-    
-    
     //发消息
     CGRect rect = CGRectMake(15, MainHeight + 10, MainWidth - 15*2.0, 44);
     UIButton *sendInfoButton = [self getButtonWithString:@"发消息" rect:rect taget:self action:@selector(sendInfoButtonClick) ];

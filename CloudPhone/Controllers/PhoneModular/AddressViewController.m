@@ -13,13 +13,13 @@
 #import "PersonModel.h"
 #import "NSString+Util.h"
 
-@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate>
+@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate>
 
 @property (nonatomic, strong) NSMutableArray *listTitleArray;
 @property (nonatomic, strong) NSMutableArray *listContentArray;
 
 @property (nonatomic, strong) UITableView *tableView;
-
+@property (nonatomic, strong) UISearchBar *searchBar;
 @end
 
 @implementation AddressViewController
@@ -36,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [ColorTool backgroundColor];
     self.title = @"通讯录";
     
     //导航栏返回按钮
@@ -47,22 +47,33 @@
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     addressButton.frame = CGRectMake(0, 0, 44, 44);
-    addressButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    [addressButton setTitle:@"添加" forState:UIControlStateNormal];
-    addressButton.titleLabel.textColor = [UIColor blackColor];
+    [addressButton setImage:[UIImage imageNamed:@"phone_addMore"] forState:UIControlStateNormal];
     [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;
     
+    //搜索框
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 10, MainWidth, 30)];
+    searchBar.delegate = self;
+    self.searchBar = searchBar;
+    searchBar.barTintColor = [ColorTool backgroundColor];
+    searchBar.backgroundImage = [GeneralToolObject imageWithColor:[UIColor clearColor]];
+    [searchBar setReturnKeyType:UIReturnKeySearch];
+    searchBar.keyboardType = UIKeyboardTypeDefault;
+    searchBar.placeholder = @"搜索";
+    
+    
+
+    [self.view addSubview:searchBar];
     //添加表视图
     [self.view addSubview:self.tableView];
-    
     [self loadAddressData];
 }
 
+
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
+        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.searchBar.frame) + 10, MainWidth, SCREEN_HEIGHT - STATUS_NAV_BAR_HEIGHT - self.searchBar.frame.size.height - 20);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.rowHeight = 60;
         _tableView.sectionIndexColor = RGB(51, 51, 51);
@@ -119,8 +130,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return [_listContentArray[section] count];
+       return [_listContentArray[section] count];
+ 
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -134,7 +145,12 @@
         NSArray *sectionArr = [_listContentArray objectAtIndex:indexPath.section];
         PersonModel *model = (PersonModel *)[sectionArr objectAtIndex:indexPath.row];
         cell.textLabel.text = model.phonename;
-        cell.detailTextLabel.text = model.tel;
+        cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
+        UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];
+        imageView.image = image;
+        cell.accessoryView = imageView;
+        //cell.detailTextLabel.text = model.tel;
     }
     
     return cell;
@@ -156,8 +172,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-
-    if (self.listTitleArray && self.listTitleArray.count > 0) {
+   if (self.listTitleArray && self.listTitleArray.count > 0) {
         UIView *contentView = [[UIView alloc] init];
         contentView.backgroundColor = RGB(240, 240, 240);
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
@@ -332,6 +347,42 @@
     }
     return listContent;
 }
+
+#pragma mark UISearchBarDelegate
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    [self.searchBar setShowsCancelButton:YES animated:YES];
+    for (UIView *view in [_searchBar.subviews[0] subviews]) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *cancelBtn = (UIButton *)view;
+            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        }
+    }
+    return YES;
+}
+
+// 取消按钮被按下时，执行的方法
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self.searchBar resignFirstResponder];
+    searchBar.text = nil;
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+}
+// 键盘中，搜索按钮被按下，执行的方法
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    NSLog(@"---%@",searchBar.text);
+    searchBar.text = nil;
+    [self.searchBar resignFirstResponder];
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+}
+
+// 当搜索内容变化时，执行该方法。很有用，可以实现时实搜索
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;{
+    NSLog(@"textDidChange---%@",searchBar.text);
+    
+    
+}
+
+
+
 
 - (void)popViewController {
 

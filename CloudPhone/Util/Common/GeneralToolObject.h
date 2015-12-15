@@ -50,5 +50,6 @@
 
 + (AppDelegate *)appDelegate;
 
-
+//返回一个纯色图片
++ (UIImage *)imageWithColor:(UIColor *)color;
 @end

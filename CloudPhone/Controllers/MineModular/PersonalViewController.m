@@ -12,21 +12,25 @@
 #import "AppDelegate.h"
 #import "UserModel.h"
 
-#import "PersonalNameViewController.h"
-#import "PersonBirthdayViewController.h"
 #import "PersonSignatureViewController.h"
 #import "ChatSendHelper.h"
 
 
-@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate>
+@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
 @property (nonatomic, strong) NSDictionary *personalDic;
 
+@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIButton *sureButton;
+@property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) NSTextAttachment *attchIcon;
+@property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) UserModel *user;
+@property (nonatomic, strong) UITextView *setSignatureView;
+@property (nonatomic, strong)   NSString *setBirthStr;
 
 
 @end
@@ -198,29 +202,16 @@
         alert.tag = 2001;
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [alert show];
-       
-//        PersonalNameViewController *personalNameVC = [PersonalNameViewController new];
-//        personalNameVC.modifyNameBlock = ^(NSString *name){
-//            UITableViewCell *nameCell = [tableView cellForRowAtIndexPath:indexPath];
-//            nameCell.detailTextLabel.text = name;
-//        };
-//        [self.navigationController pushViewController:personalNameVC animated:YES];
-        
     }else if (indexPath.section == 1 && indexPath.row == 1){
-        UIActionSheet *changeGenderSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"保密",@"男",@"女",nil];
+        UIActionSheet *changeGenderSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消"destructiveButtonTitle:nil otherButtonTitles:@"男",@"女",nil];
         changeGenderSheet.tag = 1002;
         [changeGenderSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 2){
-        PersonBirthdayViewController *birthVC = [PersonBirthdayViewController new];
-        birthVC.modifyBirthBlock = ^(NSString *birth){
-            UITableViewCell *textCell = [tableView cellForRowAtIndexPath:indexPath];
-            textCell.detailTextLabel.text = birth;
-        };
-        [self.navigationController pushViewController:birthVC animated:YES];
-        
+         [self setBrithSelectView];
     }else if (indexPath.section == 1 && indexPath.row == 3){
       //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
+       // [self addSignatureView];
         PersonSignatureViewController *signatuireVC = [PersonSignatureViewController new];
         signatuireVC.modifySignatureBlock = ^(NSString *text){
             UITableViewCell *textCell = [tableView cellForRowAtIndexPath:indexPath];
@@ -290,9 +281,10 @@
         default:
             break;
        }
-        
+    
     }else if (actionSheet.tag == 1002){
-        NSDictionary *dic = @{@"field":@"gender",@"fieval":[NSNumber numberWithInteger:buttonIndex]};
+        if(buttonIndex!=2){
+        NSDictionary *dic = @{@"field":@"gender",@"fieval":[NSNumber numberWithInteger:buttonIndex + 1]};
         [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
@@ -300,21 +292,108 @@
                     [CustomMBHud customHudWindow:@"修改成功"];
                     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
                     if (buttonIndex == 0) {
-                        cell.detailTextLabel.text = @"保密";
-                    }else if (buttonIndex == 1){
                         cell.detailTextLabel.text = @"男";
-                    }else{
+                    }else if (buttonIndex == 1){
                         cell.detailTextLabel.text = @"女";
-                        }
-                    };
+                    }
+                  };
                 } else {
                     [CustomMBHud customHudWindow:@"修改失败"];
             }
         }];
     }
-
+  }
 }
 
+- (void)setBrithSelectView{
+    UIView *coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.coverView = coverView;
+    [self.view addSubview:coverView];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.70, MainWidth, MainHeight *0.45)];
+    view.layer.cornerRadius = 3.0;
+    view.layer.masksToBounds = YES;
+    view.backgroundColor = [UIColor whiteColor];
+    [coverView addSubview:view];
+    
+    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+    self.datePicker = datePicker;
+    datePicker.frame = CGRectMake(0, 0 , MainWidth, 150);
+    datePicker.backgroundColor = [UIColor whiteColor];
+    datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    NSDate* minDate = [[NSDate alloc]initWithTimeIntervalSinceNow:-366*24*3600*60];
+    NSDate* maxDate = [[NSDate alloc]init];
+    datePicker.minimumDate = minDate;
+    datePicker.maximumDate = maxDate;
+    [datePicker addTarget:self action:@selector(dateChange:) forControlEvents:UIControlEventValueChanged];
+    [view addSubview:datePicker];
+    
+    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.datePicker.frame), MainWidth / 2.0, 44);
+    sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    sureButton.layer.borderColor = [UIColor blackColor].CGColor;
+    sureButton.layer.borderWidth = 0.5;
+    [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+    [sureButton addTarget:self action:@selector(sureButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    self.sureButton = sureButton;
+    [view addSubview:sureButton];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.frame = CGRectMake(MainWidth / 2.0, CGRectGetMaxY(self.datePicker.frame), MainWidth / 2.0, 44);
+    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
+    cancelButton.layer.borderWidth = 0.5;
+    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    self.cancelButton = cancelButton;
+    [view addSubview:cancelButton];
+}
+- (void)addSignatureView{
+    UIView *coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.coverView = coverView;
+    [self.view addSubview:coverView];
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.70, MainWidth, MainHeight *0.45)];
+    view.layer.cornerRadius = 3.0;
+    view.layer.masksToBounds = YES;
+    view.backgroundColor = [UIColor whiteColor];
+    [coverView addSubview:view];
+    
+    UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 150)];
+    setSignatureView.backgroundColor = [UIColor whiteColor];
+    setSignatureView.font = [UIFont systemFontOfSize:20];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.setSignatureView = setSignatureView;
+    self.setSignatureView.delegate = self;
+    [view addSubview:setSignatureView];
+    
+    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.setSignatureView.frame), MainWidth / 2.0, 44);
+    sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    sureButton.layer.borderColor = [UIColor blackColor].CGColor;
+    sureButton.layer.borderWidth = 0.5;
+    [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+    [sureButton addTarget:self action:@selector(sureButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    self.sureButton = sureButton;
+    [view addSubview:sureButton];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.frame = CGRectMake(MainWidth / 2.0, CGRectGetMaxY(self.setSignatureView.frame), MainWidth / 2.0, 44);
+    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
+    cancelButton.layer.borderWidth = 0.5;
+    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    self.cancelButton = cancelButton;
+    [view addSubview:cancelButton];
+}
 #pragma mark --UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -377,7 +456,44 @@
         }
     }];
 }
+- (void)sureButtonClick{
+    if (self.setBirthStr.length > 0) {
+    NSDictionary *dic = @{@"field":@"birthday",@"fieval":self.setBirthStr};
+    [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                [CustomMBHud customHudWindow:@"修改成功"];
+                UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+                cell.detailTextLabel.text = self.setBirthStr;
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:@"修改失败"];
+            }
+        }
+        
+    }];
+    [self.coverView removeFromSuperview];
+    NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1   ];
+    NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
+    [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+    }else{
+        [self.coverView removeFromSuperview];
+    }
+}
+- (void)cancelButtonClick{
+    [self.coverView removeFromSuperview];
+}
 
+
+
+- (void)dateChange:(UIDatePicker *)datePicker{
+    NSDateFormatter*formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *dateString=[formatter stringFromDate: datePicker.date];
+    self.setBirthStr = dateString;
+}
 
 #pragma mark - MBProgressHUD Show or Hidden
 - (void)AddHUD {
