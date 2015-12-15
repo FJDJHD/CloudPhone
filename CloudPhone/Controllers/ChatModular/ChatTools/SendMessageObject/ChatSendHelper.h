@@ -22,7 +22,9 @@
 + (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path time:(NSInteger)duration toUsername:(XMPPJID *)jid;
 
 //修改xmpp用户头像
-+ (void)modify;
++ (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name;
 
+//修改xmpp用户昵称
++ (void)modifyUserNicknameWithString:(NSString *)str;
 
 @end

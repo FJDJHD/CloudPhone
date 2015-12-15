@@ -22,22 +22,18 @@
     // 判断子节点数量
     if (self.childCount == 2) {
         NSInteger index = -1;
-        
         // 遍历所有节点
         for (XMPPElement *node in self.children) {
             // 如果节点的名称是attachment
             if ([node.name isEqualToString:@"attachment"]) {
-                
                 NSString *base64Str = node.stringValue;
                 NSData *data = [[NSData alloc] initWithBase64EncodedString:base64Str options:0];
                 
                 [data writeToFile:[self pathForAttachment:jid timestamp:timestamp] atomically:YES];
-                
                 // 记录附件节点的索引值
                 index = node.index;
             }
         }
-        
         // 如果index > 0，说明有附件，并且已经保存到磁盘
         if (index > 0) {
             // 使用索引，删除节点内容
@@ -45,7 +41,6 @@
             return YES;
         }
     }
-    
     return NO;
 }
 

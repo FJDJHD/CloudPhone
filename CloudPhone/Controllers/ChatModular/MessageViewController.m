@@ -151,6 +151,7 @@
         [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
     }
     NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+    
     if ([message.body isEqualToString:@"image"]) {
         UIImage *image = [UIImage imageWithContentsOfFile:path];
         _messageModel.image = image;

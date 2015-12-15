@@ -75,24 +75,47 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        UIImage *image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+        imageView.layer.cornerRadius = 24;
+        imageView.layer.masksToBounds = YES;
+        imageView.frame = CGRectMake(15, (60 - 48)/2.0, 48, 48);
+        imageView.tag = 500;
+        [cell addSubview:imageView];
+        
+        UILabel *userLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, CGRectGetMinY(imageView.frame) + 5, 200, 20)];
+        userLable.font = [UIFont systemFontOfSize:17];
+        userLable.textColor = [UIColor blackColor];
+        userLable.tag = 501;
+        [cell addSubview:userLable];
+        
+        UILabel *onlineLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(userLable.frame), CGRectGetMaxY(userLable.frame), 200, 20)];
+        onlineLable.font = [UIFont systemFontOfSize:13];
+        onlineLable.textColor = [UIColor grayColor];
+        onlineLable.tag = 502;
+        [cell addSubview:onlineLable];
+        
     }
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
+    DLog(@"************************%@************************%@",user.nickname,user.displayName);
+    
+    UILabel *userTemp = (UILabel *)[cell viewWithTag:501];
+    UILabel *onlineTemp = (UILabel *)[cell viewWithTag:502];
+
     //名称
-    NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
-    if (array.count > 0) {
-        cell.textLabel.text = array[0] ? array[0] : @"";
+    NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数
+    userTemp.text = user.nickname ? user.nickname :array[0];
+    
+    //是否在线
+    if (user.section == 0) {
+        onlineTemp.text = @"在线";
+    } else {
+        onlineTemp.text = @"离线";
     }
     
     //头像
     [self configurePhotoForCell:cell user:user];
-    
-    //是否在线
-    if (user.section == 0) {
-        cell.detailTextLabel.text = @"在线";
-    } else {
-        cell.detailTextLabel.text = @"离线";
-    }
     
     return cell;
 }
@@ -121,15 +144,16 @@
 
 
 - (void)configurePhotoForCell:(UITableViewCell *)cell user:(XMPPUserCoreDataStorageObject *)user{
+     UIImageView *imageView = (UIImageView *)[cell viewWithTag:500];
     if (user.photo != nil){
-        cell.imageView.image = user.photo;
+        imageView.image = user.photo;
     }else{
         NSData *photoData = [[[GeneralToolObject appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
         if (photoData != nil){
-            cell.imageView.image = [UIImage imageWithData:photoData];
+            imageView.image = [UIImage imageWithData:photoData];
         }
         else {
-            cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+            imageView.image = [UIImage imageNamed:@"mine_icon"];
 
         }
     }

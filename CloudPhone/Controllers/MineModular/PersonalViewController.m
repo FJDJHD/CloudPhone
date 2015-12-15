@@ -15,7 +15,7 @@
 #import "PersonalNameViewController.h"
 #import "PersonBirthdayViewController.h"
 #import "PersonSignatureViewController.h"
-
+#import "ChatSendHelper.h"
 
 
 @interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate>
@@ -194,7 +194,7 @@
         changeIconSheet.tag = 1001;
         [changeIconSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alert.tag = 2001;
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [alert show];
@@ -233,8 +233,27 @@
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 2001) {
-     //    DLog(@"%ld",buttonIndex);
+    if (alertView.tag == 2001 && buttonIndex == 1) {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        if (textField.text.length > 0) {
+            NSDictionary *dic = @{@"field":@"nick_name",@"fieval":textField.text};
+            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+                if (!error) {
+                    NSDictionary *dic = (NSDictionary *)data;
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        [CustomMBHud customHudWindow:@"昵称修改成功"];
+                        UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+                        nameCell.detailTextLabel.text = textField.text;
+                        //这里把xmpp的个人信息修改一下
+                        [ChatSendHelper modifyUserNicknameWithString:textField.text];
+                    } else {
+                        [CustomMBHud customHudWindow:@"昵称修改失败"];
+                    }
+                }
+            }];
+        }
+    } else {
+        DLog(@"取消");
     }
 }
 
@@ -279,7 +298,6 @@
             if (!error) {
                 NSDictionary *dic = (NSDictionary *)data;
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    DLog(@"性别修改成功------%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:@"修改成功"];
                     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
                     if (buttonIndex == 0) {
@@ -291,7 +309,6 @@
                         }
                     };
                 } else {
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
                     [CustomMBHud customHudWindow:@"修改失败"];
             }
         }];
@@ -302,36 +319,23 @@
 #pragma mark --UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    DLog(@"editing===========");
-    
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    
+
     [self AddHUD];
-//    [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image WithBlock:^(id data, NSError *error) {
-//        DLog(@"data = %@",data);
-//        [self HUDHidden];
-//        if (!error) {
-//            NSDictionary *dic = (NSDictionary *)data;
-//            if ([[dic objectForKey:@"status"] integerValue] == 1) {
-//                NSLog(@"上传图片成功");
-//                UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-//                UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
-//                imageView.image = image;
-//            } else {
-//                [CustomMBHud customHudWindow:@"上传图片失败"];
-//            }
-//        }
-//    }];
     [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image params:nil WithBlock:^(id data, NSError *error) {
         DLog(@"data = %@",data);
         [self HUDHidden];
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                NSLog(@"上传图片成功");
+                DLog(@"上传图片成功");
                 UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
                 UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
                 imageView.image = image;
+                
+                //这里把xmpp的个人信息修改一下
+                [ChatSendHelper modifyUserHeadPortraitWithImage:image nickName:nil];
+                
             } else {
                 [CustomMBHud customHudWindow:@"上传图片失败"];
             }

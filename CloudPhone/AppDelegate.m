@@ -358,11 +358,11 @@
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
         DLog(@"message = %@",message);
     }else{//如果程序在后台运行，收到消息以通知类型来显示
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.alertAction = @"Ok";
-        localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",@"test",@"This is a test message"];//通知主体
-        localNotification.applicationIconBadgeNumber = 1;//标记数
-        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];//发送通知
+//        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//        localNotification.alertAction = @"Ok";
+//        localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",@"test",@"This is a test message"];//通知主体
+//        localNotification.applicationIconBadgeNumber = 1;//标记数
+//        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];//发送通知
     }
 }
 

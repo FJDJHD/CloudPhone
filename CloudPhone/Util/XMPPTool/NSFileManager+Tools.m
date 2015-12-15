@@ -6,7 +6,6 @@
     
     NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *path = [cachePath stringByAppendingPathComponent:name];
-    
     /**
      参数：
      1. 要创建目录的完整路径名称字符串
