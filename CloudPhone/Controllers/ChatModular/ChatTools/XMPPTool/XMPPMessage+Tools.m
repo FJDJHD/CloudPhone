@@ -5,20 +5,25 @@
 
 // 附件保存目录
 - (NSString *)pathForAttachment:(NSString *)jid timestamp:(NSDate *)timestamp {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [fileManager applicationCachesDirectory];
+    NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%f",jid,[timestamp timeIntervalSince1970]]];
+    return filePath;
+    
     // 创建缓存目录，目录名以chatJID
-    NSString *path = [NSFileManager createDirInCachePathWithName:jid];
+//    NSString *path = [NSFileManager createDirInCachePathWithName:jid];
+//    
+//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//    format.dateFormat = @"yyyyMMddHHmmss";
+//    NSString *fileName = [format stringFromDate:timestamp];
+//    path = [path stringByAppendingPathComponent:fileName];
     
-    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    format.dateFormat = @"yyyyMMddHHmmss";
-    NSString *fileName = [format stringFromDate:timestamp];
-    path = [path stringByAppendingPathComponent:fileName];
-    
-    return path;
+//    return path;
 }
 
 // 保存附件
 - (BOOL)saveAttachmentJID:(NSString *)jid timestamp:(NSDate *)timestamp {
-    
     // 判断子节点数量
     if (self.childCount == 2) {
         NSInteger index = -1;

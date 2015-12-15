@@ -26,6 +26,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"消息",@"好友",nil]];
+    titleSegment.frame = CGRectMake(0, 0, 120, 30);
+    titleSegment.tintColor = [UIColor brownColor];
+    [titleSegment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
+    titleSegment.selectedSegmentIndex = 0;
+    self.navigationItem.titleView = titleSegment;
+    
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     addressButton.frame = CGRectMake(0, 0, 44, 44);
@@ -75,7 +82,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-        UIImage *image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+        UIImage *image = [UIImage imageNamed:@"mine_icon"];
         UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
         imageView.layer.cornerRadius = 24;
         imageView.layer.masksToBounds = YES;
@@ -98,25 +105,37 @@
     }
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
-    DLog(@"************************%@************************%@",user.nickname,user.displayName);
-    
-    UILabel *userTemp = (UILabel *)[cell viewWithTag:501];
-    UILabel *onlineTemp = (UILabel *)[cell viewWithTag:502];
-
     //名称
+    UILabel *userTemp = (UILabel *)[cell viewWithTag:501];
     NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数
     userTemp.text = user.nickname ? user.nickname :array[0];
     
     //是否在线
+    UILabel *onlineTemp = (UILabel *)[cell viewWithTag:502];
     if (user.section == 0) {
         onlineTemp.text = @"在线";
-    } else {
+    } else if (user.section == 1) {
+        onlineTemp.text = @"离开";
+    } else if (user.section == 2) {
         onlineTemp.text = @"离线";
+    } else {
+        onlineTemp.text = @"未知";
     }
     
     //头像
-    [self configurePhotoForCell:cell user:user];
-    
+    UIImageView *imageView = (UIImageView *)[cell viewWithTag:500];
+    if (user.photo != nil){
+        imageView.image = user.photo;
+    }else{
+        NSData *photoData = [[[GeneralToolObject appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
+        if (photoData != nil){
+            imageView.image = [UIImage imageWithData:photoData];
+        }
+        else {
+            imageView.image = [UIImage imageNamed:@"mine_icon"];
+            
+        }
+    }
     return cell;
 }
 
@@ -127,8 +146,9 @@
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
 
     MessageViewController *controller = [[MessageViewController alloc]init];
-    controller.chatUser = user.displayName;
+    controller.chatUser = user.jidStr;
     controller.chatJID = user.jid;
+    controller.chatPhoto = user.photo;
     [self.navigationController pushViewController:controller animated:YES];
     
 }
@@ -139,23 +159,6 @@
         XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         XMPPJID *jid = user.jid;
         [[self appDelegate].xmppRoster removeUser:jid];
-    }
-}
-
-
-- (void)configurePhotoForCell:(UITableViewCell *)cell user:(XMPPUserCoreDataStorageObject *)user{
-     UIImageView *imageView = (UIImageView *)[cell viewWithTag:500];
-    if (user.photo != nil){
-        imageView.image = user.photo;
-    }else{
-        NSData *photoData = [[[GeneralToolObject appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
-        if (photoData != nil){
-            imageView.image = [UIImage imageWithData:photoData];
-        }
-        else {
-            imageView.image = [UIImage imageNamed:@"mine_icon"];
-
-        }
     }
 }
 
@@ -228,6 +231,18 @@
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
+//切换状态
+- (void)segmentClick:(UISegmentedControl *)sender {
+
+    UISegmentedControl *segment = (UISegmentedControl *)sender;
+    if (segment.selectedSegmentIndex == 0) {
+    
+        NSLog(@"xiao xi");
+    } else {
+        NSLog(@"peng you");
+    
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -177,12 +177,16 @@
 }
 
 + (void)userLoginOut {
-    //这里作为一个登录标志
+    AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    //断开xmpp连接
+    [appDele disconnect];
+    [defaults removeObjectForKey:UserNumber];
+    
     [defaults setObject:@"notLogined" forKey:isLoginKey];
     [defaults synchronize];
     //进入
-    AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDele loadLoginViewController];
 }
 

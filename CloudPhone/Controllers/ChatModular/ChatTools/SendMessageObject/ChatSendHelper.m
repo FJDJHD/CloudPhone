@@ -74,9 +74,9 @@
 }
 
 //发送语音
-+ (void)sendVoiceMessageWithAudio:(NSData *)data filePath:(NSString *)path time:(NSInteger)duration toUsername:(XMPPJID *)jid {
++ (void)sendVoiceMessageWithAudio:(NSData *)data time:(NSInteger)duration toUsername:(XMPPJID *)jid {
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
-    [message addBody:[NSString stringWithFormat:@"audio%ld&%@",(long)duration,path]];//时间路径都放这
+    [message addBody:[NSString stringWithFormat:@"audio%ld",(long)duration]];//时间路径都放这
     //转化base64编码
     NSString *base64Str = [data base64EncodedStringWithOptions:0];
     //设置节点内容
@@ -93,8 +93,10 @@
     NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
     NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
     NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
+    
     NSData *dataFromImage = UIImageJPEGRepresentation(image, 0.5f);
     NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
+    
     [photoXML addChild:typeXML];
     [photoXML addChild:binvalXML];
     [vCardXML addChild:photoXML];
@@ -102,8 +104,13 @@
     XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
     
     if (myvCardTemp) {
+        
         myvCardTemp.photo = dataFromImage;
         [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
+    } else {
+        XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
+        [newvCardTemp setNickname:@"法国多福多寿"];
+        [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
     }
 }
 

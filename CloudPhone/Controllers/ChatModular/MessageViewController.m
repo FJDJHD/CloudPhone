@@ -69,6 +69,13 @@
     [self scrollViewToBottom:NO];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+
+    [super viewDidDisappear:animated];
+    [[EMCDDeviceManager sharedInstance] stopPlaying];
+
+}
+
 #pragma mark - 初始化组建
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -143,13 +150,13 @@
     cell.textView.tag = indexPath.row;
 
     XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    DLog(@"message = %@",message);
     
     // 如果存进去了，就把字符串转化成简洁的节点后保存
     if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
         message.messageStr = [message.message compactXMLString];
         [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
     }
+    _messageModel.voiceFilepath = nil;
     NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
     
     if ([message.body isEqualToString:@"image"]) {
@@ -158,19 +165,18 @@
         _messageModel.messageType = kImageMessage; //图片类型
         
     } else if ([message.body hasPrefix:@"audio"]) {
-        NSArray *temp = [message.body componentsSeparatedByString:@"audio"];
-        NSString *voiceInfo = temp.count > 0 ? temp[1] : @"";
-        if (![voiceInfo isEqualToString:@""]) {
-            NSArray *array = [voiceInfo componentsSeparatedByString:@"&"];
-            _messageModel.voiceTime = array.count > 0 ? array[0] : 0;
-            _messageModel.voiceFilepath = array.count > 0 ? array[1] : @"";
-        }
+        
+        NSString *timeStr = [message.body substringFromIndex:5];
+        _messageModel.voiceTime = timeStr;
+        _messageModel.voiceFilepath = path; //音频路径
         _messageModel.messageType = kVoiceMessage; //语音类型
     
     } else {
        _messageModel.messageType = kTextMessage; //文字类型
     }
     _messageModel.text = message.body;
+    _messageModel.otherPhoto = self.chatPhoto;
+    _messageModel.chatJID = self.chatJID;
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     _cellModel.message = _messageModel;
     cell.cellFrame = _cellModel;
@@ -230,7 +236,6 @@
 - (void)didSendText:(NSString *)text
 {
     if (text && text.length > 0) {
-        DLog(@"%@",text);
         [ChatSendHelper sendTextMessageWithString:text toUsername:self.chatUser];
     }
 }
@@ -274,10 +279,9 @@
     __weak typeof(self) weakSelf = self;
     [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
         if (!error) {
-            
             //发送录音
             NSData *data = [NSData dataWithContentsOfFile:recordPath];
-            [ChatSendHelper sendVoiceMessageWithAudio:data filePath:recordPath time:aDuration toUsername:self.chatJID];
+            [ChatSendHelper sendVoiceMessageWithAudio:data time:aDuration toUsername:self.chatJID];
             
         }else {
             [CustomMBHud customHudWindow:@"录音时间太短"];

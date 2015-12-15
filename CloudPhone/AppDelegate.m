@@ -54,6 +54,7 @@
 @synthesize xmppCapabilitiesStorage;
 @synthesize xmppMessageArchiving;
 @synthesize xmppMessageArchivingCoreDataStorage;
+@synthesize xmppAutoPing;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -234,28 +235,24 @@
 }
 
 - (void)goOffline {
-    DLog(@"goOnline");
+    DLog(@"goOffline");
     XMPPPresence *presence = [XMPPPresence presenceWithType:@"unavailable"];
     [xmppStream sendElement:presence];
 }
 
 //建立连接
 - (BOOL)connect {
-    
-    if ([xmppStream isConnected]) {
-        [self disconnect];
-    }
-
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
-    
-    [xmppStream setMyJID:[XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",number,XMPPSevser]]];
-    NSError *error = nil;
-    if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error]) {
-    
-        DLog(@"连接openfilre错误:%@",error);
+    if (number.length == 0) {
         return NO;
     }
+    
+    [xmppStream setMyJID:[XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",number,XMPPSevser]]];
+    
+    // 连接到服务器，如果连接已经存在，则不做任何事情
+    [self.xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:NULL];
+    
     return YES;
 }
 
@@ -276,33 +273,14 @@
 //连接上openfire，开始注册登录
 - (void)xmppStreamDidConnect:(XMPPStream *)sender {
     DLog(@"xmppStreamDidConnect,准备注册或登录");
-    NSError *error = nil;
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
-    
-//    NSString *failNumber = [defaults objectForKey:RegisterFail]; //注册失败的情况
-//    if (failNumber) {
-//        NSArray *array = [failNumber componentsSeparatedByString:@"l"];
-//        if (array.count > 0) {
-//            NSString *numStr = array[1];
-//            if ([numStr isEqualToString:number]) {
-//                self.isXMPPRegister = YES;
-//            }
-//        }
-//    }
     if (self.isXMPPRegister == YES) {
         DLog(@"注册xmpp");
-        //注册
-        if (![sender registerWithPassword:number error:&error]) {
-            DLog(@"注册error = %@",error);
-        }
+        [sender registerWithPassword:number error:NULL];
     } else {
         DLog(@"登录xmpp");
-        //登录
-        if (![sender authenticateWithPassword:number error:&error]) {
-            DLog(@"登录error = %@",error);
-        }
+        [sender authenticateWithPassword:number error:NULL];
     }
 }
 
@@ -310,6 +288,7 @@
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender {
     DLog(@"服务端认证完成");
     [self goOnline]; //标志上线
+    [self autoPingProxyServer:XMPPIP];
 }
 //认证失败
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error {
@@ -331,25 +310,14 @@
 //注册失败
 - (void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error {
     DLog(@"注册失败");
-    //改成登录试试
-    self.isXMPPRegister = NO;
-//    [self connect];
-    //如果第一次注册失败 再加一个状态判断（下次继续注册），有点蛋疼
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSString *number = [defaults objectForKey:UserNumber];
-//    [defaults setObject:[NSString stringWithFormat:@"fail%@",number] forKey:RegisterFail];   //这个和自己注册失败的手机号关联起来
-//    [defaults synchronize];
-    
 }
 
 - (void)xmppStream:(XMPPStream *)sender didSendIQ:(XMPPIQ *)iq{
-    DLog(@"didSendIQ====%@",iq.description);
 }
 
 //获取好友。。。
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq{
-    DLog(@"didReceiveIQ----%@",iq.description);
-    return YES;
+    return NO;
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
@@ -385,12 +353,40 @@
     [alertController presentViewController:alert animated:YES completion:nil];
 }
 
-//上传头像反馈
--(void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule didReceivevCardTemp:(XMPPvCardTemp *)vCardTemp forJID:(XMPPJID *)jid
-{
-    DLog(@"dsfsdfsdfa");
+#pragma mark XMPPAutoPingDelegate
+-(void)autoPingProxyServer:(NSString*)strProxyServer {
+    xmppAutoPing = [[XMPPAutoPing alloc] init];
+    [xmppAutoPing activate:xmppStream];
+    [xmppAutoPing addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    xmppAutoPing.respondsToQueries = YES;
+    xmppAutoPing.pingInterval = 2;//ping 间隔时间
+    if (nil != strProxyServer){
+        xmppAutoPing.targetJID = [XMPPJID jidWithString:strProxyServer];//设置ping目标服务器，如果为nil,则监听socketstream当前连接上的那个服务器
+    }
 }
 
+//卸载监听
+- (void)deactivateAutoPing {
+
+    [xmppAutoPing deactivate];
+    [xmppAutoPing removeDelegate:self];
+    xmppAutoPing = nil;
+}
+
+- (void)xmppAutoPingDidSendPing:(XMPPAutoPing *)sender {
+
+//    DLog(@"Sendsender = %@",sender);
+}
+
+- (void)xmppAutoPingDidReceivePong:(XMPPAutoPing *)sender {
+
+//    DLog(@"Receivesend = %@",sender);
+}
+
+- (void)xmppAutoPingDidTimeout:(XMPPAutoPing *)sender {
+
+    [CustomMBHud customHudWindow:@"xmpp连接超时"];
+}
 
 
 - (void)teardownStream {
@@ -443,6 +439,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
+    //重新连接
+    if ([xmppStream isDisconnected]) {
+        [self connect];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

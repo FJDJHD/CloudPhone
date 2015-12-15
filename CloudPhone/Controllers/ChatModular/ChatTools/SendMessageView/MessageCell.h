@@ -16,5 +16,7 @@
 
 @property (nonatomic, strong) BuddleButton *textView;
 
+@property (nonatomic, strong) UIImageView *iconView;;
+
 
 @end

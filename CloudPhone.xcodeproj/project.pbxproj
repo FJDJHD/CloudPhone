@@ -10,6 +10,10 @@
 		6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E27AB081C10505800909F19 /* back_whilte@2x.png */; };
 		6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */; };
 		6E2E8A721C06A20E000E6C2D /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */; };
+		6E4B119A1C1FAA3700CD6CE1 /* NSFileManager+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B11951C1FAA3700CD6CE1 /* NSFileManager+Tools.m */; };
+		6E4B119B1C1FAA3700CD6CE1 /* XMPPMessage+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B11971C1FAA3700CD6CE1 /* XMPPMessage+Tools.m */; };
+		6E4B119C1C1FAA3700CD6CE1 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B11991C1FAA3700CD6CE1 /* XMPPTool.m */; };
+		6E4B119F1C1FAA8100CD6CE1 /* UIImage+ResizeImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4B119E1C1FAA8100CD6CE1 /* UIImage+ResizeImage.m */; };
 		6E4D36E41C055D93001573E3 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D36E21C055D93001573E3 /* Global.m */; };
 		6E4D36F01C056102001573E3 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36EF1C056102001573E3 /* MobileCoreServices.framework */; };
 		6E4D36F21C056109001573E3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36F11C056109001573E3 /* Security.framework */; };
@@ -75,7 +79,6 @@
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
 		6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E722F541C0FEC9200A21557 /* DailNumberCell.m */; };
-		6E7D79181C1921FD00B42140 /* UIImage+ResizeImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7D79171C1921FD00B42140 /* UIImage+ResizeImage.m */; };
 		6E7D7A021C192CCC00B42140 /* VoiceSearchFeedback001.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D796D1C192CCC00B42140 /* VoiceSearchFeedback001.png */; };
 		6E7D7A031C192CCC00B42140 /* VoiceSearchFeedback001@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D796E1C192CCC00B42140 /* VoiceSearchFeedback001@2x.png */; };
 		6E7D7A041C192CCC00B42140 /* VoiceSearchFeedback002.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D796F1C192CCC00B42140 /* VoiceSearchFeedback002.png */; };
@@ -241,9 +244,6 @@
 		6E7D7AE51C1935B200B42140 /* ChatSendHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE41C1935B200B42140 /* ChatSendHelper.m */; };
 		6E7D7AE81C1982C600B42140 /* chat_recive_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE61C1982C600B42140 /* chat_recive_nor@2x.png */; };
 		6E7D7AE91C1982C600B42140 /* chat_send_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */; };
-		6E8AA9941C166E45003F1C45 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9931C166E45003F1C45 /* XMPPTool.m */; };
-		6E8AA9971C168A78003F1C45 /* XMPPMessage+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9961C168A78003F1C45 /* XMPPMessage+Tools.m */; };
-		6E8AA99A1C168ABC003F1C45 /* NSFileManager+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8AA9991C168ABC003F1C45 /* NSFileManager+Tools.m */; };
 		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
 		6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA464371C0EA88400650524 /* PersonalNameViewController.m */; };
 		6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643A1C0EE44A00650524 /* PersonModel.m */; };
@@ -586,6 +586,14 @@
 		6E2E8A6E1C06A004000E6C2D /* RegisterLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterLoginViewController.m; sourceTree = "<group>"; };
 		6E2E8A701C06A20E000E6C2D /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		6E4B11941C1FAA3700CD6CE1 /* NSFileManager+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Tools.h"; sourceTree = "<group>"; };
+		6E4B11951C1FAA3700CD6CE1 /* NSFileManager+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Tools.m"; sourceTree = "<group>"; };
+		6E4B11961C1FAA3700CD6CE1 /* XMPPMessage+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XMPPMessage+Tools.h"; sourceTree = "<group>"; };
+		6E4B11971C1FAA3700CD6CE1 /* XMPPMessage+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XMPPMessage+Tools.m"; sourceTree = "<group>"; };
+		6E4B11981C1FAA3700CD6CE1 /* XMPPTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPTool.h; sourceTree = "<group>"; };
+		6E4B11991C1FAA3700CD6CE1 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
+		6E4B119D1C1FAA8100CD6CE1 /* UIImage+ResizeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeImage.h"; sourceTree = "<group>"; };
+		6E4B119E1C1FAA8100CD6CE1 /* UIImage+ResizeImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeImage.m"; sourceTree = "<group>"; };
 		6E4D36E01C055D93001573E3 /* APIUrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIUrl.h; sourceTree = "<group>"; };
 		6E4D36E11C055D93001573E3 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		6E4D36E21C055D93001573E3 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
@@ -714,8 +722,6 @@
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		6E722F531C0FEC9200A21557 /* DailNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailNumberCell.h; sourceTree = "<group>"; };
 		6E722F541C0FEC9200A21557 /* DailNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailNumberCell.m; sourceTree = "<group>"; };
-		6E7D79161C1921FD00B42140 /* UIImage+ResizeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeImage.h"; sourceTree = "<group>"; };
-		6E7D79171C1921FD00B42140 /* UIImage+ResizeImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeImage.m"; sourceTree = "<group>"; };
 		6E7D796D1C192CCC00B42140 /* VoiceSearchFeedback001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoiceSearchFeedback001.png; sourceTree = "<group>"; };
 		6E7D796E1C192CCC00B42140 /* VoiceSearchFeedback001@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "VoiceSearchFeedback001@2x.png"; sourceTree = "<group>"; };
 		6E7D796F1C192CCC00B42140 /* VoiceSearchFeedback002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VoiceSearchFeedback002.png; sourceTree = "<group>"; };
@@ -909,12 +915,6 @@
 		6E7D7AE41C1935B200B42140 /* ChatSendHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatSendHelper.m; sourceTree = "<group>"; };
 		6E7D7AE61C1982C600B42140 /* chat_recive_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_recive_nor@2x.png"; sourceTree = "<group>"; };
 		6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_send_nor@2x.png"; sourceTree = "<group>"; };
-		6E8AA9921C166E45003F1C45 /* XMPPTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPTool.h; sourceTree = "<group>"; };
-		6E8AA9931C166E45003F1C45 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
-		6E8AA9951C168A78003F1C45 /* XMPPMessage+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XMPPMessage+Tools.h"; sourceTree = "<group>"; };
-		6E8AA9961C168A78003F1C45 /* XMPPMessage+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XMPPMessage+Tools.m"; sourceTree = "<group>"; };
-		6E8AA9981C168ABC003F1C45 /* NSFileManager+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Tools.h"; sourceTree = "<group>"; };
-		6E8AA9991C168ABC003F1C45 /* NSFileManager+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Tools.m"; sourceTree = "<group>"; };
 		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
 		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
 		6EA464361C0EA88400650524 /* PersonalNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalNameViewController.h; sourceTree = "<group>"; };
@@ -1520,6 +1520,21 @@
 			path = LoginModular;
 			sourceTree = "<group>";
 		};
+		6E4B11931C1FAA3700CD6CE1 /* XMPPTool */ = {
+			isa = PBXGroup;
+			children = (
+				6E4B119D1C1FAA8100CD6CE1 /* UIImage+ResizeImage.h */,
+				6E4B119E1C1FAA8100CD6CE1 /* UIImage+ResizeImage.m */,
+				6E4B11941C1FAA3700CD6CE1 /* NSFileManager+Tools.h */,
+				6E4B11951C1FAA3700CD6CE1 /* NSFileManager+Tools.m */,
+				6E4B11961C1FAA3700CD6CE1 /* XMPPMessage+Tools.h */,
+				6E4B11971C1FAA3700CD6CE1 /* XMPPMessage+Tools.m */,
+				6E4B11981C1FAA3700CD6CE1 /* XMPPTool.h */,
+				6E4B11991C1FAA3700CD6CE1 /* XMPPTool.m */,
+			);
+			path = XMPPTool;
+			sourceTree = "<group>";
+		};
 		6E4D36DF1C055D93001573E3 /* Global */ = {
 			isa = PBXGroup;
 			children = (
@@ -1561,7 +1576,6 @@
 		6E4D36E81C055EFE001573E3 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				6E8AA9911C166E0F003F1C45 /* XMPPTool */,
 				6E4D376E1C056619001573E3 /* AFNetworkingBase */,
 				6E4D37731C056619001573E3 /* Common */,
 				6E4D37761C056619001573E3 /* CustomControlView */,
@@ -2032,6 +2046,7 @@
 		6E7D7A921C1934F400B42140 /* ChatTools */ = {
 			isa = PBXGroup;
 			children = (
+				6E4B11931C1FAA3700CD6CE1 /* XMPPTool */,
 				6EE1CD3E1C1C2A340054B993 /* SendMessageModel */,
 				6EE1CD3F1C1C2A340054B993 /* SendMessageView */,
 				6E7D7AE21C19359200B42140 /* SendMessageObject */,
@@ -2198,24 +2213,9 @@
 			path = SendMessageObject;
 			sourceTree = "<group>";
 		};
-		6E8AA9911C166E0F003F1C45 /* XMPPTool */ = {
-			isa = PBXGroup;
-			children = (
-				6E8AA9951C168A78003F1C45 /* XMPPMessage+Tools.h */,
-				6E8AA9961C168A78003F1C45 /* XMPPMessage+Tools.m */,
-				6E8AA9981C168ABC003F1C45 /* NSFileManager+Tools.h */,
-				6E8AA9991C168ABC003F1C45 /* NSFileManager+Tools.m */,
-				6E8AA9921C166E45003F1C45 /* XMPPTool.h */,
-				6E8AA9931C166E45003F1C45 /* XMPPTool.m */,
-			);
-			path = XMPPTool;
-			sourceTree = "<group>";
-		};
 		6E8AA99C1C16AF68003F1C45 /* SessionTools */ = {
 			isa = PBXGroup;
 			children = (
-				6E7D79161C1921FD00B42140 /* UIImage+ResizeImage.h */,
-				6E7D79171C1921FD00B42140 /* UIImage+ResizeImage.m */,
 				6EC3EC401C16DE6D00B27B18 /* KeyBoard */,
 			);
 			path = SessionTools;
@@ -3963,12 +3963,12 @@
 				6E4D37331C0561A2001573E3 /* UIRefreshControl+AFNetworking.m in Sources */,
 				6E7D7ADA1C1934F400B42140 /* EMCDDeviceManagerBase.m in Sources */,
 				6EBA8D0E1C15248B00BAE5DD /* XMPPDeprecatedDigestAuthentication.m in Sources */,
-				6E8AA9941C166E45003F1C45 /* XMPPTool.m in Sources */,
 				6E7D7AD41C1934F400B42140 /* EMAudioPlayerUtil.m in Sources */,
 				6EBA8D861C15248C00BAE5DD /* XMPPIDTracker.m in Sources */,
 				6E4D372F1C0561A2001573E3 /* UIAlertView+AFNetworking.m in Sources */,
 				6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */,
 				6E4D36E41C055D93001573E3 /* Global.m in Sources */,
+				6E4B119F1C1FAA8100CD6CE1 /* UIImage+ResizeImage.m in Sources */,
 				6EBA8D511C15248B00BAE5DD /* XMPPvCardTempLabel.m in Sources */,
 				6EBA8D521C15248B00BAE5DD /* XMPPvCardTempModule.m in Sources */,
 				B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */,
@@ -4015,6 +4015,7 @@
 				6EBA8D611C15248B00BAE5DD /* NSString+XEP_0106.m in Sources */,
 				6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */,
 				6EC0BB421C0BDEB700075A19 /* MainMineViewController.m in Sources */,
+				6E4B119A1C1FAA3700CD6CE1 /* NSFileManager+Tools.m in Sources */,
 				6EC0BB331C0BDDC600075A19 /* RegisterAlertView.m in Sources */,
 				6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */,
 				6E2E8A6F1C06A004000E6C2D /* RegisterLoginViewController.m in Sources */,
@@ -4038,6 +4039,7 @@
 				6EBA8D3E1C15248B00BAE5DD /* XMPPRoomHybridStorage.m in Sources */,
 				6E4D37291C0561A2001573E3 /* AFURLConnectionOperation.m in Sources */,
 				6EBA8D481C15248B00BAE5DD /* XMPPvCardAvatarCoreDataStorageObject.m in Sources */,
+				6E4B119C1C1FAA3700CD6CE1 /* XMPPTool.m in Sources */,
 				6EBA8D661C15248B00BAE5DD /* XMPPCapabilities.m in Sources */,
 				6EBA8D361C15248B00BAE5DD /* XMPPIQ+LastActivity.m in Sources */,
 				6E4D37311C0561A2001573E3 /* UIImageView+AFNetworking.m in Sources */,
@@ -4072,6 +4074,7 @@
 				6EBA8D921C15248C00BAE5DD /* DDMultiFormatter.m in Sources */,
 				6EBA8D7D1C15248C00BAE5DD /* XMPPMessage+XEP_0280.m in Sources */,
 				6E4D37841C056619001573E3 /* AirCloudNetAPIClient.m in Sources */,
+				6E4B119B1C1FAA3700CD6CE1 /* XMPPMessage+Tools.m in Sources */,
 				B4BE7D061C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m in Sources */,
 				6EC3EC761C16DE6D00B27B18 /* YTEmojiPage.m in Sources */,
 				6EBA8D1C1C15248B00BAE5DD /* XMPPMessage.m in Sources */,
@@ -4143,7 +4146,6 @@
 				6EBA8D541C15248B00BAE5DD /* NSXMLElement+XEP_0059.m in Sources */,
 				6EE1CD331C1C22880054B993 /* MBProgressHUD+Add.m in Sources */,
 				6EC3EC8E1C16DEEA00B27B18 /* YTDeviceTest.m in Sources */,
-				6E7D79181C1921FD00B42140 /* UIImage+ResizeImage.m in Sources */,
 				6EBA8D341C15248B00BAE5DD /* XMPPIQ+JabberRPCResonse.m in Sources */,
 				6EBA8D2E1C15248B00BAE5DD /* XMPPResourceMemoryStorageObject.m in Sources */,
 				6EBA8D781C15248C00BAE5DD /* XMPPTime.m in Sources */,
@@ -4169,7 +4171,6 @@
 				6EBA8D421C15248B00BAE5DD /* XMPPRoomMessageMemoryStorageObject.m in Sources */,
 				B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */,
 				6EBA8D8D1C15248C00BAE5DD /* DDFileLogger.m in Sources */,
-				6E8AA9971C168A78003F1C45 /* XMPPMessage+Tools.m in Sources */,
 				6EBA8D741C15248B00BAE5DD /* XMPPStreamManagement.m in Sources */,
 				6EBA8D291C15248B00BAE5DD /* XMPPGroupCoreDataStorageObject.m in Sources */,
 				6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */,
@@ -4194,7 +4195,6 @@
 				6EA4643F1C0EE46B00650524 /* UserModel.m in Sources */,
 				6EE1CD391C1C22880054B993 /* MJPhotoProgressView.m in Sources */,
 				6EC3EC9C1C16E2A400B27B18 /* UIColor+YTKeyBoard.m in Sources */,
-				6E8AA99A1C168ABC003F1C45 /* NSFileManager+Tools.m in Sources */,
 				6EBA8D6C1C15248B00BAE5DD /* XMPPvCardAvatarModule.m in Sources */,
 				6EBA8D5E1C15248B00BAE5DD /* XMPPMessage+XEP_0085.m in Sources */,
 				6E7D7AE51C1935B200B42140 /* ChatSendHelper.m in Sources */,
@@ -4374,7 +4374,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "3fda1059-c1e5-42aa-b17c-09c68327ccf7";
 			};
 			name = Debug;
 		};
@@ -4405,7 +4405,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "3fda1059-c1e5-42aa-b17c-09c68327ccf7";
 			};
 			name = Release;
 		};

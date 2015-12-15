@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Global.h"
 
 typedef enum {
     kMessageModelTypeOther, //别人
@@ -32,6 +33,10 @@ typedef enum {
 @property (nonatomic, copy) NSString *voiceFilepath;
 @property (nonatomic, copy) NSString *voiceTime;
 
+//聊天人头像
+@property (nonatomic, strong) UIImage *otherPhoto;
+//聊天人的jid
+@property (nonatomic, strong) XMPPJID *chatJID;
 
 //自己还是别人
 @property (nonatomic, assign) MessageModelType type;

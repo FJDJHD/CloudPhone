@@ -13,6 +13,8 @@
 
 @property (nonatomic, copy) NSString *chatUser;  //like 13113689077@clone.com
 
+@property (nonatomic, strong) UIImage *chatPhoto; //头像
+
 @property (nonatomic, strong) XMPPJID *chatJID;
 
 @end
