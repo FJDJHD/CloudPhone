@@ -60,20 +60,30 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
- 
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-
     [super viewDidAppear:animated];
-    [self scrollViewToBottom:NO];
+    [self scrollViewToBottom:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-
     [super viewDidDisappear:animated];
+    //停止语音信息
     [[EMCDDeviceManager sharedInstance] stopPlaying];
-
+    
+    //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
+    //(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)
+    NSArray *messageArray = [NSArray arrayWithObjects:self.chatUser,@"",self.chatUser,@"最后一条",@"4321",nil];
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatUser withAll:NO];
+        if (chatArray.count > 0) {
+            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:@"ttt" conditionColumn:@"jidStr" conditionColumnValue:self.chatUser];
+        } else {
+            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+        }
+    }
 }
 
 #pragma mark - 初始化组建

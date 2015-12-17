@@ -61,11 +61,16 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    //加载界面视图
+    [self initViewController];
+    
+    
     //初始化xmpp各种类
     [self setupStream];
     
-    //加载界面视图
-    [self initViewController];
+    //打开数据库
+    [DBOperate createTable];
+    
     //消息推送 ios 8
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
@@ -192,7 +197,10 @@
     
     xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
     
-    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
+//    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
+//    xmppRoster = [[XMPPRoster alloc] initWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+
+    xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:xmppRosterStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     xmppRoster.autoFetchRoster = YES;
     xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
@@ -224,7 +232,7 @@
     [xmppMessageArchiving activate:xmppStream];
     
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppRoster addDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];//dispatch_get_main_queue()
 
 }
 
@@ -340,18 +348,79 @@
     
     NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
     
-    
     //这里暂时用ios8的方法。。。。。。。。
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [xmppRoster rejectPresenceSubscriptionRequestFrom:presence.from];
+    }]];
+    
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES
-         ];
+        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
     }]];
 
     UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     [alertController presentViewController:alert animated:YES completion:nil];
 }
+
+//- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence {
+//
+//    //取得好友状态
+//    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
+//    //当前用户
+//    //    NSString *userId = [NSString stringWithFormat:@"%@", [[sender myJID] user]];
+//    //在线用户
+//    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
+//    NSLog(@"presenceType:%@",presenceType);
+//    NSLog(@"用户:%@",presenceFromUser);
+//    
+//    
+//    tempPresence = presence;
+//    
+////    //这里再次加好友
+////    if ([presenceType isEqualToString:@"subscribe"]){
+////        NSLog(@"添加好友");
+////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"%@请求添加好友",presenceFromUser] message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+////        [alert show];
+////    } else if ([presenceType isEqualToString:@"subscribed"]){
+////        NSLog(@"已同意添加");
+////        
+////    }
+//}
+
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    if (buttonIndex == 1) {
+//        XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@",[tempPresence from]]];
+//        [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+//    } else {
+//        DLog(@"取消");
+//    }
+//}
+
+//- (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
+//    
+////    DDXMLElement *query = [iq elementsForName:@"query"][0];
+////    DDXMLElement *item = [query elementsForName:@"item"][0];
+////    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+////
+////    if ([subscription isEqualToString:@"from"]) {
+////        //这里暂时用ios8的方法。。。。。。。。
+////        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: @"treterttre" preferredStyle:UIAlertControllerStyleAlert];
+////        [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+////        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//////            [xmppRoster acceptPresenceSubscriptionRequestFrom: andAddToRoster:YES
+//////             ];
+////        }]];
+////        
+////        UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+////        [alertController presentViewController:alert animated:YES completion:nil];
+////    }
+//    
+////    if ([subscription isEqualToString:@"both"]) {
+////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"添加成功" message:@"双方已互为好友" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+////        [alert show];
+////    }
+//}
+
 
 #pragma mark XMPPAutoPingDelegate
 -(void)autoPingProxyServer:(NSString*)strProxyServer {

@@ -12,11 +12,24 @@
 #import <CoreData/CoreData.h>
 
 #import "MessageViewController.h"
+#import "FriendCell.h"
+#import "ChatListCell.h"
+
+typedef enum {
+    kFriend,
+    kMessage
+
+}FriendMessageType;
 
 @interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
+@property (nonatomic, assign) FriendMessageType selectType; //朋友还是消息列表
+
+@property (nonatomic, copy) NSArray *chatListArray;
 
 
 @end
@@ -26,7 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"消息",@"好友",nil]];
+    UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"好友",@"消息",nil]];
     titleSegment.frame = CGRectMake(0, 0, 120, 30);
     titleSegment.tintColor = [UIColor brownColor];
     [titleSegment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
@@ -78,65 +91,33 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *ID = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-        UIImage *image = [UIImage imageNamed:@"mine_icon"];
-        UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
-        imageView.layer.cornerRadius = 24;
-        imageView.layer.masksToBounds = YES;
-        imageView.frame = CGRectMake(15, (60 - 48)/2.0, 48, 48);
-        imageView.tag = 500;
-        [cell addSubview:imageView];
+    if (self.selectType == kFriend) {
+        //好友
+        static NSString *ID = @"FriendCell";
+        FriendCell *friCell =[tableView dequeueReusableCellWithIdentifier:ID];
+        if (!friCell) {
+            friCell = [[FriendCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        }
         
-        UILabel *userLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, CGRectGetMinY(imageView.frame) + 5, 200, 20)];
-        userLable.font = [UIFont systemFontOfSize:17];
-        userLable.textColor = [UIColor blackColor];
-        userLable.tag = 501;
-        [cell addSubview:userLable];
+        XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         
-        UILabel *onlineLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(userLable.frame), CGRectGetMaxY(userLable.frame), 200, 20)];
-        onlineLable.font = [UIFont systemFontOfSize:13];
-        onlineLable.textColor = [UIColor grayColor];
-        onlineLable.tag = 502;
-        [cell addSubview:onlineLable];
+        [friCell cellForData:user];
         
-    }
-    XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    
-    //名称
-    UILabel *userTemp = (UILabel *)[cell viewWithTag:501];
-    NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数
-    userTemp.text = user.nickname ? user.nickname :array[0];
-    
-    //是否在线
-    UILabel *onlineTemp = (UILabel *)[cell viewWithTag:502];
-    if (user.section == 0) {
-        onlineTemp.text = @"在线";
-    } else if (user.section == 1) {
-        onlineTemp.text = @"离开";
-    } else if (user.section == 2) {
-        onlineTemp.text = @"离线";
+        return friCell;
+        
     } else {
-        onlineTemp.text = @"未知";
-    }
+        //消息
+        static NSString *ID = @"ChatListCell";
+        ChatListCell *chatCell =[tableView dequeueReusableCellWithIdentifier:ID];
+        if (!chatCell) {
+            chatCell = [[ChatListCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        }
+   
+        return chatCell;
     
-    //头像
-    UIImageView *imageView = (UIImageView *)[cell viewWithTag:500];
-    if (user.photo != nil){
-        imageView.image = user.photo;
-    }else{
-        NSData *photoData = [[[GeneralToolObject appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
-        if (photoData != nil){
-            imageView.image = [UIImage imageWithData:photoData];
-        }
-        else {
-            imageView.image = [UIImage imageNamed:@"mine_icon"];
-            
-        }
     }
-    return cell;
+    return nil;
+   
 }
 
 #pragma mark - UITableViewDelegate
@@ -176,28 +157,36 @@
     }
     // 指定查询的实体
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"XMPPUserCoreDataStorageObject"];
-    
     // 在线状态排序
     NSSortDescriptor *sort1 = [NSSortDescriptor sortDescriptorWithKey:@"sectionNum" ascending:YES];
     // 显示的名称排序
     NSSortDescriptor *sort2 = [NSSortDescriptor sortDescriptorWithKey:@"displayName" ascending:YES];
-    
     // 添加排序
     request.sortDescriptors = @[sort1,sort2];
-    
     // 添加谓词过滤器
     request.predicate = [NSPredicate predicateWithFormat:@"!(subscription CONTAINS 'none')"];
-    
     // 添加上下文
     NSManagedObjectContext *ctx = [[GeneralToolObject appDelegate] managedObjectContext_roster];
-    
     // 实例化结果控制器
     _fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:ctx sectionNameKeyPath:nil cacheName:nil];
-    
     // 设置他的代理
     _fetchedResultsController.delegate = self;
     return _fetchedResultsController;
 }
+
+#pragma mark - 从fmdb获取聊天消息列表
+- (void)loadMessageDataFromFMDB {
+    
+    _chatListArray = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
+    
+//    if (getArray.count > 0) {
+//        for (NSArray *temp in getArray) {
+//            NSString *jidStr = [temp objectAtIndex:message_id];
+//            DLog(@"jidStr = %@",jidStr);
+//        }
+//    }
+}
+
 
 - (void)addressButtonClick {
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
@@ -236,10 +225,12 @@
 
     UISegmentedControl *segment = (UISegmentedControl *)sender;
     if (segment.selectedSegmentIndex == 0) {
+        self.selectType = kFriend;  //表示朋友列表
     
-        NSLog(@"xiao xi");
     } else {
-        NSLog(@"peng you");
+        self.selectType = kMessage; //表示消息列表
+        
+        [self loadMessageDataFromFMDB];
     
     }
 }

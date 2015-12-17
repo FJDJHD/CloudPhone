@@ -13,7 +13,7 @@
 #import "XMPP.h"
 #import "XMPPAutoPing.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate,XMPPAutoPingDelegate> {
+@interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate,XMPPAutoPingDelegate,UIAlertViewDelegate> {
 
     XMPPStream *xmppStream;         //xmpp基础服务类
     XMPPReconnect *xmppReconnect;   //如果失去连接,自动重连
@@ -31,7 +31,6 @@
     XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;  /** 消息归档存储 */
     
     XMPPAutoPing *xmppAutoPing; //添加心跳监听
-
 }
 
 @property (nonatomic, strong, readonly) XMPPStream *xmppStream;

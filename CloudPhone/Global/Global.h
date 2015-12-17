@@ -27,9 +27,6 @@
 #define HTTPURLPREFIX         @"http://dasudian.com:8090"
 
 
-
-
-
 #elif Sesame_ENVIRONMENT==3
 #define HTTPURLPREFIX @"－－－－－－"
 #endif
@@ -104,6 +101,7 @@
 #import "UIImageView+WebCache.h"
 #import "UIButton+Category.h"
 #import "AppDelegate.h"
+#import "DBOperate.h"
 
 @interface Global : NSObject
 

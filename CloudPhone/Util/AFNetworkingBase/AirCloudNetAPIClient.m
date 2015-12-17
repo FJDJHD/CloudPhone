@@ -62,7 +62,6 @@
     //域名拼接
     aPath = [aPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSMutableString *urlString = [NSMutableString stringWithFormat:@"%@%@",serviceType,aPath];
-    
     //发起请求
     switch (NetworkMethod) {
         case Get:{
