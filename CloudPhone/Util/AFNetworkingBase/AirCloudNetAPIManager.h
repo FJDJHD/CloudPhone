@@ -76,6 +76,9 @@
                  params:(NSDictionary *)params
                  WithBlock:(void (^)(id data, NSError *error))block;
 
+//好友列表
+- (void)postMailListOfParams:(NSDictionary *)params
+              WithBlock:(void (^)(id data, NSError *error))block;
 
 
 

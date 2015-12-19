@@ -1,0 +1,374 @@
+//
+//  AddressAddViewController.m
+//  CloudPhone
+//
+//  Created by wangcong on 15/12/17.
+//  Copyright © 2015年 iTal. All rights reserved.
+//
+
+#import "AddressAddViewController.h"
+#import "Global.h"
+#import "AddressObject.h"
+#import "PersonModel.h"
+#import <MessageUI/MessageUI.h>
+#import "ItelFriendModel.h"
+#import "JSONKit.h"
+
+@interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate>
+
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSMutableArray *listContentArray;
+
+@property (nonatomic, strong) NSMutableArray *numberArray;
+
+@property (nonatomic, strong) NSMutableArray *friendArray;  //itel好友
+
+@property (nonatomic, strong) NSMutableArray *invateArray;  //注册过的
+
+@property (nonatomic, strong) NSMutableArray *addressArray; //剩下通讯录的
+
+@property (nonatomic, strong) MBProgressHUD *HUD;
+
+
+@end
+
+@implementation AddressAddViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    //导航栏返回按钮
+    UIButton *backButton = [self setBackBarButton:1];
+    [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self setBackBarButtonItem:backButton];
+    
+    self.title = @"新的好友";
+    
+    _numberArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _addressArray = [[NSMutableArray alloc]initWithCapacity:0];
+    
+    [self.view addSubview:self.tableView];
+    
+    ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, NULL), ^(bool granted, CFErrorRef error) {
+        if (!granted) {
+            NSLog(@"未获得通讯录访问权限！");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomMBHud customHudWindow:@"未获取访问通讯录权限"];
+
+            });
+        } else {
+           [self loadAddressData];
+        }
+    });
+}
+
+- (UITableView *)tableView {
+    if (!_tableView) {
+        CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
+        _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
+        _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 1)];
+        _tableView.rowHeight = 60;
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+    }
+    return _tableView;
+}
+
+#pragma mark - UITabvleViewDatasource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+        //itel 好友
+        return _friendArray.count;
+    } else if (section == 1) {
+        //注册 itel
+        return _invateArray.count;
+    } else {
+        //通讯录
+        return _addressArray.count;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *ID = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (!cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        cell.detailTextLabel.textColor = RGB(102, 102, 102);
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+    }
+    
+    cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+
+    cell.accessoryView = nil;
+    if (indexPath.section == 0) {
+        //itel 好友 (好友)
+        if (_friendArray.count > 0) {
+            ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = model.userName;
+            cell.detailTextLabel.text = model.mobile;
+            cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
+        }
+        
+    } else if (indexPath.section == 1) {
+        //注册itel （添加好友）
+        if (_invateArray.count > 0) {
+            ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = model.userName;
+            cell.detailTextLabel.text = model.mobile;
+            cell.accessoryView = [self statusButtonWithTitle:@"加为好友"];
+        }
+        
+    } else {
+        //通讯录 （邀请）
+        if (_addressArray.count > 0) {
+            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = model.userName;
+            cell.detailTextLabel.text = model.mobile;
+            cell.accessoryView = [self statusButtonWithTitle:@"邀请"];
+        }
+    }
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    return 1;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+
+    if (section == 0) {
+        //itel 好友 (好友)
+        if (_friendArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"itel好友(%lu)",(unsigned long)_friendArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+        
+    } else if (section == 1) {
+        //注册itel （添加好友）
+        if (_invateArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"添加成itel好友(%lu)",(unsigned long)_invateArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+
+    } else {
+        //通讯录 （邀请）
+        if (_addressArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"邀请注册云电话(%lu)",(unsigned long)_addressArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 0) {
+        //itel 好友 (好友)
+        
+    } else if (indexPath.section == 1) {
+        //注册itel （添加好友）
+        if (_invateArray.count > 0) {
+          //  ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
+    
+        }
+    
+    } else {
+        //通讯录 （邀请）
+        if (_addressArray.count > 0) {
+            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
+            //发送系统信息
+            [self showMessageView:[NSArray arrayWithObjects:model.mobile, nil]  body:MessageItel];
+        }
+    }
+}
+
+- (UIView *)sectionHeaderViewWithTitle:(NSString *)title {
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 30)];
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(15, 2, 200, 30)];
+    lable.font = [UIFont systemFontOfSize:13.0];
+    lable.textColor = RGB(102, 102, 102);
+    lable.text = title;
+    [view addSubview:lable];
+    return view;
+}
+
+- (UIButton *)statusButtonWithTitle:(NSString *)title {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.userInteractionEnabled = NO;
+    button.frame = CGRectMake(0,0, 53, 30);
+    button.layer.cornerRadius = 5.0;
+    button.layer.masksToBounds = YES;
+    button.layer.borderWidth = 0.5;
+    if ([title isEqualToString:@"加为好友"]) {
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    } else {
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
+    }
+    button.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateNormal];
+
+    return button;
+}
+
+#pragma mark - 网络请求
+- (void)loadAddressData {
+    
+    self.listContentArray = [AddressObject shareInstance].allAddress;
+    if (self.listContentArray.count > 0 && self.listContentArray) {
+        for (NSInteger i = 0; i < self.listContentArray.count; i ++) {
+            NSArray *array = [self.listContentArray objectAtIndex:i];
+            for (PersonModel *model in array) {
+                if (model.tel) {
+                    NSString *name = model.phonename ? model.phonename : @"未备注";
+                    NSDictionary *info = @{@"mobile":model.tel,@"username":name};
+                    
+                    [_numberArray addObject:info];
+                }
+            }
+        }
+    }
+        
+    //转化为json字符串
+    if (_numberArray.count > 0 && _numberArray) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self AddHUD];
+        });
+        
+        NSDictionary *dic = @{@"jsonMobile" : [GeneralToolObject dictionaryToJson:_numberArray]};
+        [[AirCloudNetAPIManager sharedManager] postMailListOfParams:dic WithBlock:^(id data, NSError *error) {
+            [self HUDHidden];
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+              if (dic) {
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                
+                    NSArray *arr = [dic objectForKey:@"data"];
+                    for (NSUInteger i = 0; i < arr.count; i++) {
+                        NSDictionary *tempDic = [arr objectAtIndex:i];
+                        //itel 好友
+                        NSArray *friendArr = [tempDic objectForKey:@"reg_mobile"];
+                        //itel 但不是好友
+                        NSArray *invateArr = [tempDic objectForKey:@"buddy_mobile"];
+                        //itel 没注册，通讯录
+                        NSArray *addressArr = [tempDic objectForKey:@"arr_mobile"];
+                        
+                        if (friendArr.count > 0) {
+                            for (NSDictionary *friDic in friendArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [friDic objectForKey:@"username"];
+                                model.mobile = [friDic objectForKey:@"mobile"];
+                                model.status = kAlreadFriend;
+                                [_friendArray addObject:model];
+                            }
+                        }
+                        
+                        if (invateArr.count > 0) {
+                            for (NSDictionary *invDic in invateArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [invDic objectForKey:@"username"];
+                                model.mobile = [invDic objectForKey:@"mobile"];
+                                model.status = kInviteFriend;
+                                [_invateArray addObject:model];
+                            }
+                        }
+                        
+                        if (addressArr.count > 0) {
+                            for (NSDictionary *adsDic in addressArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [adsDic objectForKey:@"username"];
+                                model.mobile = [adsDic objectForKey:@"mobile"];
+                                model.status = kNotFriend;
+                                [_addressArray addObject:model];
+                            }
+                        }
+                    }
+                    [_tableView reloadData];
+                    
+               }else {
+                 [CustomMBHud customHudWindow:@"请求失败"];
+              }
+             }
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+            }
+        }];
+    }
+}
+
+#pragma mark - MFMessageComposeViewControllerDelegate
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    switch (result) {
+        case MessageComposeResultSent:
+            DLog(@"信息发送成功");
+            break;
+            
+        default:
+            DLog(@"信息发送失败");
+            break;
+    }
+}
+
+- (void)showMessageView:(NSArray*)phones body:(NSString*)body {
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]init];
+        controller.recipients = phones;
+        controller.body = body;
+        controller.messageComposeDelegate = self;
+        [self presentViewController:controller animated:YES completion:nil];
+    } else {
+        UIAlertView*alert=[[UIAlertView alloc]initWithTitle:@"提示信息"
+                                                   message:@"该设备不支持短信功能"
+                                                  delegate:nil
+                                         cancelButtonTitle:@"确定"
+                                         otherButtonTitles:nil,nil];
+        [alert show];
+    }
+}
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
+
+- (void)popViewController {
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+@end

@@ -21,4 +21,8 @@
 
 - (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize;
 
+
+//修改searchBar的颜色
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
+
 @end

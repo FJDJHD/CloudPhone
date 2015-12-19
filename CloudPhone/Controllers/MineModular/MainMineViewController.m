@@ -238,6 +238,7 @@
         
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
+            
             if (dic) {
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
                     DLog(@"成功------%@",[dic objectForKey:@"msg"]);

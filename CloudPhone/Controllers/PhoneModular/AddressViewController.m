@@ -85,15 +85,16 @@
 }
 
 - (void)loadAddressData {
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-       
-        [self initData];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            
-            [_tableView reloadData];
-        });
-    });
+     [self initData];
+     [_tableView reloadData];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//       
+//       
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+//            
+//           
+//        });
+//    });
 }
 
 - (void)initData {
@@ -145,6 +146,7 @@
         NSArray *sectionArr = [_listContentArray objectAtIndex:indexPath.section];
         PersonModel *model = (PersonModel *)[sectionArr objectAtIndex:indexPath.row];
         cell.textLabel.text = model.phonename;
+        cell.detailTextLabel.text = model.tel;
         cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
         UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];

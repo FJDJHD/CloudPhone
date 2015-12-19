@@ -24,11 +24,12 @@
 #import "XMPPRosterCoreDataStorage.h"
 #import "XMPPvCardAvatarModule.h"
 #import "XMPPvCardCoreDataStorage.h"
+#import "XMPPMessage+XEP_0184.h"
 
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import <CFNetwork/CFNetwork.h>
-
+#import "MessageViewController.h"
 
 
 @interface AppDelegate ()
@@ -55,6 +56,7 @@
 @synthesize xmppMessageArchiving;
 @synthesize xmppMessageArchivingCoreDataStorage;
 @synthesize xmppAutoPing;
+@synthesize deliveryReceiptsMoodule;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -70,15 +72,16 @@
     
     //打开数据库
     [DBOperate createTable];
-    
+
     //消息推送 ios 8
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    
+//    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }
-
-
 
 - (void)initViewController {
     //这里作为一个登录标志
@@ -144,10 +147,22 @@
     mineController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[[UIImage imageNamed:@"tabbar_mine"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_mineSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *mineNav = [[BaseNavigationController alloc] initWithRootViewController:mineController];
     
+    
     // tab bar
     BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
 //    rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
+    
+    //聊天小红点
+    CGRect chatNotifyLabelRect = CGRectMake(MainWidth*2/4 - 30, 6, 10, 10);
+    _unreadChatLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
+    _unreadChatLabel.layer.cornerRadius = 5;
+    _unreadChatLabel.clipsToBounds = YES;
+    _unreadChatLabel.textAlignment = NSTextAlignmentCenter;
+    _unreadChatLabel.hidden = YES;
+    _unreadChatLabel.backgroundColor = [UIColor redColor];
+    _unreadChatLabel.font = [UIFont systemFontOfSize:9];
+    [rootTabBarController.tabBar addSubview:_unreadChatLabel];
     
     if (CURRENT_SYS_VERSION >= 7.0) {
         [[UINavigationBar appearance] setBarTintColor:[ColorTool backgroundColor]];
@@ -198,8 +213,7 @@
     xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
     
 //    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
-//    xmppRoster = [[XMPPRoster alloc] initWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-
+    //用这个处理加好友界面卡住不动的情况
     xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:xmppRosterStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     xmppRoster.autoFetchRoster = YES;
@@ -222,6 +236,12 @@
     xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
     xmppMessageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:xmppMessageArchivingCoreDataStorage];
     
+    //消息回执，判断是否发送成功
+    deliveryReceiptsMoodule = [[XMPPMessageDeliveryReceipts alloc] init];
+    deliveryReceiptsMoodule.autoSendMessageDeliveryReceipts = YES;
+    
+
+    
     
     [xmppReconnect         activate:xmppStream];
     [xmppRoster            activate:xmppStream];
@@ -230,6 +250,7 @@
     [xmppCapabilities      activate:xmppStream];
     
     [xmppMessageArchiving activate:xmppStream];
+    [deliveryReceiptsMoodule activate:xmppStream];
     
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppRoster addDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];//dispatch_get_main_queue()
@@ -298,6 +319,7 @@
     [self goOnline]; //标志上线
     [self autoPingProxyServer:XMPPIP];
 }
+
 //认证失败
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error {
     DLog(@"服务端认证失败%@",error);
@@ -328,18 +350,75 @@
     return NO;
 }
 
+
+//接受到消息调用这个
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
+    
+    NSLog(@"message = %@ to = %@",message.type,message.toStr);
+    //有人发聊天消息来了
+    if ([message.type isEqualToString:@"chat"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ChatMessageComeing object:nil];
+        
+    }
+//        UIViewController* topViewController = appdelegate.baseTabBarController.navigationController.topViewController;
+//        NSLog(@"%@",topViewController);
+//        if ([topViewController isKindOfClass:[ HomeViewController class]]) {
+//            ｝
+        
+    
+//    if ([message hasReceiptResponse] && ![message isErrorMessage]) {
+//        DLog(@"提示发送成功");
+//    }
+//    
+//    if ([message hasReceiptRequest] && ![message isErrorMessage]) {
+//        //收到回执请求，组装消息回执
+//        DLog(@"发送消息回执");
+//        XMPPMessage *msg = [XMPPMessage messageWithType:[message attributeStringValueForName:@"type"] to:message.from elementID:[XMPPStream generateUUID]];
+//        NSXMLElement *recieved = [NSXMLElement elementWithName:@"received" xmlns:@"urn:xmpp:receipts"];
+//        [recieved addAttributeWithName:@"id" stringValue:[message attributeStringValueForName:@"id"]];
+//        [msg addChild:recieved];
+//        
+//        //发送回执
+//        [self.xmppStream sendElement:msg];
+//    }
+    
+//    //回执判断
+//    NSXMLElement *request = [message elementForName:@"request"];
+//    if (request)
+//    {
+//        if ([request.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
+//        {
+//            //组装消息回执
+//            XMPPMessage *msg = [XMPPMessage messageWithType:[message attributeStringValueForName:@"type"] to:message.from elementID:[message attributeStringValueForName:@"id"]];
+//            NSXMLElement *recieved = [NSXMLElement elementWithName:@"received" xmlns:@"urn:xmpp:receipts"];
+//            [msg addChild:recieved];
+//            
+//            //发送回执
+//            [self.xmppStream sendElement:msg];
+//        }
+//    }else
+//    {
+//        NSXMLElement *received = [message elementForName:@"received"];
+//        if (received)
+//        {
+//            if ([received.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
+//            {
+//                //发送成功
+//                NSLog(@"message send success!");
+//            }
+//        }
+//    }
 
     //程序运行在前台，消息正常显示
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
-        DLog(@"message = %@",message);
-    }else{//如果程序在后台运行，收到消息以通知类型来显示
+//    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
+//        DLog(@"message = %@",message);
+//    }else{//如果程序在后台运行，收到消息以通知类型来显示
 //        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 //        localNotification.alertAction = @"Ok";
 //        localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",@"test",@"This is a test message"];//通知主体
 //        localNotification.applicationIconBadgeNumber = 1;//标记数
 //        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];//发送通知
-    }
+//    }
 }
 
 #pragma mark XMPPRosterDelegate
@@ -374,7 +453,7 @@
 //    NSLog(@"用户:%@",presenceFromUser);
 //    
 //    
-//    tempPresence = presence;
+////    tempPresence = presence;
 //    
 ////    //这里再次加好友
 ////    if ([presenceType isEqualToString:@"subscribe"]){
@@ -398,9 +477,9 @@
 
 //- (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
 //    
-////    DDXMLElement *query = [iq elementsForName:@"query"][0];
-////    DDXMLElement *item = [query elementsForName:@"item"][0];
-////    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+//    DDXMLElement *query = [iq elementsForName:@"query"][0];
+//    DDXMLElement *item = [query elementsForName:@"item"][0];
+//    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
 ////
 ////    if ([subscription isEqualToString:@"from"]) {
 ////        //这里暂时用ios8的方法。。。。。。。。
@@ -490,6 +569,34 @@
     return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
 }
 
+- (UIViewController *)getCurrentViewController
+{
+    UIViewController *result = nil;
+    
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows)
+        {
+            if (tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    
+    return result;
+}
 
 
 

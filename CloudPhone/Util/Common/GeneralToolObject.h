@@ -19,10 +19,10 @@
 + (BOOL) validatePassword:(NSString *)passWord;
 
 //字符串转字典
-- (NSDictionary *)parseJSONStringToNSDictionary:(NSString *)JSONString;
++ (NSDictionary *)parseJSONStringToNSDictionary:(NSString *)JSONString;
 
-//字典转字符串
-+ (NSString*)dictionaryToJson:(NSDictionary *)dic;
+//(字典/数组)转字符串
++ (NSString*)dictionaryToJson:(id)resource;
 
 //设备的唯一标示
 + (NSString *)CPUuidString;

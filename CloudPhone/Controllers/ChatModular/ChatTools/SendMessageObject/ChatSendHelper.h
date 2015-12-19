@@ -26,4 +26,9 @@
 //修改xmpp用户昵称
 + (void)modifyUserNicknameWithString:(NSString *)str;
 
+
+//根据jid获取用户头像包括自己的头像
++ (UIImage *)getPhotoWithJID:(XMPPJID *)jid;
+
+
 @end

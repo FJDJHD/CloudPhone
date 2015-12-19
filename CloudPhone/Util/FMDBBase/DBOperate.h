@@ -12,12 +12,11 @@
 #define T_chatMessage    @"t_chatMessage"
 
 
-#define C_T_chatMessage @"create table t_chatMessage(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)"
+#define C_T_chatMessage @"create table t_chatMessage(jidStr TEXT,name TEXT,lastMessage TEXT,time TEXT)"
 
 
 enum marks {
     message_id,
-    message_icon,
     message_name,
     message_lastMessage,
     message_time

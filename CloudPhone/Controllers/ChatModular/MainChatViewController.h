@@ -8,9 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    kFriend,
+    kMessage
+    
+}FriendMessageType;
+
 @interface MainChatViewController : UIViewController {
 
+    
 }
+
+@property (nonatomic, assign) FriendMessageType selectType; //朋友还是消息列表
+
 
 
 @end

@@ -129,4 +129,27 @@
 }
 
 
+//根据jid获取用户头像包括自己的头像
++ (UIImage *)getPhotoWithJID:(XMPPJID *)jid {
+
+    UIImage *image = nil;
+    if ([jid isEqualToJID:[[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] myJID]]) {
+        //自己的头像
+        XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
+        if (myvCardTemp.photo != nil) {
+            image = [UIImage imageWithData:myvCardTemp.photo];
+        }
+
+    } else {
+        //jid 的头像
+        NSData *photoData = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardAvatarModule] photoDataForJID:jid];
+        if (photoData != nil){
+            image = [UIImage imageWithData:photoData];
+        }
+    }
+    return image;
+}
+
+
+
 @end

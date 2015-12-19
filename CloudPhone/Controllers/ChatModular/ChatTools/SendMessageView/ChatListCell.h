@@ -18,8 +18,8 @@
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
-@property (nonatomic, strong) UILabel *unReadLabel;
+@property (nonatomic, strong) UILabel *unreadLabel;
 
-- (void)cellForData:(NSArray *)array;
+- (void)cellForData:(NSArray *)array index:(NSIndexPath *)indexpath;
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Global.h"
+#import "XMPPMessageArchiving_Message_CoreDataObject.h"
 
 typedef enum {
     kMessageModelTypeOther, //别人
@@ -43,5 +44,13 @@ typedef enum {
 
 //消息类型
 @property (nonatomic,assign) MessageType messageType;
+
+
++ (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object;
+
+
+
+
+
 
 @end

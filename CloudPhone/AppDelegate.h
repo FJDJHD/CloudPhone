@@ -12,6 +12,7 @@
 #import "XMPPFramework.h"
 #import "XMPP.h"
 #import "XMPPAutoPing.h"
+#import "XMPPMessageDeliveryReceipts.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate,XMPPAutoPingDelegate,UIAlertViewDelegate> {
 
@@ -31,6 +32,8 @@
     XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;  /** 消息归档存储 */
     
     XMPPAutoPing *xmppAutoPing; //添加心跳监听
+    XMPPMessageDeliveryReceipts *deliveryReceiptsMoodule; //支持消息回执机制
+    
 }
 
 @property (nonatomic, strong, readonly) XMPPStream *xmppStream;
@@ -42,6 +45,7 @@
 @property (nonatomic, strong, readonly) XMPPCapabilities *xmppCapabilities;
 @property (nonatomic, strong, readonly) XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
 @property (nonatomic, strong) XMPPAutoPing *xmppAutoPing;
+@property (nonatomic, strong) XMPPMessageDeliveryReceipts *deliveryReceiptsMoodule;
 /** 消息归档 */
 @property (nonatomic, strong, readonly) XMPPMessageArchiving *xmppMessageArchiving;
 /** 消息归档存储 */
@@ -50,6 +54,9 @@
 @property (nonatomic, assign) BOOL isXMPPRegister;
 
 @property (strong, nonatomic) UIWindow *window;
+
+
+@property (nonatomic, strong) UILabel *unreadChatLabel;
 
 
 - (NSManagedObjectContext *)managedObjectContext_roster;
