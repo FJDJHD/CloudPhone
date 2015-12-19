@@ -475,6 +475,16 @@
 		B40FF0261C1688DB0077FAC9 /* freephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0251C1688DB0077FAC9 /* freephone@2x.png */; };
 		B40FF02A1C16892B0077FAC9 /* sendmsg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0291C16892B0077FAC9 /* sendmsg@2x.png */; };
 		B40FF02C1C16E0EF0077FAC9 /* Foundation+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF02B1C16E0EE0077FAC9 /* Foundation+Log.m */; };
+		B4488B2A1C23F7B100D88EFE /* mine_aboutcloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B241C23F7B100D88EFE /* mine_aboutcloud@2x.png */; };
+		B4488B2B1C23F7B100D88EFE /* mine_aboutcloud@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B251C23F7B100D88EFE /* mine_aboutcloud@3x.png */; };
+		B4488B2C1C23F7B100D88EFE /* mine_helper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B261C23F7B100D88EFE /* mine_helper@2x.png */; };
+		B4488B2D1C23F7B100D88EFE /* mine_helper@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B271C23F7B100D88EFE /* mine_helper@3x.png */; };
+		B4488B2E1C23F7B100D88EFE /* mine_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B281C23F7B100D88EFE /* mine_setting@2x.png */; };
+		B4488B2F1C23F7B100D88EFE /* mine_setting@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B291C23F7B100D88EFE /* mine_setting@3x.png */; };
+		B4488B341C23F7B900D88EFE /* mine_freetimes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B301C23F7B900D88EFE /* mine_freetimes@2x.png */; };
+		B4488B351C23F7B900D88EFE /* mine_freetimes@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B311C23F7B900D88EFE /* mine_freetimes@3x.png */; };
+		B4488B361C23F7B900D88EFE /* mine_task@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B321C23F7B900D88EFE /* mine_task@2x.png */; };
+		B4488B371C23F7B900D88EFE /* mine_task@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4488B331C23F7B900D88EFE /* mine_task@3x.png */; };
 		B44E90711C0FD41700CFC003 /* PersonGenderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */; };
 		B44E90741C0FD44900CFC003 /* PersonBirthdayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90731C0FD44900CFC003 /* PersonBirthdayViewController.m */; };
 		B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */; };
@@ -534,6 +544,8 @@
 		B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D081C0C5E7800D74D49 /* AboutCloudPhoneViewController.m */; };
 		B4BE7D0C1C0C688A00D74D49 /* HelpAndFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */; };
 		B4BE7D0F1C0C68A700D74D49 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */; };
+		B4C8F1521C22CDBD00957C99 /* login_bag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4C8F1501C22CDBD00957C99 /* login_bag@2x.png */; };
+		B4C8F1531C22CDBD00957C99 /* login_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4C8F1511C22CDBD00957C99 /* login_bg@3x.png */; };
 		B4D04DA41C1A7936008BD608 /* SpitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */; };
 		B4D04DA71C1A8117008BD608 /* ItelDialingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */; };
 		B4D04DAE1C1AA50D008BD608 /* phone_iconcover@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D04DA81C1AA50D008BD608 /* phone_iconcover@3x.png */; };
@@ -578,7 +590,6 @@
 		B4DAD40B1C18175D0092BF8F /* find_bank@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD4091C18175D0092BF8F /* find_bank@3x.png */; };
 		B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD40C1C18178F0092BF8F /* find_flight@2x.png */; };
 		B4DAD40F1C18178F0092BF8F /* find_flight@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD40D1C18178F0092BF8F /* find_flight@3x.png */; };
-		B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D11C06B0360001407D /* LoginViewController.m */; };
 		B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */; };
 		B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */; };
 		B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DD1C06E4920001407D /* ResetPasswordViewController.m */; };
@@ -1386,6 +1397,16 @@
 		B40FF0251C1688DB0077FAC9 /* freephone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "freephone@2x.png"; sourceTree = "<group>"; };
 		B40FF0291C16892B0077FAC9 /* sendmsg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sendmsg@2x.png"; sourceTree = "<group>"; };
 		B40FF02B1C16E0EE0077FAC9 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+Log.m"; sourceTree = "<group>"; };
+		B4488B241C23F7B100D88EFE /* mine_aboutcloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_aboutcloud@2x.png"; sourceTree = "<group>"; };
+		B4488B251C23F7B100D88EFE /* mine_aboutcloud@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_aboutcloud@3x.png"; sourceTree = "<group>"; };
+		B4488B261C23F7B100D88EFE /* mine_helper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_helper@2x.png"; sourceTree = "<group>"; };
+		B4488B271C23F7B100D88EFE /* mine_helper@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_helper@3x.png"; sourceTree = "<group>"; };
+		B4488B281C23F7B100D88EFE /* mine_setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_setting@2x.png"; sourceTree = "<group>"; };
+		B4488B291C23F7B100D88EFE /* mine_setting@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_setting@3x.png"; sourceTree = "<group>"; };
+		B4488B301C23F7B900D88EFE /* mine_freetimes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_freetimes@2x.png"; sourceTree = "<group>"; };
+		B4488B311C23F7B900D88EFE /* mine_freetimes@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_freetimes@3x.png"; sourceTree = "<group>"; };
+		B4488B321C23F7B900D88EFE /* mine_task@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_task@2x.png"; sourceTree = "<group>"; };
+		B4488B331C23F7B900D88EFE /* mine_task@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_task@3x.png"; sourceTree = "<group>"; };
 		B44E906F1C0FD41700CFC003 /* PersonGenderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonGenderViewController.h; sourceTree = "<group>"; };
 		B44E90701C0FD41700CFC003 /* PersonGenderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonGenderViewController.m; sourceTree = "<group>"; };
 		B44E90721C0FD44900CFC003 /* PersonBirthdayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonBirthdayViewController.h; sourceTree = "<group>"; };
@@ -1456,6 +1477,8 @@
 		B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpAndFeedbackViewController.m; sourceTree = "<group>"; };
 		B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		B4C8F1501C22CDBD00957C99 /* login_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bag@2x.png"; sourceTree = "<group>"; };
+		B4C8F1511C22CDBD00957C99 /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@3x.png"; sourceTree = "<group>"; };
 		B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpitTableViewController.h; sourceTree = "<group>"; };
 		B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpitTableViewController.m; sourceTree = "<group>"; };
 		B4D04DA51C1A8117008BD608 /* ItelDialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItelDialingViewController.h; sourceTree = "<group>"; };
@@ -1504,8 +1527,6 @@
 		B4DAD4091C18175D0092BF8F /* find_bank@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "find_bank@3x.png"; path = "CloudPhone/Resource/find_bank@3x.png"; sourceTree = SOURCE_ROOT; };
 		B4DAD40C1C18178F0092BF8F /* find_flight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_flight@2x.png"; sourceTree = "<group>"; };
 		B4DAD40D1C18178F0092BF8F /* find_flight@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_flight@3x.png"; sourceTree = "<group>"; };
-		B4DEF6D01C06B0360001407D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		B4DEF6D11C06B0360001407D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPasswordViewController.h; sourceTree = "<group>"; };
 		B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPasswordViewController.m; sourceTree = "<group>"; };
 		B4DEF6D91C06E1640001407D /* CallbackPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallbackPasswordViewController.h; sourceTree = "<group>"; };
@@ -1570,8 +1591,6 @@
 				6E2E8A711C06A20E000E6C2D /* RegisterViewController.m */,
 				B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */,
 				B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */,
-				B4DEF6D01C06B0360001407D /* LoginViewController.h */,
-				B4DEF6D11C06B0360001407D /* LoginViewController.m */,
 				B4DEF6D91C06E1640001407D /* CallbackPasswordViewController.h */,
 				B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */,
 				B4DEF6DC1C06E4920001407D /* ResetPasswordViewController.h */,
@@ -3542,6 +3561,8 @@
 		B44E90CD1C103FC500CFC003 /* login */ = {
 			isa = PBXGroup;
 			children = (
+				B4C8F1501C22CDBD00957C99 /* login_bag@2x.png */,
+				B4C8F1511C22CDBD00957C99 /* login_bg@3x.png */,
 				B44E90CE1C103FC500CFC003 /* chance_@2x.png */,
 				B44E90CF1C103FC500CFC003 /* chance_selected@2x.png */,
 				B44E90D01C103FC500CFC003 /* icon@2x.png */,
@@ -3556,6 +3577,16 @@
 		B44E90D51C103FC500CFC003 /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				B4488B301C23F7B900D88EFE /* mine_freetimes@2x.png */,
+				B4488B311C23F7B900D88EFE /* mine_freetimes@3x.png */,
+				B4488B321C23F7B900D88EFE /* mine_task@2x.png */,
+				B4488B331C23F7B900D88EFE /* mine_task@3x.png */,
+				B4488B241C23F7B100D88EFE /* mine_aboutcloud@2x.png */,
+				B4488B251C23F7B100D88EFE /* mine_aboutcloud@3x.png */,
+				B4488B261C23F7B100D88EFE /* mine_helper@2x.png */,
+				B4488B271C23F7B100D88EFE /* mine_helper@3x.png */,
+				B4488B281C23F7B100D88EFE /* mine_setting@2x.png */,
+				B4488B291C23F7B100D88EFE /* mine_setting@3x.png */,
 				B4D04DBC1C1BC2C5008BD608 /* mine_buttonbg@2x.png */,
 				B4D04DBD1C1BC2C5008BD608 /* mine_buttonbg@3x.png */,
 				B47C2E1A1C193434000E2964 /* mine_calltimeline@2x.png */,
@@ -3788,9 +3819,11 @@
 				6E7D7A081C192CCC00B42140 /* VoiceSearchFeedback004.png in Resources */,
 				B4DAD3FF1C18172D0092BF8F /* find_miaomiao@2x.png in Resources */,
 				6E7D7A771C192CCC00B42140 /* chat_receiver_audio_playing000.png in Resources */,
+				B4488B371C23F7B900D88EFE /* mine_task@3x.png in Resources */,
 				6E7D7A461C192CCC00B42140 /* faceDelete.png in Resources */,
 				B497DDE01C183EF200AF9BEB /* mine_weixin@3x.png in Resources */,
 				6E7D7A5B1C192CCC00B42140 /* chatBar_recordSelected@2x.png in Resources */,
+				B4C8F1531C22CDBD00957C99 /* login_bg@3x.png in Resources */,
 				B44E90EF1C103FC500CFC003 /* welcome@2x.png in Resources */,
 				6E7D7A4A1C192CCC00B42140 /* chatBar_face.png in Resources */,
 				6E7D7A4F1C192CCC00B42140 /* chatBar_keyboard@2x.png in Resources */,
@@ -3821,6 +3854,7 @@
 				B4A920811C1FF3270070821F /* phone|_addMore@2x.png in Resources */,
 				B4D04DAF1C1AA50D008BD608 /* phone_iconcover@2x.png in Resources */,
 				B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */,
+				B4488B2C1C23F7B100D88EFE /* mine_helper@2x.png in Resources */,
 				6E7D7A121C192CCC00B42140 /* VoiceSearchFeedback009.png in Resources */,
 				6E7D7A6C1C192CCC00B42140 /* chatBar_more_cameraSelected.png in Resources */,
 				B4A920711C1FEF3B0070821F /* phone_addressicon@3x.png in Resources */,
@@ -3839,6 +3873,7 @@
 				B47C2E241C193434000E2964 /* mine_savecosticon@2x.png in Resources */,
 				6EC3ECAC1C16E4B100B27B18 /* btn_face@2x.png in Resources */,
 				6E7D7A7E1C192CCC00B42140 /* chat_receiver_audio_playing003@2x.png in Resources */,
+				B4488B361C23F7B900D88EFE /* mine_task@2x.png in Resources */,
 				6E7D7A5D1C192CCC00B42140 /* chatBar_recordSelectedBg@2x.png in Resources */,
 				6E7D7A0E1C192CCC00B42140 /* VoiceSearchFeedback007.png in Resources */,
 				6E7D7A4D1C192CCC00B42140 /* chatBar_faceSelected@2x.png in Resources */,
@@ -3846,12 +3881,14 @@
 				B4D76A231C1523970095CB9F /* callphone_hangup@2x.png in Resources */,
 				6E7D7A5C1C192CCC00B42140 /* chatBar_recordSelectedBg.png in Resources */,
 				B44E91071C113E8100CFC003 /* wating@2x.png in Resources */,
+				B4488B341C23F7B900D88EFE /* mine_freetimes@2x.png in Resources */,
 				B4DAD4021C1817340092BF8F /* find_takeout@2x.png in Resources */,
 				6E7D7A281C192CCC00B42140 /* VoiceSearchFeedback020.png in Resources */,
 				B44E90EA1C103FC500CFC003 /* chance_selected@2x.png in Resources */,
 				B47C2E221C193434000E2964 /* mine_savecost@2x.png in Resources */,
 				6E7D7A7C1C192CCC00B42140 /* chat_receiver_audio_playing002@2x.png in Resources */,
 				6E7D7A131C192CCC00B42140 /* VoiceSearchFeedback009@2x.png in Resources */,
+				B4488B2B1C23F7B100D88EFE /* mine_aboutcloud@3x.png in Resources */,
 				6E7D7A8E1C192CCC00B42140 /* chat_sender_bg@2x.png in Resources */,
 				6EC3ECA01C16E47000B27B18 /* camera_nomal@2x.png in Resources */,
 				6E7D7A701C192CCC00B42140 /* chatBar_more_locationSelected.png in Resources */,
@@ -3891,6 +3928,7 @@
 				6E7D7A191C192CCC00B42140 /* VoiceSearchFeedback012@2x.png in Resources */,
 				6E7D7A301C192CCC00B42140 /* call_silence_h.png in Resources */,
 				6EC3EC6B1C16DE6D00B27B18 /* EmojiSutra.plist in Resources */,
+				B4488B2F1C23F7B100D88EFE /* mine_setting@3x.png in Resources */,
 				6E7D7A471C192CCC00B42140 /* faceDelete@2x.png in Resources */,
 				6E7D7A401C192CCC00B42140 /* chat_location_detail_disclosure.png in Resources */,
 				6E7D7A511C192CCC00B42140 /* chatBar_keyboardSelected@2x.png in Resources */,
@@ -3948,12 +3986,15 @@
 				B4A920701C1FEF3B0070821F /* phone_addressicon@2x.png in Resources */,
 				6E7D7A561C192CCC00B42140 /* chatBar_record.png in Resources */,
 				6E7D7A861C192CCC00B42140 /* chat_sender_audio_playing_001@2x.png in Resources */,
+				B4488B2D1C23F7B100D88EFE /* mine_helper@3x.png in Resources */,
+				B4488B351C23F7B900D88EFE /* mine_freetimes@3x.png in Resources */,
 				6E7D7A6B1C192CCC00B42140 /* chatBar_more_camera@2x.png in Resources */,
 				B497DDDB1C183EE900AF9BEB /* mine_qqspace@2x.png in Resources */,
 				6E7D7A341C192CCC00B42140 /* chatBar_more_card.png in Resources */,
 				6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */,
 				B497DDE31C183F1700AF9BEB /* mine_qq@2x.png in Resources */,
 				6EC3ECB41C16E99C00B27B18 /* btn_more@2x.png in Resources */,
+				B4488B2E1C23F7B100D88EFE /* mine_setting@2x.png in Resources */,
 				6EC3ECB01C16E50B00B27B18 /* photo_nomal@2x.png in Resources */,
 				B4D04DB61C1AA531008BD608 /* phone_icon@2x.png in Resources */,
 				6E7D7A4B1C192CCC00B42140 /* chatBar_face@2x.png in Resources */,
@@ -3968,6 +4009,7 @@
 				B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */,
 				6E7D7A3D1C192CCC00B42140 /* chatBar_textBg@2x.png in Resources */,
 				6E7D7A781C192CCC00B42140 /* chat_receiver_audio_playing000@2x.png in Resources */,
+				B4C8F1521C22CDBD00957C99 /* login_bag@2x.png in Resources */,
 				6E7D7A061C192CCC00B42140 /* VoiceSearchFeedback003.png in Resources */,
 				B44E90F31C103FC500CFC003 /* back@2x.png in Resources */,
 				B40FF02A1C16892B0077FAC9 /* sendmsg@2x.png in Resources */,
@@ -3983,6 +4025,7 @@
 				6E7D7A6F1C192CCC00B42140 /* chatBar_more_location@2x.png in Resources */,
 				6E7D7A2E1C192CCC00B42140 /* call_silence.png in Resources */,
 				6E7D7A1F1C192CCC00B42140 /* VoiceSearchFeedback015@2x.png in Resources */,
+				B4488B2A1C23F7B100D88EFE /* mine_aboutcloud@2x.png in Resources */,
 				6E7D7A641C192CCC00B42140 /* chatBar_colorMore_photo@2x.png in Resources */,
 				6E7D7A431C192CCC00B42140 /* chat_location_detail_disclosureHL@2x.png in Resources */,
 				6E7D7A241C192CCC00B42140 /* VoiceSearchFeedback018.png in Resources */,
@@ -4297,7 +4340,6 @@
 				B4BE7D091C0C5E7800D74D49 /* AboutCloudPhoneViewController.m in Sources */,
 				6E7A32341C215B72005C11B8 /* DBOperate.m in Sources */,
 				6EBA8D421C15248B00BAE5DD /* XMPPRoomMessageMemoryStorageObject.m in Sources */,
-				B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */,
 				6EBA8D8D1C15248C00BAE5DD /* DDFileLogger.m in Sources */,
 				6EBA8D741C15248B00BAE5DD /* XMPPStreamManagement.m in Sources */,
 				6E7A322C1C215B4C005C11B8 /* FMDatabasePool.m in Sources */,

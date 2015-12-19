@@ -9,7 +9,7 @@
 #import "ResetPasswordViewController.h"
 #import "Global.h"
 #import "RegisterAlertView.h"
-#import "LoginViewController.h"
+#import "RegisterLoginViewController.h"
 @interface ResetPasswordViewController ()
 @property (nonatomic, strong) UITextField *repasswordField;
 @property (nonatomic, strong) UITextField *passwordFiled;

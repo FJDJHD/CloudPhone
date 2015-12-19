@@ -22,7 +22,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *itemArray;
-
+@property (nonatomic, strong) NSArray *iamgeArray;
 @property (nonatomic, strong) NSMutableDictionary *testDic;
 
 @property (nonatomic, strong) UserModel *user;
@@ -35,6 +35,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _itemArray = @[@"免费通话时长",@"任务中心",@"关于云电话",@"帮助与反馈",@"设置"];
+        _iamgeArray = @[@"mine_freetimes",@"mine_task",@"mine_aboutcloud",@"mine_helper",@"mine_setting"];
         
     }
     return self;
@@ -131,7 +132,7 @@
             [cell addSubview:mobileLable];
 
         } else {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
         }
         
         cell.detailTextLabel.font = [UIFont systemFontOfSize:15.0];
@@ -167,6 +168,7 @@
         if(indexPath.row == 0){
            cell.detailTextLabel.text = [NSString stringWithFormat:@"剩余123分钟"] ;
         }
+        [cell.imageView setImage:[UIImage imageNamed:_iamgeArray[indexPath.row]]];
         cell.textLabel.text = _itemArray[indexPath.row];
     }
     return cell;
@@ -275,6 +277,27 @@
     return filePath;
 }
 
+//cell下划线的距离
+-(void)viewDidLayoutSubviews {
+    
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
+        
+    }
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])  {
+        [self.tableView setLayoutMargins:UIEdgeInsetsMake(0, 15, 0, 0)];
+    }
+    
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat{
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsMake(0, 15, 0, 0)];
+    }
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]){
+        [cell setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
+    }
+}
 
 
 @end

@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIButton *dialDetailButton;
 @property (nonatomic, strong)  UIButton *detailInfoButton;
 @property (nonatomic, strong)  UIView *coverView;
+@property (nonatomic, strong) UILabel *signayureLabel;
 @end
 
 @implementation FriendDetailViewController
@@ -54,13 +55,23 @@
     self.nameLabel = nameLabel;
     [self.view addSubview:nameLabel];
     
-    UIView *buttonBg = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame) + 20, MainWidth, 44)];
+    UILabel *signayureLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 40)];
+    signayureLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(nameLabel.frame) + 5 + (signayureLabel.frame.size.height) / 2.0);
+    signayureLabel.textAlignment = NSTextAlignmentLeft;
+    signayureLabel.textColor = [UIColor blackColor];
+    signayureLabel.text = @"刘美兰hahahhahah";
+    signayureLabel.font = [UIFont systemFontOfSize:16.0];
+    self.signayureLabel = signayureLabel;
+    [self.view addSubview:signayureLabel];
+    
+    
+    UIView *buttonBg = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.signayureLabel.frame) + 20, MainWidth, 44)];
     buttonBg.backgroundColor = [ColorTool backgroundColor];
     [self.view addSubview:buttonBg];
     
     
     UIButton *dialDetailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    dialDetailButton.frame = CGRectMake(61, CGRectGetMaxY(self.nameLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
+    dialDetailButton.frame = CGRectMake(61, CGRectGetMaxY(self.signayureLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
     dialDetailButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [dialDetailButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
@@ -74,7 +85,7 @@
     [self.view addSubview:dialDetailButton];
     
     UIButton *detailInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    detailInfoButton.frame = CGRectMake(CGRectGetMaxX(dialDetailButton.frame), CGRectGetMaxY(self.nameLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
+    detailInfoButton.frame = CGRectMake(CGRectGetMaxX(dialDetailButton.frame), CGRectGetMaxY(self.signayureLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
     detailInfoButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [detailInfoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [detailInfoButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];

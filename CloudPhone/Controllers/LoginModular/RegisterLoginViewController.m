@@ -9,13 +9,16 @@
 #import "RegisterLoginViewController.h"
 #import "Global.h"
 #import "RegisterViewController.h"
-#import "LoginViewController.h"
 #import "GuidePageView.h"
 #import "LoginPasswordViewController.h"
+#import "CallbackPasswordViewController.h"
+#define TEXTFONT 15.0
 @interface RegisterLoginViewController ()
 
 @property (nonatomic,strong) GuidePageView *guideView;
-
+@property (nonatomic, strong) UITextField *numberField;
+@property (nonatomic, strong) UITextField *passwordField;
+@property (nonatomic, strong) MBProgressHUD *HUD;
 
 @end
 
@@ -68,34 +71,88 @@
 - (void)initUI {
     //添加背景图
     UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    bgImageView.image = [UIImage imageNamed:@"welcome"];
+    bgImageView.image = [UIImage imageNamed:@"login_bg"];
     [self.view addSubview:bgImageView];
     
-    //登录
+    
+    //登陆输入
+    UIImage *image = [UIImage imageNamed:@"pic_zhanghao"];
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(15,136, MainWidth - 30, 88)];
+    backView.backgroundColor = [UIColor colorWithHexString:@"#ffffff"];
+    backView.alpha = 0.80;
+    backView.layer.cornerRadius = 2.0;
+    [self.view addSubview:backView];
+    
+    //手机号
+    UIImageView *numberImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 20, 20)];
+    [numberImageView setImage:image];
+    [backView addSubview:numberImageView];
+    
+    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, 0, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
+    numberField.placeholder = @"请输入手机号码";
+    numberField.font = [UIFont systemFontOfSize:TEXTFONT];
+    numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    numberField.borderStyle = UITextBorderStyleNone;
+    numberField.keyboardType = UIKeyboardTypeNumberPad;
+    [backView addSubview:numberField];
+    self.numberField = numberField;
+    
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, backView.frame.size.height / 2.0, MainWidth - 55 - image.size.width, 1)];
+    lineView.backgroundColor = [UIColor colorWithHexString:@"#aaaaaa"];
+    [backView addSubview:lineView];
+    
+    //密码
+    UIImageView *passwordImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 20, 20)];
+    [passwordImageView setImage:[UIImage imageNamed:@"pic_mima"]];
+    [backView addSubview:passwordImageView];
+    
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 10, 44, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
+    passwordField.placeholder = @"请输入登录密码";
+    passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
+    passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    passwordField.borderStyle = UITextBorderStyleNone;
+    [backView addSubview:passwordField];
+    self.passwordField = passwordField;
+    
+    //忘记密码
+    UIButton *forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    forgetPasswordButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    forgetPasswordButton.frame = CGRectMake(MainWidth - 15 - 80, CGRectGetMaxY(backView.frame), 100, 32);
+    [forgetPasswordButton setTitle:@"忘记密码 ？" forState:UIControlStateNormal];
+    forgetPasswordButton.titleLabel.textColor = [UIColor lightGrayColor];
+    [forgetPasswordButton addTarget:self action:@selector(forgetPasswordButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [forgetPasswordButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.view addSubview:forgetPasswordButton];
+        
+    //登陆
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.backgroundColor = [ColorTool backgroundColor];
-    loginButton.layer.cornerRadius = 2.0;
-    loginButton.layer.masksToBounds = YES;
-    loginButton.titleLabel.font = [UIFont systemFontOfSize:18.0];
-    loginButton.frame = CGRectMake(20, SCREEN_HEIGHT * 0.6, MainWidth - 20*2.0, 45);
+    loginButton.backgroundColor = [UIColor colorWithHexString:@"#ffffff"];
+    loginButton.alpha = 0.8;
+    loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    loginButton.frame = CGRectMake(0, 0, 50, 50);
+    loginButton.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(backView.frame) + 30 + 25);
     [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
+    loginButton.layer.cornerRadius = 25.0;
+    loginButton.layer.masksToBounds = YES;
     [loginButton addTarget:self action:@selector(loginButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [loginButton setTitleColor:[ColorTool textColor] forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     
-    //注册
+    //没有账号，注册
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.backgroundColor = [ColorTool backgroundColor];
-    registerButton.layer.cornerRadius = 2.0;
-    registerButton.layer.masksToBounds = YES;
-    registerButton.titleLabel.font = [UIFont systemFontOfSize:18.0];
-    registerButton.frame = CGRectMake(20, CGRectGetMaxY(loginButton.frame) + 25, MainWidth - 20*2.0, 45);
-    [registerButton setTitle:@"注 册" forState:UIControlStateNormal];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    registerButton.frame = CGRectMake(0, 0, 200, 32);
+    registerButton.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(loginButton.frame) + 5 + registerButton.frame.size.height / 2.0);
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"没有账号？立即注册"];
+    NSRange strRange = {0,[str length]};
+    [str addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:strRange];
+    [registerButton setAttributedTitle:str forState:UIControlStateNormal];
+    registerButton.titleLabel.textColor = [UIColor colorWithHexString:@"#646464"];
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [registerButton setTitleColor:[ColorTool textColor] forState:UIControlStateNormal];
+    [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [self.view addSubview:registerButton];
-
 }
+
 #pragma mark - 引导页
 - (void)startButtonHandle:(UIButton *)sender{
     //写入数据
@@ -122,26 +179,90 @@
 //                     }];
 }
 
-
-//登录
-- (void)loginButtonClick {
-    LoginViewController *controller = [[LoginViewController alloc] init];
-    [self.navigationController pushViewController:controller animated:YES];
-
-   
+- (void)forgetPasswordButtonClick{
+    CallbackPasswordViewController *callbackPasswordController = [[CallbackPasswordViewController alloc] init];
+    [self.navigationController pushViewController:callbackPasswordController animated:YES];
 }
 
+//用户登录
+- (void)loginButtonClick{
+    [_numberField resignFirstResponder];
+    [_passwordField resignFirstResponder];
+    
+    if (self.numberField.text.length == 0 ) {
+        [CustomMBHud customHudWindow:Login_emptyPhoneNumber];
+    }else if (self.passwordField.text.length == 0){
+        [CustomMBHud customHudWindow:Login_emptyPwdNumber];
+    }else{
+        [self AddHUD];
+        NSDictionary *dic = @{@"mobile":self.numberField.text,@"password":self.passwordField.text};
+        [[AirCloudNetAPIManager sharedManager] userLoginOfParams:dic WithBlock:^(id data, NSError *error)
+         
+         {
+             [self HUDHidden];
+             if (!error) {
+                 NSDictionary *dic = (NSDictionary *)data;
+                 
+                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                     DLog(@"登录成功------%@",[dic objectForKey:@"msg"]);
+                     
+                     //保存帐号和密码，做xmpp连接用
+                     [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
+                     
+                     //这里作为一个登录标志
+                     [GeneralToolObject userLogin];
+                     
+                 } else {
+                     
+                     NSDictionary *dataDic = [dic objectForKey:@"data"];
+                     if (dataDic) {
+                         if ([dataDic objectForKey:@"is_login"]) {
+                             if ([[dataDic objectForKey:@"is_login"] integerValue] == 1) {
+                                 
+                                 //保存帐号和密码，做xmpp连接用
+                                 [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
+                                 //登录进去（单独在这里判断下，登录后删除应用情况）
+                                 [GeneralToolObject userLogin];
+                                 return;
+                             }
+                         }
+                     }
+                     [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
+                     //                    [[[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+                     
+                 }
+             }
+             
+         }];
+        
+    }
+    
+}
 
 //注册
 - (void)registerButtonClick {
-   // [self.navigationController pushViewController:[LoginPasswordViewController new] animated:YES];
     RegisterViewController *controller = [[RegisterViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
