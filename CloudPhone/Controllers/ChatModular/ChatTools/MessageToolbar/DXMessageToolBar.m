@@ -584,12 +584,11 @@
 
 - (void)recordButtonTouchDown
 {
-    if ([self.recordView isKindOfClass:[DXRecordView class]]) {
-        [(DXRecordView *)self.recordView recordButtonTouchDown];
-    }
-    
     if (_delegate && [_delegate respondsToSelector:@selector(didStartRecordingVoiceAction:)]) {
         [_delegate didStartRecordingVoiceAction:self.recordView];
+    }
+    if ([self.recordView isKindOfClass:[DXRecordView class]]) {
+        [(DXRecordView *)self.recordView recordButtonTouchDown];
     }
 }
 
@@ -609,13 +608,13 @@
 
 - (void)recordButtonTouchUpInside
 {
-    if ([self.recordView isKindOfClass:[DXRecordView class]]) {
-        [(DXRecordView *)self.recordView recordButtonTouchUpInside];
-    }
-    
     if ([self.delegate respondsToSelector:@selector(didFinishRecoingVoiceAction:)])
     {
         [self.delegate didFinishRecoingVoiceAction:self.recordView];
+    }
+    
+    if ([self.recordView isKindOfClass:[DXRecordView class]]) {
+        [(DXRecordView *)self.recordView recordButtonTouchUpInside];
     }
     
     [self.recordView removeFromSuperview];

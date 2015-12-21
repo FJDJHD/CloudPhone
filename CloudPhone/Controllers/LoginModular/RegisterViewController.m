@@ -199,7 +199,7 @@ static const int kTimeCount             = 60;
     }else if ([GeneralToolObject validateMobile:_numberField.text]){
         //在这里添加指示器
         [self AddHUD];
-        NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text,@"imei":[GeneralToolObject CPUuidString],@"mobile_model":[[UIDevice currentDevice] model],@"mobile_type":@"iphone",@"reg_terrace":@"iOS",@"reg_id":@"111"};
+        NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text,@"imei":[UniqueUDID shareInstance].udid,@"mobile_model":[[UIDevice currentDevice] model],@"mobile_type":@"iphone",@"reg_terrace":@"iOS",@"reg_id":@"111"};
         [[AirCloudNetAPIManager sharedManager] registerStepOneOfParams:dic WithBlock:^(id data, NSError *error) {
             //隐藏指示器
             [self HUDHidden];

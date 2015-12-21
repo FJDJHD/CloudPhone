@@ -209,5 +209,16 @@
 //    }];
 }
 
+//好友列表
+- (void)postMailListOfParams:(NSDictionary *)params
+                   WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_mailList serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+
+}
+
 
 @end

@@ -11,6 +11,7 @@
 #import "Global.h"
 #import "EMCDDeviceManager.h"
 #import "XMPPvCardTemp.h"
+#import "ChatSendHelper.h"
 
 @interface MessageCell() {
 
@@ -55,7 +56,7 @@
     UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
     [_textView setTitleColor:textColor forState:UIControlStateNormal];
 
-    //聊天头像
+    //聊天头像frame
     _iconView.frame = cellFrame.iconFrame;
     //气泡frame
     _textView.frame = cellFrame.textFrame;
@@ -65,20 +66,13 @@
         if (message.otherPhoto != nil){
             _iconView.image = message.otherPhoto;
         }else{
-            NSData *photoData = [[[self appDelegate] xmppvCardAvatarModule] photoDataForJID:message.chatJID];
-            if (photoData != nil){
-                _iconView.image = [UIImage imageWithData:photoData];
-            }
+            UIImage *image = [ChatSendHelper getPhotoWithJID:message.chatJID];
+            _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
         }
     } else{
         //自己
-        XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
-        if (myvCardTemp.photo != nil) {
-            _iconView.image = [UIImage imageWithData:myvCardTemp.photo];
-        } else {
-            _iconView.image = [UIImage imageNamed:@"mine_icon"];
-        }
-
+        UIImage *image = [ChatSendHelper getPhotoWithJID:[[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] myJID]];
+        _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
     }
     
     //消息类型

@@ -57,5 +57,7 @@
 //存储openfire发送的消息
 #define API_sendOpenireMessage                          @"?s=/Home/Openfire/sendOpenireMessage"
 
+//通讯录itel好友列表
+#define API_mailList                                    @"?s=/Home/Openfire/mailList"
 
 #endif

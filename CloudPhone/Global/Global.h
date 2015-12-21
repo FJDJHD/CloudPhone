@@ -70,9 +70,8 @@
 
 
 /* notifitionCenter通知的name统一放在这里－－－－*/
-#define vedioEnterForeground            @"vedioEnterForeground" //视频播放从后台转前台
 
-#define vedioInfoAfterCookie            @"vedioInfoAfterCookie" //请求到cookie后执行这个
+#define ChatMessageComeing            @"ChatMessageComeing" //有人发聊天消息
 
 
 /* 统一的色调 －－－－*/
@@ -88,6 +87,8 @@
 #define RegisterFail              @"RegisterFail"  //xmpp注册失败
 #define ResetPassword             @"ResetPassword" //重置密码
 
+#define MessageItel               @"我正在使用云电话，每月都有免费话费赠送。http://baidu.com"
+
 #import <Foundation/Foundation.h>
 #import "Macros.h"
 #import "AirCloudNetAPIManager.h"
@@ -102,6 +103,7 @@
 #import "UIButton+Category.h"
 #import "AppDelegate.h"
 #import "DBOperate.h"
+#import "UniqueUDID.h"
 
 @interface Global : NSObject
 

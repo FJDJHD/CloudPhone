@@ -38,7 +38,7 @@
 }
 
 - (void)cellForData:(XMPPUserCoreDataStorageObject *)user {
-
+    
     //名称
     NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数
     _nameLabel.text = user.nickname ? user.nickname :array[0];

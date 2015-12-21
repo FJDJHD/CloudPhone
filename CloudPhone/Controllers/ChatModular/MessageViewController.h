@@ -11,7 +11,7 @@
 
 @interface MessageViewController : UIViewController
 
-@property (nonatomic, copy) NSString *chatUser;  //like 13113689077@clone.com
+@property (nonatomic, copy) NSString *chatJIDStr;  //like 13113689077@clone.com
 
 @property (nonatomic, strong) UIImage *chatPhoto; //头像
 

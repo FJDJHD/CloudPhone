@@ -20,9 +20,11 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (strong, nonatomic) DXMessageToolBar *chatToolBar;
+@property (nonatomic, strong) DXMessageToolBar *chatToolBar;
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
+@property (nonatomic, strong) NSMutableArray *messageArray; // 暂时没用这个
 
 @property (nonatomic, strong) CellFrameModel *cellModel;
 
@@ -41,7 +43,7 @@
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    NSArray *array = [self.chatUser componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
+    NSArray *array = [self.chatJIDStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
     self.title = array[0] ? array[0] : @"会话";
 
     
@@ -50,6 +52,7 @@
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.chatToolBar];
+    
     //将self注册为chatToolBar的moreView的代理
     if ([self.chatToolBar.moreView isKindOfClass:[DXChatBarMoreView class]]) {
         [(DXChatBarMoreView *)self.chatToolBar.moreView setDelegate:self];
@@ -68,22 +71,19 @@
     [self scrollViewToBottom:YES];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [super viewWillDisappear:animated];
+    //最后的消息保存到数据库中
+    [self saveLastMessageToFMDB];
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     //停止语音信息
     [[EMCDDeviceManager sharedInstance] stopPlaying];
     
-    //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
-    //(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)
-    NSArray *messageArray = [NSArray arrayWithObjects:self.chatUser,@"",self.chatUser,@"最后一条",@"4321",nil];
-    if (self.fetchedResultsController.fetchedObjects.count > 0) {
-        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatUser withAll:NO];
-        if (chatArray.count > 0) {
-            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:@"ttt" conditionColumn:@"jidStr" conditionColumnValue:self.chatUser];
-        } else {
-            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
-        }
-    }
+   
 }
 
 #pragma mark - 初始化组建
@@ -95,6 +95,8 @@
         _tableView.tableFooterView = [[UIView alloc]init];
         _tableView.backgroundColor = [ColorTool backgroundColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+        [_tableView addGestureRecognizer:tap];
     }
     return _tableView;
 }
@@ -130,9 +132,20 @@
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
     request.sortDescriptors = @[sort];
     // 每一个聊天界面，只关心聊天对象的消息
-    request.predicate = [NSPredicate predicateWithFormat:@"bareJidStr = %@", self.chatJID.bare];
+    if (self.chatJID.bare) {
+        request.predicate = [NSPredicate predicateWithFormat:@"bareJidStr = %@", self.chatJID.bare];
+    }
     // 从自己写的工具类里的属性中得到上下文
     NSManagedObjectContext *ctx = [self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext;
+
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        NSArray *results = [ctx executeFetchRequest:request error:nil];
+//        _messageArray = [[NSMutableArray alloc]initWithCapacity:results.count];
+//        for (XMPPMessageArchiving_Message_CoreDataObject *object in results) {
+//            MessageModel *model = [MessageModel modelForData:object];
+//            [_messageArray addObject:model];
+//        }
+//    });
     // 实例化，里面要填上上面的各种参数
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:ctx sectionNameKeyPath:nil cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -189,6 +202,7 @@
     _messageModel.chatJID = self.chatJID;
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     _cellModel.message = _messageModel;
+    
     cell.cellFrame = _cellModel;
     
     return cell;
@@ -216,6 +230,41 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self keyBoardHidden];
+}
+
+#pragma mark - 保存最后的信息
+- (void)saveLastMessageToFMDB {
+
+    //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
+    //(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        
+        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
+        NSString *lastStr = @"";
+        if ([message.body isEqualToString:@"image"]) {
+            lastStr = @"[图片]";
+        } else if ([message.body hasPrefix:@"audio"]) {
+            lastStr = @"[语音]";
+        } else {
+            lastStr = message.message.body;
+        }
+        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
+        
+        NSArray *array = [self.chatJIDStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
+        NSString *chatname = array[0] ? array[0] :@"";
+        
+        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,chatname,lastStr,lastTime,nil];
+        
+        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
+        if (chatArray.count > 0) {
+            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+        } else {
+            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+        }
+    }
+
 }
 
 
@@ -246,7 +295,7 @@
 - (void)didSendText:(NSString *)text
 {
     if (text && text.length > 0) {
-        [ChatSendHelper sendTextMessageWithString:text toUsername:self.chatUser];
+        [ChatSendHelper sendTextMessageWithString:text toUsername:self.chatJIDStr];
     }
 }
 
@@ -294,11 +343,12 @@
             [ChatSendHelper sendVoiceMessageWithAudio:data time:aDuration toUsername:self.chatJID];
             
         }else {
-            [CustomMBHud customHudWindow:@"录音时间太短"];
-            weakSelf.chatToolBar.recordButton.enabled = NO;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                weakSelf.chatToolBar.recordButton.enabled = YES;
-            });
+            weakSelf.chatToolBar.recordButton.enabled = YES;
+
+//            weakSelf.chatToolBar.recordButton.enabled = NO;
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                weakSelf.chatToolBar.recordButton.enabled = YES;
+//            });
         }
     }];
    
@@ -318,9 +368,19 @@
 
 - (void)moreViewTakePicAction:(DXChatBarMoreView *)moreView
 {
-    [self keyBoardHidden];
     DLog(@"照相");
-
+    BOOL iscamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+    if (!iscamera) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"没有相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        [alert show];
+        return;
+    }
+    UIImagePickerController *pick = [[UIImagePickerController alloc]init];
+    pick.delegate = self;
+    pick.sourceType = UIImagePickerControllerSourceTypeCamera;
+    pick.allowsEditing = YES;
+    [self presentViewController:pick animated:YES completion:NULL];
+    [self keyBoardHidden];
 }
 
 - (void)moreViewLocationAction:(DXChatBarMoreView *)moreView
@@ -344,7 +404,8 @@
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    
+//    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+
     //发送照片
     [ChatSendHelper sendImageMessageWithImage:image toUsername:self.chatJID];
     
@@ -380,6 +441,12 @@
 
 // 点击背景隐藏
 -(void)keyBoardHidden
+{
+    [self.chatToolBar endEditing:YES];
+}
+
+#pragma mark ---触摸关闭键盘----
+-(void)handleTap:(UIGestureRecognizer *)gesture
 {
     [self.chatToolBar endEditing:YES];
 }
