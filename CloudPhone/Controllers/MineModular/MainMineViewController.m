@@ -43,13 +43,14 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
     [self requestPersonalCenter];
+
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
+    
     
 //    //图片路径
 //    NSString *iconPath = [self personalIconFilePath];

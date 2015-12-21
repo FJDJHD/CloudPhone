@@ -88,7 +88,7 @@
 }
 
 //修改xmpp用户头像
-+ (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name; {
++ (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name {
     
     NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
     NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
@@ -108,24 +108,39 @@
         myvCardTemp.photo = dataFromImage;
         [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
     } else {
+        
         XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
-        [newvCardTemp setNickname:@"法国多福多寿"];
+        [newvCardTemp setNickname:@"多福多寿"];
         [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
     }
 }
 
 //修改xmpp用户昵称
 + (void)modifyUserNicknameWithString:(NSString *)str {
-    XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
-    myvCardTemp.nickname = str;
-    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
+    if (str.length > 0) {
+        NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
+        NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
+        NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
+        
+        UIImage *image = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath]];
+        NSData *dataFromImage = UIImageJPEGRepresentation(image, 0.5f);
+        NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
+        
+        [photoXML addChild:typeXML];
+        [photoXML addChild:binvalXML];
+        [vCardXML addChild:photoXML];
+        
+     
+        //修改图片
+        XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
+        [newvCardTemp setNickname:str];
+        [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
+        
+//        XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
+//        myvCardTemp.nickname = str;
+//        [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
 
-//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppRoster] setNickname:str forUser:myvCardTemp.jid];
-//    NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns:@"vcard-temp"];
-//    XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
-//    [newvCardTemp setNickname:str];
-//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
-
+    }
 }
 
 

@@ -9,17 +9,26 @@
 #import <Foundation/Foundation.h>
 #define	WHOLE_COLUMN 0
 
-#define T_chatMessage    @"t_chatMessage"
-
-
-#define C_T_chatMessage @"create table t_chatMessage(jidStr TEXT,name TEXT,lastMessage TEXT,time TEXT)"
-
-
-enum marks {
+//和哪些聊天好友聊天记录表
+#define T_chatMessage     @"t_chatMessage"
+#define C_T_chatMessage   @"create table t_chatMessage(jidStr TEXT,name TEXT,lastMessage TEXT,time TEXT)"
+enum chatMessage {
     message_id,
     message_name,
     message_lastMessage,
     message_time
+};
+
+//个人信息表
+#define T_personalInfo    @"t_personalInfo"
+#define C_T_personalInfo  @"create table t_personalInfo(phoneNum TEXT,name TEXT,iconPath TEXT,sex TEXT,birthday TEXT,signature TEXT)"
+enum personalInfo {
+    info_phoneNum,
+    info_name,
+    info_iconPath,
+    info_sex,
+    info_birthday,
+    info_signature
 };
 
 
