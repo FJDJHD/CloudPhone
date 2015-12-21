@@ -14,9 +14,6 @@
 @interface LoginPasswordViewController ()<UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *repasswordField;
 @property (nonatomic, strong) UITextField *passwordFiled;
-@property (nonatomic, strong) NSMutableAttributedString *passwordLevelStr;
-@property (nonatomic, strong) UILabel *levelLabel;
-@property (nonatomic, strong) UILabel *numberLevelLabel;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
 
@@ -50,34 +47,19 @@
     [backView addSubview:passwordLabel];
     
     UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0, 150, 44)];
-    passwordField.placeholder = @"请输入密码";
+    passwordField.placeholder = @"请输入登录密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     passwordField.borderStyle = UITextBorderStyleNone;
     self.passwordFiled = passwordField;
     self.passwordFiled.delegate = self;
     [backView addSubview:passwordField];
-    
-    UILabel *numberLevelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordField.frame), 0, 65, 44)];
-    numberLevelLabel.font = [UIFont systemFontOfSize:14.0];
-    numberLevelLabel.textColor = [UIColor blackColor];
-    numberLevelLabel.text = @"密码等级:";
-    numberLevelLabel.hidden = YES;
-    self.numberLevelLabel = numberLevelLabel;
-    [backView addSubview:numberLevelLabel];
-    
-    UILabel *levelLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLevelLabel.frame), 0, 25, 44)];
-    levelLabel.font = [UIFont systemFontOfSize:14.0];
-    levelLabel.textColor = [UIColor redColor];
-    levelLabel.text = @"低";
-    levelLabel.hidden = YES;
-    self.levelLabel = levelLabel;
-    [backView addSubview:levelLabel];
+  
 
     UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 95, 20)];
     verifyLabel.font = [UIFont systemFontOfSize:TEXTFONT];
     verifyLabel.textColor = [UIColor blackColor];
-    verifyLabel.text = @"再次输入密码";
+    verifyLabel.text = @"确认密码";
     [backView addSubview:verifyLabel];
     
     UITextField *repasswordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(verifyLabel.frame), 44, MainWidth - CGRectGetMaxX(verifyLabel.frame), 44)];
@@ -102,32 +84,6 @@
     [self.view addSubview:submitButton];
 
 }
-
-
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if (toBeString.length >= 1){
-        self.levelLabel.hidden = NO;
-        self.numberLevelLabel.hidden = NO;
-        int result = [GeneralToolObject judgePasswordStrength:toBeString];
-        if (result == 0) {
-            self.levelLabel.text = @"低";
-            }
-        else if(result == 1){
-             self.levelLabel.text = @"中";
-            }
-        else if (result==2){
-             self.levelLabel.text = @"高";
-            }
-        
-    }else{
-        self.levelLabel.hidden = YES;
-        self.numberLevelLabel.hidden = YES;
-    }
-    return YES;
-}
-
 
 
 //注册第二步

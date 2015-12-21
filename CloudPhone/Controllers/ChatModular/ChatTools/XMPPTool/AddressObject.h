@@ -20,8 +20,6 @@
 +(instancetype)shareInstance;
 
 
--(NSInteger)requestAddressBook;
-
 //获取通讯录
 - (NSMutableArray *)getAllPerson;
 

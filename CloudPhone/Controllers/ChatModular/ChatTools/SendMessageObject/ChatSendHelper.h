@@ -31,4 +31,5 @@
 + (UIImage *)getPhotoWithJID:(XMPPJID *)jid;
 
 
+
 @end

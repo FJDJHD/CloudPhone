@@ -90,7 +90,7 @@ static const int kTimeCount             = 60;
     [backView addSubview:_verifyField];
     
     _proveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _proveButton.backgroundColor = [UIColor colorWithHexString:@"cccccc"];
+    [_proveButton setBackgroundColor:[UIColor colorWithHexString:@"#27ad4d"]];
     _proveButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     _proveButton.frame = CGRectMake(CGRectGetMaxX(_verifyField.frame), 44, MainWidth - CGRectGetMaxX(_verifyField.frame), 44);
     

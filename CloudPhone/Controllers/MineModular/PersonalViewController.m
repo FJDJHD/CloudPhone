@@ -8,7 +8,6 @@
 
 #import "PersonalViewController.h"
 #import "Global.h"
-#import "LoginViewController.h"
 #import "AppDelegate.h"
 #import "UserModel.h"
 

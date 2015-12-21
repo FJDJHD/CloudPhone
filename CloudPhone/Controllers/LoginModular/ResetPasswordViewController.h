@@ -10,7 +10,6 @@
 
 @interface ResetPasswordViewController : LoginPasswordViewController
 
-
 @property (nonatomic, copy) NSString *resetNumber;
 
 @end
