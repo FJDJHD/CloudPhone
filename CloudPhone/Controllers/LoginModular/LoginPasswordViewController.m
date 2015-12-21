@@ -16,7 +16,6 @@
 @property (nonatomic, strong) UITextField *passwordFiled;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
-
 @end
 
 @implementation LoginPasswordViewController
@@ -56,7 +55,7 @@
     [backView addSubview:passwordField];
   
 
-    UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 95, 20)];
+    UILabel *verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 65, 20)];
     verifyLabel.font = [UIFont systemFontOfSize:TEXTFONT];
     verifyLabel.textColor = [UIColor blackColor];
     verifyLabel.text = @"确认密码";
