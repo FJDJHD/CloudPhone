@@ -69,7 +69,9 @@
                     if (self.modifySignatureBlock) {
                         self.modifySignatureBlock(self.setNameView.text);
                     }
-                    
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    NSString *number = [defaults objectForKey:UserNumber];
+                    [DBOperate updateData:T_personalInfo tableColumn:@"signature" columnValue:self.setNameView.text conditionColumn:@"phoneNum" conditionColumnValue:number];
                 });
                 
             } else {

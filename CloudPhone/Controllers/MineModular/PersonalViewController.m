@@ -55,11 +55,11 @@
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    
     [self.view addSubview:self.tableView];
-   
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
+    
     _infoArray = [DBOperate queryData:T_personalInfo theColumn:@"phoneNum" theColumnValue:number withAll:NO];
     if (_infoArray.count > 0) {
         NSArray *temp = _infoArray[0];
@@ -143,6 +143,7 @@
         if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"] || [model.userIcon isEqual:[NSNull null]]) {
         } else {
             if (_infoArray.count > 0) {
+                
                 UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
                 if (iconImage) {
                     imageView.image = iconImage;
@@ -158,13 +159,14 @@
     } else {
         cell.textLabel.text = self.itemArray[indexPath.row];
         
-        
         if (indexPath.row == 0) {
             //昵称
             if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@""]) {
                 cell.detailTextLabel.text = @"请设置";
             } else {
-                cell.detailTextLabel.text = model.userName;
+                if (_infoArray.count > 0) {
+                    cell.detailTextLabel.text = model.userName;
+                }
             }
 
         }else if (indexPath.row == 1){
@@ -265,7 +267,9 @@
                         UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
                         nameCell.detailTextLabel.text = textField.text;
                         
-                        
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *number = [defaults objectForKey:UserNumber];
+                        [DBOperate updateData:T_personalInfo tableColumn:@"name" columnValue:textField.text conditionColumn:@"phoneNum" conditionColumnValue:number];
                         
                         //这里把xmpp的个人信息修改一下
                         [ChatSendHelper modifyUserNicknameWithString:textField.text];
@@ -329,6 +333,9 @@
                     }else if (buttonIndex == 1){
                         cell.detailTextLabel.text = @"女";
                     }
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    NSString *number = [defaults objectForKey:UserNumber];
+                    [DBOperate updateData:T_personalInfo tableColumn:@"sex" columnValue:cell.detailTextLabel.text conditionColumn:@"phoneNum" conditionColumnValue:number];
                   };
                 } else {
                     [CustomMBHud customHudWindow:@"修改失败"];
@@ -447,6 +454,7 @@
                 //图片保存到本地路径
                 NSString *iconPath = [GeneralToolObject personalIconFilePath];
                 [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
+                DLog(@"%@",iconPath);
                 
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 NSString *number = [defaults objectForKey:UserNumber];
@@ -515,6 +523,11 @@
                 [CustomMBHud customHudWindow:@"修改成功"];
                 UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
                 cell.detailTextLabel.text = self.setBirthStr;
+                
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSString *number = [defaults objectForKey:UserNumber];
+                [DBOperate updateData:T_personalInfo tableColumn:@"birthday" columnValue:self.setBirthStr conditionColumn:@"phoneNum" conditionColumnValue:number];
+
             } else {
                 DLog(@"******%@",[dic objectForKey:@"msg"]);
                 [CustomMBHud customHudWindow:@"修改失败"];
@@ -523,18 +536,16 @@
         
     }];
     [self.coverView removeFromSuperview];
-    NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1   ];
+    NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1];
     NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
     [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
     }else{
-        [self.coverView removeFromSuperview];
+    [self.coverView removeFromSuperview];
     }
 }
 - (void)cancelButtonClick{
     [self.coverView removeFromSuperview];
 }
-
-
 
 - (void)dateChange:(UIDatePicker *)datePicker{
     NSDateFormatter*formatter = [[NSDateFormatter alloc] init];
@@ -559,8 +570,5 @@
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
-
 
 @end

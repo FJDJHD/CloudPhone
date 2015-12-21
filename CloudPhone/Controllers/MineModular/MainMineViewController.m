@@ -26,7 +26,7 @@
 @property (nonatomic, strong) NSMutableDictionary *testDic;
 
 @property (nonatomic, strong) UserModel *user;
-
+@property (nonatomic, strong) NSArray *infoArray;
 @end
 
 @implementation MainMineViewController
@@ -43,40 +43,33 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self requestPersonalCenter];
-
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    
+    _infoArray = [DBOperate queryData:T_personalInfo theColumn:@"phoneNum" theColumnValue:number withAll:NO];
+    if (_infoArray.count > 0) {
+        NSArray *temp = _infoArray[0];
+        _user = [[UserModel alloc]init];
+        _user.userNumber = [temp objectAtIndex:info_phoneNum];
+        _user.userName = [temp objectAtIndex:info_name];
+        _user.userIcon = [temp objectAtIndex:info_iconPath];
+        _user.userBirthday = [temp objectAtIndex:info_birthday];
+        _user.userGender = [temp objectAtIndex:info_sex];
+        _user.userSignature = [temp objectAtIndex:info_signature];
+        [_tableView reloadData];
+        
+    } else {
+        [self requestPersonalInfo];
+    }
+   // [self requestPersonalCenter];    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     
-    
-//    //图片路径
-//    NSString *iconPath = [self personalIconFilePath];
-//    UIImage *image = [UIImage imageNamed:@"mine_icon"];
-//    [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
-//
-//    //写入沙盒
-//    NSMutableDictionary *infoDic = [[NSMutableDictionary alloc]init];
-//    [infoDic setValue:iconPath forKey:@"personalIcon"];
-//    [infoDic setValue:@"王聪" forKey:@"personalName"];
-//    [infoDic setValue:@"13113689077" forKey:@"personalNumber"];
-//    BOOL result = [infoDic writeToFile:[self personalInfoFilePath] atomically:YES];
-//    if (result) {
-//        DLog(@"缓存成功");
-//    }
-    
-//    [self initData];
 }
-
-//- (void)initData {
-//
-//    //先读取缓存
-//    NSString *cachePath = [self personalInfoFilePath];
-//    self.testDic = [[NSMutableDictionary alloc] initWithContentsOfFile:cachePath];
-//    [_tableView reloadData];
-//}
 
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -161,9 +154,21 @@
         //头像
         if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"]) {
             
-        } else {
-            [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"pic_touxiang@2x.png"]];
+        }else {
+            if (_infoArray.count > 0) {
+                
+                UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
+                if (iconImage) {
+                    imageView.image = iconImage;
+                } else {
+                    imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+                }
+                
+            } else {
+                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"pic_touxiang@2x.png"]];
+            }
         }
+
         
     } else {
         if(indexPath.row == 0){
@@ -234,30 +239,67 @@
 }
 
 
-- (void)requestPersonalCenter {
+//- (void)requestPersonalCenter {
+//
+//    //用户中心首页
+//    [[AirCloudNetAPIManager sharedManager] getUserCenterOfParams:nil WithBlock:^(id data, NSError *error) {
+//        
+//        if (!error) {
+//            NSDictionary *dic = (NSDictionary *)data;
+//            
+//            if (dic) {
+//                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+//                    DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+//                    
+//                    NSDictionary *info = [dic objectForKey:@"data"];
+//                    if (info) {
+//                        _user = [[UserModel alloc]init];
+//                        _user.userNumber = [info objectForKey:@"mobile"];
+//                        _user.userName = [info objectForKey:@"nick_name"];
+//                        _user.userIcon = [info objectForKey:@"photo"];
+//                        [_tableView reloadData];
+//                    }
+//                    
+//                } else {
+//                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+//                }
+//            }
+//        }
+//    }];
+//}
 
-    //用户中心首页
-    [[AirCloudNetAPIManager sharedManager] getUserCenterOfParams:nil WithBlock:^(id data, NSError *error) {
-        
+- (void)requestPersonalInfo {
+    NSDictionary *dic = @{@"us":@"us"};
+    [[AirCloudNetAPIManager sharedManager] getUserCenterInfoOfParams:dic WithBlock:^(id data, NSError *error) {
         if (!error) {
             NSDictionary *dic = (NSDictionary *)data;
             
-            if (dic) {
-                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                NSDictionary *info = [dic objectForKey:@"data"];
+                if (info) {
                     
-                    NSDictionary *info = [dic objectForKey:@"data"];
-                    if (info) {
-                        _user = [[UserModel alloc]init];
-                        _user.userNumber = [info objectForKey:@"mobile"];
-                        _user.userName = [info objectForKey:@"nick_name"];
-                        _user.userIcon = [info objectForKey:@"photo"];
-                        [_tableView reloadData];
-                    }
+                    UserModel *model = [[UserModel alloc]init];
+                    model.userNumber = [info objectForKey:@"mobile"];
+                    model.userName = [info objectForKey:@"nick_name"];
+                    model.userIcon = [info objectForKey:@"photo"];
+                    model.userBirthday = [info objectForKey:@"birthday"];
+                    model.userGender = [info objectForKey:@"gender"];
+                    model.userSignature = [info objectForKey:@"signature"];
                     
-                } else {
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    self.user = model;
+                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
+                    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
+                    
+                    
+                    [_tableView reloadData];
                 }
+                
+                
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:[NSString stringWithFormat:@"%@",[dic objectForKey:@"msg"]]];
+                
             }
         }
     }];
