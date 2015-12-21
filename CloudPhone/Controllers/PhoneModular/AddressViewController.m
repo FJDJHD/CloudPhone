@@ -12,14 +12,18 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "PersonModel.h"
 #import "NSString+Util.h"
-
-@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate>
+#import "UIImage+ResizeImage.h"
+#import "FriendCell.h"
+@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) NSMutableArray *listTitleArray;
 @property (nonatomic, strong) NSMutableArray *listContentArray;
-
+@property (nonatomic, strong) NSMutableArray *searchArray;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchDisplayController *searchControl;
+
+
 @end
 
 @implementation AddressViewController
@@ -52,28 +56,15 @@
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;
     
-    //搜索框
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 10, MainWidth, 30)];
-    searchBar.delegate = self;
-    self.searchBar = searchBar;
-    searchBar.barTintColor = [ColorTool backgroundColor];
-    searchBar.backgroundImage = [GeneralToolObject imageWithColor:[UIColor clearColor]];
-    [searchBar setReturnKeyType:UIReturnKeySearch];
-    searchBar.keyboardType = UIKeyboardTypeDefault;
-    searchBar.placeholder = @"搜索";
-    
-    
-
-    [self.view addSubview:searchBar];
     //添加表视图
     [self.view addSubview:self.tableView];
+    [self initWithSearchBar];
     [self loadAddressData];
 }
 
-
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.searchBar.frame) + 10, MainWidth, SCREEN_HEIGHT - STATUS_NAV_BAR_HEIGHT - self.searchBar.frame.size.height - 20);
+        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.searchBar.frame) + 10, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.rowHeight = 60;
         _tableView.sectionIndexColor = RGB(51, 51, 51);
@@ -83,6 +74,27 @@
     }
     return _tableView;
 }
+
+
+- (void)initWithSearchBar {
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    self.searchBar.frame = CGRectMake(0.0f, 0.f, MainWidth, 44.0f);
+    self.searchBar.placeholder=@"搜索";
+    self.searchBar.delegate = self;
+    self.searchBar.backgroundColor = [UIColor clearColor];
+    self.searchBar.backgroundImage = [UIImage imageWithColor:[ColorTool backgroundColor] size:self.searchBar.bounds.size];
+    
+    //设置为列表头
+    self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 44.0f)];
+    [self.tableView.tableHeaderView addSubview:self.searchBar];
+    
+    //搜索控制器
+    self.searchControl = [[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self];
+    self.searchControl.searchResultsDataSource = self;
+    self.searchControl.searchResultsDelegate = self;
+    self.searchControl.delegate = self;
+}
+
 
 - (void)loadAddressData {
      [self initData];
@@ -131,12 +143,29 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView  == self.searchControl.searchResultsTableView) {
+        //搜索栏
+        return _searchArray.count;
+    }else{
        return [_listContentArray[section] count];
- 
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    if (tableView == self.searchControl.searchResultsTableView) {
+        //搜索
+        static NSString *ID = @"SearchCell";
+        FriendCell *searchCell =[tableView dequeueReusableCellWithIdentifier:ID];
+        if (!searchCell) {
+            searchCell = [[FriendCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        }
+        if (_searchArray.count > 0) {
+            XMPPUserCoreDataStorageObject *user = [_searchArray objectAtIndex:indexPath.row];
+            [searchCell cellForData:user];
+        }
+        return searchCell;
+        
+    } else{
     static NSString *ID = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
@@ -154,8 +183,9 @@
         cell.accessoryView = imageView;
         //cell.detailTextLabel.text = model.tel;
     }
-    
-    return cell;
+         return cell;
+  }
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate 

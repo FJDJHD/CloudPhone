@@ -181,8 +181,9 @@
     
     [self POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
-        NSString *filePath = [GeneralToolObject personalIconFilePath];
-        NSData * data= UIImageJPEGRepresentation(image, 0.1);//UIImagePNGRepresentation(fileImage);
+        NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",content]];
+        NSData *data= UIImageJPEGRepresentation(image, 0.1);//UIImagePNGRepresentation(fileImage);
         [formData appendPartWithFileData:data name:content fileName:filePath mimeType:@"image/png"];
         
     } success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {

@@ -8,6 +8,7 @@
 
 #import "FriendCell.h"
 #import "Global.h"
+#import "XMPPvCardTemp.h"
 
 @implementation FriendCell
 
@@ -39,9 +40,17 @@
 
 - (void)cellForData:(XMPPUserCoreDataStorageObject *)user {
     
+    //获取好友昵称，在好友信息查询
+    XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+    NSLog(@"xmppvCardTemp = %@ nickname = %@ givenName = %@ familyName = %@ orgName = %@",xmppvCardTemp,xmppvCardTemp.nickname,xmppvCardTemp.givenName,xmppvCardTemp.familyName,xmppvCardTemp.orgName);
+
+
     //名称
-    NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数
-    _nameLabel.text = user.nickname ? user.nickname :array[0];
+    if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+        _nameLabel.text = xmppvCardTemp.nickname;
+    } else {
+        _nameLabel.text = user.jid.user;
+    }
     
     //是否在线
     if (user.section == 0) {

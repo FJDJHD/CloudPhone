@@ -88,13 +88,19 @@
 }
 
 //修改xmpp用户头像
-+ (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name; {
++ (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name {
     
     NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
     NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
     NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
-    
-    NSData *dataFromImage = UIImageJPEGRepresentation(image, 0.5f);
+    UIImage *imag = image;
+    if (imag == nil) {
+        imag = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath]];
+        if (imag == nil) {
+            imag = [UIImage imageNamed:@"mine_icon"];
+        }
+    }
+    NSData *dataFromImage = UIImageJPEGRepresentation(imag, 0.5f);
     NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
     
     [photoXML addChild:typeXML];
@@ -104,28 +110,43 @@
     XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
     
     if (myvCardTemp) {
-        
         myvCardTemp.photo = dataFromImage;
         [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
     } else {
         XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
-        [newvCardTemp setNickname:@"法国多福多寿"];
+        [newvCardTemp setNickname:name];
         [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
     }
 }
 
 //修改xmpp用户昵称
 + (void)modifyUserNicknameWithString:(NSString *)str {
-    XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
-    myvCardTemp.nickname = str;
-    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
-
-//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppRoster] setNickname:str forUser:myvCardTemp.jid];
-//    NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns:@"vcard-temp"];
-//    XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
-//    [newvCardTemp setNickname:str];
-//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
-
+    
+    NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
+//    NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
+//    NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
+//    
+//    UIImage *image = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath]];
+//    if (image == nil) {
+//        image = [UIImage imageNamed:@"mine_icon"];
+//    }
+//
+//    NSData *dataFromImage = UIImageJPEGRepresentation(image, 0.5f);
+//    NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
+//    
+//    [photoXML addChild:typeXML];
+//    [photoXML addChild:binvalXML];
+//    [vCardXML addChild:photoXML];
+    
+    XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
+    [newvCardTemp setNickname:str];
+//    [newvCardTemp setPhoto:dataFromImage];
+    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
+    
+//    XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
+//    myvCardTemp.photo = dataFromImage;
+//    myvCardTemp.nickname = str;
+//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
 }
 
 
@@ -149,6 +170,29 @@
     }
     return image;
 }
+
+
+//根据jid获取用户头像包括自己的头像
++ (UIImage *)getPhotoWithJID:(XMPPJID *)jid {
+
+    UIImage *image = nil;
+    if ([jid isEqualToJID:[[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] myJID]]) {
+        //自己的头像
+        XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
+        if (myvCardTemp.photo != nil) {
+            image = [UIImage imageWithData:myvCardTemp.photo];
+        }
+
+    } else {
+        //jid 的头像
+        NSData *photoData = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardAvatarModule] photoDataForJID:jid];
+        if (photoData != nil){
+            image = [UIImage imageWithData:photoData];
+        }
+    }
+    return image;
+}
+
 
 
 

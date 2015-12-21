@@ -102,17 +102,17 @@
     BaseNavigationController *registerLoginNavigationController = [[BaseNavigationController alloc]initWithRootViewController:controller];
     
     if (CURRENT_SYS_VERSION >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool backgroundColor]];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
-        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setTintColor:[ColorTool backgroundColor]];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
+                                                           [UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
     self.window.rootViewController = registerLoginNavigationController;
 }
 

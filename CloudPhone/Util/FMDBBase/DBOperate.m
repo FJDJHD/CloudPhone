@@ -15,12 +15,13 @@
 
 @implementation DBOperate
 
+
 //创建表
 +(BOOL)createTable{
 
-	NSArray *tableListSql=[NSArray arrayWithObjects:C_T_chatMessage,nil];
+	NSArray *tableListSql=[NSArray arrayWithObjects:C_T_chatMessage,C_T_personalInfo,nil];
 
-	NSArray *tableList=[NSArray arrayWithObjects:T_chatMessage,nil];
+	NSArray *tableList=[NSArray arrayWithObjects:T_chatMessage,T_personalInfo,nil];
 
 	NSString *dbFilePath=[FileManager getFilePath:dataBaseFile];
 	NSLog(@"dbFilePath:---------------- %@",dbFilePath);

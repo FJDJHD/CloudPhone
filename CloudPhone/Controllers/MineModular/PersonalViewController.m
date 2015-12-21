@@ -24,12 +24,14 @@
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) UIButton *sureButton;
 @property (nonatomic, strong) UIButton *cancelButton;
-@property (nonatomic, strong) NSTextAttachment *attchIcon;
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) UserModel *user;
 @property (nonatomic, strong) UITextView *setSignatureView;
-@property (nonatomic, strong)   NSString *setBirthStr;
+@property (nonatomic, strong) NSString *setBirthStr;
+
+
+@property (nonatomic, strong) NSArray *infoArray;
 
 
 @end
@@ -47,14 +49,32 @@
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
     self.title = @"账号";
-    [self.view addSubview:self.tableView];
-      //返回
+    
+    //返回
     UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
     
-    [self requestPersonalInfo];
+    [self.view addSubview:self.tableView];
+   
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    _infoArray = [DBOperate queryData:T_personalInfo theColumn:@"phoneNum" theColumnValue:number withAll:NO];
+    if (_infoArray.count > 0) {
+        NSArray *temp = _infoArray[0];
+        _user = [[UserModel alloc]init];
+        _user.userNumber = [temp objectAtIndex:info_phoneNum];
+        _user.userName = [temp objectAtIndex:info_name];
+        _user.userIcon = [temp objectAtIndex:info_iconPath];
+        _user.userBirthday = [temp objectAtIndex:info_birthday];
+        _user.userGender = [temp objectAtIndex:info_sex];
+        _user.userSignature = [temp objectAtIndex:info_signature];
+        [_tableView reloadData];
+        
+    } else {
+        [self requestPersonalInfo];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -122,7 +142,17 @@
         //头像
         if (model.userIcon == nil || model.userIcon.length == 0 || [model.userIcon isEqualToString:@"/"] || [model.userIcon isEqual:[NSNull null]]) {
         } else {
-            [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
+            if (_infoArray.count > 0) {
+                UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
+                if (iconImage) {
+                    imageView.image = iconImage;
+                } else {
+                    imageView.image = [UIImage imageNamed:@"mine_icon"];
+                }
+                
+            } else {
+                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
+            }
         }
         
     } else {
@@ -234,8 +264,12 @@
                         [CustomMBHud customHudWindow:@"昵称修改成功"];
                         UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
                         nameCell.detailTextLabel.text = textField.text;
+                        
+                        
+                        
                         //这里把xmpp的个人信息修改一下
                         [ChatSendHelper modifyUserNicknameWithString:textField.text];
+                        [ChatSendHelper modifyUserHeadPortraitWithImage:nil nickName:textField.text];
                     } else {
                         [CustomMBHud customHudWindow:@"昵称修改失败"];
                     }
@@ -410,6 +444,14 @@
                 UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
                 imageView.image = image;
                 
+                //图片保存到本地路径
+                NSString *iconPath = [GeneralToolObject personalIconFilePath];
+                [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
+                
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSString *number = [defaults objectForKey:UserNumber];
+                [DBOperate updateData:T_personalInfo tableColumn:@"iconPath" columnValue:iconPath conditionColumn:@"phoneNum" conditionColumnValue:number];
+                
                 //这里把xmpp的个人信息修改一下
                 [ChatSendHelper modifyUserHeadPortraitWithImage:image nickName:nil];
                 
@@ -436,13 +478,20 @@
                 DLog(@"成功------%@",[dic objectForKey:@"msg"]);
                 NSDictionary *info = [dic objectForKey:@"data"];
                 if (info) {
-                    _user = [[UserModel alloc]init];
-                    _user.userNumber = [info objectForKey:@"mobile"];
-                    _user.userName = [info objectForKey:@"nick_name"];
-                    _user.userIcon = [info objectForKey:@"photo"];
-                    _user.userBirthday = [info objectForKey:@"birthday"];
-                    _user.userGender = [info objectForKey:@"gender"];
-                    _user.userSignature = [info objectForKey:@"signature"];
+                    
+                    UserModel *model = [[UserModel alloc]init];
+                    model.userNumber = [info objectForKey:@"mobile"];
+                    model.userName = [info objectForKey:@"nick_name"];
+                    model.userIcon = [info objectForKey:@"photo"];
+                    model.userBirthday = [info objectForKey:@"birthday"];
+                    model.userGender = [info objectForKey:@"gender"];
+                    model.userSignature = [info objectForKey:@"signature"];
+                    
+                    self.user = model;
+                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
+                    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
+                    
+                    
                     [_tableView reloadData];
                 }
 

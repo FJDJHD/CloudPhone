@@ -22,7 +22,7 @@
     self.title = @"设置新登录密码";
     
     //返回
-    UIButton *backButton = [self setBackBarButton:0];
+    UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
 
