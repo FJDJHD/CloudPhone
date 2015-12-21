@@ -264,8 +264,12 @@
                         [CustomMBHud customHudWindow:@"昵称修改成功"];
                         UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
                         nameCell.detailTextLabel.text = textField.text;
+                        
+                        
+                        
                         //这里把xmpp的个人信息修改一下
                         [ChatSendHelper modifyUserNicknameWithString:textField.text];
+                        [ChatSendHelper modifyUserHeadPortraitWithImage:nil nickName:textField.text];
                     } else {
                         [CustomMBHud customHudWindow:@"昵称修改失败"];
                     }

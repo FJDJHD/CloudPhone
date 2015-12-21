@@ -42,6 +42,7 @@
     
     //获取好友昵称，在好友信息查询
     XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+    NSLog(@"xmppvCardTemp = %@ nickname = %@ givenName = %@ familyName = %@ orgName = %@",xmppvCardTemp,xmppvCardTemp.nickname,xmppvCardTemp.givenName,xmppvCardTemp.familyName,xmppvCardTemp.orgName);
 
     //名称
     if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
