@@ -31,7 +31,7 @@
         
         _iconView = [[UIImageView alloc] init];
         _iconView.image = [UIImage imageNamed:@"mine_icon"];
-        _iconView.layer.cornerRadius = 24;
+        _iconView.layer.cornerRadius = ChatIconSize/2.0;
         _iconView.layer.masksToBounds = YES;
         [self addSubview:_iconView];
         

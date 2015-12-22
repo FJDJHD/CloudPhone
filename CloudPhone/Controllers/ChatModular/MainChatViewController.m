@@ -15,7 +15,7 @@
 #import "FriendCell.h"
 #import "ChatListCell.h"
 #import "UIImage+ResizeImage.h"
-
+#import "XMPPvCardTemp.h"
 @interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -33,6 +33,8 @@
 @property (nonatomic,  getter = isKCurrentController) BOOL kCurrentController; //默认不是当前的 no
 
 @property (nonatomic, strong) UILabel *unreadMessageLabel;
+
+@property (nonatomic, strong) NSIndexPath *tempIndexPath;
 
 
 @end
@@ -122,7 +124,6 @@
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.tableFooterView = [[UIView alloc]init];
-//        _tableView.backgroundColor = [ColorTool backgroundColor];
         _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -157,6 +158,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     if (tableView  == self.searchControl.searchResultsTableView) {
         //搜索栏
         return _searchArray.count;
@@ -234,6 +236,21 @@
             controller.chatJIDStr = user.jidStr;
             controller.chatJID = user.jid;
             controller.chatPhoto = user.photo;
+            
+            //名字有优先级
+            if (user.nickname.length > 0 && user.nickname) {
+                controller.chatName = user.nickname;
+                
+            } else {
+                XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                    controller.chatName = xmppvCardTemp.nickname;
+                } else {
+                    controller.chatName = user.jid.user;
+                }
+            }
+
+            
             [self.navigationController pushViewController:controller animated:YES];
         } else {
             //消息界面
@@ -245,6 +262,23 @@
                 XMPPJID *jid = [XMPPJID jidWithString:[temp objectAtIndex:message_id]];
                 controller.chatJID = jid;
                 
+                //传个名字
+                if (self.fetchedResultsController.fetchedObjects.count > 0) {
+                    for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
+                        if ([user.jid isEqualToJID:jid]) {
+                            if (user.nickname.length > 0 && user.nickname) {
+                                controller.chatName = user.nickname;
+                            } else {
+                                XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                                if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                                    controller.chatName = xmppvCardTemp.nickname;
+                                } else {
+                                    controller.chatName = user.jid.user;
+                                }
+                            }
+                        }
+                    }
+                }
                 [self.navigationController pushViewController:controller animated:YES];
             }
         }
@@ -255,29 +289,30 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (tableView == self.searchControl.searchResultsTableView) {
-        //搜索 这里还不需要做啥处理
-        return;
-    } else {
-        
-        if (self.selectType == kFriend) {
-            //好友
-            if (editingStyle == UITableViewCellEditingStyleDelete) {
-                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-                XMPPJID *jid = user.jid;
-                [[self appDelegate].xmppRoster removeUser:jid];
-            }
-        } else {
-            //消息
-            if (editingStyle == UITableViewCellEditingStyleDelete) {
-                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
-                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
-                //删除后重新再更新下数据库
-                [self loadMessageDataFromFMDB];
-                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            }
-        }
-    }
+//    if (tableView == self.searchControl.searchResultsTableView) {
+//        //搜索 这里还不需要做啥处理
+//        return;
+//    } else {
+//        
+//        if (self.selectType == kFriend) {
+//            //好友
+//            if (editingStyle == UITableViewCellEditingStyleDelete) {
+//                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+//                XMPPJID *jid = user.jid;
+//                [[self appDelegate] deleteFriend:user.jidStr];
+////                [[self appDelegate].xmppRoster removeUser:jid];
+//            }
+//        } else {
+//            //消息
+//            if (editingStyle == UITableViewCellEditingStyleDelete) {
+//                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
+//                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
+//                //删除后重新再更新下数据库
+//                [self loadMessageDataFromFMDB];
+//                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            }
+//        }
+//    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -286,6 +321,55 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60.0;
+}
+
+
+#pragma mark - ios8方法 －－－－－－－－－－－－－－－－
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        NSLog(@"点击了删除");
+        if (self.selectType == kFriend) {
+            //好友
+                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+                XMPPJID *jid = user.jid;
+               // [[self appDelegate] deleteFriend:user.jidStr];
+                [[self appDelegate].xmppRoster removeUser:jid];
+        } else {
+            //消息
+                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
+                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
+                //删除后重新再更新下数据库
+                [self loadMessageDataFromFMDB];
+            [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+
+    }];
+    
+    UITableViewRowAction *moreRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"备注" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        NSLog(@"点击了备注");
+        self.tempIndexPath = indexPath;
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+        alert.tag = 700;
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert show];
+    }];
+    if (self.selectType == kFriend) {
+        return @[deleteRowAction, moreRowAction];
+
+    }  else {
+        return @[deleteRowAction];
+    }
+    
 }
 
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
@@ -330,9 +414,6 @@
 - (void)addressButtonClick {
     AddressAddViewController *controller = [[AddressAddViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
-//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
-//    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//    [alert show];
 
 }
 
@@ -340,19 +421,14 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
         UITextField *userNameField = [alertView textFieldAtIndex:0];
-        NSString *desUser = [NSString stringWithFormat:@"%@%@",userNameField.text,XMPPSevser];
-        
-        // 如果已经是好友就不需要再次添加
-        XMPPJID *jid = [XMPPJID jidWithString:desUser];
-        
-        BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
-        if (contains) {
-            [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-            return;
+        if (alertView.tag == 700) {
+            //修改备注
+            if (userNameField.text.length > 0) {
+                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:self.tempIndexPath];
+                [[[self appDelegate] xmppRoster] setNickname:userNameField.text forUser:user.jid];
+            }
         }
-        [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
     } else {
-    
         DLog(@"取消");
     }
 }
