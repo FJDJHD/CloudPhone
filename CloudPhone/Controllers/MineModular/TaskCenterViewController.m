@@ -8,6 +8,7 @@
 
 #import "TaskCenterViewController.h"
 #import "Global.h"
+#import "UMSocial.h"
 @interface TaskCenterViewController()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -31,9 +32,6 @@
     headerView.contentMode = UIViewContentModeCenter;
     headerView.image = image;
     self.tableView.tableHeaderView = headerView;
-    
-
-    
 }
 
 - (UITableView *)tableView {
@@ -58,7 +56,6 @@
     return 1;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     static NSString *ID = @"Cell";
@@ -71,6 +68,7 @@
             self.shareBar = shareBar;
             [self setShareBar];
             [cell addSubview:shareBar];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
     }
     
@@ -109,6 +107,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(btX, btY, btWidth, btHeight);
         [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] forState:UIControlStateNormal];
+        button.tag = i;
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.shareBar addSubview:button];
         
@@ -137,7 +136,6 @@
     return 5;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 5;
 }
@@ -150,10 +148,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSLog(@"%ld",indexPath.row);
+   // NSLog(@"%ld",(long)indexPath.row);
     
 }
 
@@ -161,25 +158,28 @@
 - (void)clickButton:(UIButton *)sender{
     switch (sender.tag) {
         case 0:{
-            //静音
             DLog(@"0");
+            //使用UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite分别代表微信好友、微信朋友圈、微信收藏
+//            [[UMSocialDataService defaultDataService]  postSNSWithTypes:@[UMShareToWechatSession] content:@"分享内嵌文字" image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
+//                if (response.responseCode == UMSResponseCodeSuccess) {
+//                    NSLog(@"分享成功！");
+//                }
+//            }];
+            
         }
             break;
             
         case 1:{
-            //免提
             DLog(@"1");
         }
             break;
             
         case 2:{
-            //录音
             DLog(@"2");
         }
             break;
             
         case 3:{
-            //回拨
             DLog(@"3");
         }
             break;            
@@ -187,6 +187,17 @@
             break;
     }
     
+}
+
+
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据responseCode得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
 }
 
 - (void)popViewController {

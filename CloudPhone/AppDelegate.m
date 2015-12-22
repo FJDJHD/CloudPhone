@@ -31,6 +31,7 @@
 #import <CFNetwork/CFNetwork.h>
 #import "MessageViewController.h"
 
+#import "UMSocial.h"
 
 @interface AppDelegate ()
 
@@ -78,6 +79,8 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
 //    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+    //友盟分享
+     [UMSocialData setAppKey:@"	5678cd2067e58e3bf100087c"];
     
     [self.window makeKeyAndVisible];
     return YES;
