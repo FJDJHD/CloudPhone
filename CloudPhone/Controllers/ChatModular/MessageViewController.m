@@ -15,6 +15,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "EMCDDeviceManager.h"
 #import "EMAudioPlayerUtil.h"
+#import "XMPPvCardTemp.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -249,11 +250,8 @@
             lastStr = message.message.body;
         }
         NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
-        
-        NSArray *array = [self.chatJIDStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
-        NSString *chatname = array[0] ? array[0] :@"";
-        
-        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,chatname,lastStr,lastTime,nil];
+
+        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,nil];
         
         NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
         if (chatArray.count > 0) {

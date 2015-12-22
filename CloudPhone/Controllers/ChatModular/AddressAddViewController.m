@@ -14,7 +14,7 @@
 #import "ItelFriendModel.h"
 #import "JSONKit.h"
 
-@interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate>
+@interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -70,7 +70,7 @@
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.tableFooterView = [[UIView alloc]init];
-        _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 1)];
+        _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, CGFLOAT_MIN)];
         _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -81,14 +81,16 @@
 #pragma mark - UITabvleViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
+        return 1;
+    } else if (section == 1) {
         //itel 好友
         return _friendArray.count;
-    } else if (section == 1) {
+    } else if (section == 2) {
         //注册 itel
         return _invateArray.count;
     } else {
@@ -110,6 +112,9 @@
 
     cell.accessoryView = nil;
     if (indexPath.section == 0) {
+        cell.textLabel.text = @"添加好友";
+        
+    } else if (indexPath.section == 1) {
         //itel 好友 (好友)
         if (_friendArray.count > 0) {
             ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
@@ -118,7 +123,7 @@
             cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
         }
         
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
             ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
@@ -141,7 +146,19 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.section == 0) {
+        return 50;
+    } else {
+        return 60;
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return CGFLOAT_MIN;
+    }
     return 30.0;
 }
 
@@ -153,13 +170,15 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 
     if (section == 0) {
+        return nil;
+    } else if (section == 1) {
         //itel 好友 (好友)
         if (_friendArray.count > 0) {
             NSString *str = [NSString stringWithFormat:@"itel好友(%lu)",(unsigned long)_friendArray.count];
             return [self sectionHeaderViewWithTitle:str];
         }
         
-    } else if (section == 1) {
+    } else if (section == 2) {
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
             NSString *str = [NSString stringWithFormat:@"添加成itel好友(%lu)",(unsigned long)_invateArray.count];
@@ -179,11 +198,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     if (indexPath.section == 0) {
+        //添加好哟
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert show];
+
+        
+    }else if (indexPath.section == 1) {
         //itel 好友 (好友)
         
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
           //  ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
@@ -228,6 +253,29 @@
     [button setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateNormal];
 
     return button;
+}
+
+#pragma mark AlertDelegate
+//添加好友。。。。。
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        UITextField *userNameField = [alertView textFieldAtIndex:0];
+        NSString *desUser = [NSString stringWithFormat:@"%@%@",userNameField.text,XMPPSevser];
+  
+            // 如果已经是好友就不需要再次添加
+            XMPPJID *jid = [XMPPJID jidWithString:desUser];
+            
+            BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
+            if (contains) {
+                [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                return;
+            }
+//            [[self appDelegate] addFriend:desUser];
+        [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+        
+    } else {
+        DLog(@"取消");
+    }
 }
 
 #pragma mark - 网络请求
@@ -346,6 +394,12 @@
                                          otherButtonTitles:nil,nil];
         [alert show];
     }
+}
+
+#pragma mark - CustomMedth
+
+- (AppDelegate *)appDelegate {
+    return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
 #pragma mark - MBProgressHUD Show or Hidden

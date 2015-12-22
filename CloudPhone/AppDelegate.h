@@ -68,6 +68,14 @@
 
 
 
+//添加好友
+- (BOOL)addFriend:(NSString*)friendName;
+
+//删除好友
+- (BOOL)deleteFriend:(NSString*)friendName;
+
+
+
 //加载登录界面
 - (void)loadLoginViewController;
 

@@ -19,9 +19,9 @@
         
         UIImage *image = [UIImage imageNamed:@"mine_icon"];
         _iconImageView = [[UIImageView alloc]initWithImage:image];
-        _iconImageView.layer.cornerRadius = 24;
+        _iconImageView.layer.cornerRadius = ChatIconSize/2.0;
         _iconImageView.layer.masksToBounds = YES;
-        _iconImageView.frame = CGRectMake(15, (60 - 48)/2.0, 48, 48);
+        _iconImageView.frame = CGRectMake(15, (60 - ChatIconSize)/2.0, ChatIconSize, ChatIconSize);
         [self addSubview:_iconImageView];
         
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_iconImageView.frame) + 10, CGRectGetMinY(_iconImageView.frame) + 5, 200, 20)];
@@ -40,17 +40,20 @@
 
 - (void)cellForData:(XMPPUserCoreDataStorageObject *)user {
     
-    //获取好友昵称，在好友信息查询
-    XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
-    NSLog(@"xmppvCardTemp = %@ nickname = %@ givenName = %@ familyName = %@ orgName = %@",xmppvCardTemp,xmppvCardTemp.nickname,xmppvCardTemp.givenName,xmppvCardTemp.familyName,xmppvCardTemp.orgName);
-
-    //名称
-    if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
-        _nameLabel.text = xmppvCardTemp.nickname;
+    //获取好友昵称
+    //优先级 （最高是自己给好友设置的昵称，第二是用户自己修改的名字，第三是默认的手机号）
+    if (user.nickname.length > 0 && user.nickname) {
+        _nameLabel.text = user.nickname;
+        
     } else {
-        _nameLabel.text = user.jid.user;
+        XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+        if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+            _nameLabel.text = xmppvCardTemp.nickname;
+        } else {
+            _nameLabel.text = user.jid.user;
+        }
     }
-    
+
     //是否在线
     if (user.section == 0) {
         _onlineLable.text = @"在线";

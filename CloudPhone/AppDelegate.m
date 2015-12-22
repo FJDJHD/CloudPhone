@@ -360,85 +360,105 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:ChatMessageComeing object:nil];
         
     }
-//        UIViewController* topViewController = appdelegate.baseTabBarController.navigationController.topViewController;
-//        NSLog(@"%@",topViewController);
-//        if ([topViewController isKindOfClass:[ HomeViewController class]]) {
-//            ｝
-        
-    
-//    if ([message hasReceiptResponse] && ![message isErrorMessage]) {
-//        DLog(@"提示发送成功");
-//    }
-//    
-//    if ([message hasReceiptRequest] && ![message isErrorMessage]) {
-//        //收到回执请求，组装消息回执
-//        DLog(@"发送消息回执");
-//        XMPPMessage *msg = [XMPPMessage messageWithType:[message attributeStringValueForName:@"type"] to:message.from elementID:[XMPPStream generateUUID]];
-//        NSXMLElement *recieved = [NSXMLElement elementWithName:@"received" xmlns:@"urn:xmpp:receipts"];
-//        [recieved addAttributeWithName:@"id" stringValue:[message attributeStringValueForName:@"id"]];
-//        [msg addChild:recieved];
-//        
-//        //发送回执
-//        [self.xmppStream sendElement:msg];
-//    }
-    
-//    //回执判断
-//    NSXMLElement *request = [message elementForName:@"request"];
-//    if (request)
-//    {
-//        if ([request.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
-//        {
-//            //组装消息回执
-//            XMPPMessage *msg = [XMPPMessage messageWithType:[message attributeStringValueForName:@"type"] to:message.from elementID:[message attributeStringValueForName:@"id"]];
-//            NSXMLElement *recieved = [NSXMLElement elementWithName:@"received" xmlns:@"urn:xmpp:receipts"];
-//            [msg addChild:recieved];
-//            
-//            //发送回执
-//            [self.xmppStream sendElement:msg];
-//        }
-//    }else
-//    {
-//        NSXMLElement *received = [message elementForName:@"received"];
-//        if (received)
-//        {
-//            if ([received.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
-//            {
-//                //发送成功
-//                NSLog(@"message send success!");
-//            }
-//        }
-//    }
-
-    //程序运行在前台，消息正常显示
-//    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
-//        DLog(@"message = %@",message);
-//    }else{//如果程序在后台运行，收到消息以通知类型来显示
-//        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-//        localNotification.alertAction = @"Ok";
-//        localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",@"test",@"This is a test message"];//通知主体
-//        localNotification.applicationIconBadgeNumber = 1;//标记数
-//        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];//发送通知
-//    }
 }
 
 #pragma mark XMPPRosterDelegate
 //接受好友请求时候调用，就是有人加你好友
-- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
-    
-    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
-    
-    //这里暂时用ios8的方法。。。。。。。。
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [xmppRoster rejectPresenceSubscriptionRequestFrom:presence.from];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
-    }]];
+//- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
+//    
+//    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
+//    
+//    //这里暂时用ios8的方法。。。。。。。。
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        NSLog(@"取消");
+//        [xmppRoster rejectPresenceSubscriptionRequestFrom:presence.from];
+//    }]];
+//    
+//    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//         NSLog(@"确定");
+//        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
+//    }]];
+//
+//    UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//    [alertController presentViewController:alert animated:YES completion:nil];
+//}
 
-    UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    [alertController presentViewController:alert animated:YES completion:nil];
+//添加好友
+- (BOOL)addFriend:(NSString*)friendName
+{
+    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",friendName,XMPPSevser]];
+    [xmppRoster subscribePresenceToUser:friendJid];
+    return YES;
+}
+
+//删除好友
+- (BOOL)deleteFriend:(NSString*)friendName
+{
+    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",friendName,XMPPSevser]];
+    [xmppRoster removeUser:friendJid];
+    return YES;
+}
+
+//收到好友请求 代理函数
+- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
+{
+    
+//    XMPPJID * fromJid = presence.from;
+//    //直接通过
+//    [xmppRoster acceptPresenceSubscriptionRequestFrom:fromJid andAddToRoster:YES];
+    
+    //取得好友状态
+    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
+    //请求的用户
+    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
+    NSLog(@"presenceType:%@",presenceType);
+    
+    NSLog(@"presence2:%@  sender2:%@",presence,sender);
+    
+    XMPPJID *jid = [XMPPJID jidWithString:presenceFromUser];
+    [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+}
+
+#pragma mark 收到好友上下线状态
+- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence {
+    //    DDLogVerbose(@"%@: %@ ^^^ %@", THIS_FILE, THIS_METHOD, [presence fromStr]);
+    
+    //取得好友状态
+    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
+    //当前用户
+    //    NSString *userId = [NSString stringWithFormat:@"%@", [[sender myJID] user]];
+    //在线用户
+    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
+    NSLog(@"presenceType:%@",presenceType);
+    NSLog(@"用户:%@",presenceFromUser);
+    //这里再次加好友
+    if ([presenceType isEqualToString:@"subscribed"]) {
+        XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@",[presence from]]];
+        [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+    }
+}
+
+
+//-(void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(DDXMLElement *)item
+//{
+//    NSString *subscription = [item attributeStringValueForName:@"subscription"];
+//    NSLog(@"-------%@",subscription);
+//    if ([subscription isEqualToString:@"both"]) {
+//        NSLog(@"双方成为好友！");
+//    }
+//}
+
+- (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
+    
+    DDXMLElement *query = [iq elementsForName:@"query"][0];
+    DDXMLElement *item = [query elementsForName:@"item"][0];
+    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+    
+    
+    
+    NSLog(@"--iq = %@\n sub = %@",iq,subscription);
+
 }
 
 //- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence {

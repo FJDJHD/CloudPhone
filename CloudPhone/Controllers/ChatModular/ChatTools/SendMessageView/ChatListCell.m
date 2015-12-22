@@ -19,9 +19,9 @@
         
         UIImage *image = [UIImage imageNamed:@"mine_icon"];
         _iconImageView = [[UIImageView alloc]initWithImage:image];
-        _iconImageView.layer.cornerRadius = 24;
+        _iconImageView.layer.cornerRadius = ChatIconSize/2.0;
         _iconImageView.layer.masksToBounds = YES;
-        _iconImageView.frame = CGRectMake(15, (60 - 48)/2.0, 48, 48);
+        _iconImageView.frame = CGRectMake(15, (60 - ChatIconSize)/2.0, ChatIconSize, ChatIconSize);
         [self addSubview:_iconImageView];
         
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_iconImageView.frame) + 10, CGRectGetMinY(_iconImageView.frame) + 5, 200, 20)];

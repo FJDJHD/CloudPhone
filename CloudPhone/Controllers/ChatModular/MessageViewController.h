@@ -17,4 +17,6 @@
 
 @property (nonatomic, strong) XMPPJID *chatJID;
 
+@property (nonatomic, copy) NSString *chatName; //名字
+
 @end

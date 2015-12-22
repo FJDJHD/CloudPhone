@@ -88,6 +88,7 @@
 #define ResetPassword             @"ResetPassword" //重置密码
 
 #define MessageItel               @"我正在使用云电话，每月都有免费话费赠送。http://baidu.com"
+#define ChatIconSize              45 //这里没地方塞了
 
 #import <Foundation/Foundation.h>
 #import "Macros.h"

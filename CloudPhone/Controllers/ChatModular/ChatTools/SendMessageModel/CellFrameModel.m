@@ -10,7 +10,7 @@
 #import "UIImage+ResizeImage.h"
 
 #define padding 10
-#define iconW   48
+#define iconW   ChatIconSize
 #define iconH   iconW
 #define textW   150
 
