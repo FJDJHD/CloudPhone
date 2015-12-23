@@ -11,7 +11,6 @@
 #import "AppDelegate.h"
 #import "UserModel.h"
 
-#import "PersonSignatureViewController.h"
 #import "ChatSendHelper.h"
 
 
@@ -242,14 +241,7 @@
     }else if (indexPath.section == 1 && indexPath.row == 3){
       //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
-       // [self addSignatureView];
-        PersonSignatureViewController *signatuireVC = [PersonSignatureViewController new];
-        signatuireVC.modifySignatureBlock = ^(NSString *text){
-            UITableViewCell *textCell = [tableView cellForRowAtIndexPath:indexPath];
-            textCell.detailTextLabel.text = text;
-        };
-        [self.navigationController pushViewController:signatuireVC animated:YES];
-        
+        [self addSignatureView];
     }
 }
 
@@ -371,13 +363,14 @@
     [view addSubview:datePicker];
     
     UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.tag = 1001;
     sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.datePicker.frame), MainWidth / 2.0, 44);
     sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     sureButton.layer.borderColor = [UIColor blackColor].CGColor;
     sureButton.layer.borderWidth = 0.5;
     [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [sureButton setTitle:@"确定" forState:UIControlStateNormal];
-    [sureButton addTarget:self action:@selector(sureButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     self.sureButton = sureButton;
     [view addSubview:sureButton];
     
@@ -392,6 +385,7 @@
     self.cancelButton = cancelButton;
     [view addSubview:cancelButton];
 }
+
 - (void)addSignatureView{
     UIView *coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
@@ -407,19 +401,21 @@
     UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 150)];
     setSignatureView.backgroundColor = [UIColor whiteColor];
     setSignatureView.font = [UIFont systemFontOfSize:20];
+    self.setSignatureView = setSignatureView;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.setSignatureView = setSignatureView;
     self.setSignatureView.delegate = self;
     [view addSubview:setSignatureView];
     
     UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.tag = 1002;
     sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.setSignatureView.frame), MainWidth / 2.0, 44);
     sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     sureButton.layer.borderColor = [UIColor blackColor].CGColor;
     sureButton.layer.borderWidth = 0.5;
     [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [sureButton setTitle:@"确定" forState:UIControlStateNormal];
-    [sureButton addTarget:self action:@selector(sureButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     self.sureButton = sureButton;
     [view addSubview:sureButton];
     
@@ -473,7 +469,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 - (void)requestPersonalInfo {
     NSDictionary *dic = @{@"us":@"us"};
     [self AddHUD];
@@ -512,8 +507,10 @@
         }
     }];
 }
-- (void)sureButtonClick{
-    if (self.setBirthStr.length > 0) {
+
+- (void)sureButtonClick:(UIButton *)sender{
+    if (sender.tag == 1001) {
+        if (self.setBirthStr.length > 0) {
     NSDictionary *dic = @{@"field":@"birthday",@"fieval":self.setBirthStr};
     [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
         if (!error) {
@@ -541,8 +538,43 @@
     [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
     }else{
     [self.coverView removeFromSuperview];
+      }
+    }else if(sender.tag == 1002){
+        if (self.setSignatureView.text.length > 0){
+        NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setSignatureView.text};
+        [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    [self.setSignatureView resignFirstResponder];
+                    [CustomMBHud customHudWindow:@"个性签名修改成功"];
+                        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:1]];
+                        cell.detailTextLabel.text = self.setSignatureView.text;
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *number = [defaults objectForKey:UserNumber];
+                        [DBOperate updateData:T_personalInfo tableColumn:@"signature" columnValue:self.setSignatureView.text conditionColumn:@"phoneNum" conditionColumnValue:number];
+                    }else{
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:@"个性签名修改失败"];
+                }
+        }
+    }];
+        [self.coverView removeFromSuperview];
+        NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:4 inSection:1];
+        NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
+        [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+  }
+    else{
+        [self.coverView removeFromSuperview];
     }
+  }
 }
+
+- (void)textViewDidEndEditing:(UITextView *)textView{
+    self.setSignatureView.text = textView.text;
+}
+
+
 - (void)cancelButtonClick{
     [self.coverView removeFromSuperview];
 }

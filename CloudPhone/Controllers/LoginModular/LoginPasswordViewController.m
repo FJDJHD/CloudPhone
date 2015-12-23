@@ -45,7 +45,7 @@
     passwordLabel.text = @"输入密码";
     [backView addSubview:passwordLabel];
     
-    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0, 150, 44)];
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordLabel.frame), 0,MainWidth - CGRectGetMaxX(passwordLabel.frame), 44)];
     passwordField.placeholder = @"请输入登录密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
