@@ -13,14 +13,17 @@
 #import <MessageUI/MessageUI.h>
 #import "ItelFriendModel.h"
 #import "JSONKit.h"
+#import "AddFriendModel.h"
 
-@interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate,UIAlertViewDelegate>
+@interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *listContentArray;
 
 @property (nonatomic, strong) NSMutableArray *numberArray;
+
+@property (nonatomic, strong) NSMutableArray *addArray;
 
 @property (nonatomic, strong) NSMutableArray *friendArray;  //itel好友
 
@@ -45,10 +48,14 @@
     
     self.title = @"新的好友";
     
+    _addArray = [[NSMutableArray alloc]initWithCapacity:0];
     _numberArray = [[NSMutableArray alloc]initWithCapacity:0];
     _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
     _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
     _addressArray = [[NSMutableArray alloc]initWithCapacity:0];
+    
+    //请求添加好友的
+    [self loadFriendFromFMDB];
     
     [self.view addSubview:self.tableView];
     
@@ -74,8 +81,25 @@
         _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+//        UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+//        [_tableView addGestureRecognizer:tap];
     }
     return _tableView;
+}
+
+- (void)loadFriendFromFMDB {
+
+    [_addArray removeAllObjects];
+    
+    NSArray *array = [DBOperate queryData:T_addFriend theColumn:nil theColumnValue:nil withAll:YES];
+    if (array.count > 0) {
+        for (NSArray *temp in array) {
+            AddFriendModel *model = [[AddFriendModel alloc]init];
+            model.jidStr = [temp objectAtIndex:add_jidStr];
+            model.status = [temp objectAtIndex:add_isRead];
+            [_addArray addObject:model];
+        }
+    }
 }
 
 #pragma mark - UITabvleViewDatasource
@@ -86,7 +110,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 1;
+        return _addArray.count + 1;
     } else if (section == 1) {
         //itel 好友
         return _friendArray.count;
@@ -112,9 +136,36 @@
 
     cell.accessoryView = nil;
     if (indexPath.section == 0) {
-        cell.textLabel.text = @"添加好友";
+        if (indexPath.row == 0) {
+            UITableViewCell *textcell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"text"];
+            textcell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+
+            UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(70, 0, MainWidth - 80, 60)];
+            textField.placeholder = @"输入添加新的好友号码";
+            textField.font = [UIFont systemFontOfSize:17.0];
+            textField.returnKeyType = UIReturnKeyDone;
+            textField.delegate = self;
+            textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+            [textcell addSubview:textField];
+            return textcell;
+            
+        } else {
+            if (_addArray.count > 0) {
+                AddFriendModel *model = [_addArray objectAtIndex:indexPath.row - 1];
+                NSArray *array = [model.jidStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
+                cell.textLabel.text = array[0] ? array[0] : @"";
+                cell.detailTextLabel.text = @"请求添加好友";
+                if ([model.status isEqualToString:@"unread"]) {
+                    cell.accessoryView = [self statusButtonWithTitle:@"同意"];
+                } else {
+                    cell.accessoryView = [self statusButtonWithTitle:@"已添加"];
+                }
+            }
+        }
         
     } else if (indexPath.section == 1) {
+
         //itel 好友 (好友)
         if (_friendArray.count > 0) {
             ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
@@ -142,24 +193,35 @@
         }
     }
     return cell;
+    
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (indexPath.section == 0) {
-        return 50;
-    } else {
-        return 60;
-    }
+    return 60;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return CGFLOAT_MIN;
+    } else if (section == 1) {
+        if (_friendArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
+    } else if (section == 2) {
+        if (_invateArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
+    }  else {
+        if (_addressArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
     }
-    return 30.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -200,10 +262,23 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         //添加好哟
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        [alert show];
-
+        if (indexPath.row == 0) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alert show];
+        } else {
+            //同意与否
+            if ([[self appDelegate].xmppStream isConnected]) {
+                AddFriendModel *model = [_addArray objectAtIndex:indexPath.row -1];
+                if ([model.status isEqualToString:@"unread"]) {
+                    XMPPJID *jid = [XMPPJID jidWithString:model.jidStr];
+                    [[self appDelegate].xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+                    [DBOperate updateData:T_addFriend tableColumn:@"isRead" columnValue:@"read" conditionColumn:@"jidStr" conditionColumnValue:model.jidStr];
+                    [self loadFriendFromFMDB];
+                    [_tableView reloadData];
+                }
+            }
+        }
         
     }else if (indexPath.section == 1) {
         //itel 好友 (好友)
@@ -211,8 +286,13 @@
     } else if (indexPath.section == 2) {
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
-          //  ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
-    
+            if ([[self appDelegate].xmppStream isConnected]) {
+                ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
+                NSString *jidStr = [NSString stringWithFormat:@"%@%@",model.mobile,XMPPSevser];
+                
+                XMPPJID *jid = [XMPPJID jidWithString:jidStr];
+                [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+            }
         }
     
     } else {
@@ -224,6 +304,62 @@
         }
     }
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.view endEditing:YES];
+}
+
+#pragma mark - ios8方法 －－－－－－－－－－－－－－－－
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0 && indexPath.row > 0) {
+        return YES;
+    }
+    return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+ 
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        NSLog(@"点击了删除");
+        
+        //先自己删除了拒绝的人
+        AddFriendModel *model = [_addArray objectAtIndex:indexPath.row - 1];
+        if ([model.status isEqualToString:@"unread"]) {
+            XMPPJID *jid = [XMPPJID jidWithString:model.jidStr];
+            [[self appDelegate].xmppRoster removeUser:jid];
+            [[self appDelegate].xmppRoster rejectPresenceSubscriptionRequestFrom:jid];
+        }
+        [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:model.jidStr];
+        [self loadFriendFromFMDB];
+        [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }];
+    
+    return @[deleteRowAction];
+}
+
+#pragma mark - UITextFelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+
+    NSLog(@"sure = %@",textField.text);
+    NSString *desUser = [NSString stringWithFormat:@"%@%@",textField.text,XMPPSevser];
+    
+    // 如果已经是好友就不需要再次添加
+    XMPPJID *jid = [XMPPJID jidWithString:desUser];
+    
+    BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
+    if (contains) {
+        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+    }
+    [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+    [self.view endEditing:YES];
+    return YES;
+}
+
 
 - (UIView *)sectionHeaderViewWithTitle:(NSString *)title {
     
@@ -270,7 +406,6 @@
                 [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                 return;
             }
-//            [[self appDelegate] addFriend:desUser];
         [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
         
     } else {
@@ -279,6 +414,7 @@
 }
 
 #pragma mark - 网络请求
+
 - (void)loadAddressData {
     
     self.listContentArray = [AddressObject shareInstance].allAddress;
@@ -298,11 +434,9 @@
         
     //转化为json字符串
     if (_numberArray.count > 0 && _numberArray) {
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self AddHUD];
         });
-        
         NSDictionary *dic = @{@"jsonMobile" : [GeneralToolObject dictionaryToJson:_numberArray]};
         [[AirCloudNetAPIManager sharedManager] postMailListOfParams:dic WithBlock:^(id data, NSError *error) {
             [self HUDHidden];
@@ -316,9 +450,9 @@
                     for (NSUInteger i = 0; i < arr.count; i++) {
                         NSDictionary *tempDic = [arr objectAtIndex:i];
                         //itel 好友
-                        NSArray *friendArr = [tempDic objectForKey:@"reg_mobile"];
+                        NSArray *friendArr = [tempDic objectForKey:@"buddy_mobile"];
                         //itel 但不是好友
-                        NSArray *invateArr = [tempDic objectForKey:@"buddy_mobile"];
+                        NSArray *invateArr = [tempDic objectForKey:@"reg_mobile"];
                         //itel 没注册，通讯录
                         NSArray *addressArr = [tempDic objectForKey:@"arr_mobile"];
                         
@@ -400,6 +534,12 @@
 
 - (AppDelegate *)appDelegate {
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
+}
+
+#pragma mark ---触摸关闭键盘----
+-(void)handleTap:(UIGestureRecognizer *)gesture
+{
+    [self.view endEditing:YES];
 }
 
 #pragma mark - MBProgressHUD Show or Hidden

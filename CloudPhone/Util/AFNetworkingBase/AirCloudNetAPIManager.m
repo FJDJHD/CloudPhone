@@ -220,5 +220,16 @@
 
 }
 
+//添加openfire好友，走接口这边
+- (void)addOpenfireFriendOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_addFriend serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+
+}
+
 
 @end

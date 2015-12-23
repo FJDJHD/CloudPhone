@@ -31,6 +31,13 @@ enum personalInfo {
     info_signature
 };
 
+//添加自己好友的人
+#define T_addFriend      @"t_addFriend"
+#define C_T_addFriend    @"create table t_addFriend(jidStr TEXT,isRead TEXT)"
+enum addFriend {
+    add_jidStr,
+    add_isRead
+};
 
 @interface DBOperate : NSObject {
     

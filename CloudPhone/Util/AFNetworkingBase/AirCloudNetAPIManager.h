@@ -81,5 +81,10 @@
               WithBlock:(void (^)(id data, NSError *error))block;
 
 
+//添加openfire好友，走接口这边
+- (void)addOpenfireFriendOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block;
+
+
 
 @end

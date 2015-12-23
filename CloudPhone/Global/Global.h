@@ -72,6 +72,7 @@
 /* notifitionCenter通知的name统一放在这里－－－－*/
 
 #define ChatMessageComeing            @"ChatMessageComeing" //有人发聊天消息
+#define FriendAdding                  @"FriendAdding"       //有人加好友啦
 
 
 /* 统一的色调 －－－－*/

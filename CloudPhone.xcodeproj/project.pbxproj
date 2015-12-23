@@ -258,6 +258,7 @@
 		6E7D7AE51C1935B200B42140 /* ChatSendHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE41C1935B200B42140 /* ChatSendHelper.m */; };
 		6E7D7AE81C1982C600B42140 /* chat_recive_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE61C1982C600B42140 /* chat_recive_nor@2x.png */; };
 		6E7D7AE91C1982C600B42140 /* chat_send_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */; };
+		6E8172F91C29232E0092B5A8 /* AddFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8172F81C29232E0092B5A8 /* AddFriendModel.m */; };
 		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
 		6E9CBF091C23F0D600EFFF8D /* chat_addfriend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CBF071C23F0D600EFFF8D /* chat_addfriend@2x.png */; };
 		6E9CBF0A1C23F0D600EFFF8D /* chat_addfriend@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CBF081C23F0D600EFFF8D /* chat_addfriend@3x.png */; };
@@ -957,6 +958,8 @@
 		6E7D7AE41C1935B200B42140 /* ChatSendHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatSendHelper.m; sourceTree = "<group>"; };
 		6E7D7AE61C1982C600B42140 /* chat_recive_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_recive_nor@2x.png"; sourceTree = "<group>"; };
 		6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_send_nor@2x.png"; sourceTree = "<group>"; };
+		6E8172F71C29232E0092B5A8 /* AddFriendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendModel.h; sourceTree = "<group>"; };
+		6E8172F81C29232E0092B5A8 /* AddFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendModel.m; sourceTree = "<group>"; };
 		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
 		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
 		6E9CBF071C23F0D600EFFF8D /* chat_addfriend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_addfriend@2x.png"; sourceTree = "<group>"; };
@@ -3383,6 +3386,8 @@
 				6EE1CD491C1C2B0E0054B993 /* MessageModel.m */,
 				6E9CBF0B1C24002300EFFF8D /* ItelFriendModel.h */,
 				6E9CBF0C1C24002300EFFF8D /* ItelFriendModel.m */,
+				6E8172F71C29232E0092B5A8 /* AddFriendModel.h */,
+				6E8172F81C29232E0092B5A8 /* AddFriendModel.m */,
 			);
 			path = SendMessageModel;
 			sourceTree = "<group>";
@@ -4143,6 +4148,7 @@
 				6EBA8D131C15248B00BAE5DD /* XMPPXFacebookPlatformAuthentication.m in Sources */,
 				6E4D378A1C056619001573E3 /* UINavigationItem+margin.m in Sources */,
 				6E4D375F1C056384001573E3 /* SDWebImageCompat.m in Sources */,
+				6E8172F91C29232E0092B5A8 /* AddFriendModel.m in Sources */,
 				6EC0BB591C0C568A00075A19 /* AddressViewController.m in Sources */,
 				6E4D37AE1C0568B1001573E3 /* MJRefreshLegendHeader.m in Sources */,
 				6EBA8D821C15248C00BAE5DD /* NSXMLElement+XEP_0335.m in Sources */,
@@ -4388,7 +4394,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3fda1059-c1e5-42aa-b17c-09c68327ccf7";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4419,7 +4425,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3fda1059-c1e5-42aa-b17c-09c68327ccf7";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

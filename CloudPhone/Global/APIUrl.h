@@ -60,4 +60,7 @@
 //通讯录itel好友列表
 #define API_mailList                                    @"?s=/Home/Openfire/mailList"
 
+//openfire  添加好友
+#define API_addFriend                                   @"?s=/Home/Openfire/upRosterStatus"
+
 #endif

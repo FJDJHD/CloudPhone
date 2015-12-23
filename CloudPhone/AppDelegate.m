@@ -209,7 +209,9 @@
     xmppStream.enableBackgroundingOnSocket = YES;
     
     xmppReconnect = [[XMPPReconnect alloc] init];
-    
+    [xmppReconnect setAutoReconnect:YES];
+    [xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
+
     xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
     
 //    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
@@ -217,7 +219,7 @@
     xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:xmppRosterStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     xmppRoster.autoFetchRoster = YES;
-    xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
+    xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = NO;
 
     
     xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
@@ -354,24 +356,72 @@
 //接受到消息调用这个
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
     
-    NSLog(@"message = %@ to = %@",message.type,message.toStr);
+    NSLog(@"message = %@ to = %@ = %@",message.type,message.toStr,message.from);
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:ChatMessageComeing object:nil];
+        //13049340993@cloud.com/8b468676
+        NSArray *array = [message.fromStr componentsSeparatedByString:@"/"];
+        
+        NSString *jidStr = array[0];
+        
+        NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
+        NSString *lastStr = @"";
+        if ([message.body isEqualToString:@"image"]) {
+            lastStr = @"[图片]";
+        } else if ([message.body hasPrefix:@"audio"]) {
+            lastStr = @"[语音]";
+        } else {
+            lastStr = message.body;
+        }
+        NSArray *messageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",nil];
+        
+        if (mesageArray.count > 0) {
+            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:jidStr];
+        } else {
+            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+        }
+        
+//        NSDictionary *dic =[[NSDictionary alloc] initWithObjectsAndKeys:jidStr,@"jidStr", nil];
+//        NSNotification *notification =[NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:dic];
+    NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
+
+        [[NSNotificationCenter defaultCenter] postNotification:notice];
         
     }
 }
 
 #pragma mark XMPPRosterDelegate
 //接受好友请求时候调用，就是有人加你好友
-//- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
-//    
-//    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
-//    
-//    //这里暂时用ios8的方法。。。。。。。。
+- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
+    
+    // from = 13049340993@cloud.com type = subscribed
+    
+    //type = subscribe from = 13049340993@cloud.com
+    NSLog(@"啊啊啊啊啊啊啊啊啊啊啊啊啊type = %@ from = %@",presence.type,presence.from);
+    
+    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
+    DLog(@"mesg = %@",msg);
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
+    if (![presence.fromStr isEqualToString:selfJidStr]) {
+        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unread",nil];
+        NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
+        if (friendArray.count == 0) {
+            [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:FriendAdding object:nil];
+        }
+    }
+ 
+    
+    //这里暂时用ios8的方法。。。。。。。。
 //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
 //    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 //        NSLog(@"取消");
+//        //先自己删除了拒绝的人
+//        [xmppRoster removeUser:presence.from];
 //        [xmppRoster rejectPresenceSubscriptionRequestFrom:presence.from];
 //    }]];
 //    
@@ -382,72 +432,8 @@
 //
 //    UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
 //    [alertController presentViewController:alert animated:YES completion:nil];
-//}
-
-//添加好友
-- (BOOL)addFriend:(NSString*)friendName
-{
-    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",friendName,XMPPSevser]];
-    [xmppRoster subscribePresenceToUser:friendJid];
-    return YES;
 }
 
-//删除好友
-- (BOOL)deleteFriend:(NSString*)friendName
-{
-    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@%@",friendName,XMPPSevser]];
-    [xmppRoster removeUser:friendJid];
-    return YES;
-}
-
-//收到好友请求 代理函数
-- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
-{
-    
-//    XMPPJID * fromJid = presence.from;
-//    //直接通过
-//    [xmppRoster acceptPresenceSubscriptionRequestFrom:fromJid andAddToRoster:YES];
-    
-    //取得好友状态
-    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
-    //请求的用户
-    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
-    NSLog(@"presenceType:%@",presenceType);
-    
-    NSLog(@"presence2:%@  sender2:%@",presence,sender);
-    
-    XMPPJID *jid = [XMPPJID jidWithString:presenceFromUser];
-    [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
-}
-
-#pragma mark 收到好友上下线状态
-- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence {
-    //    DDLogVerbose(@"%@: %@ ^^^ %@", THIS_FILE, THIS_METHOD, [presence fromStr]);
-    
-    //取得好友状态
-    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
-    //当前用户
-    //    NSString *userId = [NSString stringWithFormat:@"%@", [[sender myJID] user]];
-    //在线用户
-    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
-    NSLog(@"presenceType:%@",presenceType);
-    NSLog(@"用户:%@",presenceFromUser);
-    //这里再次加好友
-    if ([presenceType isEqualToString:@"subscribed"]) {
-        XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@",[presence from]]];
-        [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
-    }
-}
-
-
-//-(void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(DDXMLElement *)item
-//{
-//    NSString *subscription = [item attributeStringValueForName:@"subscription"];
-//    NSLog(@"-------%@",subscription);
-//    if ([subscription isEqualToString:@"both"]) {
-//        NSLog(@"双方成为好友！");
-//    }
-//}
 
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
     
@@ -455,71 +441,19 @@
     DDXMLElement *item = [query elementsForName:@"item"][0];
     NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
     
+    DLog(@"SUBSCRIPTION 啦啦啦啦啦啦啦啦= %@",subscription);  
     
+    NSLog(@"全部的全部的全部的iq = %@",iq);
     
-    NSLog(@"--iq = %@\n sub = %@",iq,subscription);
-
 }
 
-//- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence {
-//
-//    //取得好友状态
-//    NSString *presenceType = [NSString stringWithFormat:@"%@", [presence type]]; //online/offline
-//    //当前用户
-//    //    NSString *userId = [NSString stringWithFormat:@"%@", [[sender myJID] user]];
-//    //在线用户
-//    NSString *presenceFromUser =[NSString stringWithFormat:@"%@", [[presence from] user]];
-//    NSLog(@"presenceType:%@",presenceType);
-//    NSLog(@"用户:%@",presenceFromUser);
-//    
-//    
-////    tempPresence = presence;
-//    
-////    //这里再次加好友
-////    if ([presenceType isEqualToString:@"subscribe"]){
-////        NSLog(@"添加好友");
-////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"%@请求添加好友",presenceFromUser] message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-////        [alert show];
-////    } else if ([presenceType isEqualToString:@"subscribed"]){
-////        NSLog(@"已同意添加");
-////        
-////    }
-//}
-
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-//    if (buttonIndex == 1) {
-//        XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@",[tempPresence from]]];
-//        [xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
-//    } else {
-//        DLog(@"取消");
-//    }
-//}
-
-//- (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
-//    
-//    DDXMLElement *query = [iq elementsForName:@"query"][0];
-//    DDXMLElement *item = [query elementsForName:@"item"][0];
-//    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
-////
-////    if ([subscription isEqualToString:@"from"]) {
-////        //这里暂时用ios8的方法。。。。。。。。
-////        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: @"treterttre" preferredStyle:UIAlertControllerStyleAlert];
-////        [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-////        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//////            [xmppRoster acceptPresenceSubscriptionRequestFrom: andAddToRoster:YES
-//////             ];
-////        }]];
-////        
-////        UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-////        [alertController presentViewController:alert animated:YES completion:nil];
-////    }
-//    
-////    if ([subscription isEqualToString:@"both"]) {
-////        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"添加成功" message:@"双方已互为好友" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-////        [alert show];
-////    }
-//}
-
+- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
+{
+    //收到对方取消定阅我得消息
+    if ([presence.type isEqualToString:@"unsubscribed"]) {
+        [xmppRoster removeUser:presence.from];
+    }
+}
 
 #pragma mark XMPPAutoPingDelegate
 -(void)autoPingProxyServer:(NSString*)strProxyServer {
@@ -541,6 +475,7 @@
     xmppAutoPing = nil;
 }
 
+#pragma mark - 心跳
 - (void)xmppAutoPingDidSendPing:(XMPPAutoPing *)sender {
 
 //    DLog(@"Sendsender = %@",sender);
@@ -554,6 +489,20 @@
 - (void)xmppAutoPingDidTimeout:(XMPPAutoPing *)sender {
 
     [CustomMBHud customHudWindow:@"xmpp连接超时"];
+}
+
+#pragma mark - XMPPReconnectDelegate
+
+
+- (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkConnectionFlags)connectionFlags {
+    
+    DLog(@"didDetectAccidentalDisconnect : \n %u ", connectionFlags);
+}
+
+- (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkConnectionFlags)connectionFlags {
+    DLog(@"shouldAttemptAutoReconnect : \n %u ", connectionFlags);
+    
+    return YES;
 }
 
 
@@ -589,34 +538,6 @@
     return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
 }
 
-- (UIViewController *)getCurrentViewController
-{
-    UIViewController *result = nil;
-    
-    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
-    if (window.windowLevel != UIWindowLevelNormal)
-    {
-        NSArray *windows = [[UIApplication sharedApplication] windows];
-        for(UIWindow * tmpWin in windows)
-        {
-            if (tmpWin.windowLevel == UIWindowLevelNormal)
-            {
-                window = tmpWin;
-                break;
-            }
-        }
-    }
-    
-    UIView *frontView = [[window subviews] objectAtIndex:0];
-    id nextResponder = [frontView nextResponder];
-    
-    if ([nextResponder isKindOfClass:[UIViewController class]])
-        result = nextResponder;
-    else
-        result = window.rootViewController;
-    
-    return result;
-}
 
 
 

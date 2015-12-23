@@ -32,7 +32,9 @@
 
 @property (nonatomic,  getter = isKCurrentController) BOOL kCurrentController; //默认不是当前的 no
 
-@property (nonatomic, strong) UILabel *unreadMessageLabel;
+@property (nonatomic, strong) UILabel *unreadMessageLabel; //消息红点
+
+@property (nonatomic, strong) UILabel *unreadAddLabel; //好友添加
 
 @property (nonatomic, strong) NSIndexPath *tempIndexPath;
 
@@ -45,8 +47,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(chatMessageNotification)
+                                                 selector:@selector(chatMessageNotification:)
                                                      name:ChatMessageComeing object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(addFriendNotification)
+                                                     name:FriendAdding object:nil];
     }
     return self;
 }
@@ -83,6 +88,16 @@
     negativeSpacer.width = -12;
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
+    
+    CGRect addNotifyLabelRect = CGRectMake(addressButton.frame.size.width-20, 8, 10, 10);
+    _unreadAddLabel = [[UILabel alloc]initWithFrame:addNotifyLabelRect];
+    _unreadAddLabel.layer.cornerRadius = 5;
+    _unreadAddLabel.clipsToBounds = YES;
+    _unreadAddLabel.textAlignment = NSTextAlignmentCenter;
+    _unreadAddLabel.hidden = YES;
+    _unreadAddLabel.backgroundColor = [UIColor redColor];
+    _unreadAddLabel.font = [UIFont systemFontOfSize:9];
+    [addressButton addSubview:_unreadAddLabel];
     
     _searchArray = [[NSMutableArray alloc]initWithCapacity:0];
     
@@ -340,16 +355,21 @@
         NSLog(@"点击了删除");
         if (self.selectType == kFriend) {
             //好友
-                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-                XMPPJID *jid = user.jid;
-               // [[self appDelegate] deleteFriend:user.jidStr];
+            XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            XMPPJID *jid = user.jid;
                 [[self appDelegate].xmppRoster removeUser:jid];
+            [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
+            //如果消息列表有也顺便删除了
+            [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:user.jidStr];
+            //把好友添加的也删了
+            [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
+
         } else {
             //消息
-                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
-                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
+            NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
+            [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
                 //删除后重新再更新下数据库
-                [self loadMessageDataFromFMDB];
+            [self loadMessageDataFromFMDB];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
 
@@ -412,6 +432,8 @@
 
 
 - (void)addressButtonClick {
+    
+    self.unreadAddLabel.hidden = YES;
     AddressAddViewController *controller = [[AddressAddViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
 
@@ -489,16 +511,45 @@
 }
 
 #pragma mark - 聊天消息通知
-- (void)chatMessageNotification {
+- (void)chatMessageNotification:(NSNotification *)sender {
 
     if (self.kCurrentController == NO) {
         //不在当前界面
         [self appDelegate].unreadChatLabel.hidden = NO;
         self.unreadMessageLabel.hidden = NO;
     } else if (self.kCurrentController == YES && self.selectType == kFriend) {
-        //在当前界面
+        //在当前界面好友
         self.unreadMessageLabel.hidden = NO;
+    } else if (self.kCurrentController == YES && self.selectType == kMessage) {
+        //在当前界面消息
+        NSString *jidStr = sender.userInfo[@"jidStr"];
+        NSString *realName = @"好友";
+        if (self.fetchedResultsController.fetchedObjects.count > 0) {
+            for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
+                if ([user.jid isEqualToJID:[XMPPJID jidWithString:jidStr]]) {
+                    if (user.nickname.length > 0 && user.nickname) {
+                        realName = user.nickname;
+                    } else {
+                        XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                        if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                            realName = xmppvCardTemp.nickname;
+                        } else {
+                            realName = user.jid.user;
+                        }
+                    }
+                }
+            }
+        }
+        [DBOperate updateData:T_chatMessage tableColumn:@"name" columnValue:realName conditionColumn:@"jidStr" conditionColumnValue:jidStr];
+        
+        [self loadMessageDataFromFMDB];
+        [self.tableView reloadData];
     }
+}
+
+#pragma mark - 添加好友
+- (void)addFriendNotification {
+    self.unreadAddLabel.hidden = NO;
 }
 
 
