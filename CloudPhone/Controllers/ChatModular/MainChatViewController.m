@@ -378,7 +378,7 @@
     UITableViewRowAction *moreRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"备注" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
         NSLog(@"点击了备注");
         self.tempIndexPath = indexPath;
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"修改备注" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
         alert.tag = 700;
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [alert show];
@@ -512,6 +512,27 @@
 
 #pragma mark - 聊天消息通知
 - (void)chatMessageNotification:(NSNotification *)sender {
+    
+    //这里是修改消息的名字的
+    NSString *jidStr = sender.userInfo[@"jidStr"];
+    NSString *realName = @"好友";
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
+            if ([user.jid isEqualToJID:[XMPPJID jidWithString:jidStr]]) {
+                if (user.nickname.length > 0 && user.nickname) {
+                    realName = user.nickname;
+                } else {
+                    XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                    if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                        realName = xmppvCardTemp.nickname;
+                    } else {
+                        realName = user.jid.user;
+                    }
+                }
+            }
+        }
+    }
+    [DBOperate updateData:T_chatMessage tableColumn:@"name" columnValue:realName conditionColumn:@"jidStr" conditionColumnValue:jidStr];
 
     if (self.kCurrentController == NO) {
         //不在当前界面
@@ -522,25 +543,6 @@
         self.unreadMessageLabel.hidden = NO;
     } else if (self.kCurrentController == YES && self.selectType == kMessage) {
         //在当前界面消息
-        NSString *jidStr = sender.userInfo[@"jidStr"];
-        NSString *realName = @"好友";
-        if (self.fetchedResultsController.fetchedObjects.count > 0) {
-            for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
-                if ([user.jid isEqualToJID:[XMPPJID jidWithString:jidStr]]) {
-                    if (user.nickname.length > 0 && user.nickname) {
-                        realName = user.nickname;
-                    } else {
-                        XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
-                        if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
-                            realName = xmppvCardTemp.nickname;
-                        } else {
-                            realName = user.jid.user;
-                        }
-                    }
-                }
-            }
-        }
-        [DBOperate updateData:T_chatMessage tableColumn:@"name" columnValue:realName conditionColumn:@"jidStr" conditionColumnValue:jidStr];
         
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];

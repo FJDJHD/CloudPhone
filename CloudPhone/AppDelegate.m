@@ -384,7 +384,7 @@
             [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
         }
 
-    NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
+       NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
 
         [[NSNotificationCenter defaultCenter] postNotification:notice];
         
