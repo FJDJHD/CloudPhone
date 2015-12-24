@@ -31,7 +31,7 @@
 #import <CFNetwork/CFNetwork.h>
 #import "MessageViewController.h"
 
-#import "UMSocial.h"
+#import "OpenShareHeader.h"
 
 @interface AppDelegate ()
 
@@ -73,18 +73,30 @@
     
     //打开数据库
     [DBOperate createTable];
+    
+    //openshare分享到微信和QQ注册
+    [OpenShare connectQQWithAppId:@"1104965629"];
+    [OpenShare connectWeixinWithAppId:@"wx84d7434525d9d63f"];
 
     //消息推送 ios 8
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
 //    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-    //友盟分享
-     [UMSocialData setAppKey:@"	5678cd2067e58e3bf100087c"];
     
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+//openshare分享回调
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    if ([OpenShare handleOpenURL:url]) {
+        return YES;
+    }
+    //这里可以写上其他OpenShare不支持的客户端的回调，比如支付宝等。
+    return YES;
+}
+
 
 - (void)initViewController {
     //这里作为一个登录标志
