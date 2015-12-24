@@ -263,9 +263,9 @@
     if (indexPath.section == 0) {
         //添加好哟
         if (indexPath.row == 0) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
-            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-            [alert show];
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"添加好友" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定" , nil];
+//            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+//            [alert show];
         } else {
             //同意与否
             if ([[self appDelegate].xmppStream isConnected]) {
@@ -287,6 +287,7 @@
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
             if ([[self appDelegate].xmppStream isConnected]) {
+                [CustomMBHud customHudWindow:@"等待对方同意"];
                 ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
                 NSString *jidStr = [NSString stringWithFormat:@"%@%@",model.mobile,XMPPSevser];
                 
