@@ -395,9 +395,7 @@
         } else {
             [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
         }
-        
-//        NSDictionary *dic =[[NSDictionary alloc] initWithObjectsAndKeys:jidStr,@"jidStr", nil];
-//        NSNotification *notification =[NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:dic];
+
     NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
 
         [[NSNotificationCenter defaultCenter] postNotification:notice];
@@ -467,6 +465,8 @@
     //收到对方取消定阅我得消息
     if ([presence.type isEqualToString:@"unsubscribed"]) {
         [xmppRoster removeUser:presence.from];
+        //把好友添加的也删了
+        [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:presence.fromStr];
     }
 }
 

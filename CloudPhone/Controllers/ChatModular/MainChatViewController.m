@@ -59,7 +59,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"好友",@"消息",nil]];
+    UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"消息",@"好友",nil]];
     titleSegment.frame = CGRectMake(0, 0, 120, 30);
     titleSegment.tintColor = [UIColor colorWithHexString:@"#049ff1"];
     [titleSegment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
@@ -564,11 +564,11 @@
 
     UISegmentedControl *segment = (UISegmentedControl *)sender;
     if (segment.selectedSegmentIndex == 0) {
-        self.selectType = kFriend;  //表示朋友列表
+        self.selectType = kMessage;  //表示朋友列表
         [self.tableView reloadData];
     
     } else {
-        self.selectType = kMessage; //表示消息列表
+        self.selectType = kFriend; //表示消息列表
         
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
