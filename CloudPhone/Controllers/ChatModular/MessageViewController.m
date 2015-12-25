@@ -75,6 +75,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
 
     [super viewWillDisappear:animated];
+    
     //最后的消息保存到数据库中
     [self saveLastMessageToFMDB];
 }
@@ -235,33 +236,39 @@
 
 #pragma mark - 保存最后的信息
 - (void)saveLastMessageToFMDB {
+    
+    NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
+    if (chatArray.count > 0) {
+        [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+        
+    }
 
     //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
     //(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)
-    if (self.fetchedResultsController.fetchedObjects.count > 0) {
-        
-        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
-        NSString *lastStr = @"";
-        if ([message.body isEqualToString:@"image"]) {
-            lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"audio"]) {
-            lastStr = @"[语音]";
-        } else {
-            lastStr = message.message.body;
-        }
-        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
-
-        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,nil];
-        
-        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
-        if (chatArray.count > 0) {
-            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-        } else {
-            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
-        }
-    }
+//    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+//        
+//        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
+//        NSString *lastStr = @"";
+//        if ([message.body isEqualToString:@"image"]) {
+//            lastStr = @"[图片]";
+//        } else if ([message.body hasPrefix:@"audio"]) {
+//            lastStr = @"[语音]";
+//        } else {
+//            lastStr = message.message.body;
+//        }
+//        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
+//
+//        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,nil];
+//        
+//        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
+//        if (chatArray.count > 0) {
+//            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+//             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+//            
+//        } else {
+//            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+//        }
+//    }
 
 }
 

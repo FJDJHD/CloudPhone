@@ -11,12 +11,13 @@
 
 //和哪些聊天好友聊天记录表
 #define T_chatMessage     @"t_chatMessage"
-#define C_T_chatMessage   @"create table t_chatMessage(jidStr TEXT,name TEXT,lastMessage TEXT,time TEXT)"
+#define C_T_chatMessage   @"create table t_chatMessage(jidStr TEXT,name TEXT,lastMessage TEXT,time TEXT,unreadMessage TEXT)"
 enum chatMessage {
     message_id,
     message_name,
     message_lastMessage,
-    message_time
+    message_time,
+    message_unreadMessage
 };
 
 //个人信息表

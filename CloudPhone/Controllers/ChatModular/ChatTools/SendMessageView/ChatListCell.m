@@ -35,17 +35,16 @@
         [self addSubview:_lastMessageLabel];
         
         //小红点
-//        CGRect chatNotifyLabelRect = CGRectMake(MainWidth - 60, (60 - 20)/2.0, 20, 20);
-//        _unreadLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
-//        _unreadLabel.layer.cornerRadius = 10;
-//        _unreadLabel.clipsToBounds = YES;
-//        _unreadLabel.textAlignment = NSTextAlignmentCenter;
-//        _unreadLabel.text = @"10";
-//        _unreadLabel.textColor = [UIColor whiteColor];
-////        _unreadLabel.hidden = YES;
-//        _unreadLabel.backgroundColor = [UIColor redColor];
-//        _unreadLabel.font = [UIFont systemFontOfSize:9];
-//        [self addSubview:_unreadLabel];
+        CGRect chatNotifyLabelRect = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 18, 18);
+        _unreadLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
+        _unreadLabel.layer.cornerRadius = 9;
+        _unreadLabel.clipsToBounds = YES;
+        _unreadLabel.textAlignment = NSTextAlignmentCenter;
+        _unreadLabel.textColor = [UIColor whiteColor];
+        _unreadLabel.hidden = YES;
+        _unreadLabel.backgroundColor = [UIColor redColor];
+        _unreadLabel.font = [UIFont boldSystemFontOfSize:10];
+        [self addSubview:_unreadLabel];
     }
     return self;
 }
@@ -60,6 +59,21 @@
         
         //最后信息
         _lastMessageLabel.text = [temp objectAtIndex:message_lastMessage];
+        
+        //小红点
+        NSString *unread = [temp objectAtIndex:message_unreadMessage];
+        NSInteger tempUnread = [unread integerValue];
+        if (0 < tempUnread && tempUnread <= 99) {
+            _unreadLabel.hidden = NO;
+            _unreadLabel.text = unread;
+            _unreadLabel.frame = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 18, 18);
+        } else if (tempUnread > 99) {
+            _unreadLabel.hidden = NO;
+            _unreadLabel.frame = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 24, 18);
+            _unreadLabel.text = @"99+";
+        } else {
+            _unreadLabel.hidden = YES;
+        }
         
         //头像
         XMPPJID *jid = [XMPPJID jidWithString:[temp objectAtIndex:message_id]];

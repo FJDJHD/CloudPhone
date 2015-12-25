@@ -32,8 +32,6 @@
 
 @property (nonatomic,  getter = isKCurrentController) BOOL kCurrentController; //默认不是当前的 no
 
-@property (nonatomic, strong) UILabel *unreadMessageLabel; //消息红点
-
 @property (nonatomic, strong) UILabel *unreadAddLabel; //好友添加
 
 @property (nonatomic, strong) NSIndexPath *tempIndexPath;
@@ -65,17 +63,6 @@
     [titleSegment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     titleSegment.selectedSegmentIndex = 0;
     self.navigationItem.titleView = titleSegment;
-    
-    //聊天小红点
-    CGRect chatNotifyLabelRect = CGRectMake(titleSegment.frame.size.width-10, 0, 10, 10);
-    _unreadMessageLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
-    _unreadMessageLabel.layer.cornerRadius = 5;
-    _unreadMessageLabel.clipsToBounds = YES;
-    _unreadMessageLabel.textAlignment = NSTextAlignmentCenter;
-    _unreadMessageLabel.hidden = YES;
-    _unreadMessageLabel.backgroundColor = [UIColor redColor];
-    _unreadMessageLabel.font = [UIFont systemFontOfSize:9];
-    [titleSegment addSubview:_unreadMessageLabel];
     
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -121,9 +108,6 @@
 
     [super viewDidAppear:animated];
     self.kCurrentController = YES; //一个标志
-    if ([self appDelegate].unreadChatLabel.hidden == NO) {
-        self.unreadMessageLabel.hidden = NO;
-    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -243,7 +227,9 @@
         [self.navigationController pushViewController:controller animated:YES];
         
     } else {
-    
+        //判断tabbar小红点出现
+        [self tabbarUnreadMessageisShow];
+        
         if (self.selectType == kFriend) {
             //好友
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
@@ -299,7 +285,6 @@
         }
 
     }
-    
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -357,7 +342,7 @@
             //好友
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             XMPPJID *jid = user.jid;
-                [[self appDelegate].xmppRoster removeUser:jid];
+            [[self appDelegate].xmppRoster removeUser:jid];
             [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
             //如果消息列表有也顺便删除了
             [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:user.jidStr];
@@ -372,6 +357,9 @@
             [self loadMessageDataFromFMDB];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
+        
+        //判断tabbar小红点出现
+        [self tabbarUnreadMessageisShow];
 
     }];
     
@@ -428,6 +416,32 @@
     
     _chatListArray = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
 
+}
+
+
+- (void)tabbarUnreadMessageisShow {
+    if ([[self appDelegate].xmppStream isConnected]) {
+        BOOL reg = [self seekUnreadMessageFromFMDB];
+        if (reg) {
+            [self appDelegate].unreadChatLabel.hidden = NO;
+        } else {
+            [self appDelegate].unreadChatLabel.hidden = YES;
+        }
+    }
+}
+
+//查询是否有未读的message
+- (BOOL)seekUnreadMessageFromFMDB {
+    NSArray *arr = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
+    BOOL unreadFlag = NO;
+    for (NSArray *temp in arr) {
+        NSString *unreadTemp = [temp objectAtIndex:message_unreadMessage];
+        NSInteger unreadInt = [unreadTemp integerValue];
+        if (unreadInt > 0) {
+            unreadFlag = YES;
+        }
+    }
+    return unreadFlag;
 }
 
 
@@ -534,19 +548,13 @@
     }
     [DBOperate updateData:T_chatMessage tableColumn:@"name" columnValue:realName conditionColumn:@"jidStr" conditionColumnValue:jidStr];
 
-    if (self.kCurrentController == NO) {
-        //不在当前界面
-        [self appDelegate].unreadChatLabel.hidden = NO;
-        self.unreadMessageLabel.hidden = NO;
-    } else if (self.kCurrentController == YES && self.selectType == kFriend) {
-        //在当前界面好友
-        self.unreadMessageLabel.hidden = NO;
-    } else if (self.kCurrentController == YES && self.selectType == kMessage) {
+    //出现红点的
+    [self appDelegate].unreadChatLabel.hidden = NO;
+    if (self.kCurrentController == YES && self.selectType == kMessage) {
         //在当前界面消息
-        
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
-    }
+     }
 }
 
 #pragma mark - 添加好友
@@ -566,11 +574,11 @@
 
     UISegmentedControl *segment = (UISegmentedControl *)sender;
     if (segment.selectedSegmentIndex == 0) {
-        self.selectType = kMessage;  //表示朋友列表
+        self.selectType = kMessage;  //表示消息列表
         [self.tableView reloadData];
     
     } else {
-        self.selectType = kFriend; //表示消息列表
+        self.selectType = kFriend; //表示朋友列表
         
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
@@ -582,6 +590,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:ChatMessageComeing object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FriendAdding object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

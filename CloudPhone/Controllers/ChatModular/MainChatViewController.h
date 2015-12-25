@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    kFriend,
-    kMessage
+    kMessage,
+    kFriend
     
 }FriendMessageType;
 

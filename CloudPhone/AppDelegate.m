@@ -67,9 +67,10 @@
     //加载界面视图
     [self initViewController];
     
-    
     //初始化xmpp各种类
     [self setupStream];
+    
+    //
     
     //打开数据库
     [DBOperate createTable];
@@ -245,9 +246,6 @@
     deliveryReceiptsMoodule = [[XMPPMessageDeliveryReceipts alloc] init];
     deliveryReceiptsMoodule.autoSendMessageDeliveryReceipts = YES;
     
-
-    
-    
     [xmppReconnect         activate:xmppStream];
     [xmppRoster            activate:xmppStream];
     [xmppvCardTempModule   activate:xmppStream];
@@ -357,14 +355,11 @@
 
 
 //接受到消息调用这个
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
-    
-    NSLog(@"message = %@ to = %@ = %@",message.type,message.toStr,message.from);
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {    
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
         //13049340993@cloud.com/8b468676
         NSArray *array = [message.fromStr componentsSeparatedByString:@"/"];
-        
         NSString *jidStr = array[0];
         
         NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
@@ -376,12 +371,18 @@
         } else {
             lastStr = message.body;
         }
-        NSArray *messageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",nil];
+        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",@"1",nil];
         
         if (mesageArray.count > 0) {
+            //取出原本的小红点 ，之后加一存进去
+            NSString *oriUnread = [mesageArray[0] objectAtIndex:message_unreadMessage];
+            NSInteger temp = [oriUnread integerValue] + 1;
+            NSString *saveUnread = [NSString stringWithFormat:@"%ld",(long)temp];
+            
             [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:jidStr];
+            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:saveUnread conditionColumn:@"jidStr" conditionColumnValue:jidStr];
         } else {
-            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+            [DBOperate insertDataWithnotAutoID:saveMessageArray tableName:T_chatMessage];
         }
 
        NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
