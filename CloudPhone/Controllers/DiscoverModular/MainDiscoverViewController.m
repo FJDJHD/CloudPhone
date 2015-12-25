@@ -34,10 +34,11 @@
     [self setAllButtons];
 }
 
+
 - (void)setupAppBar{
     UIScrollView *appBar= [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, MainHeight)];
     appBar.tag = 1002;
-    appBar.contentSize = CGSizeMake(0, MainHeight * 1.5);
+    appBar.contentSize = CGSizeMake(0, MainHeight * 1.2);
     self.appBar  = appBar;
     [self.view addSubview:appBar];
 }
@@ -115,7 +116,7 @@
 }
 //开启定时器
 - (void)addTimer{
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
 }
 //关闭定时器
 - (void)removeTimer{
