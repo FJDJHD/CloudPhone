@@ -23,12 +23,12 @@
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) UIButton *sureButton;
 @property (nonatomic, strong) UIButton *cancelButton;
-@property (nonatomic, strong) UIView *coverView;
+@property (nonatomic, strong) UIControl *coverView;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) UserModel *user;
 @property (nonatomic, strong) UITextView *setSignatureView;
 @property (nonatomic, strong) NSString *setBirthStr;
-
+@property (nonatomic, assign, getter=isChangingKeyboard) BOOL changingKeyboard;
 
 @property (nonatomic, strong) NSArray *infoArray;
 
@@ -36,7 +36,10 @@
 @end
 
 
-@implementation PersonalViewController
+@implementation PersonalViewController{
+    UIView *signatureView;
+    UIView *birthView;
+}
 - (NSArray *)itemArray{
     if (!_itemArray) {
         _itemArray = @[@"昵称",@"性别",@"生日",@"手机",@"个性签名"];
@@ -74,7 +77,35 @@
     } else {
         [self requestPersonalInfo];
     }
+    //监听键盘
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)keyboardWillShow:(NSNotification *)note{
+    CGFloat duration = [note.userInfo[UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        CGRect keyboardF = [note.userInfo[UIKeyboardFrameEndUserInfoKey]CGRectValue];
+        CGFloat keyboardH = keyboardF.size.height;
+        signatureView.transform = CGAffineTransformMakeTranslation(0, - keyboardH);
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)note{
+    if (self.isChangingKeyboard) {
+        return;
+    }
+    
+    CGFloat duration = [note.userInfo[UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        signatureView.transform = CGAffineTransformIdentity;
+    }];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -228,16 +259,23 @@
         changeIconSheet.tag = 1001;
         [changeIconSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alert.tag = 2001;
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        [alert show];
+//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//        alert.tag = 2001;
+//        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+//        [alert show];
+        [self addSetPersonName];
     }else if (indexPath.section == 1 && indexPath.row == 1){
         UIActionSheet *changeGenderSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消"destructiveButtonTitle:nil otherButtonTitles:@"男",@"女",nil];
         changeGenderSheet.tag = 1002;
         [changeGenderSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 2){
          [self setBrithSelectView];
+        CGFloat duration = 0.2;
+        [UIView animateWithDuration:duration animations:^{
+            CGFloat birthH = birthView.frame.size.height;
+            birthView.transform = CGAffineTransformMakeTranslation(0, - birthH);
+        }];
+
     }else if (indexPath.section == 1 && indexPath.row == 3){
       //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
@@ -337,21 +375,100 @@
   }
 }
 
-- (void)setBrithSelectView{
-    UIView *coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+- (void)addSetPersonName{
+    UIControl *coverView = [[UIControl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    [coverView addTarget:self action:@selector(clickCoverView:) forControlEvents:UIControlEventTouchUpInside];
     self.coverView = coverView;
     [self.view addSubview:coverView];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.70, MainWidth, MainHeight *0.45)];
-    view.layer.cornerRadius = 3.0;
-    view.layer.masksToBounds = YES;
-    view.backgroundColor = [UIColor whiteColor];
-    [coverView addSubview:view];
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight - STATUS_BAR_HEIGHT, MainWidth, 88)];
+    signatureView.layer.cornerRadius = 3.0;
+    signatureView.layer.masksToBounds = YES;
+    signatureView.backgroundColor = [UIColor whiteColor];
+    [coverView addSubview:signatureView];
     
+    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.tag = 2001;
+    sureButton.frame = CGRectMake(MainWidth / 2.0, 0, MainWidth / 2.0, 44);
+    sureButton.titleEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 0);
+    sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+    [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.sureButton = sureButton;
+    [signatureView addSubview:sureButton];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.tag = 2002;
+    cancelButton.frame = CGRectMake(0, 0, MainWidth / 2.0, 44);
+    cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 100);
+    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.cancelButton = cancelButton;
+    [signatureView addSubview:cancelButton];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(sureButton.frame), MainWidth, 1)];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [signatureView addSubview:line];
+    
+    
+    UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth, 44)];
+    setSignatureView.backgroundColor = [UIColor whiteColor];
+    setSignatureView.font = [UIFont systemFontOfSize:20];
+    self.setSignatureView = setSignatureView;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.setSignatureView = setSignatureView;
+    self.setSignatureView.delegate = self;
+    [signatureView addSubview:setSignatureView];
+    
+    [self.setSignatureView becomeFirstResponder];
+}
+
+- (void)setBrithSelectView{
+    UIControl *coverView = [[UIControl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    [coverView addTarget:self action:@selector(clickCoverView:) forControlEvents:UIControlEventTouchUpInside];
+    self.coverView = coverView;
+    [self.view addSubview:coverView];
+    
+    birthView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 1.15, MainWidth, MainHeight *0.45)];
+    birthView.layer.cornerRadius = 3.0;
+    birthView.layer.masksToBounds = YES;
+    birthView.backgroundColor = [UIColor whiteColor];
+    [coverView addSubview:birthView];
+    
+    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureButton.tag = 1001;
+    sureButton.frame = CGRectMake(MainWidth / 2.0, 0, MainWidth / 2.0, 44);
+    sureButton.titleEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 0);
+    sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
+    [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.sureButton = sureButton;
+    [birthView addSubview:sureButton];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.tag = 1002;
+    cancelButton.frame = CGRectMake(0, 0, MainWidth / 2.0, 44);
+    cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 100);
+    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelButton addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.cancelButton = cancelButton;
+    [birthView addSubview:cancelButton];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(sureButton.frame), MainWidth, 1)];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [birthView addSubview:line];
+
     UIDatePicker *datePicker = [[UIDatePicker alloc] init];
     self.datePicker = datePicker;
-    datePicker.frame = CGRectMake(0, 0 , MainWidth, 150);
+    datePicker.frame = CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth,150);
     datePicker.backgroundColor = [UIColor whiteColor];
     datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     datePicker.datePickerMode = UIDatePickerModeDate;
@@ -360,75 +477,61 @@
     datePicker.minimumDate = minDate;
     datePicker.maximumDate = maxDate;
     [datePicker addTarget:self action:@selector(dateChange:) forControlEvents:UIControlEventValueChanged];
-    [view addSubview:datePicker];
+    [birthView addSubview:datePicker];
+    
+}
+
+- (void)addSignatureView{
+    
+    UIControl *coverView = [[UIControl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    [coverView addTarget:self action:@selector(clickCoverView:) forControlEvents:UIControlEventTouchUpInside];
+    self.coverView = coverView;
+    [self.view addSubview:coverView];
+    
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.86, MainWidth, MainHeight *0.3)];
+    signatureView.layer.cornerRadius = 3.0;
+    signatureView.layer.masksToBounds = YES;
+    signatureView.backgroundColor = [UIColor whiteColor];
+    [coverView addSubview:signatureView];
     
     UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sureButton.tag = 1001;
-    sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.datePicker.frame), MainWidth / 2.0, 44);
+    sureButton.tag = 2001;
+    sureButton.frame = CGRectMake(MainWidth / 2.0, 0, MainWidth / 2.0, 44);
+    sureButton.titleEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 0);
     sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    sureButton.layer.borderColor = [UIColor blackColor].CGColor;
-    sureButton.layer.borderWidth = 0.5;
     [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [sureButton setTitle:@"确定" forState:UIControlStateNormal];
     [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     self.sureButton = sureButton;
-    [view addSubview:sureButton];
+    [signatureView addSubview:sureButton];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelButton.frame = CGRectMake(MainWidth / 2.0, CGRectGetMaxY(self.datePicker.frame), MainWidth / 2.0, 44);
+    cancelButton.tag = 2002;
+    cancelButton.frame = CGRectMake(0, 0, MainWidth / 2.0, 44);
+    cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 100);
     cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
-    cancelButton.layer.borderWidth = 0.5;
     [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     self.cancelButton = cancelButton;
-    [view addSubview:cancelButton];
-}
+    [signatureView addSubview:cancelButton];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(sureButton.frame), MainWidth, 1)];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [signatureView addSubview:line];
 
-- (void)addSignatureView{
-    UIView *coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
-    self.coverView = coverView;
-    [self.view addSubview:coverView];
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.70, MainWidth, MainHeight *0.45)];
-    view.layer.cornerRadius = 3.0;
-    view.layer.masksToBounds = YES;
-    view.backgroundColor = [UIColor whiteColor];
-    [coverView addSubview:view];
-    
-    UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 150)];
+
+    UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth, MainWidth * 0.3 - 45)];
     setSignatureView.backgroundColor = [UIColor whiteColor];
     setSignatureView.font = [UIFont systemFontOfSize:20];
     self.setSignatureView = setSignatureView;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.setSignatureView = setSignatureView;
     self.setSignatureView.delegate = self;
-    [view addSubview:setSignatureView];
+    [signatureView addSubview:setSignatureView];
     
-    UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sureButton.tag = 1002;
-    sureButton.frame = CGRectMake(0, CGRectGetMaxY(self.setSignatureView.frame), MainWidth / 2.0, 44);
-    sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    sureButton.layer.borderColor = [UIColor blackColor].CGColor;
-    sureButton.layer.borderWidth = 0.5;
-    [sureButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [sureButton setTitle:@"确定" forState:UIControlStateNormal];
-    [sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.sureButton = sureButton;
-    [view addSubview:sureButton];
-    
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelButton.frame = CGRectMake(MainWidth / 2.0, CGRectGetMaxY(self.setSignatureView.frame), MainWidth / 2.0, 44);
-    cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    cancelButton.layer.borderColor = [UIColor blackColor].CGColor;
-    cancelButton.layer.borderWidth = 0.5;
-    [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    self.cancelButton = cancelButton;
-    [view addSubview:cancelButton];
+    [self.setSignatureView becomeFirstResponder];
 }
 #pragma mark --UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -532,14 +635,14 @@
         }
         
     }];
-    [self.coverView removeFromSuperview];
+    [self removeBirthCoverView];
     NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1];
     NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
     [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
     }else{
-    [self.coverView removeFromSuperview];
+       [self removeBirthCoverView];
       }
-    }else if(sender.tag == 1002){
+    }else if(sender.tag == 2001){
         if (self.setSignatureView.text.length > 0){
         NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setSignatureView.text};
         [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
@@ -574,9 +677,16 @@
     self.setSignatureView.text = textView.text;
 }
 
-
-- (void)cancelButtonClick{
+- (void)cancelButtonClick:(UIButton *)sender{
+    if (sender.tag == 1002) {
+    [self removeBirthCoverView];
+    }else if (sender.tag == 2002){
     [self.coverView removeFromSuperview];
+    }
+}
+
+- (void)clickCoverView:(UIControl *)sender{
+    [self removeBirthCoverView];
 }
 
 - (void)dateChange:(UIDatePicker *)datePicker{
@@ -586,6 +696,16 @@
     self.setBirthStr = dateString;
 }
 
+- (void)removeBirthCoverView{
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        CGFloat birthH = birthView.frame.size.height;
+        birthView.transform = CGAffineTransformMakeTranslation(0,birthH);
+    }completion:^(BOOL finished) {
+        [self.coverView removeFromSuperview];
+    }];
+
+}
 #pragma mark - MBProgressHUD Show or Hidden
 - (void)AddHUD {
     _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -602,5 +722,6 @@
 - (void)popViewController {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 @end
