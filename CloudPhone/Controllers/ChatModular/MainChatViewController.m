@@ -36,6 +36,8 @@
 
 @property (nonatomic, strong) NSIndexPath *tempIndexPath;
 
+@property (nonatomic, strong) UIButton *addressButton;
+
 
 @end
 
@@ -65,26 +67,28 @@
     self.navigationItem.titleView = titleSegment;
     
     //导航栏右按钮
-    UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    addressButton.frame = CGRectMake(0, 0, 44, 44);
-    [addressButton setImage:[UIImage imageNamed:@"chat_addfriend.png"] forState:UIControlStateNormal];
-    [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    _addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _addressButton.frame = CGRectMake(0, 0, 44, 44);
+    [_addressButton setImage:[UIImage imageNamed:@"chat_addfriend.png"] forState:UIControlStateNormal];
+    [_addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
                                        initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                        target:nil action:nil];
     negativeSpacer.width = -12;
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_addressButton];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
     
-    CGRect addNotifyLabelRect = CGRectMake(addressButton.frame.size.width-20, 8, 10, 10);
-    _unreadAddLabel = [[UILabel alloc]initWithFrame:addNotifyLabelRect];
+
+    _unreadAddLabel = [[UILabel alloc]init];
+    _unreadAddLabel.frame = CGRectMake(_addressButton.frame.size.width-20, 8, 10, 10);
+    _unreadAddLabel.tag = 1400;
     _unreadAddLabel.layer.cornerRadius = 5;
     _unreadAddLabel.clipsToBounds = YES;
     _unreadAddLabel.textAlignment = NSTextAlignmentCenter;
     _unreadAddLabel.hidden = YES;
     _unreadAddLabel.backgroundColor = [UIColor redColor];
     _unreadAddLabel.font = [UIFont systemFontOfSize:9];
-    [addressButton addSubview:_unreadAddLabel];
+    [_addressButton addSubview:_unreadAddLabel];
     
     _searchArray = [[NSMutableArray alloc]initWithCapacity:0];
     
@@ -98,10 +102,23 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    //查看下小红点
+    [self tabbarUnreadMessageisShow];
+    
     if (self.selectType == kMessage) {
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
     }
+    
+    //添加好友小红点
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *str = [defaults objectForKey:XMPPAddFriend];
+    if ([str isEqualToString:@"somebodyAdd"]) {
+        _unreadAddLabel.hidden = NO;
+    } else {
+        _unreadAddLabel.hidden = YES;
+    }
+  
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -227,9 +244,7 @@
         [self.navigationController pushViewController:controller animated:YES];
         
     } else {
-        //判断tabbar小红点出现
-        [self tabbarUnreadMessageisShow];
-        
+    
         if (self.selectType == kFriend) {
             //好友
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
@@ -382,7 +397,7 @@
 
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
-    NSLog(@"上下文改变");
+    DLog(@"上下文改变");
     [self.tableView reloadData];
 }
 
@@ -420,13 +435,15 @@
 
 
 - (void)tabbarUnreadMessageisShow {
-    if ([[self appDelegate].xmppStream isConnected]) {
-        BOOL reg = [self seekUnreadMessageFromFMDB];
-        if (reg) {
-            [self appDelegate].unreadChatLabel.hidden = NO;
-        } else {
-            [self appDelegate].unreadChatLabel.hidden = YES;
-        }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *str = [defaults objectForKey:XMPPAddFriend];
+    
+    BOOL reg = [self seekUnreadMessageFromFMDB];
+    if (reg || [str isEqualToString:@"somebodyAdd"]) {
+        [self appDelegate].unreadChatLabel.hidden = NO;
+    } else {
+        [self appDelegate].unreadChatLabel.hidden = YES;
     }
 }
 
@@ -442,15 +459,6 @@
         }
     }
     return unreadFlag;
-}
-
-
-- (void)addressButtonClick {
-    
-    self.unreadAddLabel.hidden = YES;
-    AddressAddViewController *controller = [[AddressAddViewController alloc]init];
-    [self.navigationController pushViewController:controller animated:YES];
-
 }
 
 //添加好友。。。。。
@@ -559,7 +567,10 @@
 
 #pragma mark - 添加好友
 - (void)addFriendNotification {
-    self.unreadAddLabel.hidden = NO;
+    DLog(@"好友界面，接受通知");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _unreadAddLabel.hidden = NO;
+    });
 }
 
 
@@ -568,6 +579,12 @@
 - (AppDelegate *)appDelegate {
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
+#pragma mark - 导航栏右按钮
+- (void)addressButtonClick {
+    AddressAddViewController *controller = [[AddressAddViewController alloc]init];
+    [self.navigationController pushViewController:controller animated:YES];
+    
+}
 
 //切换状态
 - (void)segmentClick:(UISegmentedControl *)sender {
@@ -575,12 +592,12 @@
     UISegmentedControl *segment = (UISegmentedControl *)sender;
     if (segment.selectedSegmentIndex == 0) {
         self.selectType = kMessage;  //表示消息列表
+        [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
     
     } else {
         self.selectType = kFriend; //表示朋友列表
-        
-        [self loadMessageDataFromFMDB];
+       
         [self.tableView reloadData];
     
     }

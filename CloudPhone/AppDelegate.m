@@ -70,10 +70,11 @@
     //初始化xmpp各种类
     [self setupStream];
     
-    //
-    
     //打开数据库
     [DBOperate createTable];
+    
+    //显示小红点
+    [self tabbarUnreadMessageisShow];
     
     //openshare分享到微信和QQ注册
     [OpenShare connectQQWithAppId:@"1104965629"];
@@ -397,7 +398,7 @@
             [DBOperate insertDataWithnotAutoID:saveMessageArray tableName:T_chatMessage];
         }
 
-       NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
+        NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
 
         [[NSNotificationCenter defaultCenter] postNotification:notice];
         
@@ -411,7 +412,7 @@
     // from = 13049340993@cloud.com type = subscribed
     
     //type = subscribe from = 13049340993@cloud.com
-    NSLog(@"啊啊啊啊啊啊啊啊啊啊啊啊啊type = %@ from = %@",presence.type,presence.from);
+//    NSLog(@"啊啊啊啊啊啊啊啊啊啊啊啊啊type = %@ from = %@",presence.type,presence.from);
     
     NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
     DLog(@"mesg = %@",msg);
@@ -420,12 +421,18 @@
     NSString *number = [defaults objectForKey:UserNumber];
     NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
     if (![presence.fromStr isEqualToString:selfJidStr]) {
-        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unread",nil];
+        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
         NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
+        DLog(@"这里进来了么");
         if (friendArray.count == 0) {
             [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:FriendAdding object:nil];
+            [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
+            [defaults synchronize];
+            
+            DLog(@"添加好友通知呀，来了");
+            NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
+            [[NSNotificationCenter defaultCenter] postNotification:notice];
         }
     }
  
@@ -464,6 +471,7 @@
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
     //收到对方取消定阅我得消息
+    NSLog(@"presenceType = %@",presence.type);
     if ([presence.type isEqualToString:@"unsubscribed"]) {
         [xmppRoster removeUser:presence.from];
         //把好友添加的也删了
@@ -548,6 +556,7 @@
 #pragma mark XMPPCoreData
 - (NSManagedObjectContext *)managedObjectContext_roster{
     return [xmppRosterStorage mainThreadManagedObjectContext];
+    
 }
 
 - (NSManagedObjectContext *)managedObjectContext_capabilities{
@@ -555,6 +564,34 @@
 }
 
 
+
+#pragma mark -- 应用开启又红点的显示小红点
+- (void)tabbarUnreadMessageisShow {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *str = [defaults objectForKey:XMPPAddFriend];
+    
+    BOOL reg = [self seekUnreadMessageFromFMDB];
+    if (reg || [str isEqualToString:@"somebodyAdd"]) {
+        self.unreadChatLabel.hidden = NO;
+    } else {
+        self.unreadChatLabel.hidden = YES;
+    }
+}
+
+//查询是否有未读的message
+- (BOOL)seekUnreadMessageFromFMDB {
+    NSArray *arr = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
+    BOOL unreadFlag = NO;
+    for (NSArray *temp in arr) {
+        NSString *unreadTemp = [temp objectAtIndex:message_unreadMessage];
+        NSInteger unreadInt = [unreadTemp integerValue];
+        if (unreadInt > 0) {
+            unreadFlag = YES;
+        }
+    }
+    return unreadFlag;
+}
 
 
 #pragma mark - 应用程序生命周期

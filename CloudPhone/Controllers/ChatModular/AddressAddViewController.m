@@ -37,6 +37,15 @@
 @end
 
 @implementation AddressAddViewController
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(addFriendNotification)
+                                                     name:FriendAdding object:nil];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -72,6 +81,13 @@
     });
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"dismiss" forKey:XMPPAddFriend];
+    [defaults synchronize];
+}
+
 - (UITableView *)tableView {
     if (!_tableView) {
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
@@ -88,15 +104,13 @@
 }
 
 - (void)loadFriendFromFMDB {
-
     [_addArray removeAllObjects];
-    
     NSArray *array = [DBOperate queryData:T_addFriend theColumn:nil theColumnValue:nil withAll:YES];
     if (array.count > 0) {
         for (NSArray *temp in array) {
             AddFriendModel *model = [[AddFriendModel alloc]init];
             model.jidStr = [temp objectAtIndex:add_jidStr];
-            model.status = [temp objectAtIndex:add_isRead];
+            model.status = [temp objectAtIndex:add_isAgree];
             [_addArray addObject:model];
         }
     }
@@ -156,7 +170,7 @@
                 NSArray *array = [model.jidStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
                 cell.textLabel.text = array[0] ? array[0] : @"";
                 cell.detailTextLabel.text = @"请求添加好友";
-                if ([model.status isEqualToString:@"unread"]) {
+                if ([model.status isEqualToString:@"unagree"]) {
                     cell.accessoryView = [self statusButtonWithTitle:@"同意"];
                 } else {
                     cell.accessoryView = [self statusButtonWithTitle:@"已添加"];
@@ -270,10 +284,10 @@
             //同意与否
             if ([[self appDelegate].xmppStream isConnected]) {
                 AddFriendModel *model = [_addArray objectAtIndex:indexPath.row -1];
-                if ([model.status isEqualToString:@"unread"]) {
+                if ([model.status isEqualToString:@"unagree"]) {
                     XMPPJID *jid = [XMPPJID jidWithString:model.jidStr];
                     [[self appDelegate].xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
-                    [DBOperate updateData:T_addFriend tableColumn:@"isRead" columnValue:@"read" conditionColumn:@"jidStr" conditionColumnValue:model.jidStr];
+                    [DBOperate updateData:T_addFriend tableColumn:@"isAgree" columnValue:@"agree" conditionColumn:@"jidStr" conditionColumnValue:model.jidStr];
                     [self loadFriendFromFMDB];
                     [_tableView reloadData];
                 }
@@ -537,6 +551,15 @@
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
+- (void)addFriendNotification {
+    DLog(@"聊天界面，接受通知");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self loadFriendFromFMDB];
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    });
+   
+}
+
 #pragma mark ---触摸关闭键盘----
 -(void)handleTap:(UIGestureRecognizer *)gesture
 {
@@ -558,6 +581,11 @@
 - (void)popViewController {
 
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark -didReceiveMemoryWarning and dealloc
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:FriendAdding object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
