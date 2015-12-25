@@ -8,7 +8,7 @@
 
 #import "TaskCenterViewController.h"
 #import "Global.h"
-#import "UMSocial.h"
+#import "OpenShareHeader.h"
 @interface TaskCenterViewController()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -149,38 +149,78 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
    // NSLog(@"%ld",(long)indexPath.row);
-    
 }
 
 
 - (void)clickButton:(UIButton *)sender{
     switch (sender.tag) {
         case 0:{
-            DLog(@"0");
-            //使用UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite分别代表微信好友、微信朋友圈、微信收藏
-//            [[UMSocialDataService defaultDataService]  postSNSWithTypes:@[UMShareToWechatSession] content:@"分享内嵌文字" image:nil location:nil urlResource:nil presentedController:self completion:^(UMSocialResponseEntity *response){
-//                if (response.responseCode == UMSResponseCodeSuccess) {
-//                    NSLog(@"分享成功！");
-//                }
-//            }];
+            OSMessage *msg=[[OSMessage alloc]init];
+            msg.title=@"Hello msg.title";
+            msg.extInfo=@"app自己的扩展消息，当从微信打开app的时候，会传给app";
+            msg.link=@"http://www.baidu.com/";//分享到朋友圈以后，微信就不会调用app了，跟news类型分享到朋友圈一样。
+            // msg.image=testImage;
+            // msg.thumbnail=testThumbImage;
+            msg.multimediaType=OSMultimediaTypeApp;
             
+            [OpenShare shareToWeixinTimeline:msg Success:^(OSMessage *message) {
+                DLog(@"微信分享到朋友圈成功：\n%@",message);
+            } Fail:^(OSMessage *message, NSError *error) {
+                DLog(@"微信分享到朋友圈失败：\n%@\n%@",error,message);
+            }];
         }
             break;
             
         case 1:{
-            DLog(@"1");
+            OSMessage *msg=[[OSMessage alloc] init];
+            msg.title=[NSString stringWithFormat:@"Hello OpenShare (msg.title) %f",[[NSDate date] timeIntervalSince1970]];
+          //  msg.image=testImage;
+          //  msg.thumbnail=testThumbImage;
+            msg.desc=[NSString stringWithFormat:@"这里写的是msg.description %f",[[NSDate date] timeIntervalSince1970]];
+           // msg.link=@"http://sports.qq.com/a/20120510/000650.htm";
+
+
+            [OpenShare shareToQQZone:msg Success:^(OSMessage *message) {
+                DLog(@"分享到QQ空间成功:%@",msg);
+            } Fail:^(OSMessage *message, NSError *error) {
+                DLog(@"分享到QQ空间失败:%@\n%@",msg,error);
+            }];
+
         }
             break;
             
         case 2:{
-            DLog(@"2");
+            OSMessage *msg=[[OSMessage alloc] init];
+            msg.title=[NSString stringWithFormat:@"Hello OpenShare (msg.title) %f",[[NSDate date] timeIntervalSince1970]];
+         //   msg.image=testImage;
+         //   msg.thumbnail=testThumbImage;
+            msg.desc=[NSString stringWithFormat:@"这里写的是msg.description %f",[[NSDate date] timeIntervalSince1970]];
+            
+           // msg.link=@"http://sports.qq.com/a/20120510/000650.htm";
+
+            [OpenShare shareToQQFriends:msg Success:^(OSMessage *message) {
+                DLog(@"分享到QQ好友成功:%@",msg);
+            } Fail:^(OSMessage *message, NSError *error) {
+                DLog(@"分享到QQ好友失败:%@\n%@",msg,error);
+            }];
         }
             break;
             
         case 3:{
-            DLog(@"3");
+            OSMessage *msg=[[OSMessage alloc]init];
+            msg.title=@"Hello msg.title";
+            msg.extInfo=@"app自己的扩展消息，当从微信打开app的时候，会传给app";
+            msg.link=@"http://www.baidu.com/";//分享到朋友圈以后，微信就不会调用app了，跟news类型分享到朋友圈一样。
+            // msg.image=testImage;
+            // msg.thumbnail=testThumbImage;
+            msg.multimediaType=OSMultimediaTypeApp;
+            [OpenShare shareToWeixinSession:msg Success:^(OSMessage *message) {
+               DLog(@"微信分享到会话成功：\n%@",message);
+            } Fail:^(OSMessage *message, NSError *error) {
+               DLog(@"微信分享到会话失败：\n%@\n%@",error,message);
+            }];
+
         }
             break;            
         default:
@@ -189,16 +229,6 @@
     
 }
 
-
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据responseCode得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        //得到分享到的微博平台名
-        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
-    }
-}
 
 - (void)popViewController {
 

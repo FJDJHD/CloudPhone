@@ -62,7 +62,7 @@
     } else {
         [self requestPersonalInfo];
     }
-   // [self requestPersonalCenter];    
+    [self requestPersonalCenter];
 }
 
 - (void)viewDidLoad {
@@ -239,34 +239,23 @@
 }
 
 
-//- (void)requestPersonalCenter {
-//
-//    //用户中心首页
-//    [[AirCloudNetAPIManager sharedManager] getUserCenterOfParams:nil WithBlock:^(id data, NSError *error) {
-//        
-//        if (!error) {
-//            NSDictionary *dic = (NSDictionary *)data;
-//            
-//            if (dic) {
-//                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-//                    DLog(@"成功------%@",[dic objectForKey:@"msg"]);
-//                    
-//                    NSDictionary *info = [dic objectForKey:@"data"];
-//                    if (info) {
-//                        _user = [[UserModel alloc]init];
-//                        _user.userNumber = [info objectForKey:@"mobile"];
-//                        _user.userName = [info objectForKey:@"nick_name"];
-//                        _user.userIcon = [info objectForKey:@"photo"];
-//                        [_tableView reloadData];
-//                    }
-//                    
-//                } else {
-//                    DLog(@"******%@",[dic objectForKey:@"msg"]);
-//                }
-//            }
-//        }
-//    }];
-//}
+- (void)requestPersonalCenter {
+    //用户中心首页
+    [[AirCloudNetAPIManager sharedManager] getUserCenterOfParams:nil WithBlock:^(id data, NSError *error) {
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if (dic) {
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    //不做处理，用来监控各种状态
+                    DLog(@"成功------%@",[dic objectForKey:@"msg"]);
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                }
+            }
+        }
+    }];
+}
 
 - (void)requestPersonalInfo {
     NSDictionary *dic = @{@"us":@"us"};
