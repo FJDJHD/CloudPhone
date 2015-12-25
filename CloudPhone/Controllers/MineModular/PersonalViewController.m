@@ -14,7 +14,7 @@
 #import "ChatSendHelper.h"
 
 
-@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIAlertViewDelegate,UITextViewDelegate>
+@interface PersonalViewController()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextViewDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
@@ -27,6 +27,7 @@
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) UserModel *user;
 @property (nonatomic, strong) UITextView *setSignatureView;
+@property (nonatomic, strong) UITextField *setPersonName;
 @property (nonatomic, strong) NSString *setBirthStr;
 @property (nonatomic, assign, getter=isChangingKeyboard) BOOL changingKeyboard;
 
@@ -259,10 +260,6 @@
         changeIconSheet.tag = 1001;
         [changeIconSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 0){
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"修改昵称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        alert.tag = 2001;
-//        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//        [alert show];
         [self addSetPersonName];
     }else if (indexPath.section == 1 && indexPath.row == 1){
         UIActionSheet *changeGenderSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消"destructiveButtonTitle:nil otherButtonTitles:@"男",@"女",nil];
@@ -280,38 +277,6 @@
       //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
         [self addSignatureView];
-    }
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 2001 && buttonIndex == 1) {
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        if (textField.text.length > 0) {
-            NSDictionary *dic = @{@"field":@"nick_name",@"fieval":textField.text};
-            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
-                if (!error) {
-                    NSDictionary *dic = (NSDictionary *)data;
-                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                        [CustomMBHud customHudWindow:@"昵称修改成功"];
-                        UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-                        nameCell.detailTextLabel.text = textField.text;
-                        
-                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                        NSString *number = [defaults objectForKey:UserNumber];
-                        [DBOperate updateData:T_personalInfo tableColumn:@"name" columnValue:textField.text conditionColumn:@"phoneNum" conditionColumnValue:number];
-                        
-                        //这里把xmpp的个人信息修改一下
-                        [ChatSendHelper modifyUserNicknameWithString:textField.text];
-                        [ChatSendHelper modifyUserHeadPortraitWithImage:nil nickName:textField.text];
-                    } else {
-                        [CustomMBHud customHudWindow:@"昵称修改失败"];
-                    }
-                }
-            }];
-        }
-    } else {
-        DLog(@"取消");
     }
 }
 
@@ -389,7 +354,7 @@
     [coverView addSubview:signatureView];
     
     UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sureButton.tag = 2001;
+    sureButton.tag = 3001;
     sureButton.frame = CGRectMake(MainWidth / 2.0, 0, MainWidth / 2.0, 44);
     sureButton.titleEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 0);
     sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
@@ -400,7 +365,7 @@
     [signatureView addSubview:sureButton];
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelButton.tag = 2002;
+    cancelButton.tag = 3002;
     cancelButton.frame = CGRectMake(0, 0, MainWidth / 2.0, 44);
     cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 100);
     cancelButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
@@ -415,16 +380,14 @@
     [signatureView addSubview:line];
     
     
-    UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth, 44)];
-    setSignatureView.backgroundColor = [UIColor whiteColor];
-    setSignatureView.font = [UIFont systemFontOfSize:20];
-    self.setSignatureView = setSignatureView;
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.setSignatureView = setSignatureView;
-    self.setSignatureView.delegate = self;
-    [signatureView addSubview:setSignatureView];
+    UITextField *setPersonName = [[UITextField alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth, 44)];
+    setPersonName.backgroundColor = [UIColor whiteColor];
+    setPersonName.font = [UIFont systemFontOfSize:20];
+    self.setPersonName = setPersonName;
+    self.setPersonName.delegate = self;
+    [signatureView addSubview:setPersonName];
     
-    [self.setSignatureView becomeFirstResponder];
+    [self.setPersonName becomeFirstResponder];
 }
 
 - (void)setBrithSelectView{
@@ -527,7 +490,6 @@
     setSignatureView.font = [UIFont systemFontOfSize:20];
     self.setSignatureView = setSignatureView;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.setSignatureView = setSignatureView;
     self.setSignatureView.delegate = self;
     [signatureView addSubview:setSignatureView];
     
@@ -667,10 +629,35 @@
         NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
         [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
   }
-    else{
-        [self.coverView removeFromSuperview];
+}else if (sender.tag == 3001){
+        if (self.setPersonName.text.length > 0) {
+            NSDictionary *dic = @{@"field":@"nick_name",@"fieval":self.setPersonName.text};
+            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+                if (!error) {
+                    NSDictionary *dic = (NSDictionary *)data;
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        [CustomMBHud customHudWindow:@"昵称修改成功"];
+                        UITableViewCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+                        nameCell.detailTextLabel.text = self.setPersonName.text;
+                        
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *number = [defaults objectForKey:UserNumber];
+                        [DBOperate updateData:T_personalInfo tableColumn:@"name" columnValue:self.setPersonName.text conditionColumn:@"phoneNum" conditionColumnValue:number];
+                        
+                        //这里把xmpp的个人信息修改一下
+                        [ChatSendHelper modifyUserNicknameWithString:self.setPersonName.text];
+                        [ChatSendHelper modifyUserHeadPortraitWithImage:nil nickName:self.setPersonName.text];
+                    } else {
+                        [CustomMBHud customHudWindow:@"昵称修改失败"];
+                    }
+                }
+            }];
+            [self.coverView removeFromSuperview];
+            NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:0 inSection:1];
+            NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
+            [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
-  }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView{
@@ -680,7 +667,7 @@
 - (void)cancelButtonClick:(UIButton *)sender{
     if (sender.tag == 1002) {
     [self removeBirthCoverView];
-    }else if (sender.tag == 2002){
+    }else if (sender.tag == 2002 | sender.tag == 3002){
     [self.coverView removeFromSuperview];
     }
 }
