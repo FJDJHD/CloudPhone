@@ -277,9 +277,8 @@
                     model.userSignature = [info objectForKey:@"signature"];
                     
                     self.user = model;
-                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
+                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,model.userIcon,model.userGender,model.userBirthday,model.userSignature,nil];
                     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
-                    
                     
                     [_tableView reloadData];
                 }
@@ -296,20 +295,20 @@
 
 #pragma mark ---file read and write
 
-//个人头像保存在沙盒
-- (NSString *)personalIconFilePath {
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
-    return filePath;
-}
-
-//保存在plist文件中
-- (NSString *)personalInfoFilePath{
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
-    return filePath;
-}
-
+////个人头像保存在沙盒
+//- (NSString *)personalIconFilePath {
+//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+//    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
+//    return filePath;
+//}
+//
+////保存在plist文件中
+//- (NSString *)personalInfoFilePath{
+//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+//    NSString *filePath = [path stringByAppendingPathComponent:@"personalInfo.plist"];
+//    return filePath;
+//}
+//
 //cell下划线的距离
 -(void)viewDidLayoutSubviews {
     
