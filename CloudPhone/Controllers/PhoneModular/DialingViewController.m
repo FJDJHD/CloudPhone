@@ -8,15 +8,27 @@
 
 #import "DialingViewController.h"
 #import "Global.h"
-@interface DialingViewController ()
-
+#import "DialKeyboard.h"
+@interface DialingViewController ()<DialKeyboardDelegate>
+@property (nonatomic,strong) DialKeyboard * keyboard;
 @end
 
-@implementation DialingViewController
+@implementation DialingViewController{
+    BOOL isShow[8];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDailingUI];
+    [self initDialKeyboard];
+}
+
+- (void)initDialKeyboard{
+    //初始化自定义键盘
+    CGRect frame = CGRectMake(0, 0, MainWidth, 300);
+    DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
+    self.keyboard = keyboard;
+    self.keyboard.delegate = self;
 }
 
 - (void)initDailingUI{
@@ -126,7 +138,7 @@
             
         case 5:{
             //键盘
-            DLog(@"5");
+            [self keyboardShow];
         }
             break;
             
@@ -135,4 +147,35 @@
     }
     
 }
+
+#pragma DialKeyboradDelegate
+- (void)keyboardShow{
+    [self.view addSubview:self.keyboard];
+}
+
+- (void)keyboardHidden{
+    [self.keyboard removeFromSuperview];
+}
+//- (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
+//    [self.textView insertText:button.titleLabel.text];
+//}
+//
+//- (void)keyboard:(DialKeyboard *)keyboard didClickDeleteBtn:(UIButton *)deleteBtn {
+//    [self.textView deleteBackward];
+//}
+//
+//- (void)keyboard:(DialKeyboard *)keyboard didClickRemoveBtn:(UIButton *)deleteBtn {
+//    [self.textView resignFirstResponder];
+//}
+//
+//- (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
+//    NSLog(@"拨打");
+//    //这里写拨打电话业务
+//}
+//
+//点击空白收键盘
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
+}
+
 @end

@@ -13,6 +13,7 @@
 #import "DailNumberCell.h"
 #import "FriendDetailViewController.h"
 #import "ItelDialingViewController.h"
+
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -32,7 +33,7 @@
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;
     
-    //添加列表试图
+       //添加列表试图
     [self.view addSubview:self.tableView];
 }
 

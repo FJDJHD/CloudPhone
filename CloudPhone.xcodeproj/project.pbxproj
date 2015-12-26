@@ -525,6 +525,9 @@
 		B4B126C51C2BCB7600A0AAEB /* OpenShare+Weibo.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126BC1C2BCB7600A0AAEB /* OpenShare+Weibo.m */; };
 		B4B126C61C2BCB7600A0AAEB /* OpenShare+Weixin.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126BE1C2BCB7600A0AAEB /* OpenShare+Weixin.m */; };
 		B4B126C71C2BCB7600A0AAEB /* OpenShare.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126C01C2BCB7600A0AAEB /* OpenShare.m */; };
+		B4B126D41C2E65E300A0AAEB /* DialKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */; };
+		B4B126D71C2E668500A0AAEB /* phone_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */; };
+		B4B126D81C2E668500A0AAEB /* phone_dial@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */; };
 		B4BE7CFD1C0C5C6E00D74D49 /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */; };
 		B4BE7D031C0C5E1900D74D49 /* TaskCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D021C0C5E1900D74D49 /* TaskCenterViewController.m */; };
 		B4BE7D061C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D051C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m */; };
@@ -1434,6 +1437,10 @@
 		B4B126BF1C2BCB7600A0AAEB /* OpenShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenShare.h; sourceTree = "<group>"; };
 		B4B126C01C2BCB7600A0AAEB /* OpenShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenShare.m; sourceTree = "<group>"; };
 		B4B126C11C2BCB7600A0AAEB /* OpenShareHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenShareHeader.h; sourceTree = "<group>"; };
+		B4B126D21C2E65E300A0AAEB /* DialKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialKeyboard.h; sourceTree = "<group>"; };
+		B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialKeyboard.m; sourceTree = "<group>"; };
+		B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_delete@2x.png"; sourceTree = "<group>"; };
+		B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_dial@2x.png"; sourceTree = "<group>"; };
 		B4BE7CFB1C0C5C6E00D74D49 /* PersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalViewController.h; sourceTree = "<group>"; };
 		B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
 		B4BE7D011C0C5E1900D74D49 /* TaskCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCenterViewController.h; sourceTree = "<group>"; };
@@ -1618,6 +1625,8 @@
 				6E722F541C0FEC9200A21557 /* DailNumberCell.m */,
 				B40FF01A1C1580790077FAC9 /* ChatCell.h */,
 				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
+				B4B126D21C2E65E300A0AAEB /* DialKeyboard.h */,
+				B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3608,6 +3617,8 @@
 				B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */,
 				B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */,
 				B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */,
+				B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */,
+				B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */,
 			);
 			path = dialing;
 			sourceTree = "<group>";
@@ -3761,6 +3772,7 @@
 				6E7D7A121C192CCC00B42140 /* VoiceSearchFeedback009.png in Resources */,
 				6E7D7A6C1C192CCC00B42140 /* chatBar_more_cameraSelected.png in Resources */,
 				B4A920711C1FEF3B0070821F /* phone_addressicon@3x.png in Resources */,
+				B4B126D71C2E668500A0AAEB /* phone_delete@2x.png in Resources */,
 				B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */,
 				6E7D7A3C1C192CCC00B42140 /* chatBar_textBg.png in Resources */,
 				6E7D7A361C192CCC00B42140 /* chatBar_more_cardSelected.png in Resources */,
@@ -3855,6 +3867,7 @@
 				6E7D7A2B1C192CCC00B42140 /* call_out@2x.png in Resources */,
 				6E7D7A141C192CCC00B42140 /* VoiceSearchFeedback010.png in Resources */,
 				B4D04DBF1C1BC2C5008BD608 /* mine_buttonbg@3x.png in Resources */,
+				B4B126D81C2E668500A0AAEB /* phone_dial@2x.png in Resources */,
 				B4D04DB71C1AA531008BD608 /* phone_icon@3x.png in Resources */,
 				B4D04DB11C1AA50D008BD608 /* phone_itelhangup@3x.png in Resources */,
 				6E7D7A161C192CCC00B42140 /* VoiceSearchFeedback011.png in Resources */,
@@ -4112,6 +4125,7 @@
 				6E4D37611C056384001573E3 /* SDWebImageDownloader.m in Sources */,
 				6EBA8D3D1C15248B00BAE5DD /* XMPPRoomHybrid.xcdatamodeld in Sources */,
 				6EBA8D5B1C15248B00BAE5DD /* XMPPRegistration.m in Sources */,
+				B4B126D41C2E65E300A0AAEB /* DialKeyboard.m in Sources */,
 				6EE1CD3B1C1C22880054B993 /* MJPhotoView.m in Sources */,
 				6EBA8D571C15248B00BAE5DD /* XMPPPubSub.m in Sources */,
 				6E4D37241C0561A2001573E3 /* AFHTTPRequestOperation.m in Sources */,
