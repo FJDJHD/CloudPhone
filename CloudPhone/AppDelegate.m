@@ -167,7 +167,7 @@
     
     // tab bar
     BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
-//    rootTabBarController.delegate = self;
+    rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
     
     //聊天小红点
@@ -384,7 +384,10 @@
         } else {
             lastStr = message.body;
         }
-        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",@"1",nil];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *number = [defaults objectForKey:UserNumber];
+        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",@"1",number,nil];
         
         if (mesageArray.count > 0) {
             //取出原本的小红点 ，之后加一存进去
@@ -408,10 +411,6 @@
 #pragma mark XMPPRosterDelegate
 //接受好友请求时候调用，就是有人加你好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
-    
-    // from = 13049340993@cloud.com type = subscribed
-    
-    //type = subscribe from = 13049340993@cloud.com
 //    NSLog(@"啊啊啊啊啊啊啊啊啊啊啊啊啊type = %@ from = %@",presence.type,presence.from);
     
     NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
@@ -423,7 +422,6 @@
     if (![presence.fromStr isEqualToString:selfJidStr]) {
         NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
         NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
-        DLog(@"这里进来了么");
         if (friendArray.count == 0) {
             [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
             
@@ -435,7 +433,6 @@
             [[NSNotificationCenter defaultCenter] postNotification:notice];
         }
     }
- 
     
     //这里暂时用ios8的方法。。。。。。。。
 //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
@@ -457,14 +454,10 @@
 
 
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
-    
-    DDXMLElement *query = [iq elementsForName:@"query"][0];
-    DDXMLElement *item = [query elementsForName:@"item"][0];
-    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
-    
-    DLog(@"SUBSCRIPTION 啦啦啦啦啦啦啦啦= %@",subscription);  
-    
-    NSLog(@"全部的全部的全部的iq = %@",iq);
+//    DDXMLElement *query = [iq elementsForName:@"query"][0];
+//    DDXMLElement *item = [query elementsForName:@"item"][0];
+//    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+    DLog(@"全部的全部的全部的iq = %@",iq);
     
 }
 

@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
-@property (nonatomic, copy) NSArray *chatListArray;
+@property (nonatomic, strong) NSMutableArray *chatListArray;
 
 @property (nonatomic, strong) UISearchDisplayController *searchControl;
 
@@ -91,6 +91,7 @@
     [_addressButton addSubview:_unreadAddLabel];
     
     _searchArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _chatListArray = [[NSMutableArray alloc]initWithCapacity:0];
     
     //添加列表试图
     [self.view addSubview:self.tableView];
@@ -358,7 +359,6 @@
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             XMPPJID *jid = user.jid;
             [[self appDelegate].xmppRoster removeUser:jid];
-            [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
             //如果消息列表有也顺便删除了
             [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:user.jidStr];
             //把好友添加的也删了
@@ -428,8 +428,21 @@
 
 #pragma mark - 从fmdb获取聊天消息列表
 - (void)loadMessageDataFromFMDB {
+    [self.chatListArray removeAllObjects];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
     
-    _chatListArray = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
+    NSArray *tempArr = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
+    
+    if (tempArr.count > 0) {
+        for (NSArray *temp in tempArr) {
+            if ([number isEqualToString:[temp objectAtIndex:message_mineNumber]]) {
+                [self.chatListArray addObject:temp];
+            }
+        }
+    }
+   
+//    _chatListArray = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
 
 }
 

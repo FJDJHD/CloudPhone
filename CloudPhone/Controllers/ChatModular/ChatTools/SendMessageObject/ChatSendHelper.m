@@ -95,7 +95,9 @@
     NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
     UIImage *imag = image;
     if (imag == nil) {
-        imag = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath]];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *num = [defaults objectForKey:UserNumber];
+        imag = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath:num]];
         if (imag == nil) {
             imag = [UIImage imageNamed:@"mine_icon"];
         }
@@ -121,32 +123,10 @@
 
 //修改xmpp用户昵称
 + (void)modifyUserNicknameWithString:(NSString *)str {
-    
     NSXMLElement *vCardXML = [NSXMLElement elementWithName:@"vCard" xmlns: @"vcard-temp"];
-//    NSXMLElement *photoXML = [NSXMLElement elementWithName:@"PHOTO"];
-//    NSXMLElement *typeXML = [NSXMLElement elementWithName:@"TYPE" stringValue:@"image/jpeg"];
-//    
-//    UIImage *image = [UIImage imageWithContentsOfFile:[GeneralToolObject personalIconFilePath]];
-//    if (image == nil) {
-//        image = [UIImage imageNamed:@"mine_icon"];
-//    }
-//
-//    NSData *dataFromImage = UIImageJPEGRepresentation(image, 0.5f);
-//    NSXMLElement *binvalXML = [NSXMLElement elementWithName:@"BINVAL" stringValue:[dataFromImage base64EncodedStringWithOptions:0]];
-//    
-//    [photoXML addChild:typeXML];
-//    [photoXML addChild:binvalXML];
-//    [vCardXML addChild:photoXML];
-    
     XMPPvCardTemp *newvCardTemp = [XMPPvCardTemp vCardTempFromElement:vCardXML];
     [newvCardTemp setNickname:str];
-//    [newvCardTemp setPhoto:dataFromImage];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:newvCardTemp];
-    
-//    XMPPvCardTemp *myvCardTemp = [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] myvCardTemp];
-//    myvCardTemp.photo = dataFromImage;
-//    myvCardTemp.nickname = str;
-//    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppvCardTempModule] updateMyvCardTemp:myvCardTemp];
 }
 
 

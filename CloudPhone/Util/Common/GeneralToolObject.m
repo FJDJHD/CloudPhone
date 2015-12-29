@@ -90,9 +90,9 @@
 
 
 //个人头像保存在沙盒
-+ (NSString *)personalIconFilePath {
++ (NSString *)personalIconFilePath:(NSString *)num {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *filePath = [path stringByAppendingPathComponent:@"personalIcon.png"];
+    NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"icon%@.png",num]];
     return filePath;
 }
 
@@ -131,6 +131,10 @@
 + (void)userLoginOut {
     AppDelegate *appDele = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *number = [defaults objectForKey:UserNumber];
+    
+    //清空个人信息数据库
+    [DBOperate deleteData:T_personalInfo tableColumn:@"phoneNum" columnValue:number];
 
     //断开xmpp连接
     [appDele disconnect];

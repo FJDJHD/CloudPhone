@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) MessageModel *messageModel;
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 @end
 
 @implementation MessageViewController
@@ -97,10 +99,19 @@
         _tableView.tableFooterView = [[UIView alloc]init];
         _tableView.backgroundColor = [ColorTool backgroundColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+//        _refreshControl = [[UIRefreshControl alloc]init];
+//        [_refreshControl addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventValueChanged];
+//        [_tableView addSubview:_refreshControl];
+        
         UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
         [_tableView addGestureRecognizer:tap];
     }
     return _tableView;
+}
+
+- (void)refreshAction {
+   [_refreshControl endRefreshing];
 }
 
 - (DXMessageToolBar *)chatToolBar
@@ -139,15 +150,6 @@
     }
     // 从自己写的工具类里的属性中得到上下文
     NSManagedObjectContext *ctx = [self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext;
-
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        NSArray *results = [ctx executeFetchRequest:request error:nil];
-//        _messageArray = [[NSMutableArray alloc]initWithCapacity:results.count];
-//        for (XMPPMessageArchiving_Message_CoreDataObject *object in results) {
-//            MessageModel *model = [MessageModel modelForData:object];
-//            [_messageArray addObject:model];
-//        }
-//    });
     // 实例化，里面要填上上面的各种参数
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:ctx sectionNameKeyPath:nil cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -205,6 +207,9 @@
     _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
     _cellModel.message = _messageModel;
     
+    //zanshi
+    cell.tempController = self;
+    
     cell.cellFrame = _cellModel;
     
     return cell;
@@ -236,40 +241,41 @@
 
 #pragma mark - 保存最后的信息
 - (void)saveLastMessageToFMDB {
-    
-    NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
-    if (chatArray.count > 0) {
-        [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-        
-    }
 
     //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
-    //(jidStr TEXT,icon TEXT,name TEXT,lastMessage TEXT,time TEXT)
-//    if (self.fetchedResultsController.fetchedObjects.count > 0) {
-//        
-//        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
-//        NSString *lastStr = @"";
-//        if ([message.body isEqualToString:@"image"]) {
-//            lastStr = @"[图片]";
-//        } else if ([message.body hasPrefix:@"audio"]) {
-//            lastStr = @"[语音]";
-//        } else {
-//            lastStr = message.message.body;
-//        }
-//        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
-//
-//        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,nil];
-//        
-//        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
-//        if (chatArray.count > 0) {
-//            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-//             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-//            
-//        } else {
-//            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
-//        }
-//    }
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        
+        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
+        NSString *lastStr = @"";
+        if ([message.body isEqualToString:@"image"]) {
+            lastStr = @"[图片]";
+        } else if ([message.body hasPrefix:@"audio"]) {
+            lastStr = @"[语音]";
+        } else {
+            lastStr = message.message.body;
+        }
+        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
 
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *number = [defaults objectForKey:UserNumber];
+        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
+        
+        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
+        if (chatArray.count > 0) {
+            
+            //最后一条信息
+            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+            //最后的时间
+             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+            //红点清零
+             [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+        } else {
+            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+        }
+    }
 }
 
 
@@ -280,7 +286,6 @@
     [self.tableView reloadData];
     [self scrollViewToBottom:NO];
 }
-
 
 #pragma mark -DXMessageToolBarDelegate
 - (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView{

@@ -27,6 +27,9 @@
 
 @property (nonatomic, strong) UserModel *user;
 @property (nonatomic, strong) NSArray *infoArray;
+
+@property (nonatomic, copy) NSString *numberStr;
+
 @end
 
 @implementation MainMineViewController
@@ -41,34 +44,31 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+- (void)viewDidLoad {
+    [super viewDidLoad];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
+    self.numberStr = number;
     
-    _infoArray = [DBOperate queryData:T_personalInfo theColumn:@"phoneNum" theColumnValue:number withAll:NO];
+    [self.view addSubview:self.tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    _infoArray = [DBOperate queryData:T_personalInfo theColumn:@"phoneNum" theColumnValue:self.numberStr withAll:NO];
     if (_infoArray.count > 0) {
         NSArray *temp = _infoArray[0];
         _user = [[UserModel alloc]init];
         _user.userNumber = [temp objectAtIndex:info_phoneNum];
         _user.userName = [temp objectAtIndex:info_name];
         _user.userIcon = [temp objectAtIndex:info_iconPath];
-        _user.userBirthday = [temp objectAtIndex:info_birthday];
-        _user.userGender = [temp objectAtIndex:info_sex];
-        _user.userSignature = [temp objectAtIndex:info_signature];
         [_tableView reloadData];
         
     } else {
         [self requestPersonalInfo];
     }
-    [self requestPersonalCenter];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self.view addSubview:self.tableView];
-    
+    //    [self requestPersonalCenter];
 }
 
 - (UITableView *)tableView {
@@ -140,11 +140,8 @@
         UILabel *userLable = (UILabel *)[cell viewWithTag:201];
         UILabel *mobileLable = (UILabel *)[cell viewWithTag:202];
         //电话
-        if (model.userNumber == nil || model.userNumber.length == 0 || [model.userNumber isEqualToString:@""]) {
-            mobileLable.text = @"";
-        } else {
-            mobileLable.text = model.userNumber;
-        }
+        mobileLable.text = self.numberStr ? self.numberStr : @"";
+
         //昵称
         if (model.userName == nil || model.userName.length == 0 || [model.userName isEqualToString:@"" ]) {
             userLable.text = @"昵称";
@@ -157,11 +154,15 @@
         }else {
             if (_infoArray.count > 0) {
                 
-                UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
-                if (iconImage) {
-                    imageView.image = iconImage;
+                if ([model.userIcon hasPrefix:@"http://"]) {
+                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
                 } else {
-                    imageView.image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+                    UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
+                    if (iconImage) {
+                        imageView.image = iconImage;
+                    } else {
+                        imageView.image = [UIImage imageNamed:@"mine_icon"];
+                    }
                 }
                 
             } else {
@@ -272,18 +273,11 @@
                     model.userNumber = [info objectForKey:@"mobile"];
                     model.userName = [info objectForKey:@"nick_name"];
                     model.userIcon = [info objectForKey:@"photo"];
-                    model.userBirthday = [info objectForKey:@"birthday"];
-                    model.userGender = [info objectForKey:@"gender"];
-                    model.userSignature = [info objectForKey:@"signature"];
                     
                     self.user = model;
-                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
-                    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
-                    
-                    
+
                     [_tableView reloadData];
                 }
-                
                 
             } else {
                 DLog(@"******%@",[dic objectForKey:@"msg"]);

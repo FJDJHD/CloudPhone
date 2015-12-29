@@ -34,7 +34,7 @@
 + (int) judgePasswordStrength:(NSString*) _password;
 
 //个人头像保存在沙盒
-+ (NSString *)personalIconFilePath;
++ (NSString *)personalIconFilePath:(NSString *)num;
 
 //保存在plist文件中
 + (NSString *)personalInfoFilePath;

@@ -175,11 +175,15 @@
         } else {
             if (_infoArray.count > 0) {
                 
-                UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
-                if (iconImage) {
-                    imageView.image = iconImage;
+                if ([model.userIcon hasPrefix:@"http://"]) {
+                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
                 } else {
-                    imageView.image = [UIImage imageNamed:@"mine_icon"];
+                    UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
+                    if (iconImage) {
+                        imageView.image = iconImage;
+                    } else {
+                        imageView.image = [UIImage imageNamed:@"mine_icon"];
+                    }
                 }
                 
             } else {
@@ -513,12 +517,12 @@
                 imageView.image = image;
                 
                 //图片保存到本地路径
-                NSString *iconPath = [GeneralToolObject personalIconFilePath];
-                [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
-                DLog(@"%@",iconPath);
-                
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 NSString *number = [defaults objectForKey:UserNumber];
+                NSString *iconPath = [GeneralToolObject personalIconFilePath:number];
+                [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
+                DLog(@"%@",iconPath);
+
                 [DBOperate updateData:T_personalInfo tableColumn:@"iconPath" columnValue:iconPath conditionColumn:@"phoneNum" conditionColumnValue:number];
                 
                 //这里把xmpp的个人信息修改一下
@@ -556,7 +560,7 @@
                     model.userSignature = [info objectForKey:@"signature"];
                     
                     self.user = model;
-                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
+                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,model.userIcon,model.userGender,model.userBirthday,model.userSignature,nil];
                     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
                     
                     
