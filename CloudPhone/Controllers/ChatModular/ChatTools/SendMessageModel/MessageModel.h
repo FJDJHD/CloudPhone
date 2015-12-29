@@ -29,6 +29,7 @@ typedef enum {
 
 //照片
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic, copy) NSString *imagePath;
 
 //语音
 @property (nonatomic, copy) NSString *voiceFilepath;

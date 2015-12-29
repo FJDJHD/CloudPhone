@@ -117,6 +117,8 @@
 - (void)toggleControls;
 - (BOOL)areControlsHidden;
 
+- (void)longPressGesture;
+
 // Data
 - (NSUInteger)numberOfPhotos;
 - (id<MWPhoto>)photoAtIndex:(NSUInteger)index;

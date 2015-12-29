@@ -43,6 +43,9 @@
 
 @property (nonatomic, strong) NSMutableArray *photos;
 
+@property (nonatomic, strong) UIViewController *tempController;
+
+
 
 @end
 
@@ -71,6 +74,7 @@
         //语音动画。。。放这里。。有点
         _animationImageView = [[UIImageView alloc] init];
         _animationImageView.animationDuration = ANIMATION_IMAGEVIEW_SPEED;
+        [self addSubview:_animationImageView];
         
         _senderAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
         _recevierAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
@@ -79,7 +83,11 @@
     return self;
 }
 
-- (void)setCellFrame:(CellFrameModel *)cellFrame {
+- (void)cellForDataWithModel:(CellFrameModel *)cellFrame indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller{
+
+    _textView.tag = indexPath.row;
+    _tempController = controller;
+    
     _cellFrame = cellFrame;
     MessageModel *message = cellFrame.message;
     
@@ -88,7 +96,7 @@
     //聊天背景颜色
     UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
     [_textView setTitleColor:textColor forState:UIControlStateNormal];
-
+    
     //聊天头像frame
     _iconView.frame = cellFrame.iconFrame;
     //气泡frame
@@ -122,7 +130,8 @@
     } else if (message.messageType == kVoiceMessage) {
         //语音
         [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
-        
+        [_textView setImage:nil forState:UIControlStateNormal];
+        _textView.imageView.layer.cornerRadius = 0.0;
         [_textView setTitle:[NSString stringWithFormat:@"%@''",message.voiceTime] forState:UIControlStateNormal];
         if (message.type) {
             //别人的语音
@@ -153,21 +162,24 @@
     
     //这里给button传语音沙盒路径
     _textView.voicePath = message.voiceFilepath;
-    _textView.model = message;
+    _textView.imagePath = message.imagePath;
     //消息类型
     _textView.messageType = message.messageType;
     
+
+
 }
 
 - (void)buttonClick:(UIButton *)sender {
     
     BuddleButton *tempButton = (BuddleButton *)sender;
+    
     if (tempButton.messageType == kImageMessage) {
         //图片
-//        MWPhoto *photo = [MWPhoto photoWithImage:tempButton.model.image];
-//        [self.photos addObject:photo];
-//        
-//        [self.tempController.navigationController pushViewController:self.photoBrowser animated:NO];
+        _photos = [[NSMutableArray alloc]initWithCapacity:0];
+        UIImage *image = [UIImage imageWithContentsOfFile:tempButton.imagePath];
+        NSArray *arr = [NSArray arrayWithObject:image];
+        [self showPhotoBrowser:arr index:0];
         
     }else if (tempButton.messageType == kVoiceMessage) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -195,48 +207,46 @@
 }
 
 
-//- (MWPhotoBrowser *)photoBrowser
-//{
-//    if (_photoBrowser == nil) {
-//        _photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
-//        _photoBrowser.displayActionButton = YES;
-//        _photoBrowser.displayNavArrows = YES;
-//        _photoBrowser.enableSwipeToDismiss = YES;
-//        _photoBrowser.displaySelectionButtons = NO;
-//        _photoBrowser.alwaysShowControls = NO;
-//        _photoBrowser.wantsFullScreenLayout = YES;
-//        _photoBrowser.zoomPhotosToFill = YES;
-//        _photoBrowser.enableGrid = NO;
-//        _photoBrowser.startOnGrid = NO;
-//        [_photoBrowser setCurrentPhotoIndex:0];
-//    }
-//    
-//    return _photoBrowser;
-//}
-//
-//- (NSMutableArray *)photos
-//{
-//    if (_photos == nil) {
-//        _photos = [[NSMutableArray alloc] init];
-//    }
-//    
-//    return _photos;
-//}
-
-#pragma mark - MWPhotoBrowserDelegate
-
-- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser
-{
-    return [self.photos count];
-}
-
-- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index
-{
-    if (index < self.photos.count)
-    {
-        return [self.photos objectAtIndex:index];
+-(void)showPhotoBrowser:(NSArray*)imageArray index:(NSInteger)currentIndex{
+    if (imageArray && [imageArray count] > 0) {
+        NSMutableArray *photoArray = [NSMutableArray array];
+        for (id object in imageArray) {
+            MWPhoto *photo;
+            if ([object isKindOfClass:[UIImage class]]) {
+                photo = [MWPhoto photoWithImage:object];
+            } else if ([object isKindOfClass:[NSURL class]]) {
+                photo = [MWPhoto photoWithURL:object];
+            } else if ([object isKindOfClass:[NSString class]]) {
+                photo = [MWPhoto photoWithURL:[NSURL fileURLWithPath:object]];
+            }
+            [photoArray addObject:photo];
+        }
+        
+        self.photos = photoArray;
     }
     
+    MWPhotoBrowser *photoBrowser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    photoBrowser.displayActionButton = NO;
+    photoBrowser.displayNavArrows = NO;
+    photoBrowser.displaySelectionButtons = NO;
+    photoBrowser.alwaysShowControls = NO;
+    photoBrowser.zoomPhotosToFill = YES;
+    photoBrowser.enableGrid = NO;
+    photoBrowser.startOnGrid = NO;
+    photoBrowser.enableSwipeToDismiss = NO;
+    [photoBrowser setCurrentPhotoIndex:currentIndex];
+    
+    [self.tempController.navigationController pushViewController:photoBrowser animated:YES];
+}
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser{
+    return self.photos.count;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index{
+    if (index < self.photos.count) {
+        return self.photos[index];
+    }
     return nil;
 }
 
@@ -256,5 +266,86 @@
 }
 
 
+
+//- (void)setCellFrame:(CellFrameModel *)cellFrame {
+//    _cellFrame = cellFrame;
+//    MessageModel *message = cellFrame.message;
+//    
+//    //气泡
+//    NSString *textBg = message.type ? @"chat_recive_nor" : @"chat_send_nor";
+//    //聊天背景颜色
+//    UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
+//    [_textView setTitleColor:textColor forState:UIControlStateNormal];
+//    
+//    //聊天头像frame
+//    _iconView.frame = cellFrame.iconFrame;
+//    //气泡frame
+//    _textView.frame = cellFrame.textFrame;
+//    
+//    if (message.type) {
+//        //他人
+//        if (message.otherPhoto != nil){
+//            _iconView.image = message.otherPhoto;
+//        }else{
+//            UIImage *image = [ChatSendHelper getPhotoWithJID:message.chatJID];
+//            _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
+//        }
+//    } else{
+//        //自己
+//        UIImage *image = [ChatSendHelper getPhotoWithJID:[[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] myJID]];
+//        _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
+//    }
+//    
+//    //消息类型
+//    if (message.messageType == kImageMessage) {
+//        //图片
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:message.image forState:UIControlStateNormal];
+//        [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 0,0, 0)];
+//        _textView.imageView.layer.cornerRadius = 7.0;
+//        _textView.imageView.layer.masksToBounds = YES;
+//        [_textView setTitle:nil forState:UIControlStateNormal];
+//        _animationImageView.image = nil;
+//        [_textView addSubview:_animationImageView];
+//    } else if (message.messageType == kVoiceMessage) {
+//        //语音
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:nil forState:UIControlStateNormal];
+//        _textView.imageView.layer.cornerRadius = 0.0;
+//        [_textView setTitle:[NSString stringWithFormat:@"%@''",message.voiceTime] forState:UIControlStateNormal];
+//        if (message.type) {
+//            //别人的语音
+//            [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 20,0, -20)];
+//            _animationImageView.image = [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
+//            _animationImageView.frame = CGRectMake(20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
+//            _animationImageView.animationImages = _recevierAnimationImages;
+//            [_textView addSubview:_animationImageView];
+//        } else {
+//            //自己的语音
+//            [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, -20,0, 20)];
+//            _animationImageView.image = [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
+//            _animationImageView.frame = CGRectMake(_textView.frame.size.width - ANIMATION_IMAGEVIEW_SIZE - 20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
+//            _animationImageView.animationImages = _senderAnimationImages;
+//            [_textView addSubview:_animationImageView];
+//        }
+//        
+//    } else {
+//        //文字
+//        [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 0,0, 0)];
+//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+//        [_textView setImage:nil forState:UIControlStateNormal];
+//        _textView.imageView.layer.cornerRadius = 0.0;
+//        [_textView setTitle:message.text forState:UIControlStateNormal];
+//        _animationImageView.image = nil;
+//        [_textView addSubview:_animationImageView];
+//    }
+//    
+//    //这里给button传语音沙盒路径
+//    _textView.voicePath = message.voiceFilepath;
+//    _textView.imagePath = message.imagePath;
+//    //消息类型
+//    _textView.messageType = message.messageType;
+//    
+//}
 
 @end

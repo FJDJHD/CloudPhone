@@ -8,15 +8,15 @@
 
 #import "MWPhoto.h"
 #import "MWPhotoBrowser.h"
-#import "EMSDWebImageDecoder.h"
-#import "EMSDWebImageManager.h"
-#import "EMSDWebImageOperation.h"
+#import "SDWebImageDecoder.h"
+#import "SDWebImageManager.h"
+#import "SDWebImageOperation.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @interface MWPhoto () {
 
     BOOL _loadingInProgress;
-    id <EMSDWebImageOperation> _webImageOperation;
+    id <SDWebImageOperation> _webImageOperation;
         
 }
 
@@ -113,7 +113,7 @@
                 @autoreleasepool {
                     @try {
                         ALAssetsLibrary *assetslibrary = [[ALAssetsLibrary alloc] init];
-                        [assetslibrary assetForURL:self->_photoURL
+                        [assetslibrary assetForURL:_photoURL
                                        resultBlock:^(ALAsset *asset){
                                            ALAssetRepresentation *rep = [asset defaultRepresentation];
                                            CGImageRef iref = [rep fullScreenImage];
@@ -140,8 +140,8 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 @autoreleasepool {
                     @try {
-                        self.underlyingImage = [UIImage imageWithContentsOfFile:self->_photoURL.path];
-                        if (!self->_underlyingImage) {
+                        self.underlyingImage = [UIImage imageWithContentsOfFile:_photoURL.path];
+                        if (!_underlyingImage) {
                             MWLog(@"Error loading photo from path: %@", _photoURL.path);
                         }
                     } @finally {
@@ -154,7 +154,7 @@
             
             // Load async from web (using SDWebImage)
             @try {
-                EMSDWebImageManager *manager = [EMSDWebImageManager sharedManager];
+                SDWebImageManager *manager = [SDWebImageManager sharedManager];
                 _webImageOperation = [manager downloadImageWithURL:_photoURL
                                                            options:0
                                                           progress:^(NSInteger receivedSize, NSInteger expectedSize) {
@@ -166,11 +166,11 @@
                                                                   [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
                                                               }
                                                           }
-                                                         completed:^(UIImage *image, NSError *error, EMSDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                         completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
                                                              if (error) {
                                                                  MWLog(@"SDWebImage failed to download image: %@", error);
                                                              }
-                                                             self->_webImageOperation = nil;
+                                                             _webImageOperation = nil;
                                                              self.underlyingImage = image;
                                                              [self imageLoadingComplete];
                                                          }];

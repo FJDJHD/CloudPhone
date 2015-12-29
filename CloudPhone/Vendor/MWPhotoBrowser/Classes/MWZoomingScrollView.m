@@ -346,11 +346,6 @@
 	[_photoBrowser hideControlsAfterDelay];
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-}
-
 #pragma mark - Tap Detection
 
 - (void)handleSingleTap:(CGPoint)touchPoint {
@@ -389,6 +384,11 @@
 }
 - (void)imageView:(UIImageView *)imageView doubleTapDetected:(UITouch *)touch {
     [self handleDoubleTap:[touch locationInView:imageView]];
+}
+
+- (void)imageViewLongTouch:(UIImageView *)imageView
+{
+    [_photoBrowser longPressGesture];
 }
 
 // Background View

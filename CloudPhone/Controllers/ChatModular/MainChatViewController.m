@@ -250,6 +250,7 @@
             //好友
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             MessageViewController *controller = [[MessageViewController alloc]init];
+            controller.scrollType = ScrollToBottomType;
             controller.chatJIDStr = user.jidStr;
             controller.chatJID = user.jid;
             controller.chatPhoto = user.photo;
@@ -274,6 +275,7 @@
             if (_chatListArray.count > 0) {
                 NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
                 MessageViewController *controller = [[MessageViewController alloc]init];
+                controller.scrollType = ScrollToBottomType;
                 controller.chatJIDStr = [temp objectAtIndex:message_id];
                 
                 XMPPJID *jid = [XMPPJID jidWithString:[temp objectAtIndex:message_id]];

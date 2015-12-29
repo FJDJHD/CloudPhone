@@ -10,10 +10,12 @@
 #import "MWCommon.h"
 #import "MWPhotoBrowser.h"
 #import "MWPhotoBrowserPrivate.h"
-#import "EMSDImageCache.h"
+#import "SDImageCache.h"
+#import <AssetsLibrary/ALAssetsLibrary.h>
 
 #define PADDING                  10
 #define ACTION_SHEET_OLD_ACTIONS 2000
+#define ACTION_SHEET_LONG_ACTIONS 1000
 
 @implementation MWPhotoBrowser
 
@@ -97,7 +99,7 @@
     _pagingScrollView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self releaseAllUnderlyingPhotos:NO];
-    [[EMSDImageCache sharedImageCache] clearMemory]; // clear memory
+//    [[SDImageCache sharedImageCache] clearMemory]; // clear memory
 }
 
 - (void)releaseAllUnderlyingPhotos:(BOOL)preserveCurrent {
@@ -216,7 +218,7 @@
     // Navigation buttons
     if ([self.navigationController.viewControllers objectAtIndex:0] == self) {
         // We're first on stack so show done button
-        _doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed:)];
+        _doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed:)];
         // Set appearance
         if ([UIBarButtonItem respondsToSelector:@selector(appearance)]) {
             [_doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -307,6 +309,9 @@
     [self tilePages];
     _performingLayout = NO;
     
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [self.navigationController.navigationBar setHidden:YES];
 }
 
 // Release any retained subviews of the main view.
@@ -370,7 +375,7 @@
             [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:animated];
 #pragma clang diagnostic push
         } else {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:animated];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
         }
     }
     
@@ -420,6 +425,9 @@
     if (!_leaveStatusBarAlone && fullScreen && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [[UIApplication sharedApplication] setStatusBarStyle:_previousStatusBarStyle animated:animated];
     }
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    [self.navigationController.navigationBar setHidden:NO];
     
 	// Super
 	[super viewWillDisappear:animated];
@@ -1174,12 +1182,12 @@
     
     // Animate grid in and photo scroller out
     [UIView animateWithDuration:animated ? 0.3 : 0 animations:^(void) {
-        self->_gridController.view.frame = self.view.bounds;
+        _gridController.view.frame = self.view.bounds;
         CGRect newPagingFrame = [self frameForPagingScrollView];
         newPagingFrame = CGRectOffset(newPagingFrame, 0, (self.startOnGrid ? 1 : -1) * newPagingFrame.size.height);
-        self->_pagingScrollView.frame = newPagingFrame;
+        _pagingScrollView.frame = newPagingFrame;
     } completion:^(BOOL finished) {
-        [self->_gridController didMoveToParentViewController:self];
+        [_gridController didMoveToParentViewController:self];
     }];
     
 }
@@ -1212,7 +1220,7 @@
     // Animate, hide grid and show paging scroll view
     [UIView animateWithDuration:0.3 animations:^{
         tmpGridController.view.frame = CGRectOffset(self.view.bounds, 0, (self.startOnGrid ? -1 : 1) * self.view.bounds.size.height);
-        self->_pagingScrollView.frame = [self frameForPagingScrollView];
+        _pagingScrollView.frame = [self frameForPagingScrollView];
     } completion:^(BOOL finished) {
         [tmpGridController willMoveToParentViewController:nil];
         [tmpGridController.view removeFromSuperview];
@@ -1327,13 +1335,13 @@
         
         // Toolbar
         if (slideAndFade) {
-            self->_toolbar.frame = [self frameForToolbarAtOrientation:self.interfaceOrientation];
-            if (hidden) self->_toolbar.frame = CGRectOffset(self->_toolbar.frame, 0, animatonOffset);
+            _toolbar.frame = [self frameForToolbarAtOrientation:self.interfaceOrientation];
+            if (hidden) _toolbar.frame = CGRectOffset(_toolbar.frame, 0, animatonOffset);
         }
-        self->_toolbar.alpha = alpha;
+        _toolbar.alpha = alpha;
 
         // Captions
-        for (MWZoomingScrollView *page in self->_visiblePages) {
+        for (MWZoomingScrollView *page in _visiblePages) {
             if (page.captionView) {
                 MWCaptionView *v = page.captionView;
                 if (slideAndFade) {
@@ -1348,7 +1356,7 @@
         }
         
         // Selected buttons
-        for (MWZoomingScrollView *page in self->_visiblePages) {
+        for (MWZoomingScrollView *page in _visiblePages) {
             if (page.selectedButton) {
                 UIButton *v = page.selectedButton;
                 CGRect newFrame = [self frameForSelectedButton:v atIndex:0];
@@ -1396,8 +1404,20 @@
 
 - (BOOL)areControlsHidden { return (_toolbar.alpha == 0); }
 - (void)hideControls { [self setControlsHidden:YES animated:YES permanent:NO]; }
-- (void)toggleControls { [self setControlsHidden:![self areControlsHidden] animated:YES permanent:NO]; }
+- (void)toggleControls {
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+//    [self setControlsHidden:![self areControlsHidden] animated:YES permanent:NO];
+}
 
+- (void)longPressGesture
+{
+    if (_isOpen) {
+        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消"  destructiveButtonTitle:@"保存" otherButtonTitles: nil];
+        sheet.tag = ACTION_SHEET_LONG_ACTIONS;
+        [sheet showInView:self.view];
+    }
+}
 #pragma mark - Properties
 
 // Handle depreciated method
@@ -1442,7 +1462,8 @@
             // Call delegate method and let them dismiss us
             [_delegate photoBrowserDidFinishModalPresentation:self];
         } else  {
-            [self dismissViewControllerAnimated:YES completion:nil];
+//            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }
@@ -1547,6 +1568,11 @@
                 [self emailPhoto]; return;
             }
         }
+    }else if (actionSheet.tag == ACTION_SHEET_LONG_ACTIONS){
+        if (buttonIndex != actionSheet.cancelButtonIndex)
+        {
+            [self savePhoto];
+        }
     }
     [self hideControlsAfterDelay]; // Continue as normal...
 }
@@ -1596,20 +1622,29 @@
 - (void)savePhoto {
     id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
     if ([photo underlyingImage]) {
-        [self showProgressHUDWithMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"Saving", @"Displayed with ellipsis as 'Saving...' when an item is in the process of being saved")]];
+        [self showProgressHUDWithMessage:[NSString stringWithFormat:@"%@\u2026" , NSLocalizedString(@"保存中", @"Displayed with ellipsis as '保存中...' when an item is in the process of being saved")]];
         [self performSelector:@selector(actuallySavePhoto:) withObject:photo afterDelay:0];
     }
 }
 
 - (void)actuallySavePhoto:(id<MWPhoto>)photo {
+    if ([photo underlyingImage].images.count>1) {
+        NSData *gifData = [[NSData alloc] initWithContentsOfFile:((MWPhoto*)photo).photoURL.path];
+        ALAssetsLibrary *al = [[ALAssetsLibrary alloc] init];
+        [al writeImageDataToSavedPhotosAlbum:gifData metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
+            [self image:nil didFinishSavingWithError:error contextInfo:nil];
+        }];
+        return;
+    }
     if ([photo underlyingImage]) {
-        UIImageWriteToSavedPhotosAlbum([photo underlyingImage], self, 
+        UIImageWriteToSavedPhotosAlbum([photo underlyingImage], self,
                                        @selector(image:didFinishSavingWithError:contextInfo:), nil);
     }
+    
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    [self showProgressHUDCompleteMessage: error ? NSLocalizedString(@"Failed", @"Informing the user a process has failed") : NSLocalizedString(@"Saved", @"Informing the user an item has been saved")];
+    [self showProgressHUDCompleteMessage: error ? NSLocalizedString(@"保存失败", @"Informing the user a process has failed") : NSLocalizedString(@"已保存", @"Informing the user an item has been saved")];
     [self hideControlsAfterDelay]; // Continue as normal...
 }
 
@@ -1659,7 +1694,8 @@
                                                         delegate:nil cancelButtonTitle:NSLocalizedString(@"Dismiss", nil) otherButtonTitles:nil];
 		[alert show];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

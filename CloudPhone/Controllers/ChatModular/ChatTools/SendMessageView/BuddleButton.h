@@ -19,6 +19,8 @@ typedef void(^TapButtonActionBlock) (UIButton *button);
 
 @property (nonatomic, copy) NSString *voicePath; //语音路径
 
+@property (nonatomic, copy) NSString *imagePath; //图片路径
+
 
 
 

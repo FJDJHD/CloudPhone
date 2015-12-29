@@ -18,7 +18,6 @@
 
 @property (nonatomic, strong) UIImageView *iconView;
 
-@property (nonatomic, strong) UIViewController *tempController;
-
+- (void)cellForDataWithModel:(CellFrameModel *)cellFrame indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller;
 
 @end

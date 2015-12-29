@@ -52,6 +52,7 @@
 @property (nonatomic) BOOL startOnGrid;
 @property (nonatomic) NSUInteger delayToHideElements;
 @property (nonatomic, readonly) NSUInteger currentIndex;
+@property (nonatomic) BOOL isOpen;
 
 // Init
 - (id)initWithPhotos:(NSArray *)photosArray  __attribute__((deprecated("Use initWithDelegate: instead"))); // Depreciated
@@ -68,4 +69,5 @@
 - (void)showNextPhotoAnimated:(BOOL)animated;
 - (void)showPreviousPhotoAnimated:(BOOL)animated;
 
+- (void)longPressGesture:(BOOL)isOpen;
 @end

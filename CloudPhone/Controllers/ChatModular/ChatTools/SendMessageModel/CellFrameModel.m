@@ -34,7 +34,7 @@
  
     if (_message.messageType == kImageMessage) {
         //*******图片******//
-        _message.image = [_message.image scaleImageWithWidth:150];
+        _message.image = [_message.image scaleImageWithWidth:(arc4random() % 20) + 110];
         CGFloat textFrameX = message.type ? (2 * padding + iconFrameW) : (frame.size.width - 2 * padding - iconFrameW - _message.image.size.width);
         _textFrame = CGRectMake(textFrameX, textFrameY - 3, _message.image.size.width, _message.image.size.height);
     } else if (_message.messageType == kVoiceMessage) {

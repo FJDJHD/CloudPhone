@@ -25,13 +25,14 @@
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
-@property (nonatomic, strong) NSMutableArray *messageArray; // 暂时没用这个
+@property (nonatomic, strong) NSMutableArray *dataMessageArray; // 暂时没用这个
 
-@property (nonatomic, strong) CellFrameModel *cellModel;
+//@property (nonatomic, strong) CellFrameModel *cellModel;
+//
+//@property (nonatomic, strong) MessageModel *messageModel;
 
-@property (nonatomic, strong) MessageModel *messageModel;
+//@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -46,12 +47,15 @@
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    NSArray *array = [self.chatJIDStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
-    self.title = array[0] ? array[0] : @"会话";
+    //标题
+    self.title = _chatName;
 
     
-    _cellModel = [[CellFrameModel alloc]init];
-    _messageModel = [[MessageModel alloc]init];
+//    _cellModel = [[CellFrameModel alloc]init];
+//    _messageModel = [[MessageModel alloc]init];
+    
+    //消息数据源
+    _dataMessageArray = [[NSMutableArray alloc]initWithCapacity:0];
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.chatToolBar];
@@ -62,16 +66,20 @@
     }
     
     [self.fetchedResultsController performFetch:NULL];
+    [self loadXMPPMessageData];
+    
     
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self scrollViewToBottom:YES];
+    if (self.scrollType == ScrollToBottomType) {
+        [self scrollViewToBottom:NO];
+    }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -110,9 +118,9 @@
     return _tableView;
 }
 
-- (void)refreshAction {
-   [_refreshControl endRefreshing];
-}
+//- (void)refreshAction {
+//   [_refreshControl endRefreshing];
+//}
 
 - (DXMessageToolBar *)chatToolBar
 {
@@ -164,7 +172,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.fetchedResultsController.fetchedObjects.count;
+//    return self.fetchedResultsController.fetchedObjects.count;
+    return _dataMessageArray.count;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,43 +184,49 @@
     if (!cell) {
         cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    cell.textView.tag = indexPath.row;
+//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    
+//    // 如果存进去了，就把字符串转化成简洁的节点后保存
+//    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
+//        message.messageStr = [message.message compactXMLString];
+//        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
+//    }
+//    _messageModel.voiceFilepath = nil;
+//    _messageModel.imagePath = nil;
+//    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+//    
+//    if ([message.body isEqualToString:@"image"]) {
+//        UIImage *image = [UIImage imageWithContentsOfFile:path];
+//        _messageModel.image = image;
+//        _messageModel.imagePath = path;
+//        _messageModel.messageType = kImageMessage; //图片类型
+//        
+//    } else if ([message.body hasPrefix:@"audio"]) {
+//        
+//        NSString *timeStr = [message.body substringFromIndex:5];
+//        _messageModel.voiceTime = timeStr;
+//        _messageModel.voiceFilepath = path; //音频路径
+//        _messageModel.messageType = kVoiceMessage; //语音类型
+//    
+//    } else {
+//       _messageModel.messageType = kTextMessage; //文字类型
+//    }
+//    _messageModel.text = message.body;
+//    _messageModel.otherPhoto = self.chatPhoto;
+//    _messageModel.chatJID = self.chatJID;
+//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+//    _cellModel.message = _messageModel;
+//    cell.cellFrame = _cellModel;
+    
+    
+    if (_dataMessageArray.count > 0) {
+        
+        CellFrameModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+        
+        [cell cellForDataWithModel:model indexPath:indexPath controller:self];
 
-    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    // 如果存进去了，就把字符串转化成简洁的节点后保存
-    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-        message.messageStr = [message.message compactXMLString];
-        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
     }
-    _messageModel.voiceFilepath = nil;
-    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
     
-    if ([message.body isEqualToString:@"image"]) {
-        UIImage *image = [UIImage imageWithContentsOfFile:path];
-        _messageModel.image = image;
-        _messageModel.messageType = kImageMessage; //图片类型
-        
-    } else if ([message.body hasPrefix:@"audio"]) {
-        
-        NSString *timeStr = [message.body substringFromIndex:5];
-        _messageModel.voiceTime = timeStr;
-        _messageModel.voiceFilepath = path; //音频路径
-        _messageModel.messageType = kVoiceMessage; //语音类型
-    
-    } else {
-       _messageModel.messageType = kTextMessage; //文字类型
-    }
-    _messageModel.text = message.body;
-    _messageModel.otherPhoto = self.chatPhoto;
-    _messageModel.chatJID = self.chatJID;
-    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-    _cellModel.message = _messageModel;
-    
-    //zanshi
-    cell.tempController = self;
-    
-    cell.cellFrame = _cellModel;
     
     return cell;
 }
@@ -225,14 +241,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    _messageModel.text = message.body;
-    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-    
-    _cellModel.message = _messageModel;
-    return _cellModel.cellHeight;
-        
+//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    
+//    _messageModel.text = message.body;
+//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+//    _cellModel.message = _messageModel;
+
+    if (_dataMessageArray.count > 0) {
+        CellFrameModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+        return model.cellHeight;
+    }
+    return 0;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -283,8 +302,56 @@
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     DLog(@"上下文改变");
+    [self loadXMPPMessageData];
+    
     [self.tableView reloadData];
-    [self scrollViewToBottom:NO];
+    [self scrollViewToBottom:YES];
+}
+
+- (void)loadXMPPMessageData {
+    [_dataMessageArray removeAllObjects];
+    
+    if (self.fetchedResultsController.fetchedObjects > 0) {
+        for (XMPPMessageArchiving_Message_CoreDataObject *message in self.fetchedResultsController.fetchedObjects) {
+            
+            @autoreleasepool {
+                CellFrameModel *cellmodel = [[CellFrameModel alloc]init];
+                
+                MessageModel *messagemodel = [[MessageModel alloc]init];
+                // 如果存进去了，就把字符串转化成简洁的节点后保存
+                if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
+                    message.messageStr = [message.message compactXMLString];
+                    [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
+                }
+                NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+                
+                if ([message.body isEqualToString:@"image"]) {
+                    UIImage *image = [UIImage imageWithContentsOfFile:path];
+                    messagemodel.image = image;
+                    messagemodel.imagePath = path;
+                    messagemodel.messageType = kImageMessage; //图片类型
+                    
+                } else if ([message.body hasPrefix:@"audio"]) {
+                    NSString *timeStr = [message.body substringFromIndex:5];
+                    messagemodel.voiceTime = timeStr;
+                    messagemodel.voiceFilepath = path;
+                    messagemodel.messageType = kVoiceMessage; //语音类型
+                    
+                } else {
+                    messagemodel.messageType = kTextMessage; //文字类型
+                }
+                messagemodel.text = message.body;
+                messagemodel.otherPhoto = self.chatPhoto;
+                messagemodel.chatJID = self.chatJID;
+                messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+                
+                cellmodel.message = messagemodel;
+                
+                [_dataMessageArray addObject:cellmodel];
+            }
+        }
+    }
+   
 }
 
 #pragma mark -DXMessageToolBarDelegate
@@ -425,6 +492,8 @@
 #pragma mark - Methd
 - (void)scrollViewToBottom:(BOOL)animated
 {
+    
+    
     if (self.tableView.contentSize.height > self.tableView.frame.size.height)
     {
         CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
