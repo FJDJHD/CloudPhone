@@ -14,18 +14,19 @@
 @end
 
 @implementation DialingViewController{
-    BOOL isShow[8];
+    BOOL isShow;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDailingUI];
     [self initDialKeyboard];
+     isShow = NO;
 }
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, 0, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - 152 - STATUS_NAV_BAR_HEIGHT, MainWidth, 300);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -137,8 +138,12 @@
         break;
             
         case 5:{
-            //键盘
-            [self keyboardShow];
+            if (isShow) {
+                [self keyboardHidden];
+                }else{
+                [self keyboardShow];
+            }
+            
         }
             break;
             
@@ -150,32 +155,28 @@
 
 #pragma DialKeyboradDelegate
 - (void)keyboardShow{
+     isShow = !isShow;
     [self.view addSubview:self.keyboard];
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        CGFloat keyboardH = self.keyboard.frame.size.height;
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0, -keyboardH);
+    }];
 }
 
 - (void)keyboardHidden{
-    [self.keyboard removeFromSuperview];
+     isShow = !isShow;
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        CGFloat keyboardH = self.keyboard.frame.size.height;
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH);
+    }];
 }
-//- (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
-//    [self.textView insertText:button.titleLabel.text];
-//}
-//
-//- (void)keyboard:(DialKeyboard *)keyboard didClickDeleteBtn:(UIButton *)deleteBtn {
-//    [self.textView deleteBackward];
-//}
-//
-//- (void)keyboard:(DialKeyboard *)keyboard didClickRemoveBtn:(UIButton *)deleteBtn {
-//    [self.textView resignFirstResponder];
-//}
-//
-//- (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-//    NSLog(@"拨打");
-//    //这里写拨打电话业务
-//}
-//
 //点击空白收键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.view endEditing:YES];
+    if (isShow == 1) {
+        [self keyboardHidden];
+    }
 }
 
 @end

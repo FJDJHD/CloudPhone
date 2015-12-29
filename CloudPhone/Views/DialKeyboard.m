@@ -15,7 +15,7 @@
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
-    UIImageView * keyboard = [[UIImageView alloc] init];
+    UIView * keyboard = [[UIView alloc] init];
     keyboard.frame = frame;
     keyboard.userInteractionEnabled = YES;
     keyboard.backgroundColor = [UIColor lightGrayColor];
@@ -71,6 +71,7 @@
         btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
         [keyboard addSubview:btn];
     }
+   
     return self;
 }
 

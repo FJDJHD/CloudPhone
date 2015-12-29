@@ -13,17 +13,21 @@
 #import "DailNumberCell.h"
 #import "FriendDetailViewController.h"
 #import "ItelDialingViewController.h"
-
-@interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate>
-
+#import "DialKeyboard.h"
+@interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>
+@property (nonatomic,strong) DialKeyboard * keyboard;
 @property (nonatomic, strong) UITableView *tableView;
-
+@property (nonatomic, strong) UITextField *textFiled;
 @end
 
-@implementation MainPhoneViewController
+@implementation MainPhoneViewController{
+    BOOL isShow;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+     self.automaticallyAdjustsScrollViewInsets = NO;
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed:@"phone_friends"];
@@ -32,10 +36,37 @@
     [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;
-    
-       //添加列表试图
+    //添加列表试图
     [self.view addSubview:self.tableView];
+
+    [self initDialKeyboard];
+//    isShow = NO;
+//    [self keyboardShow];
+//    
+//    [self initTextFiled];
+//     self.navigationController.navigationBarHidden = YES;
+//    [self.textFiled becomeFirstResponder];
+//    NSLog(@"-----keyboardY---%ld",(long)self.keyboard.frame.origin.y);
+
 }
+
+- (void)initTextFiled{
+ UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 100, MainWidth, 44)];
+    textFiled.backgroundColor = [UIColor blueColor];
+    self.textFiled = textFiled;
+    self.textFiled.delegate = self;
+    [self.view addSubview:self.textFiled];
+    self.textFiled.inputView  = self.keyboard;
+   }
+
+- (void)initDialKeyboard{
+    //初始化自定义键盘
+    CGRect frame = CGRectMake(0, MainHeight - 152 - STATUS_NAV_BAR_HEIGHT, MainWidth, 300);
+    DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
+    self.keyboard = keyboard;
+    self.keyboard.delegate = self;
+}
+
 
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -92,10 +123,52 @@
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+#pragma DialKeyboradDelegate
+- (void)keyboardShow{
+    isShow = !isShow;
+    [self.view addSubview:self.keyboard];
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        CGFloat keyboardH = self.keyboard.frame.size.height;
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0, -keyboardH - TABBAR_HEIGHT);
+    }];
+}
+
+- (void)keyboardHidden{
+    isShow = !isShow;
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        CGFloat keyboardH = self.keyboard.frame.size.height;
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH + TABBAR_HEIGHT);
+    }];
+}
+
+- (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
+    [self.textFiled insertText:button.titleLabel.text];
+}
+
+- (void)keyboard:(DialKeyboard *)keyboard didClickDeleteBtn:(UIButton *)deleteBtn {
+    [self.textFiled deleteBackward];
+}
+
+- (void)keyboard:(DialKeyboard *)keyboard didClickRemoveBtn:(UIButton *)deleteBtn {
+    [self  keyboardHidden];
+}
+
+- (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
+    NSLog(@"拨打");
+    //这里写拨打电话业务
+}
+
+//点击空白收键盘
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+        [self.textFiled resignFirstResponder];
+     NSLog(@"-----keyboardY---%ld",(long)self.keyboard.frame.origin.y);
 }
 
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
 
 @end
