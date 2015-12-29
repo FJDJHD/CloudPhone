@@ -556,7 +556,7 @@
                     model.userSignature = [info objectForKey:@"signature"];
                     
                     self.user = model;
-                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,[GeneralToolObject personalIconFilePath],model.userGender,model.userBirthday,model.userSignature,nil];
+                    NSArray *infoArray = [NSArray arrayWithObjects:model.userNumber,model.userName,model.userIcon,model.userGender,model.userBirthday,model.userSignature,nil];
                     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_personalInfo];
                     
                     
