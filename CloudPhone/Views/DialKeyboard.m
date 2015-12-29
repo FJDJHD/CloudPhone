@@ -7,6 +7,7 @@
 //
 
 #import "DialKeyboard.h"
+#import "Global.h"
 #import "GeneralToolObject.h"
 @interface DialKeyboard()
 @end
@@ -16,7 +17,7 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     UIView * keyboard = [[UIView alloc] init];
-    keyboard.frame = frame;
+    keyboard.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     keyboard.userInteractionEnabled = YES;
     keyboard.backgroundColor = [UIColor lightGrayColor];
     [self addSubview:keyboard];
