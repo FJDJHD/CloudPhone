@@ -168,7 +168,9 @@
     // tab bar
     BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
     rootTabBarController.delegate = self;
-    rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];;
+    rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];
+    
+   
     
     //聊天小红点
     CGRect chatNotifyLabelRect = CGRectMake(MainWidth*2/4 - 30, 6, 10, 10);
@@ -198,6 +200,13 @@
     //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0), NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateSelected];
     
     self.window.rootViewController = rootTabBarController;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
+    UIViewController *vc = [viewController.viewControllers firstObject];
+    if ([vc isKindOfClass:[MainPhoneViewController class]]) {
+        NSLog(@"%@",vc);
+    }
 }
 
 #pragma mark 注册推送通知之后
