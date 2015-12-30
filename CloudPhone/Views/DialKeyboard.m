@@ -7,8 +7,6 @@
 //
 
 #import "DialKeyboard.h"
-#import "Global.h"
-#import "GeneralToolObject.h"
 @interface DialKeyboard()
 @end
 
@@ -24,9 +22,8 @@
     for (int i = 0; i<15; i++) {
         
         UIButton * btn = [[UIButton alloc]init];
-        [btn setBackgroundImage:[GeneralToolObject imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
-        [btn setBackgroundImage:[GeneralToolObject imageWithColor:[UIColor lightGrayColor]] forState:UIControlStateHighlighted];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        btn.backgroundColor = [UIColor whiteColor];
         btn.showsTouchWhenHighlighted = YES;
         NSString * titleSTR = nil;
         btn.titleLabel.font = [UIFont systemFontOfSize:30.0];

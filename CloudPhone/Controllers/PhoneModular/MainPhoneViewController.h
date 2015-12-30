@@ -10,4 +10,7 @@
 
 @interface MainPhoneViewController : UIViewController
 
+
+- (void)keyboardShow;
+
 @end

@@ -15,19 +15,22 @@
 #import "ItelDialingViewController.h"
 #import "DialKeyboard.h"
 
-@interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>
+@interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>{
+    BOOL isShow;
+    NSMutableString *labelString;
+}
+
 @property (nonatomic,strong) DialKeyboard * keyboard;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textFiled;
+@property (nonatomic, strong) UILabel *label;
 @end
 
-@implementation MainPhoneViewController{
-    BOOL isShow;
-}
-
+@implementation MainPhoneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    labelString = [[NSMutableString alloc]init];
      self.automaticallyAdjustsScrollViewInsets = NO;
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -41,23 +44,22 @@
     //添加列表试图
     [self.view addSubview:self.tableView];
     [self initDialKeyboard];
-    [self initTextFiled];
+    //isShow = NO;
+   // [self keyboardShow];
+    [self initLabel];
 }
 
-
-- (void)initTextFiled{
-    UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
-    textFiled.backgroundColor = [UIColor whiteColor];
-    self.textFiled = textFiled;
-    self.textFiled.delegate = self;
-    self.textFiled.inputView  = self.keyboard;
+- (void)initLabel{
+    UILabel  *label= [[UILabel alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
+    label.backgroundColor = [UIColor lightGrayColor];
+    self.label = label;
     self.navigationController.navigationBarHidden = YES;
-    [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
-   }
+    [self.view insertSubview:label aboveSubview:self.navigationController.navigationBar];
+}
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, 0, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT - 30 + 150, MainWidth, 300);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -139,15 +141,18 @@
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
-    [self.textFiled insertText:button.titleLabel.text];
+    [labelString appendString:button.titleLabel.text];
+    self.label.text = labelString;
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickDeleteBtn:(UIButton *)deleteBtn {
-    [self.textFiled deleteBackward];
+    
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickRemoveBtn:(UIButton *)deleteBtn {
-    [self.textFiled resignFirstResponder];}
+    [self keyboardHidden];
+   
+}
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
     NSLog(@"拨打");
@@ -156,7 +161,7 @@
 
 //点击空白收键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-        [self.textFiled resignFirstResponder];
+       [self keyboardHidden];
 }
 
 

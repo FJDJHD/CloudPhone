@@ -35,6 +35,7 @@
 
 @interface AppDelegate ()
 
+
 - (void)setupStream;
 - (void)teardownStream;
 
@@ -203,9 +204,12 @@
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
-    UIViewController *vc = [viewController.viewControllers firstObject];
+        UIViewController *vc = [viewController.viewControllers firstObject];
     if ([vc isKindOfClass:[MainPhoneViewController class]]) {
-        NSLog(@"%@",vc);
+        
+        MainPhoneViewController *tempComtroller = (MainPhoneViewController *)vc;
+        [tempComtroller keyboardShow];
+    
     }
 }
 
