@@ -8,6 +8,7 @@
 
 #import "ItelDialingViewController.h"
 #import "Global.h"
+#import "EndDialingViewController.h"
 @interface ItelDialingViewController ()
 
 @end
@@ -101,8 +102,9 @@
 }
 
 - (void)clickButton:(UIButton *)sender{
+    [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+   // [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
