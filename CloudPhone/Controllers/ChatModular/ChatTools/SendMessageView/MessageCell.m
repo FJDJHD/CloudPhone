@@ -51,6 +51,7 @@
 
 @implementation MessageCell
 
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -163,6 +164,7 @@
     //这里给button传语音沙盒路径
     _textView.voicePath = message.voiceFilepath;
     _textView.imagePath = message.imagePath;
+    
     //消息类型
     _textView.messageType = message.messageType;
     
@@ -173,35 +175,71 @@
     BuddleButton *tempButton = (BuddleButton *)sender;
     
     if (tempButton.messageType == kImageMessage) {
+        
         //图片
-        _photos = [[NSMutableArray alloc]initWithCapacity:0];
-        UIImage *image = [UIImage imageWithContentsOfFile:tempButton.imagePath];
-        NSArray *arr = [NSArray arrayWithObject:image];
-        [self showPhotoBrowser:arr index:0];
+        [self browserClickImage:tempButton.imagePath];
         
     }else if (tempButton.messageType == kVoiceMessage) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([[EMCDDeviceManager sharedInstance] isPlaying]) {
-                [self startAudioAnimation];
-            } else {
-                [self stopAudioAnimation];
-            }
-        });
-        //语音
-        [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:tempButton.voicePath completion:^(NSError *error) {
-            if (!error) {
-                DLog(@"播放语音");
-                [self stopAudioAnimation];
-            } else {
-                [self stopAudioAnimation];
-                DLog(@"播放error ＝ %@",error);
-            }
-        }];
+        
+        //播放语音
+        [self playClickAudio:tempButton.voicePath];
         
     } else {
         
         //文字
     }
+}
+
+//放大图片
+- (void)browserClickImage:(NSString *)path {
+
+    _photos = [[NSMutableArray alloc]initWithCapacity:0];
+    UIImage *image = [UIImage imageWithContentsOfFile:path];
+    NSArray *arr = [NSArray arrayWithObject:image];
+    [self showPhotoBrowser:arr index:0];
+
+}
+
+//播放语音
+- (void)playClickAudio:(NSString *)path {
+    //先暂停当前语音
+     [[EMCDDeviceManager sharedInstance] stopPlaying];
+    
+    //获取屏幕中可视视图
+    MessageViewController *tempControl = (MessageViewController *)self.tempController;
+    NSArray *indexPaths = [tempControl.tableView indexPathsForVisibleRows];
+    for (NSIndexPath *visibleIndexPath in indexPaths) {
+        MessageCell *cell = [tempControl.tableView cellForRowAtIndexPath:visibleIndexPath];
+        [cell stopAudioAnimation];
+    }
+
+    
+    //语音动画
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([[EMCDDeviceManager sharedInstance] isPlaying]) {
+            [self startAudioAnimation];
+        } else {
+            [self stopAudioAnimation];
+        }
+    });
+   
+
+    //语音
+    [[EMCDDeviceManager sharedInstance] asyncPlayingWithPath:path completion:^(NSError *error) {
+        if (!error) {
+            DLog(@"播放语音");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self stopAudioAnimation];
+                
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self stopAudioAnimation];
+                
+            });            DLog(@"播放error ＝ %@",error);
+        }
+    }];
+
 }
 
 
@@ -234,8 +272,8 @@
     photoBrowser.enableSwipeToDismiss = NO;
     [photoBrowser setCurrentPhotoIndex:currentIndex];
     
-    MessageViewController *temp = (MessageViewController *)self.tempController;
-    temp.scrollType = ScrollStillType;
+    MessageViewController *tempControl = (MessageViewController *)self.tempController;
+    tempControl.scrollType = ScrollStillType;
     [self.tempController.navigationController pushViewController:photoBrowser animated:YES];
 }
 

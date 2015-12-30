@@ -368,9 +368,15 @@
     
     BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
     if (contains) {
-        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        DLog(@"已是好友");
+//        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
     }
     [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+    
+    if ([[[self appDelegate] xmppStream] isConnected]) {
+        [CustomMBHud customHudWindow:@"等待对方同意"];
+    }
+    
     [self.view endEditing:YES];
     return YES;
 }
@@ -418,7 +424,8 @@
             
             BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
             if (contains) {
-                [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                DLog(@"");
+//                [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                 return;
             }
         [[self appDelegate].xmppRoster subscribePresenceToUser:jid];

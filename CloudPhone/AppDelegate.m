@@ -375,9 +375,8 @@
     return NO;
 }
 
-
 //接受到消息调用这个
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {    
+- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
         //13049340993@cloud.com/8b468676
@@ -386,9 +385,9 @@
         
         NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
         NSString *lastStr = @"";
-        if ([message.body isEqualToString:@"image"]) {
+        if ([message.body hasPrefix:@"ImgBase64"]) {
             lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"audio"]) {
+        } else if ([message.body hasPrefix:@"AudioBase64"]) {
             lastStr = @"[语音]";
         } else {
             lastStr = message.body;
@@ -415,6 +414,31 @@
         [[NSNotificationCenter defaultCenter] postNotification:notice];
         
     }
+    
+    
+    //回执判断(要不要添加回执呢)
+    NSXMLElement *request = [message elementForName:@"request"];
+    if (request)
+    {
+        if ([request.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
+        {
+            XMPPMessage *msg = [XMPPMessage messageWithType:[message attributeStringValueForName:@"type"] to:message.from elementID:[message attributeStringValueForName:@"id"]];
+            NSXMLElement *recieved = [NSXMLElement elementWithName:@"received" xmlns:@"urn:xmpp:receipts"];
+            [msg addChild:recieved];
+            
+            //发送回执
+            [self.xmppStream sendElement:msg];
+        }
+    }else{
+        NSXMLElement *received = [message elementForName:@"received"];
+        if (received){
+            if ([received.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
+            {
+                //发送成功
+                NSLog(@"对方接受到啦!");
+            }
+        }
+    }
 }
 
 #pragma mark XMPPRosterDelegate
@@ -434,6 +458,7 @@
         if (friendArray.count == 0) {
             [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
             
+            //这里是判断新好友的小红点
             [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
             [defaults synchronize];
             
@@ -442,23 +467,6 @@
             [[NSNotificationCenter defaultCenter] postNotification:notice];
         }
     }
-    
-    //这里暂时用ios8的方法。。。。。。。。
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message: msg preferredStyle:UIAlertControllerStyleAlert];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//        NSLog(@"取消");
-//        //先自己删除了拒绝的人
-//        [xmppRoster removeUser:presence.from];
-//        [xmppRoster rejectPresenceSubscriptionRequestFrom:presence.from];
-//    }]];
-//    
-//    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//         NSLog(@"确定");
-//        [xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
-//    }]];
-//
-//    UIAlertController *alertController = (UIAlertController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-//    [alertController presentViewController:alert animated:YES completion:nil];
 }
 
 
@@ -478,6 +486,9 @@
         [xmppRoster removeUser:presence.from];
         //把好友添加的也删了
         [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:presence.fromStr];
+        
+        //如果消息列表有也顺便删除了
+        [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:presence.fromStr];
     }
 }
 

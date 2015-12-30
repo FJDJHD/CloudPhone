@@ -21,7 +21,14 @@
     NSString *to = username; //发送的目标
     [message addAttributeWithName:@"to" stringValue:to];
     [message addChild:body];
+    
+    //添加回执
+    NSXMLElement *recieved = [NSXMLElement elementWithName:@"request" xmlns:@"urn:xmpp:receipts"];
+    [recieved addAttributeWithName:@"id" stringValue:[message attributeStringValueForName:@"id"]];
+    [message addChild:recieved];
+    
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+    
     
     //发回自己服务器
     if (username.length > 0) {
@@ -45,15 +52,25 @@
 //发送图片
 + (void)sendImageMessageWithImage:(UIImage *)image toUsername:(XMPPJID *)jid {
     NSData *data= UIImageJPEGRepresentation(image, 0.1);
-    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
-    [message addBody:@"image"];
+    
+    NSString *siID = [XMPPStream generateUUID];
+    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid elementID:siID]; //发送的目标
+    
+    //添加回执
+    NSXMLElement *receipt = [NSXMLElement elementWithName:@"request" xmlns:@"urn:xmpp:receipts"];
+    [message addChild:receipt];
+    
     //转化base64编码
     NSString *base64Str = [data base64EncodedStringWithOptions:0];
-    //设置节点内容
-    XMPPElement *attachment = [XMPPElement elementWithName:@"attachment" stringValue:base64Str];
-    //包含子节点
-    [message addChild:attachment];
+    
+    NSMutableString *imageString = [[NSMutableString alloc]initWithString:@"ImgBase64"];
+    [imageString appendString:base64Str];
+    
+    [message addBody:imageString];
+    
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+    
+    
     
     //发回自己服务器
 //    if (jid.user.length > 0) {
@@ -75,14 +92,22 @@
 
 //发送语音
 + (void)sendVoiceMessageWithAudio:(NSData *)data time:(NSInteger)duration toUsername:(XMPPJID *)jid {
-    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
-    [message addBody:[NSString stringWithFormat:@"audio%ld",(long)duration]];//时间路径都放这
+    
+    NSString *siID = [XMPPStream generateUUID];
+    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid elementID:siID]; //发送的目标
+    
+    //添加回执
+    NSXMLElement *receipt = [NSXMLElement elementWithName:@"request" xmlns:@"urn:xmpp:receipts"];
+    [message addChild:receipt];
+    
     //转化base64编码
     NSString *base64Str = [data base64EncodedStringWithOptions:0];
-    //设置节点内容
-    XMPPElement *attachment = [XMPPElement elementWithName:@"attachment" stringValue:base64Str];
-    //包含子节点
-    [message addChild:attachment];
+    
+    NSMutableString *audioString = [[NSMutableString alloc]initWithFormat:@"AudioBase64{%ld}",(long)duration];
+    [audioString appendString:base64Str];
+    
+    
+    [message addBody:audioString];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
 
 }

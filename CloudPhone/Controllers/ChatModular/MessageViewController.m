@@ -16,16 +16,13 @@
 #import "EMCDDeviceManager.h"
 #import "EMAudioPlayerUtil.h"
 #import "XMPPvCardTemp.h"
+#import "NSFileManager+Tools.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
-
 @property (nonatomic, strong) DXMessageToolBar *chatToolBar;
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-
-@property (nonatomic, strong) NSMutableArray *dataMessageArray; // 暂时没用这个
+@property (nonatomic, strong) NSMutableArray *dataMessageArray;
 
 @property (nonatomic, strong) CellFrameModel *cellModel;
 
@@ -180,40 +177,6 @@
     if (!cell) {
         cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    
-//    // 如果存进去了，就把字符串转化成简洁的节点后保存
-//    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-//        message.messageStr = [message.message compactXMLString];
-//        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-//    }
-//    _messageModel.voiceFilepath = nil;
-//    _messageModel.imagePath = nil;
-//    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
-//    
-//    if ([message.body isEqualToString:@"image"]) {
-//        UIImage *image = [UIImage imageWithContentsOfFile:path];
-//        _messageModel.image = image;
-//        _messageModel.imagePath = path;
-//        _messageModel.messageType = kImageMessage; //图片类型
-//        
-//    } else if ([message.body hasPrefix:@"audio"]) {
-//        
-//        NSString *timeStr = [message.body substringFromIndex:5];
-//        _messageModel.voiceTime = timeStr;
-//        _messageModel.voiceFilepath = path; //音频路径
-//        _messageModel.messageType = kVoiceMessage; //语音类型
-//    
-//    } else {
-//       _messageModel.messageType = kTextMessage; //文字类型
-//    }
-//    _messageModel.text = message.body;
-//    _messageModel.otherPhoto = self.chatPhoto;
-//    _messageModel.chatJID = self.chatJID;
-//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-//    _cellModel.message = _messageModel;
-//    cell.cellFrame = _cellModel;
-    
     
     if (_dataMessageArray.count > 0) {
         MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
@@ -236,14 +199,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    
-//    _messageModel.text = message.body;
-//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-//    _cellModel.message = _messageModel;
-
     if (_dataMessageArray.count > 0) {
-//        CellFrameModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
         MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
         _cellModel.message = model;
         return _cellModel.cellHeight;
@@ -263,9 +219,9 @@
         
         XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
         NSString *lastStr = @"";
-        if ([message.body isEqualToString:@"image"]) {
+        if ([message.body hasPrefix:@"ImgBase64"]) {
             lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"audio"]) {
+        } else if ([message.body hasPrefix:@"AudioBase64"]) {
             lastStr = @"[语音]";
         } else {
             lastStr = message.message.body;
@@ -314,21 +270,22 @@
         for (XMPPMessageArchiving_Message_CoreDataObject *message in self.fetchedResultsController.fetchedObjects) {
             
             MessageModel *messagemodel = [[MessageModel alloc]init];
-            // 如果存进去了，就把字符串转化成简洁的节点后保存
-            if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-                message.messageStr = [message.message compactXMLString];
-                [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-            }
-            NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
-            
-            if ([message.body isEqualToString:@"image"]) {
+
+            if ([message.body hasPrefix:@"ImgBase64"]) {
+                //先存本地一份（放大图片从本地取不会失真，好神奇）
+                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
+                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                
                 UIImage *image = [UIImage imageWithContentsOfFile:path];
                 messagemodel.image = image;
                 messagemodel.imagePath = path;
                 messagemodel.messageType = kImageMessage; //图片类型
                 
-            } else if ([message.body hasPrefix:@"audio"]) {
-                NSString *timeStr = [message.body substringFromIndex:5];
+            } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                NSString *timeStr = [self getTimeString:message.body];
+                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"audio"];
+                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                
                 messagemodel.voiceTime = timeStr;
                 messagemodel.voiceFilepath = path;
                 messagemodel.messageType = kVoiceMessage; //语音类型
@@ -346,6 +303,41 @@
     }
    
 }
+
+#pragma maek - 发送图片语音存放本地
+//图片和语音存到本地 ，，
+- (void)saveDataWithJID:(NSString *)jid timestamp:(NSDate *)timestamp
+                             content:(NSString *)body messageType:(NSString *)type{
+    if ([type isEqualToString:@"image"]) {
+        NSString *base64str = [body substringFromIndex:9];
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        //存到本地
+        [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
+        
+    } else if ([type isEqualToString:@"audio"]) {
+        NSArray *array = [body componentsSeparatedByString:@"}"];
+        NSString *base64str = array[1];
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        //存到本地
+        [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
+    }
+}
+
+- (NSString *)pathForData:(NSString *)jid timestamp:(NSDate *)timestamp {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [fileManager applicationCachesDirectory];
+    NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%f",jid,[timestamp timeIntervalSince1970]]];
+    return filePath;
+}
+//AudioBase64{%ld}
+- (NSString *)getTimeString:(NSString *)content{
+    
+    NSRange start = [content rangeOfString:@"{"];
+    NSRange end = [content rangeOfString:@"}"];
+    NSString *sub = [content substringWithRange:NSMakeRange(start.location + 1, end.location-start.location-1)];
+    return sub;
+}
+
 
 #pragma mark -DXMessageToolBarDelegate
 - (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView{
@@ -469,7 +461,6 @@
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-//    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
 
     //发送照片
     [ChatSendHelper sendImageMessageWithImage:image toUsername:self.chatJID];

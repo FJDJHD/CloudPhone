@@ -15,4 +15,5 @@
  */
 - (NSString *)pathForAttachment:(NSString *)jid timestamp:(NSDate *)timestamp;
 
+
 @end

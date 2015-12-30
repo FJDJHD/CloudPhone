@@ -18,13 +18,31 @@
 //    format.dateFormat = @"yyyyMMddHHmmss";
 //    NSString *fileName = [format stringFromDate:timestamp];
 //    path = [path stringByAppendingPathComponent:fileName];
-    
+//    
 //    return path;
 }
+
+
 
 // 保存附件
 - (BOOL)saveAttachmentJID:(NSString *)jid timestamp:(NSDate *)timestamp {
     // 判断子节点数量
+    
+//    if (self.childCount == 2) {
+//     for (XMPPElement *node in self.children) {
+//        // 如果节点的名称是attachment
+//        if ([node.name isEqualToString:@"attachment"]) {
+//            NSString *base64Str = node.stringValue;
+//            NSData *data = [[NSData alloc] initWithBase64EncodedString:base64Str options:0];
+//            
+//            [data writeToFile:[self pathForAttachment:jid timestamp:timestamp] atomically:YES];
+//            // 记录附件节点的索引值
+//        }
+//     }
+//    }
+//    return YES;
+
+    
     if (self.childCount == 2) {
         NSInteger index = -1;
         // 遍历所有节点
