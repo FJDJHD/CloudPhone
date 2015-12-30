@@ -13,7 +13,7 @@
 #import "XMPPvCardTemp.h"
 #import "ChatSendHelper.h"
 #import "MWPhotoBrowser.h"
-
+#import "MessageViewController.h"
 
 #define ANIMATION_IMAGEVIEW_SIZE 25 // 小喇叭图片尺寸
 #define ANIMATION_IMAGEVIEW_SPEED 1 // 小喇叭动画播放速度
@@ -166,8 +166,6 @@
     //消息类型
     _textView.messageType = message.messageType;
     
-
-
 }
 
 - (void)buttonClick:(UIButton *)sender {
@@ -236,6 +234,8 @@
     photoBrowser.enableSwipeToDismiss = NO;
     [photoBrowser setCurrentPhotoIndex:currentIndex];
     
+    MessageViewController *temp = (MessageViewController *)self.tempController;
+    temp.scrollType = ScrollStillType;
     [self.tempController.navigationController pushViewController:photoBrowser animated:YES];
 }
 

@@ -44,7 +44,7 @@
 
 //发送图片
 + (void)sendImageMessageWithImage:(UIImage *)image toUsername:(XMPPJID *)jid {
-    NSData *data= UIImageJPEGRepresentation(image, 0.5);
+    NSData *data= UIImageJPEGRepresentation(image, 0.1);
     XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid]; //发送的目标
     [message addBody:@"image"];
     //转化base64编码

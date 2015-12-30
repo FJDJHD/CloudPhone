@@ -29,6 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
      self.automaticallyAdjustsScrollViewInsets = NO;
+    
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed:@"phone_friends"];
@@ -52,8 +53,11 @@
     self.textFiled.delegate = self;
     self.textFiled.inputView  = self.keyboard;
     self.navigationController.navigationBarHidden = YES;
-    [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
-   }
+    [self.view addSubview:self.textFiled];
+    
+//    [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
+
+}
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
@@ -158,6 +162,10 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
         [self.textFiled resignFirstResponder];
 }
+
+
+
+
 
 
 - (void)didReceiveMemoryWarning {
