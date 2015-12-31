@@ -16,23 +16,18 @@
 #import "EMCDDeviceManager.h"
 #import "EMAudioPlayerUtil.h"
 #import "XMPPvCardTemp.h"
+#import "NSFileManager+Tools.h"
+#import "LocationViewController.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
-
 @property (nonatomic, strong) DXMessageToolBar *chatToolBar;
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSMutableArray *dataMessageArray;
 
-@property (nonatomic, strong) NSMutableArray *dataMessageArray; // 暂时没用这个
-
-//@property (nonatomic, strong) CellFrameModel *cellModel;
-//
-//@property (nonatomic, strong) MessageModel *messageModel;
+@property (nonatomic, strong) CellFrameModel *cellModel;
 
 //@property (nonatomic, strong) UIRefreshControl *refreshControl;
-
 
 @end
 
@@ -42,17 +37,16 @@
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
 
+    //标题
+    self.title = _chatName;
+    
     //导航栏返回按钮
     UIButton *backButton = [self setBackBarButton:1];
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-    //标题
-    self.title = _chatName;
-
-    
-//    _cellModel = [[CellFrameModel alloc]init];
-//    _messageModel = [[MessageModel alloc]init];
+    //这里建一个模型就够了
+    _cellModel = [[CellFrameModel alloc]init];
     
     //消息数据源
     _dataMessageArray = [[NSMutableArray alloc]initWithCapacity:0];
@@ -172,8 +166,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-//    return self.fetchedResultsController.fetchedObjects.count;
-    return _dataMessageArray.count;
+    return self.fetchedResultsController.fetchedObjects.count;
+//    return _dataMessageArray.count;
 
 }
 
@@ -184,46 +178,11 @@
     if (!cell) {
         cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    
-//    // 如果存进去了，就把字符串转化成简洁的节点后保存
-//    if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-//        message.messageStr = [message.message compactXMLString];
-//        [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-//    }
-//    _messageModel.voiceFilepath = nil;
-//    _messageModel.imagePath = nil;
-//    NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
-//    
-//    if ([message.body isEqualToString:@"image"]) {
-//        UIImage *image = [UIImage imageWithContentsOfFile:path];
-//        _messageModel.image = image;
-//        _messageModel.imagePath = path;
-//        _messageModel.messageType = kImageMessage; //图片类型
-//        
-//    } else if ([message.body hasPrefix:@"audio"]) {
-//        
-//        NSString *timeStr = [message.body substringFromIndex:5];
-//        _messageModel.voiceTime = timeStr;
-//        _messageModel.voiceFilepath = path; //音频路径
-//        _messageModel.messageType = kVoiceMessage; //语音类型
-//    
-//    } else {
-//       _messageModel.messageType = kTextMessage; //文字类型
-//    }
-//    _messageModel.text = message.body;
-//    _messageModel.otherPhoto = self.chatPhoto;
-//    _messageModel.chatJID = self.chatJID;
-//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-//    _cellModel.message = _messageModel;
-//    cell.cellFrame = _cellModel;
-    
     
     if (_dataMessageArray.count > 0) {
-        
-        CellFrameModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
-        
-        [cell cellForDataWithModel:model indexPath:indexPath controller:self];
+        MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+        _cellModel.message = model;
+        [cell cellForDataWithModel:_cellModel indexPath:indexPath controller:self];
 
     }
     
@@ -241,15 +200,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//    XMPPMessageArchiving_Message_CoreDataObject *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    
-//    _messageModel.text = message.body;
-//    _messageModel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-//    _cellModel.message = _messageModel;
-
     if (_dataMessageArray.count > 0) {
-        CellFrameModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
-        return model.cellHeight;
+        MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+        _cellModel.message = model;
+        return _cellModel.cellHeight;
     }
     return 0;
 }
@@ -266,9 +220,9 @@
         
         XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
         NSString *lastStr = @"";
-        if ([message.body isEqualToString:@"image"]) {
+        if ([message.body hasPrefix:@"ImgBase64"]) {
             lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"audio"]) {
+        } else if ([message.body hasPrefix:@"AudioBase64"]) {
             lastStr = @"[语音]";
         } else {
             lastStr = message.message.body;
@@ -302,64 +256,95 @@
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     DLog(@"上下文改变");
+
     [self loadXMPPMessageData];
     
     [self.tableView reloadData];
     [self scrollViewToBottom:YES];
 }
 
+
 - (void)loadXMPPMessageData {
     [_dataMessageArray removeAllObjects];
     
-    if (self.fetchedResultsController.fetchedObjects > 0) {
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
         for (XMPPMessageArchiving_Message_CoreDataObject *message in self.fetchedResultsController.fetchedObjects) {
             
-            @autoreleasepool {
-                CellFrameModel *cellmodel = [[CellFrameModel alloc]init];
+            MessageModel *messagemodel = [[MessageModel alloc]init];
+
+            if ([message.body hasPrefix:@"ImgBase64"]) {
+                //先存本地一份（放大图片从本地取不会失真，好神奇）
+                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
+                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
                 
-                MessageModel *messagemodel = [[MessageModel alloc]init];
-                // 如果存进去了，就把字符串转化成简洁的节点后保存
-                if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-                    message.messageStr = [message.message compactXMLString];
-                    [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-                }
-                NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+                UIImage *image = [UIImage imageWithContentsOfFile:path];
+                messagemodel.image = image;
+                messagemodel.imagePath = path;
+                messagemodel.messageType = kImageMessage; //图片类型
                 
-                if ([message.body isEqualToString:@"image"]) {
-                    UIImage *image = [UIImage imageWithContentsOfFile:path];
-                    messagemodel.image = image;
-                    messagemodel.imagePath = path;
-                    messagemodel.messageType = kImageMessage; //图片类型
-                    
-                } else if ([message.body hasPrefix:@"audio"]) {
-                    NSString *timeStr = [message.body substringFromIndex:5];
-                    messagemodel.voiceTime = timeStr;
-                    messagemodel.voiceFilepath = path;
-                    messagemodel.messageType = kVoiceMessage; //语音类型
-                    
-                } else {
-                    messagemodel.messageType = kTextMessage; //文字类型
-                }
-                messagemodel.text = message.body;
-                messagemodel.otherPhoto = self.chatPhoto;
-                messagemodel.chatJID = self.chatJID;
-                messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+            } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                NSString *timeStr = [self getTimeString:message.body];
+                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"audio"];
+                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
                 
-                cellmodel.message = messagemodel;
+                messagemodel.voiceTime = timeStr;
+                messagemodel.voiceFilepath = path;
+                messagemodel.messageType = kVoiceMessage; //语音类型
                 
-                [_dataMessageArray addObject:cellmodel];
+            } else {
+                messagemodel.messageType = kTextMessage; //文字类型
             }
+            messagemodel.text = message.body;
+            messagemodel.otherPhoto = self.chatPhoto;
+            messagemodel.chatJID = self.chatJID;
+            messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+            
+            [_dataMessageArray addObject:messagemodel];
         }
     }
    
 }
 
+#pragma maek - 发送图片语音存放本地
+//图片和语音存到本地 ，，
+- (void)saveDataWithJID:(NSString *)jid timestamp:(NSDate *)timestamp
+                             content:(NSString *)body messageType:(NSString *)type{
+    if ([type isEqualToString:@"image"]) {
+        NSString *base64str = [body substringFromIndex:9];
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        //存到本地
+        [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
+        
+    } else if ([type isEqualToString:@"audio"]) {
+        NSArray *array = [body componentsSeparatedByString:@"}"];
+        NSString *base64str = array[1];
+        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        //存到本地
+        [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
+    }
+}
+
+- (NSString *)pathForData:(NSString *)jid timestamp:(NSDate *)timestamp {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [fileManager applicationCachesDirectory];
+    NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%f",jid,[timestamp timeIntervalSince1970]]];
+    return filePath;
+}
+//AudioBase64{%ld}
+- (NSString *)getTimeString:(NSString *)content{
+    
+    NSRange start = [content rangeOfString:@"{"];
+    NSRange end = [content rangeOfString:@"}"];
+    NSString *sub = [content substringWithRange:NSMakeRange(start.location + 1, end.location-start.location-1)];
+    return sub;
+}
+
+
 #pragma mark -DXMessageToolBarDelegate
 - (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView{
 }
 
-- (void)didChangeFrameToHeight:(CGFloat)toHeight
-{
+- (void)didChangeFrameToHeight:(CGFloat)toHeight{
     [UIView animateWithDuration:0.3 animations:^{
         CGRect rect = self.tableView.frame;
         rect.origin.y = 0;
@@ -369,18 +354,17 @@
     [self scrollViewToBottom:NO];
 }
 
-- (void)didSendText:(NSString *)text
-{
+- (void)didSendText:(NSString *)text{
     if (text && text.length > 0) {
         [ChatSendHelper sendTextMessageWithString:text toUsername:self.chatJIDStr];
+        self.chatToolBar.inputTextView.text = @"";
     }
 }
 
 /**
  *  按下录音按钮开始录音
  */
-- (void)didStartRecordingVoiceAction:(UIView *)recordView
-{
+- (void)didStartRecordingVoiceAction:(UIView *)recordView{
     if ([self canRecord]) {
         DXRecordView *tmpView = (DXRecordView *)recordView;
         tmpView.center = self.view.center;
@@ -402,16 +386,14 @@
 /**
  *  手指向上滑动取消录音
  */
-- (void)didCancelRecordingVoiceAction:(UIView *)recordView
-{
+- (void)didCancelRecordingVoiceAction:(UIView *)recordView{
     [[EMCDDeviceManager sharedInstance] cancelCurrentRecording];
 }
 
 /**
  *  松开手指完成录音
  */
-- (void)didFinishRecoingVoiceAction:(UIView *)recordView
-{
+- (void)didFinishRecoingVoiceAction:(UIView *)recordView{
     __weak typeof(self) weakSelf = self;
     [[EMCDDeviceManager sharedInstance] asyncStopRecordingWithCompletion:^(NSString *recordPath, NSInteger aDuration, NSError *error) {
         if (!error) {
@@ -428,7 +410,6 @@
 //            });
         }
     }];
-   
 }
 
 #pragma mark - EMChatBarMoreViewDelegate
@@ -462,6 +443,9 @@
 
 - (void)moreViewLocationAction:(DXChatBarMoreView *)moreView
 {
+    DLog(@"定位");
+    LocationViewController *controller = [[LocationViewController alloc]init];
+    [self.navigationController pushViewController:controller animated:YES];
     // 隐藏键盘
     [self keyBoardHidden];
 }
@@ -481,7 +465,6 @@
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-//    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
 
     //发送照片
     [ChatSendHelper sendImageMessageWithImage:image toUsername:self.chatJID];
@@ -490,23 +473,16 @@
 }
 
 #pragma mark - Methd
-- (void)scrollViewToBottom:(BOOL)animated
-{
-    
-    
-    if (self.tableView.contentSize.height > self.tableView.frame.size.height)
-    {
+- (void)scrollViewToBottom:(BOOL)animated{
+    if (self.tableView.contentSize.height > self.tableView.frame.size.height){
         CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
-        
         [self.tableView setContentOffset:offset animated:animated];
     }
 }
 
-- (BOOL)canRecord
-{
+- (BOOL)canRecord{
     __block BOOL bCanRecord = YES;
-    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
-    {
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending){
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         if ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) {
             [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) {
@@ -514,19 +490,16 @@
             }];
         }
     }
-    
     return bCanRecord;
 }
 
 // 点击背景隐藏
--(void)keyBoardHidden
-{
+-(void)keyBoardHidden{
     [self.chatToolBar endEditing:YES];
 }
 
 #pragma mark ---触摸关闭键盘----
--(void)handleTap:(UIGestureRecognizer *)gesture
-{
+-(void)handleTap:(UIGestureRecognizer *)gesture{
     [self.chatToolBar endEditing:YES];
 }
 

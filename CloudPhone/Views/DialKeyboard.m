@@ -17,7 +17,7 @@
     UIView * keyboard = [[UIView alloc] init];
     keyboard.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     keyboard.userInteractionEnabled = YES;
-    keyboard.backgroundColor = [UIColor lightGrayColor];
+    keyboard.backgroundColor = [UIColor clearColor];
     [self addSubview:keyboard];
     for (int i = 0; i<15; i++) {
         

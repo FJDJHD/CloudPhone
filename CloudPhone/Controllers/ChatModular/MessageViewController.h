@@ -26,4 +26,9 @@ typedef NS_ENUM(NSInteger, ScrollType) {
 
 @property (nonatomic, assign) ScrollType scrollType;
 
+
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+
 @end

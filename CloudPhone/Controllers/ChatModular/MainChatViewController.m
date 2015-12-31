@@ -365,12 +365,14 @@
             [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:user.jidStr];
             //把好友添加的也删了
             [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
+            //删除后重新再更新下数据库
+            [self loadMessageDataFromFMDB];
 
         } else {
             //消息
             NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
             [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
-                //删除后重新再更新下数据库
+            //删除后重新再更新下数据库
             [self loadMessageDataFromFMDB];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -443,9 +445,6 @@
             }
         }
     }
-   
-//    _chatListArray = [DBOperate queryData:T_chatMessage theColumn:nil theColumnValue:nil withAll:YES];
-
 }
 
 
@@ -552,7 +551,8 @@
     
     //这里是修改消息的名字的
     NSString *jidStr = sender.userInfo[@"jidStr"];
-    NSString *realName = @"好友";
+    NSArray *nameArray = [jidStr componentsSeparatedByString:XMPPSevser];
+    NSString *realName = nameArray[0] ? nameArray[0] :@"好友";
     if (self.fetchedResultsController.fetchedObjects.count > 0) {
         for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
             if ([user.jid isEqualToJID:[XMPPJID jidWithString:jidStr]]) {

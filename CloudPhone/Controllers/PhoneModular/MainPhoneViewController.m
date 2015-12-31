@@ -32,6 +32,7 @@
     isShow = NO;
     labelString = [[NSMutableString alloc]init];
      self.automaticallyAdjustsScrollViewInsets = NO;
+    
     //导航栏右按钮
     UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed:@"phone_friends"];
@@ -54,6 +55,10 @@
     self.textFiled = textFiled;
     self.navigationController.navigationBarHidden = YES;
     [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
+
+    
+
+
 }
 
 - (void)initDialKeyboard{
@@ -166,6 +171,10 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
        [self keyboardHidden];
 }
+
+
+
+
 
 
 - (void)didReceiveMemoryWarning {
