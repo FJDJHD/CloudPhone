@@ -17,7 +17,6 @@
 #import "EMAudioPlayerUtil.h"
 #import "XMPPvCardTemp.h"
 #import "NSFileManager+Tools.h"
-#import "LocationViewController.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -224,16 +223,21 @@
             lastStr = @"[图片]";
         } else if ([message.body hasPrefix:@"AudioBase64"]) {
             lastStr = @"[语音]";
+        } else if ([message.body hasPrefix:@"TextBase64"]){
+            lastStr = [message.message.body substringFromIndex:10];
+        } else if ([message.body hasPrefix:@"LonBase64"]) {
+            lastStr = @"[位置]";
         } else {
-            lastStr = message.message.body;
+            lastStr = @"不配配类型。。。。。";
         }
+
         NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
 
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *number = [defaults objectForKey:UserNumber];
         NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
         
-        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:self.chatJIDStr withAll:NO];
+        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:self.chatJIDStr theColumn:@"mineNumber" equalValue:number];
         if (chatArray.count > 0) {
             
             //最后一条信息
@@ -281,6 +285,7 @@
                 messagemodel.image = image;
                 messagemodel.imagePath = path;
                 messagemodel.messageType = kImageMessage; //图片类型
+                messagemodel.text = @"照片";
                 
             } else if ([message.body hasPrefix:@"AudioBase64"]) {
                 NSString *timeStr = [self getTimeString:message.body];
@@ -290,11 +295,28 @@
                 messagemodel.voiceTime = timeStr;
                 messagemodel.voiceFilepath = path;
                 messagemodel.messageType = kVoiceMessage; //语音类型
+                messagemodel.text = @"语音";
                 
+            } else if ([message.body hasPrefix:@"TextBase64"]){
+                
+                messagemodel.text = [message.body substringFromIndex:10];
+                messagemodel.messageType = kTextMessage; //文字类型
+                
+            } else if ([message.body hasPrefix:@"LonBase64"]){
+                
+                NSString *jsonStr = [message.body substringFromIndex:9];
+                if (jsonStr) {
+                    NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                    messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
+                    messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
+                    messagemodel.address = [locDic objectForKey:@"address"];
+                }
+                messagemodel.messageType = kLocationMessage; //地理位置类型
+            
             } else {
+                messagemodel.text = @"不配配类型。。。。";
                 messagemodel.messageType = kTextMessage; //文字类型
             }
-            messagemodel.text = message.body;
             messagemodel.otherPhoto = self.chatPhoto;
             messagemodel.chatJID = self.chatJID;
             messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
@@ -444,8 +466,15 @@
 - (void)moreViewLocationAction:(DXChatBarMoreView *)moreView
 {
     DLog(@"定位");
+    WEAKSELF
     LocationViewController *controller = [[LocationViewController alloc]init];
-    [self.navigationController pushViewController:controller animated:YES];
+    controller.locationBlock = ^(double lat ,double lon , NSString *address){
+        DLog(@"lat = %f\n lon = %f\n address = %@",lat,lon,address);
+        [ChatSendHelper sendLocationMessageWithLatitude:lat longitude:lon adress:address toUsername:weakSelf.chatJID];
+    
+    };
+    
+    [self.navigationController pushViewController:controller animated:NO];
     // 隐藏键盘
     [self keyBoardHidden];
 }

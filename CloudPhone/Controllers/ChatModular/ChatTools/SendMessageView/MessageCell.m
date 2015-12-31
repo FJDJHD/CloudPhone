@@ -35,8 +35,8 @@
 
 @interface MessageCell()<MWPhotoBrowserDelegate> {
     UIImageView *_animationImageView;
-    NSMutableArray *_senderAnimationImages;
-    NSMutableArray *_recevierAnimationImages;
+    UILabel *_locLabel;
+
 }
 
 @property (nonatomic, strong) MWPhotoBrowser *photoBrowser;
@@ -45,11 +45,30 @@
 
 @property (nonatomic, strong) UIViewController *tempController;
 
+@property (nonatomic, strong) NSMutableArray *senderAnimationImages;
+
+@property (nonatomic, strong) NSMutableArray *recevierAnimationImages;
 
 
 @end
 
 @implementation MessageCell
+
+- (NSMutableArray *)senderAnimationImages {
+    if (!_senderAnimationImages) {
+         _senderAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
+        
+    }
+    return _senderAnimationImages;
+}
+
+- (NSMutableArray *)recevierAnimationImages {
+    if (!_recevierAnimationImages) {
+        _recevierAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
+        
+    }
+    return _recevierAnimationImages;
+}
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -77,8 +96,15 @@
         _animationImageView.animationDuration = ANIMATION_IMAGEVIEW_SPEED;
         [self addSubview:_animationImageView];
         
-        _senderAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
-        _recevierAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
+        _locLabel = [[UILabel alloc]initWithFrame:CGRectMake(22, 83, 100, 40)];
+        _locLabel.numberOfLines = 0;
+        _locLabel.textAlignment = NSTextAlignmentCenter;
+        _locLabel.textColor = [UIColor whiteColor];
+        _locLabel.font = [UIFont systemFontOfSize:10];
+        [self addSubview:_locLabel];
+        
+//        _senderAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
+//        _recevierAnimationImages = [[NSMutableArray alloc] initWithObjects: [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_01], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_02], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_03], [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_04], nil];
         
     }
     return self;
@@ -102,6 +128,14 @@
     _iconView.frame = cellFrame.iconFrame;
     //气泡frame
     _textView.frame = cellFrame.textFrame;
+    
+    //这里给button传语音沙盒路径
+    _textView.voicePath = message.voiceFilepath;
+    _textView.imagePath = message.imagePath;
+    _textView.lat = message.lat;
+    _textView.lon = message.lon;
+    _textView.address = message.address;
+    _textView.messageType = message.messageType; //消息类型
     
     if (message.type) {
         //他人
@@ -128,27 +162,45 @@
         [_textView setTitle:nil forState:UIControlStateNormal];
         _animationImageView.image = nil;
         [_textView addSubview:_animationImageView];
+        _locLabel.text = @"";
+        [_textView addSubview:_locLabel];
+        
     } else if (message.messageType == kVoiceMessage) {
         //语音
         [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
         [_textView setImage:nil forState:UIControlStateNormal];
         _textView.imageView.layer.cornerRadius = 0.0;
         [_textView setTitle:[NSString stringWithFormat:@"%@''",message.voiceTime] forState:UIControlStateNormal];
+        _locLabel.text = @"";
+        [_textView addSubview:_locLabel];
         if (message.type) {
             //别人的语音
             [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 20,0, -20)];
             _animationImageView.image = [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
             _animationImageView.frame = CGRectMake(20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
-            _animationImageView.animationImages = _recevierAnimationImages;
+            _animationImageView.animationImages = self.recevierAnimationImages;
             [_textView addSubview:_animationImageView];
         } else {
             //自己的语音
             [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, -20,0, 20)];
             _animationImageView.image = [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
             _animationImageView.frame = CGRectMake(_textView.frame.size.width - ANIMATION_IMAGEVIEW_SIZE - 20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
-            _animationImageView.animationImages = _senderAnimationImages;
+            _animationImageView.animationImages = self.senderAnimationImages;
             [_textView addSubview:_animationImageView];
         }
+        
+    } else if (message.messageType == kLocationMessage) {
+        //地理位置
+        [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 0,0, 0)];
+        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
+        [_textView setImage:[UIImage imageNamed:@"chatView_location_map"] forState:UIControlStateNormal];
+        _textView.imageView.layer.cornerRadius = 7.0;
+        _textView.imageView.layer.masksToBounds = YES;
+        _animationImageView.image = nil;
+        [_textView addSubview:_animationImageView];
+        
+        _locLabel.text = message.address;
+        [_textView addSubview:_locLabel];
         
     } else {
         //文字
@@ -159,14 +211,9 @@
         [_textView setTitle:message.text forState:UIControlStateNormal];
         _animationImageView.image = nil;
         [_textView addSubview:_animationImageView];
+        _locLabel.text = @"";
+        [_textView addSubview:_locLabel];
     }
-    
-    //这里给button传语音沙盒路径
-    _textView.voicePath = message.voiceFilepath;
-    _textView.imagePath = message.imagePath;
-    
-    //消息类型
-    _textView.messageType = message.messageType;
     
 }
 
@@ -179,10 +226,17 @@
         //图片
         [self browserClickImage:tempButton.imagePath];
         
-    }else if (tempButton.messageType == kVoiceMessage) {
+    } else if (tempButton.messageType == kVoiceMessage) {
         
         //播放语音
         [self playClickAudio:tempButton.voicePath];
+        
+    } else if (tempButton.messageType == kLocationMessage) {
+        
+        //地理位置
+        CLLocationCoordinate2D coor = (CLLocationCoordinate2D){tempButton.lat,tempButton.lon};
+        LocationViewController *controller = [[LocationViewController alloc]initWithLocation:coor address:tempButton.address];
+        [self.tempController.navigationController pushViewController:controller animated:NO];
         
     } else {
         
@@ -230,16 +284,14 @@
             DLog(@"播放语音");
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self stopAudioAnimation];
-                
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self stopAudioAnimation];
-                
-            });            DLog(@"播放error ＝ %@",error);
+            });
+            DLog(@"播放error ＝ %@",error);
         }
     }];
-
 }
 
 
@@ -303,87 +355,5 @@
     return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
-
-
-//- (void)setCellFrame:(CellFrameModel *)cellFrame {
-//    _cellFrame = cellFrame;
-//    MessageModel *message = cellFrame.message;
-//    
-//    //气泡
-//    NSString *textBg = message.type ? @"chat_recive_nor" : @"chat_send_nor";
-//    //聊天背景颜色
-//    UIColor *textColor = message.type ? [UIColor blackColor] : [UIColor whiteColor];
-//    [_textView setTitleColor:textColor forState:UIControlStateNormal];
-//    
-//    //聊天头像frame
-//    _iconView.frame = cellFrame.iconFrame;
-//    //气泡frame
-//    _textView.frame = cellFrame.textFrame;
-//    
-//    if (message.type) {
-//        //他人
-//        if (message.otherPhoto != nil){
-//            _iconView.image = message.otherPhoto;
-//        }else{
-//            UIImage *image = [ChatSendHelper getPhotoWithJID:message.chatJID];
-//            _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
-//        }
-//    } else{
-//        //自己
-//        UIImage *image = [ChatSendHelper getPhotoWithJID:[[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] myJID]];
-//        _iconView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
-//    }
-//    
-//    //消息类型
-//    if (message.messageType == kImageMessage) {
-//        //图片
-//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
-//        [_textView setImage:message.image forState:UIControlStateNormal];
-//        [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 0,0, 0)];
-//        _textView.imageView.layer.cornerRadius = 7.0;
-//        _textView.imageView.layer.masksToBounds = YES;
-//        [_textView setTitle:nil forState:UIControlStateNormal];
-//        _animationImageView.image = nil;
-//        [_textView addSubview:_animationImageView];
-//    } else if (message.messageType == kVoiceMessage) {
-//        //语音
-//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
-//        [_textView setImage:nil forState:UIControlStateNormal];
-//        _textView.imageView.layer.cornerRadius = 0.0;
-//        [_textView setTitle:[NSString stringWithFormat:@"%@''",message.voiceTime] forState:UIControlStateNormal];
-//        if (message.type) {
-//            //别人的语音
-//            [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 20,0, -20)];
-//            _animationImageView.image = [UIImage imageNamed:RECEIVER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
-//            _animationImageView.frame = CGRectMake(20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
-//            _animationImageView.animationImages = _recevierAnimationImages;
-//            [_textView addSubview:_animationImageView];
-//        } else {
-//            //自己的语音
-//            [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, -20,0, 20)];
-//            _animationImageView.image = [UIImage imageNamed:SENDER_ANIMATION_IMAGEVIEW_IMAGE_DEFAULT];
-//            _animationImageView.frame = CGRectMake(_textView.frame.size.width - ANIMATION_IMAGEVIEW_SIZE - 20, (_textView.frame.size.height - ANIMATION_IMAGEVIEW_SIZE)/2.0, ANIMATION_IMAGEVIEW_SIZE, ANIMATION_IMAGEVIEW_SIZE);
-//            _animationImageView.animationImages = _senderAnimationImages;
-//            [_textView addSubview:_animationImageView];
-//        }
-//        
-//    } else {
-//        //文字
-//        [_textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 0,0, 0)];
-//        [_textView setBackgroundImage:[UIImage resizeImage:textBg] forState:UIControlStateNormal];
-//        [_textView setImage:nil forState:UIControlStateNormal];
-//        _textView.imageView.layer.cornerRadius = 0.0;
-//        [_textView setTitle:message.text forState:UIControlStateNormal];
-//        _animationImageView.image = nil;
-//        [_textView addSubview:_animationImageView];
-//    }
-//    
-//    //这里给button传语音沙盒路径
-//    _textView.voicePath = message.voiceFilepath;
-//    _textView.imagePath = message.imagePath;
-//    //消息类型
-//    _textView.messageType = message.messageType;
-//    
-//}
 
 @end

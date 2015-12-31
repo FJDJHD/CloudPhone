@@ -16,9 +16,10 @@ typedef enum {
 } MessageModelType;
 
 typedef enum {
-    kTextMessage,   //文字
-    kImageMessage,  //图片
-    kVoiceMessage   //语音
+    kTextMessage,    //文字
+    kImageMessage,   //图片
+    kVoiceMessage,   //语音
+    kLocationMessage //位置
 } MessageType;
 
 @interface MessageModel : NSObject
@@ -29,11 +30,16 @@ typedef enum {
 
 //照片
 @property (nonatomic, strong) UIImage *image;
-@property (nonatomic, copy) NSString *imagePath;
+@property (nonatomic, copy)   NSString *imagePath;
 
 //语音
 @property (nonatomic, copy) NSString *voiceFilepath;
 @property (nonatomic, copy) NSString *voiceTime;
+
+//位置
+@property (nonatomic, assign) double lat;
+@property (nonatomic, assign) double lon;
+@property (nonatomic, copy)   NSString *address;
 
 //聊天人头像
 @property (nonatomic, strong) UIImage *otherPhoto;
@@ -44,7 +50,7 @@ typedef enum {
 @property (nonatomic, assign) MessageModelType type;
 
 //消息类型
-@property (nonatomic,assign) MessageType messageType;
+@property (nonatomic, assign) MessageType messageType;
 
 
 + (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object;

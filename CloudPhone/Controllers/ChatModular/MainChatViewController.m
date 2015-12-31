@@ -36,8 +36,6 @@
 
 @property (nonatomic, strong) NSIndexPath *tempIndexPath;
 
-@property (nonatomic, strong) UIButton *addressButton;
-
 
 @end
 
@@ -67,20 +65,20 @@
     self.navigationItem.titleView = titleSegment;
     
     //导航栏右按钮
-    _addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _addressButton.frame = CGRectMake(0, 0, 44, 44);
-    [_addressButton setImage:[UIImage imageNamed:@"chat_addfriend.png"] forState:UIControlStateNormal];
-    [_addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    addressButton.frame = CGRectMake(0, 0, 44, 44);
+    [addressButton setImage:[UIImage imageNamed:@"chat_addfriend.png"] forState:UIControlStateNormal];
+    [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
                                        initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                        target:nil action:nil];
     negativeSpacer.width = -12;
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_addressButton];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
     
 
     _unreadAddLabel = [[UILabel alloc]init];
-    _unreadAddLabel.frame = CGRectMake(_addressButton.frame.size.width-20, 8, 10, 10);
+    _unreadAddLabel.frame = CGRectMake(addressButton.frame.size.width-20, 8, 10, 10);
     _unreadAddLabel.tag = 1400;
     _unreadAddLabel.layer.cornerRadius = 5;
     _unreadAddLabel.clipsToBounds = YES;
@@ -88,7 +86,7 @@
     _unreadAddLabel.hidden = YES;
     _unreadAddLabel.backgroundColor = [UIColor redColor];
     _unreadAddLabel.font = [UIFont systemFontOfSize:9];
-    [_addressButton addSubview:_unreadAddLabel];
+    [addressButton addSubview:_unreadAddLabel];
     
     _searchArray = [[NSMutableArray alloc]initWithCapacity:0];
     _chatListArray = [[NSMutableArray alloc]initWithCapacity:0];

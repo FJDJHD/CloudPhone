@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CellFrameModel.h"
 #import "BuddleButton.h"
+#import "LocationViewController.h"
 
 @interface MessageCell : UITableViewCell
 

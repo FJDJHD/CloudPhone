@@ -40,7 +40,7 @@
 
 + (NSString*)dictionaryToJson:(id)resource{
     //不要json分隔行线 需要把NSJSONWritingPrettyPrinted 改成 “0“
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:resource options:NSJSONWritingPrettyPrinted error:nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:resource options:0 error:nil];
     
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     

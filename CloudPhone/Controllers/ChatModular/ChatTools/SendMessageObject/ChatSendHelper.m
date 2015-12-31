@@ -15,7 +15,13 @@
 + (void)sendTextMessageWithString:(NSString *)str toUsername:(NSString *)username {
 
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    [body setStringValue:str];
+    
+//    //信息包装成json字符串
+//    NSDictionary *dic = @{@"messageType":@"text",@"data":str};
+//    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
+
+    [body setStringValue:[NSString stringWithFormat:@"TextBase64%@",str]];
+    
     NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
     [message addAttributeWithName:@"type" stringValue:@"chat"];
     NSString *to = username; //发送的目标
@@ -66,6 +72,9 @@
     NSMutableString *imageString = [[NSMutableString alloc]initWithString:@"ImgBase64"];
     [imageString appendString:base64Str];
     
+//    NSDictionary *dic = @{@"messageType":@"image",@"data":base64Str};
+//    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
+    
     [message addBody:imageString];
     
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
@@ -106,6 +115,29 @@
     NSMutableString *audioString = [[NSMutableString alloc]initWithFormat:@"AudioBase64{%ld}",(long)duration];
     [audioString appendString:base64Str];
     
+//    NSDictionary *dic = @{@"messageType":@"audio",@"data":base64Str,@"duration":[NSString stringWithFormat:@"%ld",(long)duration]};
+//    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
+    
+    [message addBody:audioString];
+    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+
+}
+
+//发送地理位置
++ (void)sendLocationMessageWithLatitude:(double)lat longitude:(double)lon adress:(NSString *)address toUsername:(XMPPJID *)jid {
+    NSString *siID = [XMPPStream generateUUID];
+    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid elementID:siID]; //发送的目标
+    
+    //添加回执
+    NSXMLElement *receipt = [NSXMLElement elementWithName:@"request" xmlns:@"urn:xmpp:receipts"];
+    [message addChild:receipt];
+    
+    //包在一个json字符串里
+    NSDictionary *dic = @{@"latitude":[NSNumber numberWithDouble:lat],@"longitude":[NSNumber numberWithDouble:lon],@"address":address};
+    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
+    
+    NSMutableString *audioString = [[NSMutableString alloc]initWithString:@"LonBase64"];
+    [audioString appendString:jsonString];
     
     [message addBody:audioString];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];

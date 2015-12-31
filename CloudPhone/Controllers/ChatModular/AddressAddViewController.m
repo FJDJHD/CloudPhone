@@ -97,8 +97,6 @@
         _tableView.rowHeight = 60;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-//        UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
-//        [_tableView addGestureRecognizer:tap];
     }
     return _tableView;
 }
@@ -374,7 +372,9 @@
     [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
     
     if ([[[self appDelegate] xmppStream] isConnected]) {
-        [CustomMBHud customHudWindow:@"等待对方同意"];
+        if (textField.text.length > 0) {
+            [CustomMBHud customHudWindow:@"等待对方同意"];
+        }
     }
     
     [self.view endEditing:YES];

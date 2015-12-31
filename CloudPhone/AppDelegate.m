@@ -390,26 +390,33 @@
 
 //接受到消息调用这个
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
+        
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
         //13049340993@cloud.com/8b468676
         NSArray *array = [message.fromStr componentsSeparatedByString:@"/"];
-        NSString *jidStr = array[0];
+        NSString *jidStr = @"";
+        if (array.count > 0) {
+            jidStr = array[0];
+        }
         
-        NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
         NSString *lastStr = @"";
         if ([message.body hasPrefix:@"ImgBase64"]) {
             lastStr = @"[图片]";
         } else if ([message.body hasPrefix:@"AudioBase64"]) {
             lastStr = @"[语音]";
+        } else if ([message.body hasPrefix:@"TextBase64"]){
+            lastStr = [message.body substringFromIndex:10];
+        } else if ([message.body hasPrefix:@"LonBase64"]) {
+            lastStr = @"[位置]";
         } else {
-            lastStr = message.body;
+            lastStr = @"不配配类型。。。。。";
         }
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *number = [defaults objectForKey:UserNumber];
         NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",@"1",number,nil];
-        
+        NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:jidStr theColumn:@"mineNumber" equalValue:number];
         if (mesageArray.count > 0) {
             //取出原本的小红点 ，之后加一存进去
             NSString *oriUnread = [mesageArray[0] objectAtIndex:message_unreadMessage];
@@ -448,7 +455,7 @@
             if ([received.xmlns isEqualToString:@"urn:xmpp:receipts"])//消息回执
             {
                 //发送成功
-                NSLog(@"对方接受到啦!");
+                DLog(@"对方接受到啦!");
             }
         }
     }

@@ -21,6 +21,9 @@ typedef void(^TapButtonActionBlock) (UIButton *button);
 
 @property (nonatomic, copy) NSString *imagePath; //图片路径
 
+@property (nonatomic, assign) double lat; //经纬度
+@property (nonatomic, assign) double lon;
+@property (nonatomic, copy)   NSString *address;
 
 
 
