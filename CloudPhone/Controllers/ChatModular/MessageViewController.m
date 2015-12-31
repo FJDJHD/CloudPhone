@@ -17,6 +17,7 @@
 #import "EMAudioPlayerUtil.h"
 #import "XMPPvCardTemp.h"
 #import "NSFileManager+Tools.h"
+#import "LocationViewController.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -44,7 +45,7 @@
     [backButton addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
     [self setBackBarButtonItem:backButton];
     
-   
+    //这里建一个模型就够了
     _cellModel = [[CellFrameModel alloc]init];
     
     //消息数据源
@@ -442,6 +443,9 @@
 
 - (void)moreViewLocationAction:(DXChatBarMoreView *)moreView
 {
+    DLog(@"定位");
+    LocationViewController *controller = [[LocationViewController alloc]init];
+    [self.navigationController pushViewController:controller animated:YES];
     // 隐藏键盘
     [self keyBoardHidden];
 }

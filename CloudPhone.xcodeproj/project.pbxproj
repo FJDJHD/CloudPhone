@@ -258,6 +258,9 @@
 		6E7D7AE81C1982C600B42140 /* chat_recive_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE61C1982C600B42140 /* chat_recive_nor@2x.png */; };
 		6E7D7AE91C1982C600B42140 /* chat_send_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */; };
 		6E8172F91C29232E0092B5A8 /* AddFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8172F81C29232E0092B5A8 /* AddFriendModel.m */; };
+		6E88BC731C33E4E80038CE38 /* chat_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88BC721C33E4E80038CE38 /* chat_location@2x.png */; };
+		6E88BC751C33E71D0038CE38 /* chat_playPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88BC741C33E71D0038CE38 /* chat_playPhone@2x.png */; };
+		6E88BC781C33E8E10038CE38 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E88BC771C33E8E10038CE38 /* LocationViewController.m */; };
 		6E88C8F61C32881C00AD28A3 /* chat_photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F31C32881C00AD28A3 /* chat_photo@2x.png */; };
 		6E88C8F71C32881C00AD28A3 /* chat_takePic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F41C32881C00AD28A3 /* chat_takePic@2x.png */; };
 		6E88C8F81C32881C00AD28A3 /* chat_takePic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F51C32881C00AD28A3 /* chat_takePic@3x.png */; };
@@ -1014,6 +1017,10 @@
 		6E7D7AE71C1982C600B42140 /* chat_send_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_send_nor@2x.png"; sourceTree = "<group>"; };
 		6E8172F71C29232E0092B5A8 /* AddFriendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendModel.h; sourceTree = "<group>"; };
 		6E8172F81C29232E0092B5A8 /* AddFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendModel.m; sourceTree = "<group>"; };
+		6E88BC721C33E4E80038CE38 /* chat_location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_location@2x.png"; sourceTree = "<group>"; };
+		6E88BC741C33E71D0038CE38 /* chat_playPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_playPhone@2x.png"; sourceTree = "<group>"; };
+		6E88BC761C33E8E10038CE38 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		6E88BC771C33E8E10038CE38 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
 		6E88C8F31C32881C00AD28A3 /* chat_photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_photo@2x.png"; sourceTree = "<group>"; };
 		6E88C8F41C32881C00AD28A3 /* chat_takePic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_takePic@2x.png"; sourceTree = "<group>"; };
 		6E88C8F51C32881C00AD28A3 /* chat_takePic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_takePic@3x.png"; sourceTree = "<group>"; };
@@ -2492,6 +2499,8 @@
 		6E9CBF061C23F08600EFFF8D /* RealChat */ = {
 			isa = PBXGroup;
 			children = (
+				6E88BC741C33E71D0038CE38 /* chat_playPhone@2x.png */,
+				6E88BC721C33E4E80038CE38 /* chat_location@2x.png */,
 				6E88C8F31C32881C00AD28A3 /* chat_photo@2x.png */,
 				6E88C8F41C32881C00AD28A3 /* chat_takePic@2x.png */,
 				6E88C8F51C32881C00AD28A3 /* chat_takePic@3x.png */,
@@ -3472,6 +3481,8 @@
 				6EC0BB361C0BDEB700075A19 /* MainChatViewController.m */,
 				6E7D7A8F1C19311100B42140 /* MessageViewController.h */,
 				6E7D7A901C19311100B42140 /* MessageViewController.m */,
+				6E88BC761C33E8E10038CE38 /* LocationViewController.h */,
+				6E88BC771C33E8E10038CE38 /* LocationViewController.m */,
 				6EF3960B1C22C11300E3F1BF /* AddressAddViewController.h */,
 				6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */,
 			);
@@ -4032,6 +4043,7 @@
 				B47C2E251C193434000E2964 /* mine_savecosticon@3x.png in Resources */,
 				B497DDD91C183EE900AF9BEB /* mine_penyouquan@2x.png in Resources */,
 				6E7D7A3B1C192CCC00B42140 /* chatBar_more_faceSelected@2x.png in Resources */,
+				6E88BC731C33E4E80038CE38 /* chat_location@2x.png in Resources */,
 				6E7D7A721C192CCC00B42140 /* chatBar_more_photo.png in Resources */,
 				6EC3ECA21C16E48B00B27B18 /* btn_say@2x.png in Resources */,
 				B4D04DB31C1AA50D008BD608 /* phone_point@3x.png in Resources */,
@@ -4154,6 +4166,7 @@
 				6E7D7A6B1C192CCC00B42140 /* chatBar_more_camera@2x.png in Resources */,
 				B497DDDB1C183EE900AF9BEB /* mine_qqspace@2x.png in Resources */,
 				6E7D7A341C192CCC00B42140 /* chatBar_more_card.png in Resources */,
+				6E88BC751C33E71D0038CE38 /* chat_playPhone@2x.png in Resources */,
 				6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */,
 				B497DDE31C183F1700AF9BEB /* mine_qq@2x.png in Resources */,
 				6EC3ECB41C16E99C00B27B18 /* btn_more@2x.png in Resources */,
@@ -4309,6 +4322,7 @@
 				6EC0BB401C0BDEB700075A19 /* MainChatViewController.m in Sources */,
 				B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */,
 				6E7D7ACF1C1934F400B42140 /* DXFaceView.m in Sources */,
+				6E88BC781C33E8E10038CE38 /* LocationViewController.m in Sources */,
 				6EBA8D581C15248B00BAE5DD /* TURNSocket.m in Sources */,
 				6EBA8D731C15248B00BAE5DD /* XMPPStreamManagementStanzas.m in Sources */,
 				6EBA8D1F1C15248B00BAE5DD /* XMPPPresence.m in Sources */,

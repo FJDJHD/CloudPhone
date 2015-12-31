@@ -14,6 +14,7 @@
 
 #define CHAT_BUTTON_SIZE 60
 #define INSETS 8
+#define OFFUPSIDE  20
 
 @implementation DXChatBarMoreView
 
@@ -32,27 +33,38 @@
     self.backgroundColor = [UIColor clearColor];
     CGFloat insets = (self.frame.size.width - 4 * CHAT_BUTTON_SIZE) / 5;
     
+    //相册照片
     _photoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    [_photoButton setFrame:CGRectMake(insets, 20, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+    [_photoButton setFrame:CGRectMake(insets, OFFUPSIDE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
     [_photoButton setImage:[UIImage imageNamed:@"chat_photo"] forState:UIControlStateNormal];
-//    [_photoButton setImage:[UIImage imageNamed:@"chatBar_colorMore_photoSelected"] forState:UIControlStateHighlighted];
     [_photoButton addTarget:self action:@selector(photoAction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_photoButton];
     
+    //拍照
     _takePicButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    [_takePicButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 20, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+    [_takePicButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, OFFUPSIDE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
     [_takePicButton setImage:[UIImage imageNamed:@"chat_takePic"] forState:UIControlStateNormal];
     [_takePicButton addTarget:self action:@selector(takePicAction) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_takePicButton];
     
-//    _takePicButton =[UIButton buttonWithType:UIButtonTypeCustom];
-//    [_takePicButton setFrame:CGRectMake(insets * 3 + CHAT_BUTTON_SIZE * 2, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
-//    [_takePicButton setImage:[UIImage imageNamed:@"chatBar_colorMore_camera"] forState:UIControlStateNormal];
-//    [_takePicButton setImage:[UIImage imageNamed:@"chatBar_colorMore_cameraSelected"] forState:UIControlStateHighlighted];
-//    [_takePicButton addTarget:self action:@selector(takePicAction) forControlEvents:UIControlEventTouchUpInside];
-//    [self addSubview:_takePicButton];
+    //地图
+    _locationButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    [_locationButton setFrame:CGRectMake(insets * 3 + CHAT_BUTTON_SIZE * 2, OFFUPSIDE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+    [_locationButton setImage:[UIImage imageNamed:@"chat_location"] forState:UIControlStateNormal];
+
+    [_locationButton addTarget:self action:@selector(locationAction) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_locationButton];
+    
+    _audioCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
+    [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE * 3, OFFUPSIDE, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+    [_audioCallButton setImage:[UIImage imageNamed:@"chat_playPhone"] forState:UIControlStateNormal];
+    [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_audioCallButton];
+
 
     CGRect frame = self.frame;
+    self.frame = CGRectMake(0, 0, frame.size.width, CHAT_BUTTON_SIZE*2 + 20*2 + 40);
+
 //    if (type == ChatMoreTypeChat) {
 //        frame.size.height = 150;
 //        _audioCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -61,7 +73,7 @@
 //        [_audioCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_audioCallSelected"] forState:UIControlStateHighlighted];
 //        [_audioCallButton addTarget:self action:@selector(takeAudioCallAction) forControlEvents:UIControlEventTouchUpInside];
 //        [self addSubview:_audioCallButton];
-//        
+//
 //        _videoCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
 //        [_videoCallButton setFrame:CGRectMake(insets, 10 * 2 + CHAT_BUTTON_SIZE + 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
 //        [_videoCallButton setImage:[UIImage imageNamed:@"chatBar_colorMore_videoCall"] forState:UIControlStateNormal];
@@ -73,7 +85,6 @@
 //    {
 //        frame.size.height = 80;
 //    }
-    self.frame = CGRectMake(0, 0, frame.size.width, CHAT_BUTTON_SIZE*2 + 20*2 + 40);
 }
 
 #pragma mark - action
@@ -92,20 +103,20 @@
     }
 }
 
-//- (void)takePicAction{
-//    if(_delegate && [_delegate respondsToSelector:@selector(moreViewTakePicAction:)]){
-//        [_delegate moreViewTakePicAction:self];
-//    }
-//}
+- (void)locationAction{
+    if(_delegate && [_delegate respondsToSelector:@selector(moreViewLocationAction:)]){
+        [_delegate moreViewLocationAction:self];
+    }
+}
 
 
 
-//- (void)takeAudioCallAction
-//{
-//    if (_delegate && [_delegate respondsToSelector:@selector(moreViewAudioCallAction:)]) {
-//        [_delegate moreViewAudioCallAction:self];
-//    }
-//}
+- (void)takeAudioCallAction
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(moreViewAudioCallAction:)]) {
+        [_delegate moreViewAudioCallAction:self];
+    }
+}
 //
 //- (void)takeVideoCallAction
 //{
