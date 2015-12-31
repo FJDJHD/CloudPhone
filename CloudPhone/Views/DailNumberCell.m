@@ -8,6 +8,7 @@
 
 #import "DailNumberCell.h"
 #import "Global.h"
+#import "FriendDetailViewController.h"
 @implementation DailNumberCell
 
 
@@ -50,14 +51,22 @@
         _dailDateLable.textColor = [UIColor blackColor];
         [self addSubview:_dailDateLable];
 
-        
         UIImage *arrowImg = [UIImage imageNamed:@"mine_arrow"];
-        CGRect arrowImageFrame = CGRectMake(MainWidth - 20, (60 - arrowImg.size.height)/2.0 , arrowImg.size.width, arrowImg.size.height);
-        UIImageView  *arrowImgView = [[UIImageView alloc]initWithImage:arrowImg];
-        arrowImgView.frame = arrowImageFrame;
-        [self addSubview:arrowImgView];
+        CGRect arrowImageFrame = CGRectMake(MainWidth - 60, 0 , 60, 60);
+        UIButton  *arrowImgButton = [[UIButton alloc]initWithFrame:arrowImageFrame];
+        [arrowImgButton setImage:arrowImg forState:UIControlStateNormal];
+        [arrowImgButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 30, 0.0, 0.0)];
+
+        [self addSubview:arrowImgButton];
+        [arrowImgButton addTarget:self action:@selector(arrowButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
+}
+
+- (void)arrowButtonClick{
+    DLog(@"++++++++");
+   
+
 }
 
 @end

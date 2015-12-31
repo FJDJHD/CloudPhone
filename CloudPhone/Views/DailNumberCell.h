@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
 @interface DailNumberCell : UITableViewCell
 
 @property (nonatomic, strong) UIImageView *dailImageView;

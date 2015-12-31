@@ -18,11 +18,13 @@
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>{
     BOOL isShow;
     NSMutableString *labelString;
+    UIButton *addressButton;
 }
 
 @property (nonatomic,strong) DialKeyboard * keyboard;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textFiled;
+@property (nonatomic, strong) UILabel *titleLabel;
 @end
 
 @implementation MainPhoneViewController
@@ -32,9 +34,12 @@
     isShow = NO;
     labelString = [[NSMutableString alloc]init];
      self.automaticallyAdjustsScrollViewInsets = NO;
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0 , 0, 20, 44)];
+    self.titleLabel.text = @"电话";
+                                                               
     
     //导航栏右按钮
-    UIButton *addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *image = [UIImage imageNamed:@"phone_friends"];
     addressButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
     [addressButton setBackgroundImage:image forState:UIControlStateNormal];
@@ -48,18 +53,14 @@
     [self initTextFiled];
 }
 
-
 - (void)initTextFiled{
     UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
-    textFiled.backgroundColor = [UIColor whiteColor];
+    textFiled.backgroundColor = [ColorTool backgroundColor];
+    textFiled.textAlignment = NSTextAlignmentCenter;
+    textFiled.enabled = NO;
     self.textFiled = textFiled;
-    self.navigationController.navigationBarHidden = YES;
-    [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
-
-    
-
-
 }
+
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
@@ -104,20 +105,18 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 0) {
-        DialingViewController *dialingVC = [DialingViewController new];
-        [self presentViewController:dialingVC animated:YES completion:nil];
-    }else if (indexPath.row == 1){
-        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
-        [self.navigationController pushViewController:friDetailVC animated:YES];
-    }else{
-        [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
-    }
+    
+    DialingViewController *dialingVC = [DialingViewController new];
+    [self presentViewController:dialingVC animated:YES completion:nil];
+
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    if (indexPath.row == 1){
+//        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+//        [self.navigationController pushViewController:friDetailVC animated:YES];
+//    }
     
 }
-
 
 - (void)addressButtonClick {
     AddressViewController *controller = [[AddressViewController alloc]init];
@@ -127,7 +126,9 @@
 #pragma DialKeyboradDelegate
 - (void)keyboardShow{
     isShow = !isShow;
+    [addressButton setHidden:YES];
     [self.view addSubview:self.keyboard];
+    self.navigationItem.titleView = self.textFiled;
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
         CGFloat keyboardH = self.keyboard.frame.size.height;
@@ -137,6 +138,14 @@
 
 - (void)keyboardHidden{
     isShow = !isShow;
+    [addressButton setHidden:NO];
+    self.navigationItem.titleView = self.titleLabel;
+    NSInteger  count = labelString.length;
+    NSRange range = {0,count};
+    if (count >0) {
+        [labelString deleteCharactersInRange:range];
+        self.textFiled.text = labelString;
+    }
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
         CGFloat keyboardH = self.keyboard.frame.size.height;
@@ -163,19 +172,15 @@
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    NSLog(@"拨打");
-    //这里写拨打电话业务
+    DialingViewController *dialingVC = [DialingViewController new];
+    [self presentViewController:dialingVC animated:YES completion:nil];
+    [self keyboardHidden];
 }
 
 //点击空白收键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
        [self keyboardHidden];
 }
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

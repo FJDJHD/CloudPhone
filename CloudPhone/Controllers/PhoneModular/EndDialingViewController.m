@@ -8,6 +8,8 @@
 
 #import "EndDialingViewController.h"
 #import "Global.h"
+#import "ItelDialingViewController.h"
+#import "SpitTableViewController.h"
 @interface EndDialingViewController ()
 
 @end
@@ -103,12 +105,19 @@
             break;
             
         case 1:{
-       [self dismissViewControllerAnimated:YES completion:nil];
+            
+            UIViewController * controller = self.presentingViewController;
+            [self dismissViewControllerAnimated:NO completion:^{
+                UIViewController * c = controller.presentingViewController;
+                [controller dismissViewControllerAnimated:NO completion:^{
+                    [c dismissViewControllerAnimated:NO completion:nil];
+                }];
+            }];
         }
             break;
             
         case 2:{
-            DLog(@"2");
+            [self presentViewController:[SpitTableViewController new] animated:YES completion:nil];
         }
             break;
         default:
