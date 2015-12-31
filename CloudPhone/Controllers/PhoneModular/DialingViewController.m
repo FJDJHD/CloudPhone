@@ -9,6 +9,8 @@
 #import "DialingViewController.h"
 #import "Global.h"
 #import "DialKeyboard.h"
+#import "EndDialingViewController.h"
+#import "ItelDialingViewController.h"
 @interface DialingViewController ()<DialKeyboardDelegate>
 @property (nonatomic,strong) DialKeyboard * keyboard;
 @end
@@ -26,7 +28,7 @@
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, MainHeight - 152 - STATUS_NAV_BAR_HEIGHT, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT - 30 + 150, MainWidth, 300);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -126,14 +128,12 @@
         break;
             
         case 3:{
-            //回拨
-            DLog(@"3");
+        [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
         }
         break;
             
         case 4:{
-            //挂断
-            [self dismissViewControllerAnimated:YES completion:nil];
+        [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
         }
         break;
             

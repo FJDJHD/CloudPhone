@@ -104,7 +104,6 @@
 - (void)clickButton:(UIButton *)sender{
     [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
     
-   // [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

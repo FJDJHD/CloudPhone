@@ -1589,8 +1589,8 @@
 		B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		B4C8F1501C22CDBD00957C99 /* login_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bag@2x.png"; sourceTree = "<group>"; };
 		B4C8F1511C22CDBD00957C99 /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@3x.png"; sourceTree = "<group>"; };
-		B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpitTableViewController.h; sourceTree = "<group>"; };
-		B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpitTableViewController.m; sourceTree = "<group>"; };
+		B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpitTableViewController.h; path = ../MineModular/SpitTableViewController.h; sourceTree = "<group>"; };
+		B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpitTableViewController.m; path = ../MineModular/SpitTableViewController.m; sourceTree = "<group>"; };
 		B4D04DA51C1A8117008BD608 /* ItelDialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItelDialingViewController.h; sourceTree = "<group>"; };
 		B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItelDialingViewController.m; sourceTree = "<group>"; };
 		B4D04DA81C1AA50D008BD608 /* phone_iconcover@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_iconcover@3x.png"; sourceTree = "<group>"; };
@@ -3539,8 +3539,6 @@
 				B4BE7D0B1C0C688A00D74D49 /* HelpAndFeedbackViewController.m */,
 				B4BE7D0D1C0C68A700D74D49 /* SettingViewController.h */,
 				B4BE7D0E1C0C68A700D74D49 /* SettingViewController.m */,
-				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
-				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 			);
 			path = MineModular;
 			sourceTree = "<group>";
@@ -3560,6 +3558,8 @@
 				B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */,
 				B48D133B1C3274680027254A /* EndDialingViewController.h */,
 				B48D133C1C3274680027254A /* EndDialingViewController.m */,
+				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
+				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 			);
 			path = PhoneModular;
 			sourceTree = "<group>";
@@ -3964,7 +3964,7 @@
 				TargetAttributes = {
 					6EB2ED4A1C04684A002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = MB56WXZ49W;
+						DevelopmentTeam = 5B6A48P7YX;
 					};
 					6EB2ED631C04684B002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -4739,8 +4739,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4762,7 +4762,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4771,8 +4771,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4794,7 +4794,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
