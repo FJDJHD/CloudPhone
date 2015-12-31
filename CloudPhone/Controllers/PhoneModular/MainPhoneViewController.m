@@ -23,13 +23,13 @@
 @property (nonatomic,strong) DialKeyboard * keyboard;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textFiled;
-@property (nonatomic, strong) UILabel *label;
 @end
 
 @implementation MainPhoneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isShow = NO;
     labelString = [[NSMutableString alloc]init];
      self.automaticallyAdjustsScrollViewInsets = NO;
     //导航栏右按钮
@@ -44,17 +44,16 @@
     //添加列表试图
     [self.view addSubview:self.tableView];
     [self initDialKeyboard];
-    //isShow = NO;
-   // [self keyboardShow];
-    [self initLabel];
+    [self initTextFiled];
 }
 
-- (void)initLabel{
-    UILabel  *label= [[UILabel alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
-    label.backgroundColor = [UIColor lightGrayColor];
-    self.label = label;
+
+- (void)initTextFiled{
+    UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
+    textFiled.backgroundColor = [UIColor whiteColor];
+    self.textFiled = textFiled;
     self.navigationController.navigationBarHidden = YES;
-    [self.view insertSubview:label aboveSubview:self.navigationController.navigationBar];
+    [self.view insertSubview:self.textFiled aboveSubview:self.navigationController.navigationBar];
 }
 
 - (void)initDialKeyboard{
@@ -142,16 +141,20 @@
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
     [labelString appendString:button.titleLabel.text];
-    self.label.text = labelString;
+    self.textFiled.text = labelString;
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickDeleteBtn:(UIButton *)deleteBtn {
-    
+    NSInteger  count = labelString.length;
+    NSRange range = {count - 1,1};
+    if (count >0) {
+        [labelString deleteCharactersInRange:range];
+        self.textFiled.text = labelString;
+    }
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickRemoveBtn:(UIButton *)deleteBtn {
     [self keyboardHidden];
-   
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {

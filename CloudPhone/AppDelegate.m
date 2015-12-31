@@ -33,8 +33,10 @@
 
 #import "OpenShareHeader.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate (){
+    BOOL isShow;
+}
+@property (nonatomic, weak) UIViewController *lastSelectedViewController;
 
 - (void)setupStream;
 - (void)teardownStream;
@@ -206,11 +208,18 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
         UIViewController *vc = [viewController.viewControllers firstObject];
     if ([vc isKindOfClass:[MainPhoneViewController class]]) {
-        
-        MainPhoneViewController *tempComtroller = (MainPhoneViewController *)vc;
-        [tempComtroller keyboardShow];
-    
+        if (self.lastSelectedViewController == vc) {
+            MainPhoneViewController *tempComtroller = (MainPhoneViewController *)vc;
+            if (isShow == NO) {
+                 [tempComtroller keyboardShow];
+                isShow = YES;
+            }else{
+                [tempComtroller keyboardHidden];
+                isShow = NO;
+            }
+        }
     }
+    self.lastSelectedViewController = vc;
 }
 
 #pragma mark 注册推送通知之后

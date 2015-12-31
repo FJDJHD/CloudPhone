@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MainPhoneViewController : UIViewController
-
-
 - (void)keyboardShow;
-
+- (void)keyboardHidden;
 @end
