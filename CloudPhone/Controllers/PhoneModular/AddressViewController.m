@@ -14,6 +14,8 @@
 #import "NSString+Util.h"
 #import "UIImage+ResizeImage.h"
 #import "FriendCell.h"
+#import "AddressIconButton.h"
+
 @interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) NSMutableArray *listTitleArray;
@@ -177,6 +179,7 @@
         cell.textLabel.text = model.phonename;
         cell.detailTextLabel.text = model.tel;
         cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
+       // cell.imageView = [AddressIconButton buttonWithTitle:@"r"];
         UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];
         imageView.image = image;

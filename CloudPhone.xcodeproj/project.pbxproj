@@ -268,6 +268,7 @@
 		6E9244681C350B880012C53F /* chatView_location_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9244661C350B880012C53F /* chatView_location_map@3x.png */; };
 		6E92446B1C351DC00012C53F /* chat_fire@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9244691C351DC00012C53F /* chat_fire@2x.png */; };
 		6E92446C1C351DC00012C53F /* chat_palyVedio@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E92446A1C351DC00012C53F /* chat_palyVedio@2x.png */; };
+		6E92446F1C3528360012C53F /* AddressIconButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E92446E1C3528360012C53F /* AddressIconButton.m */; };
 		6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E98972B1C083BD500B9D9E9 /* GuidePageView.m */; };
 		6E9CBF091C23F0D600EFFF8D /* chat_addfriend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CBF071C23F0D600EFFF8D /* chat_addfriend@2x.png */; };
 		6E9CBF0A1C23F0D600EFFF8D /* chat_addfriend@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CBF081C23F0D600EFFF8D /* chat_addfriend@3x.png */; };
@@ -1032,6 +1033,8 @@
 		6E9244661C350B880012C53F /* chatView_location_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chatView_location_map@3x.png"; sourceTree = "<group>"; };
 		6E9244691C351DC00012C53F /* chat_fire@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_fire@2x.png"; sourceTree = "<group>"; };
 		6E92446A1C351DC00012C53F /* chat_palyVedio@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_palyVedio@2x.png"; sourceTree = "<group>"; };
+		6E92446D1C3528360012C53F /* AddressIconButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressIconButton.h; sourceTree = "<group>"; };
+		6E92446E1C3528360012C53F /* AddressIconButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressIconButton.m; sourceTree = "<group>"; };
 		6E98972A1C083BD500B9D9E9 /* GuidePageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuidePageView.h; sourceTree = "<group>"; };
 		6E98972B1C083BD500B9D9E9 /* GuidePageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuidePageView.m; sourceTree = "<group>"; };
 		6E9CBF071C23F0D600EFFF8D /* chat_addfriend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_addfriend@2x.png"; sourceTree = "<group>"; };
@@ -1780,6 +1783,8 @@
 				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
 				B4B126D21C2E65E300A0AAEB /* DialKeyboard.h */,
 				B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */,
+				6E92446D1C3528360012C53F /* AddressIconButton.h */,
+				6E92446E1C3528360012C53F /* AddressIconButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -4611,6 +4616,7 @@
 				6EBA8D251C15248B00BAE5DD /* XMPPOutgoingFileTransfer.m in Sources */,
 				B4B126C31C2BCB7600A0AAEB /* OpenShare+QQ.m in Sources */,
 				6EBA8D791C15248C00BAE5DD /* NSXMLElement+XEP_0203.m in Sources */,
+				6E92446F1C3528360012C53F /* AddressIconButton.m in Sources */,
 				6E7D7AE11C1934F400B42140 /* XHMessageTextView.m in Sources */,
 				6EB2ED501C04684A002799BD /* main.m in Sources */,
 				6EBA8D7B1C15248C00BAE5DD /* XMPPAttentionModule.m in Sources */,
