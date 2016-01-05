@@ -85,6 +85,13 @@
 - (void)addOpenfireFriendOfParams:(NSDictionary *)params
                         WithBlock:(void (^)(id data, NSError *error))block;
 
+//回拨
+- (void)callBackOfParams:(NSDictionary *)params
+               WithBlock:(void (^)(id data, NSError *error))block;
+
+//链接通话平台
+- (void)linkRongLianInfoOfParams:(NSDictionary *)params
+                       WithBlock:(void (^)(id data, NSError *error))block;
 
 
 @end

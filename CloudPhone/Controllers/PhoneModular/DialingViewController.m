@@ -11,6 +11,11 @@
 #import "DialKeyboard.h"
 #import "EndDialingViewController.h"
 #import "ItelDialingViewController.h"
+
+#import "AppDelegate.h"
+#import "ECDeviceHeaders.h"
+#import "DeviceDelegateHelper.h"
+#import "DeviceDelegateHelper+VoIP.h"
 @interface DialingViewController ()<DialKeyboardDelegate>
 @property (nonatomic,strong) DialKeyboard * keyboard;
 @end
@@ -19,11 +24,61 @@
     BOOL isShow;
 }
 
+- (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo andCallType:(NSInteger)type
+{
+    if (self = [super init])
+    {
+        self.callerName = name;
+        self.callerNo = phoneNo;
+        self.voipNo = voipNo;
+        hhInt = 0;
+        mmInt = 0;
+        ssInt = 0;
+        isLouder = NO;
+        voipCallType = type;
+        [ [ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:isLouder];
+        return self;
+    }
+    
+    return nil;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDailingUI];
     [self initDialKeyboard];
      isShow = NO;
+    
+    //直拨
+    self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+    if (self.callID.length <= 0)//获取CallID失败，即拨打失败
+    {
+    }
+    
+    //网络WiFi电话
+    //    NSDictionary *dic = @{@"imei":[UniqueUDID shareInstance].udid,@"re_mobile":@"13049340993"};
+    //    [[AirCloudNetAPIManager sharedManager] linkRongLianInfoOfParams:dic WithBlock:^(id data, NSError *error){
+    //        if (!error) {
+    //            NSDictionary *dic = (NSDictionary *)data;
+    //            NSDictionary *info = [dic objectForKey:@"data"];
+    //            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+    //                self.sub_account_sid = [info objectForKey:@"sub_account_sid"];
+    //                self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:self.sub_account_sid];
+    //                if (self.callID.length <= 0)//获取CallID失败，即拨打失败
+    //                {
+    //                }
+    //            } else {
+    //                DLog(@"******%@",[dic objectForKey:@"msg"]);
+    //            }
+    //        }
+    //    }];
+    
+    //    self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:@"0aa4e434af9f11e59288ac853d9f54f2"];
+    //    if (self.callID.length <= 0)//获取CallID失败，即拨打失败
+    //    {
+    //    }
+    
 }
 
 - (void)initDialKeyboard{
@@ -133,7 +188,8 @@
         break;
             
         case 4:{
-        [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
+           // [[ECDevice sharedInstance].VoIPManager releaseCall:self.callerNo];
+            [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
         }
         break;
             

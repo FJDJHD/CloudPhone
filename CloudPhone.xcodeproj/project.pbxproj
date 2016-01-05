@@ -278,7 +278,7 @@
 		6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643A1C0EE44A00650524 /* PersonModel.m */; };
 		6EA4643F1C0EE46B00650524 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643E1C0EE46B00650524 /* UserModel.m */; };
 		6EB2ED501C04684A002799BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED4F1C04684A002799BD /* main.m */; };
-		6EB2ED531C04684A002799BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED521C04684A002799BD /* AppDelegate.m */; };
+		6EB2ED531C04684A002799BD /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED521C04684A002799BD /* AppDelegate.mm */; };
 		6EB2ED5B1C04684A002799BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EB2ED5A1C04684A002799BD /* Assets.xcassets */; };
 		6EB2ED691C04684B002799BD /* CloudPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED681C04684B002799BD /* CloudPhoneTests.m */; };
 		6EB2ED741C04684B002799BD /* CloudPhoneUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB2ED731C04684B002799BD /* CloudPhoneUITests.m */; };
@@ -640,6 +640,8 @@
 		B4DEF6E51C06F9470001407D /* UIColor+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6E41C06F9470001407D /* UIColor+Category.m */; };
 		B4DEF6E81C06FC3D0001407D /* ColorTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6E71C06FC3D0001407D /* ColorTool.m */; };
 		B4E5E0881C3B89E200172834 /* CCPSDKBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B4E5E04D1C3B89E200172834 /* CCPSDKBundle.bundle */; };
+		B4E5E08F1C3B8CD500172834 /* DeviceDelegateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E5E08C1C3B8CD500172834 /* DeviceDelegateHelper.m */; };
+		B4E5E0901C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E5E08E1C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1053,7 +1055,7 @@
 		6EB2ED4B1C04684A002799BD /* CloudPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EB2ED4F1C04684A002799BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6EB2ED511C04684A002799BD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		6EB2ED521C04684A002799BD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		6EB2ED521C04684A002799BD /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		6EB2ED5A1C04684A002799BD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EB2ED5F1C04684A002799BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EB2ED641C04684B002799BD /* CloudPhoneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudPhoneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1705,6 +1707,10 @@
 		B4E5E0851C3B89E200172834 /* ECVoiceMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoiceMessageBody.h; sourceTree = "<group>"; };
 		B4E5E0861C3B89E200172834 /* NetworkStatistic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkStatistic.h; sourceTree = "<group>"; };
 		B4E5E0871C3B89E200172834 /* VoipCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoipCall.h; sourceTree = "<group>"; };
+		B4E5E08B1C3B8CD500172834 /* DeviceDelegateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceDelegateHelper.h; sourceTree = "<group>"; };
+		B4E5E08C1C3B8CD500172834 /* DeviceDelegateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceDelegateHelper.m; sourceTree = "<group>"; };
+		B4E5E08D1C3B8CD500172834 /* DeviceDelegateHelper+VoIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeviceDelegateHelper+VoIP.h"; sourceTree = "<group>"; };
+		B4E5E08E1C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DeviceDelegateHelper+VoIP.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2595,6 +2601,10 @@
 		6EA464391C0EE43B00650524 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B4E5E08B1C3B8CD500172834 /* DeviceDelegateHelper.h */,
+				B4E5E08C1C3B8CD500172834 /* DeviceDelegateHelper.m */,
+				B4E5E08D1C3B8CD500172834 /* DeviceDelegateHelper+VoIP.h */,
+				B4E5E08E1C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m */,
 				6EA4643B1C0EE44A00650524 /* PersonModel.h */,
 				6EA4643A1C0EE44A00650524 /* PersonModel.m */,
 				6EA4643D1C0EE46B00650524 /* UserModel.h */,
@@ -2628,7 +2638,7 @@
 			isa = PBXGroup;
 			children = (
 				6EB2ED511C04684A002799BD /* AppDelegate.h */,
-				6EB2ED521C04684A002799BD /* AppDelegate.m */,
+				6EB2ED521C04684A002799BD /* AppDelegate.mm */,
 				6E4D36DF1C055D93001573E3 /* Global */,
 				6EA464391C0EE43B00650524 /* Models */,
 				6E4D36E71C055EAE001573E3 /* Views */,
@@ -4126,7 +4136,7 @@
 				TargetAttributes = {
 					6EB2ED4A1C04684A002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = MB56WXZ49W;
+						DevelopmentTeam = 5B6A48P7YX;
 					};
 					6EB2ED631C04684B002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -4588,6 +4598,7 @@
 				6E4D37241C0561A2001573E3 /* AFHTTPRequestOperation.m in Sources */,
 				6EBA8D1A1C15248B00BAE5DD /* XMPPIQ.m in Sources */,
 				6EBA8D441C15248B00BAE5DD /* XMPPMessage+XEP0045.m in Sources */,
+				B4E5E08F1C3B8CD500172834 /* DeviceDelegateHelper.m in Sources */,
 				6EBA8D171C15248B00BAE5DD /* NSXMLElement+XMPP.m in Sources */,
 				6EBA8D6B1C15248B00BAE5DD /* XMPPMessageArchiving.m in Sources */,
 				6E4D372E1C0561A2001573E3 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -4601,6 +4612,7 @@
 				6EBA8D561C15248B00BAE5DD /* XMPPIQ+XEP_0060.m in Sources */,
 				6EBA8D5C1C15248B00BAE5DD /* NSDate+XMPPDateTimeProfiles.m in Sources */,
 				6E9CBF0D1C24002300EFFF8D /* ItelFriendModel.m in Sources */,
+				B4E5E0901C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m in Sources */,
 				6E4D37A81C0568B1001573E3 /* MJRefreshConst.m in Sources */,
 				6EBA8D0D1C15248B00BAE5DD /* XMPPAnonymousAuthentication.m in Sources */,
 				6EBA8D2A1C15248B00BAE5DD /* XMPPResourceCoreDataStorageObject.m in Sources */,
@@ -4641,7 +4653,7 @@
 				6EBA8D551C15248B00BAE5DD /* XMPPResultSet.m in Sources */,
 				6EBA8D5F1C15248B00BAE5DD /* XMPPSoftwareVersion.m in Sources */,
 				6EBA8D591C15248B00BAE5DD /* XMPPIQ+XEP_0066.m in Sources */,
-				6EB2ED531C04684A002799BD /* AppDelegate.m in Sources */,
+				6EB2ED531C04684A002799BD /* AppDelegate.mm in Sources */,
 				6EBA8D641C15248B00BAE5DD /* XMPPCapsCoreDataStorageObject.m in Sources */,
 				6EBA8D301C15248B00BAE5DD /* XMPPUserMemoryStorageObject.m in Sources */,
 				6EBA8D8F1C15248C00BAE5DD /* DDTTYLogger.m in Sources */,
@@ -4903,8 +4915,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4919,6 +4932,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/UMSocial_Sdk_4.4",
+					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -4926,7 +4940,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4935,8 +4949,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4951,6 +4966,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/CloudPhone/Controllers/ChatModular/ChatTools/MessageToolbar/MessageToolBarBottomView/RecordView/DeviceUtil/VoiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/UMSocial_Sdk_4.4",
+					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -4958,7 +4974,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -63,4 +63,11 @@
 //openfire  添加好友
 #define API_addFriend                                   @"?s=/Home/Openfire/upRosterStatus"
 
+//回拨
+#define API_callBack                                    @"?s=/Home/CCPRest/callBack"
+
+//链接通话平台
+#define API_linkRongLian                                @"?s=/Home/CCPRest/subInfo"
+
+
 #endif

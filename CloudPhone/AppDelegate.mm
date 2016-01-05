@@ -87,7 +87,11 @@
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
-//    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+    
+    //注册融云SDK
+    [ECDevice sharedInstance].delegate = [DeviceDelegateHelper sharedInstance];
+    [self requestLinkRongLianInfo];
+
     
     [self.window makeKeyAndVisible];
     return YES;
@@ -625,6 +629,35 @@
     }
     return unreadFlag;
 }
+
+- (void)requestLinkRongLianInfo {
+    NSDictionary *dic = @{@"imei":[UniqueUDID shareInstance].udid};
+    [[AirCloudNetAPIManager sharedManager] linkRongLianInfoOfParams:dic WithBlock:^(id data, NSError *error){
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            NSDictionary *info = [dic objectForKey:@"data"];
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                ECLoginInfo * loginInfo = [[ECLoginInfo alloc] init];
+                loginInfo.username = [info objectForKey:@"sub_account_sid"];//用户登录app的用户id即可。
+                loginInfo.appKey = [info objectForKey:@"appKey"];
+                loginInfo.appToken = [info objectForKey:@"appToken"];
+                loginInfo.authType = LoginAuthType_NormalAuth;//默认方式登录
+                loginInfo.mode = LoginMode_InputPassword;
+                [[ECDevice sharedInstance] login:loginInfo completion:^(ECError *error){
+                    if (error.errorCode == ECErrorType_NoError) {
+                        DLog(@"荣联平台链接成功");
+                    }else{
+                        DLog(@"荣联平台链接失败");
+                        NSLog(@"%@, %@, %@",loginInfo.username,loginInfo.appKey,loginInfo.appToken);
+                    }
+                }];
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+            }
+        }
+    }];
+}
+
 
 
 #pragma mark - 应用程序生命周期

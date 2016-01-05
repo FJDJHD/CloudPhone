@@ -231,5 +231,24 @@
 
 }
 
+//回拨
+- (void)callBackOfParams:(NSDictionary *)params
+               WithBlock:(void (^)(id data, NSError *error))block{
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_callBack serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+    
+}
+
+//链接电话平台信息
+- (void)linkRongLianInfoOfParams:(NSDictionary *)params
+                       WithBlock:(void (^)(id data, NSError *error))block{
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_linkRongLian serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+    
+}
+
+
 
 @end

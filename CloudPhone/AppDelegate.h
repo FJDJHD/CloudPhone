@@ -14,7 +14,9 @@
 #import "XMPPAutoPing.h"
 #import "XMPPMessageDeliveryReceipts.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate,XMPPAutoPingDelegate,UIAlertViewDelegate> {
+#import "ECDeviceHeaders.h"
+#import "DeviceDelegateHelper.h"
+@interface AppDelegate : UIResponder <UIApplicationDelegate,XMPPRosterDelegate,XMPPStreamDelegate,XMPPAutoPingDelegate,UIAlertViewDelegate,UITabBarControllerDelegate> {
 
     XMPPStream *xmppStream;         //xmpp基础服务类
     XMPPReconnect *xmppReconnect;   //如果失去连接,自动重连

@@ -171,8 +171,11 @@
     [self keyboardHidden];
 }
 
+//拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    DialingViewController *dialingVC = [DialingViewController new];
+    
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:nil andCallerNo:labelString andVoipNo:labelString andCallType:0];
+    
     [self presentViewController:dialingVC animated:YES completion:nil];
     [self keyboardHidden];
 }

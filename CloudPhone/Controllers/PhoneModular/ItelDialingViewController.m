@@ -18,7 +18,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDailingUI];
+    
+     // [self requestCallBack];
 }
+
+- (void)requestCallBack {
+    NSDictionary *dic = @{@"to_mobile":@"13113689077",@"imei":[UniqueUDID shareInstance].udid};
+    [[AirCloudNetAPIManager sharedManager] callBackOfParams:dic WithBlock:^(id data, NSError *error){
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                DLog(@"回拨成功------%@",[dic objectForKey:@"msg"]);
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+            }
+        }
+    }];
+}
+
 
 - (void)initDailingUI{
     UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_bg"]];
