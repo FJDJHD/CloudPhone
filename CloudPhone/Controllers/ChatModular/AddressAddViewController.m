@@ -144,18 +144,35 @@
         cell.detailTextLabel.textColor = RGB(102, 102, 102);
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
         
-//        AddressIconButton *button = [AddressIconButton buttonWithTitle:@""];
-//        button.tag = 550;
-//        [cell addSubview:button];
+        AddressIconButton *button = [AddressIconButton buttonWithTitle:@""];
+        button.tag = 550;
+        [cell addSubview:button];
+        
+        UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMinY(button.frame) + 2, 150, 20)];
+        title.tag = 551;
+        title.textColor = [UIColor blackColor];
+        title.font = [UIFont systemFontOfSize:15.0];
+        [cell addSubview:title];
+        
+        UILabel *subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
+        subtitle.tag = 552;
+        subtitle.textColor = RGB(102, 102, 102);
+        subtitle.font = [UIFont systemFontOfSize:13.0];
+        [cell addSubview:subtitle];
+        
     }
     
-    cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+//    cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
 
     cell.accessoryView = nil;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             UITableViewCell *textcell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"text"];
-            textcell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+//            textcell.imageView.image = [UIImage imageNamed:@"mine_icon"];
+            
+            AddressIconButton *button = [AddressIconButton buttonWithTitle:@"＋"];
+            button.tag = 580;
+            [textcell addSubview:button];
 
             UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(70, 0, MainWidth - 80, 60)];
             textField.placeholder = @"输入添加新的好友号码";
@@ -171,13 +188,25 @@
             if (_addArray.count > 0) {
                 AddFriendModel *model = [_addArray objectAtIndex:indexPath.row - 1];
                 NSArray *array = [model.jidStr componentsSeparatedByString:XMPPSevser]; //从字符A中分隔成2个元素的数组
-                cell.textLabel.text = array[0] ? array[0] : @"";
-                cell.detailTextLabel.text = @"请求添加好友";
+                UILabel *titleLab = (UILabel *)[cell viewWithTag:551];
+                UILabel *subtitleLab = (UILabel *)[cell viewWithTag:552];
+                titleLab.text = array[0] ? array[0] : @"";
+                subtitleLab.text = @"请求添加好友";
+                
+                AddressIconButton *button = [cell viewWithTag:550];
+                if (titleLab.text.length > 0) {
+                    [button setTitle:[titleLab.text substringToIndex:1] forState:UIControlStateNormal];
+                } else {
+                    [button setTitle:@"" forState:UIControlStateNormal];
+                }
+                
                 if ([model.status isEqualToString:@"unagree"]) {
                     cell.accessoryView = [self statusButtonWithTitle:@"同意"];
                 } else {
                     cell.accessoryView = [self statusButtonWithTitle:@"已添加"];
                 }
+                
+              
             }
         }
         
@@ -185,14 +214,21 @@
         //itel 好友 (好友)
         if (_friendArray.count > 0) {
             ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
-            cell.textLabel.text = model.userName;
-            cell.detailTextLabel.text = model.mobile;
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+            
             cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
-//            AddressIconButton *button = [cell viewWithTag:550];
-//            if (model.userName.length > 0) {
-//                [button setTitle:model.userName. forState:UIControlStateNormal];
-//
-//            }
+        
             
         }
         
@@ -200,18 +236,43 @@
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
             ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
-            cell.textLabel.text = model.userName;
-            cell.detailTextLabel.text = model.mobile;
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+            
             cell.accessoryView = [self statusButtonWithTitle:@"加为好友"];
+            
+           
         }
         
     } else {
         //通讯录 （邀请）
         if (_addressArray.count > 0) {
             ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
-            cell.textLabel.text = model.userName;
-            cell.detailTextLabel.text = model.mobile;
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+
+            
             cell.accessoryView = [self statusButtonWithTitle:@"邀请"];
+            
         }
     }
     return cell;
