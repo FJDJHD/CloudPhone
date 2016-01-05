@@ -639,6 +639,7 @@
 		B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DD1C06E4920001407D /* ResetPasswordViewController.m */; };
 		B4DEF6E51C06F9470001407D /* UIColor+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6E41C06F9470001407D /* UIColor+Category.m */; };
 		B4DEF6E81C06FC3D0001407D /* ColorTool.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6E71C06FC3D0001407D /* ColorTool.m */; };
+		B4E5E0881C3B89E200172834 /* CCPSDKBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B4E5E04D1C3B89E200172834 /* CCPSDKBundle.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1650,6 +1651,60 @@
 		B4DEF6E41C06F9470001407D /* UIColor+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Category.m"; path = "../../Global/UIColor+Category.m"; sourceTree = "<group>"; };
 		B4DEF6E61C06FC3D0001407D /* ColorTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorTool.h; sourceTree = "<group>"; };
 		B4DEF6E71C06FC3D0001407D /* ColorTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorTool.m; sourceTree = "<group>"; };
+		B4E5E04D1C3B89E200172834 /* CCPSDKBundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CCPSDKBundle.bundle; sourceTree = "<group>"; };
+		B4E5E04F1C3B89E200172834 /* ECChatDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECChatDelegate.h; sourceTree = "<group>"; };
+		B4E5E0501C3B89E200172834 /* ECDelegateBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDelegateBase.h; sourceTree = "<group>"; };
+		B4E5E0511C3B89E200172834 /* ECDeskDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDeskDelegate.h; sourceTree = "<group>"; };
+		B4E5E0521C3B89E200172834 /* ECGroupDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupDelegate.h; sourceTree = "<group>"; };
+		B4E5E0531C3B89E200172834 /* ECMeetingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMeetingDelegate.h; sourceTree = "<group>"; };
+		B4E5E0541C3B89E200172834 /* ECMessageDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMessageDelegate.h; sourceTree = "<group>"; };
+		B4E5E0551C3B89E200172834 /* ECNetworkDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECNetworkDelegate.h; sourceTree = "<group>"; };
+		B4E5E0561C3B89E200172834 /* ECSystemDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSystemDelegate.h; sourceTree = "<group>"; };
+		B4E5E0571C3B89E200172834 /* ECVoIPCallDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoIPCallDelegate.h; sourceTree = "<group>"; };
+		B4E5E0581C3B89E200172834 /* ECDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDevice.h; sourceTree = "<group>"; };
+		B4E5E0591C3B89E200172834 /* ECDeviceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDeviceDelegate.h; sourceTree = "<group>"; };
+		B4E5E05A1C3B89E200172834 /* ECDeviceHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDeviceHeaders.h; sourceTree = "<group>"; };
+		B4E5E05C1C3B89E200172834 /* ECEnumDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECEnumDefs.h; sourceTree = "<group>"; };
+		B4E5E05F1C3B89E200172834 /* ECChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECChatManager.h; sourceTree = "<group>"; };
+		B4E5E0601C3B89E200172834 /* ECDeskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDeskManager.h; sourceTree = "<group>"; };
+		B4E5E0611C3B89E200172834 /* ECGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupManager.h; sourceTree = "<group>"; };
+		B4E5E0621C3B89E200172834 /* ECManagerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECManagerBase.h; sourceTree = "<group>"; };
+		B4E5E0631C3B89E200172834 /* ECMeetingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMeetingManager.h; sourceTree = "<group>"; };
+		B4E5E0641C3B89E200172834 /* ECMessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMessageManager.h; sourceTree = "<group>"; };
+		B4E5E0651C3B89E200172834 /* ECVoIPCallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoIPCallManager.h; sourceTree = "<group>"; };
+		B4E5E0661C3B89E200172834 /* ECVoIPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoIPManager.h; sourceTree = "<group>"; };
+		B4E5E0671C3B89E200172834 /* ECVoIPSetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoIPSetManager.h; sourceTree = "<group>"; };
+		B4E5E0691C3B89E200172834 /* CameraDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraDeviceInfo.h; sourceTree = "<group>"; };
+		B4E5E06A1C3B89E200172834 /* ECAudioConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECAudioConfig.h; sourceTree = "<group>"; };
+		B4E5E06B1C3B89E200172834 /* ECCallMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECCallMessageBody.h; sourceTree = "<group>"; };
+		B4E5E06C1C3B89E200172834 /* ECCreateMeetingParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECCreateMeetingParams.h; sourceTree = "<group>"; };
+		B4E5E06D1C3B89E200172834 /* ECError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECError.h; sourceTree = "<group>"; };
+		B4E5E06E1C3B89E200172834 /* ECFileMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECFileMessageBody.h; sourceTree = "<group>"; };
+		B4E5E06F1C3B89E200172834 /* ECGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroup.h; sourceTree = "<group>"; };
+		B4E5E0701C3B89E200172834 /* ECGroupMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupMatch.h; sourceTree = "<group>"; };
+		B4E5E0711C3B89E200172834 /* ECGroupMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupMember.h; sourceTree = "<group>"; };
+		B4E5E0721C3B89E200172834 /* ECGroupNoticeMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupNoticeMessage.h; sourceTree = "<group>"; };
+		B4E5E0731C3B89E200172834 /* ECGroupOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECGroupOption.h; sourceTree = "<group>"; };
+		B4E5E0741C3B89E200172834 /* ECImageMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECImageMessageBody.h; sourceTree = "<group>"; };
+		B4E5E0751C3B89E200172834 /* ECInterphoneMeetingMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECInterphoneMeetingMsg.h; sourceTree = "<group>"; };
+		B4E5E0761C3B89E200172834 /* ECLocationMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECLocationMessageBody.h; sourceTree = "<group>"; };
+		B4E5E0771C3B89E200172834 /* ECLoginInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECLoginInfo.h; sourceTree = "<group>"; };
+		B4E5E0781C3B89E200172834 /* ECMeetingMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMeetingMember.h; sourceTree = "<group>"; };
+		B4E5E0791C3B89E200172834 /* ECMeetingRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMeetingRoom.h; sourceTree = "<group>"; };
+		B4E5E07A1C3B89E200172834 /* ECMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMessage.h; sourceTree = "<group>"; };
+		B4E5E07B1C3B89E200172834 /* ECMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMessageBody.h; sourceTree = "<group>"; };
+		B4E5E07C1C3B89E200172834 /* ECMessageNotifyMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMessageNotifyMsg.h; sourceTree = "<group>"; };
+		B4E5E07D1C3B89E200172834 /* ECMultiVideoMeetingMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMultiVideoMeetingMsg.h; sourceTree = "<group>"; };
+		B4E5E07E1C3B89E200172834 /* ECMultiVoiceMeetingMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECMultiVoiceMeetingMsg.h; sourceTree = "<group>"; };
+		B4E5E07F1C3B89E200172834 /* ECPersonInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECPersonInfo.h; sourceTree = "<group>"; };
+		B4E5E0801C3B89E200172834 /* ECProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECProgressDelegate.h; sourceTree = "<group>"; };
+		B4E5E0811C3B89E200172834 /* ECSountTouchConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSountTouchConfig.h; sourceTree = "<group>"; };
+		B4E5E0821C3B89E200172834 /* ECTextMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECTextMessageBody.h; sourceTree = "<group>"; };
+		B4E5E0831C3B89E200172834 /* ECUserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECUserState.h; sourceTree = "<group>"; };
+		B4E5E0841C3B89E200172834 /* ECVideoMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVideoMessageBody.h; sourceTree = "<group>"; };
+		B4E5E0851C3B89E200172834 /* ECVoiceMessageBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECVoiceMessageBody.h; sourceTree = "<group>"; };
+		B4E5E0861C3B89E200172834 /* NetworkStatistic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkStatistic.h; sourceTree = "<group>"; };
+		B4E5E0871C3B89E200172834 /* VoipCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoipCall.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1804,6 +1859,7 @@
 		6E4D36E91C055F03001573E3 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B4E5E04C1C3B89E200172834 /* Yuntx_FullLib_SDK */,
 				6EC98C321C3144B5002A4666 /* MWPhotoBrowser */,
 				B4B126B41C2BCB7600A0AAEB /* openshare */,
 				6E9CBF0E1C2413A600EFFF8D /* JsonKit */,
@@ -3902,6 +3958,107 @@
 			path = dialing;
 			sourceTree = "<group>";
 		};
+		B4E5E04C1C3B89E200172834 /* Yuntx_FullLib_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				B4E5E04D1C3B89E200172834 /* CCPSDKBundle.bundle */,
+				B4E5E04E1C3B89E200172834 /* Delegate */,
+				B4E5E0581C3B89E200172834 /* ECDevice.h */,
+				B4E5E0591C3B89E200172834 /* ECDeviceDelegate.h */,
+				B4E5E05A1C3B89E200172834 /* ECDeviceHeaders.h */,
+				B4E5E05B1C3B89E200172834 /* enums */,
+				B4E5E05D1C3B89E200172834 /* lib */,
+				B4E5E05E1C3B89E200172834 /* Manager */,
+				B4E5E0681C3B89E200172834 /* types */,
+			);
+			path = Yuntx_FullLib_SDK;
+			sourceTree = "<group>";
+		};
+		B4E5E04E1C3B89E200172834 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				B4E5E04F1C3B89E200172834 /* ECChatDelegate.h */,
+				B4E5E0501C3B89E200172834 /* ECDelegateBase.h */,
+				B4E5E0511C3B89E200172834 /* ECDeskDelegate.h */,
+				B4E5E0521C3B89E200172834 /* ECGroupDelegate.h */,
+				B4E5E0531C3B89E200172834 /* ECMeetingDelegate.h */,
+				B4E5E0541C3B89E200172834 /* ECMessageDelegate.h */,
+				B4E5E0551C3B89E200172834 /* ECNetworkDelegate.h */,
+				B4E5E0561C3B89E200172834 /* ECSystemDelegate.h */,
+				B4E5E0571C3B89E200172834 /* ECVoIPCallDelegate.h */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		B4E5E05B1C3B89E200172834 /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				B4E5E05C1C3B89E200172834 /* ECEnumDefs.h */,
+			);
+			path = enums;
+			sourceTree = "<group>";
+		};
+		B4E5E05D1C3B89E200172834 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		B4E5E05E1C3B89E200172834 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				B4E5E05F1C3B89E200172834 /* ECChatManager.h */,
+				B4E5E0601C3B89E200172834 /* ECDeskManager.h */,
+				B4E5E0611C3B89E200172834 /* ECGroupManager.h */,
+				B4E5E0621C3B89E200172834 /* ECManagerBase.h */,
+				B4E5E0631C3B89E200172834 /* ECMeetingManager.h */,
+				B4E5E0641C3B89E200172834 /* ECMessageManager.h */,
+				B4E5E0651C3B89E200172834 /* ECVoIPCallManager.h */,
+				B4E5E0661C3B89E200172834 /* ECVoIPManager.h */,
+				B4E5E0671C3B89E200172834 /* ECVoIPSetManager.h */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		B4E5E0681C3B89E200172834 /* types */ = {
+			isa = PBXGroup;
+			children = (
+				B4E5E0691C3B89E200172834 /* CameraDeviceInfo.h */,
+				B4E5E06A1C3B89E200172834 /* ECAudioConfig.h */,
+				B4E5E06B1C3B89E200172834 /* ECCallMessageBody.h */,
+				B4E5E06C1C3B89E200172834 /* ECCreateMeetingParams.h */,
+				B4E5E06D1C3B89E200172834 /* ECError.h */,
+				B4E5E06E1C3B89E200172834 /* ECFileMessageBody.h */,
+				B4E5E06F1C3B89E200172834 /* ECGroup.h */,
+				B4E5E0701C3B89E200172834 /* ECGroupMatch.h */,
+				B4E5E0711C3B89E200172834 /* ECGroupMember.h */,
+				B4E5E0721C3B89E200172834 /* ECGroupNoticeMessage.h */,
+				B4E5E0731C3B89E200172834 /* ECGroupOption.h */,
+				B4E5E0741C3B89E200172834 /* ECImageMessageBody.h */,
+				B4E5E0751C3B89E200172834 /* ECInterphoneMeetingMsg.h */,
+				B4E5E0761C3B89E200172834 /* ECLocationMessageBody.h */,
+				B4E5E0771C3B89E200172834 /* ECLoginInfo.h */,
+				B4E5E0781C3B89E200172834 /* ECMeetingMember.h */,
+				B4E5E0791C3B89E200172834 /* ECMeetingRoom.h */,
+				B4E5E07A1C3B89E200172834 /* ECMessage.h */,
+				B4E5E07B1C3B89E200172834 /* ECMessageBody.h */,
+				B4E5E07C1C3B89E200172834 /* ECMessageNotifyMsg.h */,
+				B4E5E07D1C3B89E200172834 /* ECMultiVideoMeetingMsg.h */,
+				B4E5E07E1C3B89E200172834 /* ECMultiVoiceMeetingMsg.h */,
+				B4E5E07F1C3B89E200172834 /* ECPersonInfo.h */,
+				B4E5E0801C3B89E200172834 /* ECProgressDelegate.h */,
+				B4E5E0811C3B89E200172834 /* ECSountTouchConfig.h */,
+				B4E5E0821C3B89E200172834 /* ECTextMessageBody.h */,
+				B4E5E0831C3B89E200172834 /* ECUserState.h */,
+				B4E5E0841C3B89E200172834 /* ECVideoMessageBody.h */,
+				B4E5E0851C3B89E200172834 /* ECVoiceMessageBody.h */,
+				B4E5E0861C3B89E200172834 /* NetworkStatistic.h */,
+				B4E5E0871C3B89E200172834 /* VoipCall.h */,
+			);
+			path = types;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4016,6 +4173,7 @@
 				6E7D7A461C192CCC00B42140 /* faceDelete.png in Resources */,
 				6E9CBF091C23F0D600EFFF8D /* chat_addfriend@2x.png in Resources */,
 				B497DDE01C183EF200AF9BEB /* mine_weixin@3x.png in Resources */,
+				B4E5E0881C3B89E200172834 /* CCPSDKBundle.bundle in Resources */,
 				6E7D7A5B1C192CCC00B42140 /* chatBar_recordSelected@2x.png in Resources */,
 				B4C8F1531C22CDBD00957C99 /* login_bg@3x.png in Resources */,
 				B44E90EF1C103FC500CFC003 /* welcome@2x.png in Resources */,
