@@ -77,6 +77,7 @@
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
     
 
+    //有好友添加的小红点
     _unreadAddLabel = [[UILabel alloc]init];
     _unreadAddLabel.frame = CGRectMake(addressButton.frame.size.width-20, 8, 10, 10);
     _unreadAddLabel.tag = 1400;

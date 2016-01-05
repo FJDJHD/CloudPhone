@@ -14,6 +14,7 @@
 #import "ItelFriendModel.h"
 #import "JSONKit.h"
 #import "AddFriendModel.h"
+#import "AddressIconButton.h"
 
 @interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 
@@ -142,6 +143,10 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
         cell.detailTextLabel.textColor = RGB(102, 102, 102);
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+        
+//        AddressIconButton *button = [AddressIconButton buttonWithTitle:@""];
+//        button.tag = 550;
+//        [cell addSubview:button];
     }
     
     cell.imageView.image = [UIImage imageNamed:@"mine_icon"];
@@ -177,13 +182,18 @@
         }
         
     } else if (indexPath.section == 1) {
-
         //itel 好友 (好友)
         if (_friendArray.count > 0) {
             ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
             cell.textLabel.text = model.userName;
             cell.detailTextLabel.text = model.mobile;
             cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
+//            AddressIconButton *button = [cell viewWithTag:550];
+//            if (model.userName.length > 0) {
+//                [button setTitle:model.userName. forState:UIControlStateNormal];
+//
+//            }
+            
         }
         
     } else if (indexPath.section == 2) {

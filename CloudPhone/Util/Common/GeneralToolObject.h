@@ -52,4 +52,10 @@
 
 //返回一个纯色图片
 + (UIImage *)imageWithColor:(UIColor *)color;
+
+
+
+//时间转化成几分钟前
++ (NSString *)compareCurrentTime:(NSDate *)compareDate;
+
 @end

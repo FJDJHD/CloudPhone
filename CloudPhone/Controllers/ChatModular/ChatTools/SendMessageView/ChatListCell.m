@@ -24,19 +24,24 @@
         _iconImageView.frame = CGRectMake(15, (60 - ChatIconSize)/2.0, ChatIconSize, ChatIconSize);
         [self addSubview:_iconImageView];
         
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_iconImageView.frame) + 10, CGRectGetMinY(_iconImageView.frame) + 5, 200, 20)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_iconImageView.frame) + 10, CGRectGetMinY(_iconImageView.frame) + 2, 200, 20)];
         _nameLabel.font = [UIFont systemFontOfSize:17];
         _nameLabel.textColor = [UIColor blackColor];
         [self addSubview:_nameLabel];
         
-        _lastMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame), 100, 20)];
+        _lastMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame)+2, 100, 20)];
         _lastMessageLabel.font = [UIFont systemFontOfSize:13];
         _lastMessageLabel.textColor = [UIColor grayColor];
         [self addSubview:_lastMessageLabel];
         
+        _timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(MainWidth - 70, CGRectGetMinY(_iconImageView.frame) + 3, 60, 18)];
+        _timeLabel.font = [UIFont systemFontOfSize:12];
+        _timeLabel.textAlignment = NSTextAlignmentRight;
+        _timeLabel.textColor = [UIColor grayColor];
+        [self addSubview:_timeLabel];
+        
         //小红点
-        CGRect chatNotifyLabelRect = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 18, 18);
-        _unreadLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
+        _unreadLabel = [[UILabel alloc]init];
         _unreadLabel.layer.cornerRadius = 9;
         _unreadLabel.clipsToBounds = YES;
         _unreadLabel.textAlignment = NSTextAlignmentCenter;
@@ -66,15 +71,21 @@
         if (0 < tempUnread && tempUnread <= 99) {
             _unreadLabel.hidden = NO;
             _unreadLabel.text = unread;
-            _unreadLabel.frame = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 18, 18);
+            _unreadLabel.frame = CGRectMake(MainWidth - 30, (60 - 18)/2.0 + 10, 18, 18);
         } else if (tempUnread > 99) {
             _unreadLabel.hidden = NO;
-            _unreadLabel.frame = CGRectMake(MainWidth - 35, (60 - 18)/2.0, 24, 18);
+            _unreadLabel.frame = CGRectMake(MainWidth - 36, (60 - 18)/2.0 + 10, 24, 18);
             _unreadLabel.text = @"99+";
         } else {
             _unreadLabel.hidden = YES;
         }
         
+        //时间
+        NSTimeInterval timeInt = [[temp objectAtIndex:message_time] integerValue];
+        NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeInt];
+        _timeLabel.text = [GeneralToolObject compareCurrentTime:date];
+        
+
         //头像
         XMPPJID *jid = [XMPPJID jidWithString:[temp objectAtIndex:message_id]];
         UIImage *image = [ChatSendHelper getPhotoWithJID:jid];
@@ -85,7 +96,10 @@
 
 
 
-
+//加上8小时
+//        NSTimeZone *zone = [NSTimeZone systemTimeZone];
+//        NSInteger interval = [zone secondsFromGMTForDate:date];
+//        NSDate *localeDate = [date  dateByAddingTimeInterval:interval];
 
 
 

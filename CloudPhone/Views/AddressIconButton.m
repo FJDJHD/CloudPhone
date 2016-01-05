@@ -19,8 +19,8 @@
 
 - (instancetype)initButtonWithTitle:(NSString *)str {
     AddressIconButton *button = [AddressIconButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, 45, 45);
-    button.layer.cornerRadius = 45/2.0;
+    button.frame = CGRectMake(15, (60 - 42)/2.0, 42, 42);
+    button.layer.cornerRadius = 42/2.0;
     button.layer.masksToBounds = YES;
     [button setTitle:str forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
