@@ -90,7 +90,7 @@
     
     //注册融云SDK
     [ECDevice sharedInstance].delegate = [DeviceDelegateHelper sharedInstance];
-    [self requestLinkRongLianInfo];
+   // [self requestLinkRongLianInfo];
 
     
     [self.window makeKeyAndVisible];
@@ -145,6 +145,7 @@
     
     //开始连接xmpp
     [self connect];
+    [self requestLinkRongLianInfo];
 
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
@@ -646,9 +647,11 @@
                 [[ECDevice sharedInstance] login:loginInfo completion:^(ECError *error){
                     if (error.errorCode == ECErrorType_NoError) {
                         DLog(@"荣联平台链接成功");
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *value = [defaults objectForKey:UserNumber];
+                       [[ECDevice sharedInstance].VoIPManager setSelfPhoneNumber:value];
                     }else{
                         DLog(@"荣联平台链接失败");
-                        NSLog(@"%@, %@, %@",loginInfo.username,loginInfo.appKey,loginInfo.appToken);
                     }
                 }];
             } else {

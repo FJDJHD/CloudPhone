@@ -46,12 +46,12 @@
 //}
 //
 //呼叫事件
-//- (void)onCallEvents:(VoIPCall*)voipCall {
-//    if (voipCall.callStatus == ECallStreaming) {
-//        [DemoGlobalClass sharedInstance].isCallBusy = YES;
-//    }
-//    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_onCallEvent object:voipCall];
-//}
+- (void)onCallEvents:(VoIPCall*)voipCall {
+    if (voipCall.callStatus == ECallStreaming) {
+       // [DemoGlobalClass sharedInstance].isCallBusy = YES;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_onCallEvent object:voipCall];
+}
 
 /**
  @brief 收到dtmf

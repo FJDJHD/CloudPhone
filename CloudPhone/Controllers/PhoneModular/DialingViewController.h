@@ -19,7 +19,7 @@
     int ssInt;
     NSTimer *timer;
     BOOL isLouder;
-    NSInteger voipCallType; //0:直拨 1:免费网络语音通话 2:回拨
+    NSInteger voipCallType; //0:wifi 1:直拨 2:回拨
 }
 
 @property (nonatomic, strong) NSString *callid;
@@ -30,6 +30,9 @@
 
 @property (nonatomic, strong) NSString *callID;
 @property (nonatomic, strong) NSString *sub_account_sid;
+
+
+@property (nonatomic,strong) UILabel *dailingLabel;
 
 - (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo andCallType:(NSInteger)type;
 

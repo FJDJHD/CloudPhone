@@ -19,7 +19,7 @@
     [super viewDidLoad];
     [self initDailingUI];
     
-     // [self requestCallBack];
+      [self requestCallBack];
 }
 
 - (void)requestCallBack {
