@@ -89,7 +89,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -173,8 +173,8 @@
 
 //拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:nil andCallerNo:labelString andVoipNo:labelString andCallType:0];
+    //CallType：0 WiFi，1 直拨
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:nil andCallerNo:labelString andVoipNo:labelString andCallType:1];
     
     [self presentViewController:dialingVC animated:YES completion:nil];
     [self keyboardHidden];

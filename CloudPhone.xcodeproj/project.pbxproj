@@ -582,6 +582,7 @@
 		B4B126D41C2E65E300A0AAEB /* DialKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */; };
 		B4B126D71C2E668500A0AAEB /* phone_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */; };
 		B4B126D81C2E668500A0AAEB /* phone_dial@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */; };
+		B4BC2CC91C3B9806009A80FC /* VoipIncomingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BC2CC81C3B9806009A80FC /* VoipIncomingViewController.m */; };
 		B4BE7CFD1C0C5C6E00D74D49 /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */; };
 		B4BE7D031C0C5E1900D74D49 /* TaskCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D021C0C5E1900D74D49 /* TaskCenterViewController.m */; };
 		B4BE7D061C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D051C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m */; };
@@ -1581,6 +1582,8 @@
 		B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialKeyboard.m; sourceTree = "<group>"; };
 		B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_delete@2x.png"; sourceTree = "<group>"; };
 		B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_dial@2x.png"; sourceTree = "<group>"; };
+		B4BC2CC71C3B9806009A80FC /* VoipIncomingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoipIncomingViewController.h; sourceTree = "<group>"; };
+		B4BC2CC81C3B9806009A80FC /* VoipIncomingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoipIncomingViewController.m; sourceTree = "<group>"; };
 		B4BE7CFB1C0C5C6E00D74D49 /* PersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalViewController.h; sourceTree = "<group>"; };
 		B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
 		B4BE7D011C0C5E1900D74D49 /* TaskCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCenterViewController.h; sourceTree = "<group>"; };
@@ -3623,6 +3626,8 @@
 				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
 				B4D76A131C1523360095CB9F /* DialingViewController.h */,
 				B4D76A141C1523360095CB9F /* DialingViewController.m */,
+				B4BC2CC71C3B9806009A80FC /* VoipIncomingViewController.h */,
+				B4BC2CC81C3B9806009A80FC /* VoipIncomingViewController.m */,
 				B40FF0201C1672200077FAC9 /* FriendDetailViewController.h */,
 				B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */,
 				B4D04DA51C1A8117008BD608 /* ItelDialingViewController.h */,
@@ -4550,6 +4555,7 @@
 				6EBA8D8E1C15248C00BAE5DD /* DDLog.m in Sources */,
 				6EBA8D811C15248C00BAE5DD /* XMPPMessage+XEP_0333.m in Sources */,
 				6EBA8D4A1C15248B00BAE5DD /* XMPPvCardCoreDataStorageObject.m in Sources */,
+				B4BC2CC91C3B9806009A80FC /* VoipIncomingViewController.m in Sources */,
 				6EBA8D611C15248B00BAE5DD /* NSString+XEP_0106.m in Sources */,
 				6E98972C1C083BD500B9D9E9 /* GuidePageView.m in Sources */,
 				6EC0BB421C0BDEB700075A19 /* MainMineViewController.m in Sources */,
