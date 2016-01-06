@@ -416,10 +416,13 @@
         } else {
             lastStr = @"不配配类型。。。。。";
         }
+        //当前时间
+        NSDate *time = [NSDate date];
+        NSString *currentTime = [NSString stringWithFormat:@"%f",[time timeIntervalSince1970]];
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *number = [defaults objectForKey:UserNumber];
-        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,@"000",@"1",number,nil];
+        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,currentTime,@"1",number,nil];
         NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:jidStr theColumn:@"mineNumber" equalValue:number];
         if (mesageArray.count > 0) {
             //取出原本的小红点 ，之后加一存进去

@@ -286,7 +286,6 @@
                 messagemodel.imagePath = path;
                 messagemodel.messageType = kImageMessage; //图片类型
                 messagemodel.text = @"照片";
-                
             } else if ([message.body hasPrefix:@"AudioBase64"]) {
                 NSString *timeStr = [self getTimeString:message.body];
                 [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"audio"];

@@ -124,7 +124,7 @@ static const int kTimeCount             = 60;
     [selectButton setImage:[UIImage imageNamed:@"chance_"] forState:UIControlStateNormal];
     [selectButton setImage:[UIImage imageNamed:@"chance_selected"] forState:UIControlStateSelected];
     [selectButton addTarget:self action:@selector(selectButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    selectButton.frame = CGRectMake(15, CGRectGetMaxY(registerButton.frame) + 10 , 20, 20);
+    selectButton.frame = CGRectMake(15, CGRectGetMaxY(registerButton.frame) + 11 , 20, 20);
     [self.view addSubview:selectButton];
     selectButton.selected = YES;
     self.selectButton = selectButton;
@@ -198,6 +198,8 @@ static const int kTimeCount             = 60;
         [alterView show];
     }else if ([GeneralToolObject validateMobile:_numberField.text]){
         //在这里添加指示器
+        [_numberField resignFirstResponder];
+        [_verifyField resignFirstResponder];
         [self AddHUD];
         NSDictionary *dic = @{@"mobile":_numberField.text,@"verify":_verifyField.text,@"imei":[UniqueUDID shareInstance].udid,@"mobile_model":[[UIDevice currentDevice] model],@"mobile_type":@"iphone",@"reg_terrace":@"iOS",@"reg_id":@"111"};
         [[AirCloudNetAPIManager sharedManager] registerStepOneOfParams:dic WithBlock:^(id data, NSError *error) {
@@ -207,8 +209,7 @@ static const int kTimeCount             = 60;
                 NSDictionary *dic = (NSDictionary *)data;
                 
                 if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [_numberField resignFirstResponder];
-                    [_verifyField resignFirstResponder];
+                  
                     RegisterAlertView *alertView =[[RegisterAlertView alloc]initWithFrame:self.view.frame lable1:@"您好，云电话账号注册成功 ！" lable2:@"您的手机号就是您的iTel号码了^_^" lable3:@"欢迎您使用iTel云电话 ！尽享免费电话轻松畅聊 ！" lable4:@"为了您的账号安全，请设置登录密码" number:_numberField.text];
                     [alertView show:self];
                 } else {

@@ -87,8 +87,7 @@
 
 //注册第二步
 - (void)submitButtonClick{
-    [self.passwordFiled resignFirstResponder];
-    [self.repasswordField resignFirstResponder];
+   
     if (self.passwordFiled.text.length == 0 ) {
        [CustomMBHud customHudWindow:Login_emptyPwdNumber];
     }else if (self.repasswordField.text.length == 0){
@@ -96,6 +95,8 @@
     }else if (![self.passwordFiled.text isEqualToString:self.repasswordField.text]){
         [CustomMBHud customHudWindow:Login_noSamePwdNumber];
     }else{
+        [self.passwordFiled resignFirstResponder];
+        [self.repasswordField resignFirstResponder];
         [self AddHUD];
         NSDictionary *dic = @{@"password":self.passwordFiled.text,@"repassword":self.repasswordField.text};
         [[AirCloudNetAPIManager sharedManager] registerStepTwoOfParams:dic WithBlock:^(id data, NSError *error) {

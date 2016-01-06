@@ -507,8 +507,18 @@
     
     if (self.searchBar.text.length > 0) {
         for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
-             NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser];
-             NSString *friendName = user.nickname ? user.nickname :array[0];
+             NSString *friendName = @"";
+            
+            if (user.nickname.length > 0 && user.nickname) {
+                friendName = user.nickname;
+            } else {
+                XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                    friendName = xmppvCardTemp.nickname;
+                } else {
+                    friendName = user.jid.user;
+                }
+            }
             
             if ([friendName hasPrefix:self.searchBar.text]) {
                 [_searchArray addObject:user];
@@ -518,13 +528,21 @@
         //这里在做一个补充查询
         if (_searchArray.count == 0) {
             for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
-                NSArray *array = [user.displayName componentsSeparatedByString:XMPPSevser];
-                NSString *friendName = user.nickname ? user.nickname :array[0];
+                NSString *friendName = @"";
                 
-                if (_searchArray.count == 0) {
-                    if ([friendName rangeOfString:self.searchBar.text].location !=NSNotFound) {
-                        [_searchArray addObject:user];
+                if (user.nickname.length > 0 && user.nickname) {
+                    friendName = user.nickname;
+                } else {
+                    XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
+                    if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
+                        friendName = xmppvCardTemp.nickname;
+                    } else {
+                        friendName = user.jid.user;
                     }
+                }
+                
+                if ([friendName rangeOfString:self.searchBar.text options:NSCaseInsensitiveSearch].location !=NSNotFound) {
+                    [_searchArray addObject:user];
                 }
             }
         }
