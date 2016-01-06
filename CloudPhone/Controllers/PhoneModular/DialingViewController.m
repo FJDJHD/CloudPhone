@@ -11,6 +11,7 @@
 #import "DialKeyboard.h"
 #import "EndDialingViewController.h"
 #import "ItelDialingViewController.h"
+#import "CallRecordsModel.h"
 
 #import "AppDelegate.h"
 #import "ECDeviceHeaders.h"
@@ -151,7 +152,7 @@
     dailingLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(numberLabel.frame) + 8 + (dailingLabel.frame.size.height) / 2.0);
     dailingLabel.textAlignment = NSTextAlignmentCenter;
     dailingLabel.textColor = [UIColor whiteColor];
-    dailingLabel.text = @"正在呼叫...";
+    //dailingLabel.text = @"正在呼叫...";
     dailingLabel.font = [UIFont systemFontOfSize:14.0];
     self.dailingLabel = dailingLabel;
     [detailView addSubview:dailingLabel];
@@ -210,6 +211,7 @@
             
         case 4:{
            //挂断
+            self.callResult = @"1";
             [self releaseCall];
         }
         break;
@@ -268,30 +270,33 @@
         }
             break;
             
-//        case ECallFailed: {
-//            if( voipCall.reason == ECErrorType_NoResponse) {
-//                self.dailingLabel.text = @"网络不给力";
-//            } else if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
-//                self.dailingLabel.text = @"您拨叫的用户正忙，请稍后再拨";
-//            } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
-//                self.dailingLabel.text = @"对方不在线";
-//            } else if ( voipCall.reason == ECErrorType_CallMissed ) {
-//                self.dailingLabel.text = @"呼叫超时";
-//            } else if ( voipCall.reason == ECErrorType_SDKUnSupport) {
-//                self.dailingLabel.text = @"该版本不支持此功能";
-//            } else if ( voipCall.reason == ECErrorType_CalleeSDKUnSupport ) {
-//                self.dailingLabel.text = @"对方版本不支持音频";
-//            } else {
-//                self.dailingLabel.text = @"呼叫失败";
-//            }
-//            
-//            if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
-//                
-//            } else {
-//             //   [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(backFronts) userInfo:nil repeats:NO];
-//            }
-//        }
-         //   break;
+        case ECallFailed: {
+            if( voipCall.reason == ECErrorType_NoResponse) {
+                self.dailingLabel.text = @"网络不给力";
+            } else if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
+                self.dailingLabel.text = @"您拨叫的用户正忙，请稍后再拨";
+            } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
+                self.dailingLabel.text = @"对方不在线";
+            } else if ( voipCall.reason == ECErrorType_CallMissed ) {
+                self.dailingLabel.text = @"呼叫超时";
+            } else if ( voipCall.reason == ECErrorType_SDKUnSupport) {
+                self.dailingLabel.text = @"该版本不支持此功能";
+            } else if ( voipCall.reason == ECErrorType_CalleeSDKUnSupport ) {
+                self.dailingLabel.text = @"对方版本不支持音频";
+            } else {
+                self.dailingLabel.text = @"呼叫失败";
+            }
+            
+            if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
+                
+            } else {
+             //   [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(backFronts) userInfo:nil repeats:NO];
+            }
+            self.callResult = @"2";
+            [self releaseCall];
+            
+        }
+            break;
             
         case ECallEnd: {//呼叫释放
             if ([timer isValid]) {
@@ -300,22 +305,18 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.dailingLabel.text = @"正在挂机...";
                 });
-                
+                self.callResult = @"0";
                 [self releaseCall];
+                
             }
-            
-
-//            if (!isKickOff) {
-//                [NSTimer scheduledTimerWithTimeInterval:0.0f target:self selector:@selector(backFronts) userInfo:nil repeats:NO];
-//            }
         }
             break;
-//
+
 //        case ECallTransfered: {
 //            self.dailingLabel.text = @"呼叫被转移...";
 //        }
 //            break;
-//            
+            
         default:
             break;
    }
@@ -355,7 +356,19 @@
 }
 - (void)releaseCall{
     [[ECDevice sharedInstance].VoIPManager releaseCall:self.callID];
+    
+    CallRecordsModel *callRecordsModel = [[CallRecordsModel alloc] init];
+    callRecordsModel.callResult = self.callResult;
+    callRecordsModel.callerName = self.callerName;
+    callRecordsModel.callerNo = self.callerNo;
+    NSDate *date = [NSDate date];
+    callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",date];
+    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
+    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
+    
+    NSLog(@"通话记录录入数据库");
     [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
+    
 }
 
 - (void)handfree {

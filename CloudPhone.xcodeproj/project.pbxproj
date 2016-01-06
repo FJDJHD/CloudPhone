@@ -484,7 +484,6 @@
 		6EE1CD511C1C2B590054B993 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD4F1C1C2B590054B993 /* MessageCell.m */; };
 		6EF3960D1C22C11300E3F1BF /* AddressAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */; };
 		6EF396101C22C3C100E3F1BF /* AddressObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3960F1C22C3C100E3F1BF /* AddressObject.m */; };
-		B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF01B1C1580790077FAC9 /* ChatCell.m */; };
 		B40FF0221C1672200077FAC9 /* FriendDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */; };
 		B40FF0241C16804E0077FAC9 /* person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0231C16804E0077FAC9 /* person@2x.png */; };
 		B40FF0261C1688DB0077FAC9 /* freephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B40FF0251C1688DB0077FAC9 /* freephone@2x.png */; };
@@ -555,6 +554,9 @@
 		B48D13351C311AF80027254A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E4D36F11C056109001573E3 /* Security.framework */; };
 		B48D13371C311B350027254A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B48D13361C311B350027254A /* CoreTelephony.framework */; };
 		B48D133D1C3274680027254A /* EndDialingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B48D133C1C3274680027254A /* EndDialingViewController.m */; };
+		B49749351C3CF55C007D20BB /* phone_incall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B49749321C3CF55C007D20BB /* phone_incall@2x.png */; };
+		B49749361C3CF55C007D20BB /* phone_incallNo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B49749331C3CF55C007D20BB /* phone_incallNo@2x.png */; };
+		B49749371C3CF55C007D20BB /* phone_outcall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B49749341C3CF55C007D20BB /* phone_outcall@2x.png */; };
 		B497DDD91C183EE900AF9BEB /* mine_penyouquan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B497DDD51C183EE900AF9BEB /* mine_penyouquan@2x.png */; };
 		B497DDDA1C183EE900AF9BEB /* mine_penyouquan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B497DDD61C183EE900AF9BEB /* mine_penyouquan@3x.png */; };
 		B497DDDB1C183EE900AF9BEB /* mine_qqspace@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B497DDD71C183EE900AF9BEB /* mine_qqspace@2x.png */; };
@@ -583,6 +585,7 @@
 		B4B126D71C2E668500A0AAEB /* phone_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */; };
 		B4B126D81C2E668500A0AAEB /* phone_dial@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */; };
 		B4BC2CC91C3B9806009A80FC /* VoipIncomingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BC2CC81C3B9806009A80FC /* VoipIncomingViewController.m */; };
+		B4BC2CCE1C3CB7BF009A80FC /* CallRecordsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BC2CCD1C3CB7BF009A80FC /* CallRecordsModel.m */; };
 		B4BE7CFD1C0C5C6E00D74D49 /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */; };
 		B4BE7D031C0C5E1900D74D49 /* TaskCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D021C0C5E1900D74D49 /* TaskCenterViewController.m */; };
 		B4BE7D061C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4BE7D051C0C5E4900D74D49 /* FreeCallPhoneTimesViewController.m */; };
@@ -1469,8 +1472,6 @@
 		6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressAddViewController.m; sourceTree = "<group>"; };
 		6EF3960E1C22C3C100E3F1BF /* AddressObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressObject.h; sourceTree = "<group>"; };
 		6EF3960F1C22C3C100E3F1BF /* AddressObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressObject.m; sourceTree = "<group>"; };
-		B40FF01A1C1580790077FAC9 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
-		B40FF01B1C1580790077FAC9 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		B40FF0201C1672200077FAC9 /* FriendDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendDetailViewController.h; sourceTree = "<group>"; };
 		B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendDetailViewController.m; sourceTree = "<group>"; };
 		B40FF0231C16804E0077FAC9 /* person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "person@2x.png"; sourceTree = "<group>"; };
@@ -1547,6 +1548,9 @@
 		B48D13361C311B350027254A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		B48D133B1C3274680027254A /* EndDialingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndDialingViewController.h; sourceTree = "<group>"; };
 		B48D133C1C3274680027254A /* EndDialingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndDialingViewController.m; sourceTree = "<group>"; };
+		B49749321C3CF55C007D20BB /* phone_incall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_incall@2x.png"; sourceTree = "<group>"; };
+		B49749331C3CF55C007D20BB /* phone_incallNo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_incallNo@2x.png"; sourceTree = "<group>"; };
+		B49749341C3CF55C007D20BB /* phone_outcall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_outcall@2x.png"; sourceTree = "<group>"; };
 		B497DDD51C183EE900AF9BEB /* mine_penyouquan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_penyouquan@2x.png"; sourceTree = "<group>"; };
 		B497DDD61C183EE900AF9BEB /* mine_penyouquan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_penyouquan@3x.png"; sourceTree = "<group>"; };
 		B497DDD71C183EE900AF9BEB /* mine_qqspace@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_qqspace@2x.png"; sourceTree = "<group>"; };
@@ -1584,6 +1588,8 @@
 		B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_dial@2x.png"; sourceTree = "<group>"; };
 		B4BC2CC71C3B9806009A80FC /* VoipIncomingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoipIncomingViewController.h; sourceTree = "<group>"; };
 		B4BC2CC81C3B9806009A80FC /* VoipIncomingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoipIncomingViewController.m; sourceTree = "<group>"; };
+		B4BC2CCC1C3CB7BF009A80FC /* CallRecordsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallRecordsModel.h; sourceTree = "<group>"; };
+		B4BC2CCD1C3CB7BF009A80FC /* CallRecordsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallRecordsModel.m; sourceTree = "<group>"; };
 		B4BE7CFB1C0C5C6E00D74D49 /* PersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalViewController.h; sourceTree = "<group>"; };
 		B4BE7CFC1C0C5C6E00D74D49 /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
 		B4BE7D011C0C5E1900D74D49 /* TaskCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCenterViewController.h; sourceTree = "<group>"; };
@@ -1843,8 +1849,6 @@
 				6EC0BB321C0BDDC600075A19 /* RegisterAlertView.m */,
 				6E722F531C0FEC9200A21557 /* DailNumberCell.h */,
 				6E722F541C0FEC9200A21557 /* DailNumberCell.m */,
-				B40FF01A1C1580790077FAC9 /* ChatCell.h */,
-				B40FF01B1C1580790077FAC9 /* ChatCell.m */,
 				B4B126D21C2E65E300A0AAEB /* DialKeyboard.h */,
 				B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */,
 				6E92446D1C3528360012C53F /* AddressIconButton.h */,
@@ -2612,6 +2616,8 @@
 				6EA4643A1C0EE44A00650524 /* PersonModel.m */,
 				6EA4643D1C0EE46B00650524 /* UserModel.h */,
 				6EA4643E1C0EE46B00650524 /* UserModel.m */,
+				B4BC2CCC1C3CB7BF009A80FC /* CallRecordsModel.h */,
+				B4BC2CCD1C3CB7BF009A80FC /* CallRecordsModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -3622,8 +3628,6 @@
 			children = (
 				6EC0BB3E1C0BDEB700075A19 /* MainPhoneViewController.h */,
 				6EC0BB3F1C0BDEB700075A19 /* MainPhoneViewController.m */,
-				6EC0BB571C0C568A00075A19 /* AddressViewController.h */,
-				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
 				B4D76A131C1523360095CB9F /* DialingViewController.h */,
 				B4D76A141C1523360095CB9F /* DialingViewController.m */,
 				B4BC2CC71C3B9806009A80FC /* VoipIncomingViewController.h */,
@@ -3634,6 +3638,8 @@
 				B4D04DA61C1A8117008BD608 /* ItelDialingViewController.m */,
 				B48D133B1C3274680027254A /* EndDialingViewController.h */,
 				B48D133C1C3274680027254A /* EndDialingViewController.m */,
+				6EC0BB571C0C568A00075A19 /* AddressViewController.h */,
+				6EC0BB581C0C568A00075A19 /* AddressViewController.m */,
 				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
 				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 			);
@@ -3939,6 +3945,9 @@
 		B4D76A161C1523970095CB9F /* dialing */ = {
 			isa = PBXGroup;
 			children = (
+				B49749321C3CF55C007D20BB /* phone_incall@2x.png */,
+				B49749331C3CF55C007D20BB /* phone_incallNo@2x.png */,
+				B49749341C3CF55C007D20BB /* phone_outcall@2x.png */,
 				B4A9207E1C1FF3270070821F /* phone_addMore@3x.png */,
 				B4A9207F1C1FF3270070821F /* phone|_addMore@2x.png */,
 				B4A9207A1C1FEF8B0070821F /* phone_teamIcon@2x.png */,
@@ -4141,7 +4150,7 @@
 				TargetAttributes = {
 					6EB2ED4A1C04684A002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = MB56WXZ49W;
+						DevelopmentTeam = 5B6A48P7YX;
 					};
 					6EB2ED631C04684B002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -4184,6 +4193,8 @@
 				6E7D7A081C192CCC00B42140 /* VoiceSearchFeedback004.png in Resources */,
 				B4DAD3FF1C18172D0092BF8F /* find_miaomiao@2x.png in Resources */,
 				6E7D7A771C192CCC00B42140 /* chat_receiver_audio_playing000.png in Resources */,
+				B49749371C3CF55C007D20BB /* phone_outcall@2x.png in Resources */,
+				B49749351C3CF55C007D20BB /* phone_incall@2x.png in Resources */,
 				B4488B371C23F7B900D88EFE /* mine_task@3x.png in Resources */,
 				6E7D7A461C192CCC00B42140 /* faceDelete.png in Resources */,
 				6E9CBF091C23F0D600EFFF8D /* chat_addfriend@2x.png in Resources */,
@@ -4363,6 +4374,7 @@
 				6E27AB0C1C10505800909F19 /* back_whilte@2x.png in Resources */,
 				B497DDE31C183F1700AF9BEB /* mine_qq@2x.png in Resources */,
 				6EC3ECB41C16E99C00B27B18 /* btn_more@2x.png in Resources */,
+				B49749361C3CF55C007D20BB /* phone_incallNo@2x.png in Resources */,
 				B4488B2E1C23F7B100D88EFE /* mine_setting@2x.png in Resources */,
 				6EC3ECB01C16E50B00B27B18 /* photo_nomal@2x.png in Resources */,
 				B4D04DB61C1AA531008BD608 /* phone_icon@2x.png in Resources */,
@@ -4494,7 +4506,6 @@
 				6EBA8D1D1C15248B00BAE5DD /* XMPPModule.m in Sources */,
 				6E4D37301C0561A2001573E3 /* UIButton+AFNetworking.m in Sources */,
 				6EBA8D351C15248B00BAE5DD /* XMPPJabberRPCModule.m in Sources */,
-				B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */,
 				6E4D37881C056619001573E3 /* BaseTabBarController.m in Sources */,
 				6E4D37331C0561A2001573E3 /* UIRefreshControl+AFNetworking.m in Sources */,
 				6E7D7ADA1C1934F400B42140 /* EMCDDeviceManagerBase.m in Sources */,
@@ -4702,6 +4713,7 @@
 				6EBA8D541C15248B00BAE5DD /* NSXMLElement+XEP_0059.m in Sources */,
 				6EC98C931C3144B5002A4666 /* DACircularProgressView.m in Sources */,
 				6EE1CD331C1C22880054B993 /* MBProgressHUD+Add.m in Sources */,
+				B4BC2CCE1C3CB7BF009A80FC /* CallRecordsModel.m in Sources */,
 				6EC98CB01C3144B5002A4666 /* PSTGridLayoutSection.m in Sources */,
 				6EBA8D341C15248B00BAE5DD /* XMPPIQ+JabberRPCResonse.m in Sources */,
 				6EBA8D2E1C15248B00BAE5DD /* XMPPResourceMemoryStorageObject.m in Sources */,
@@ -4922,8 +4934,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4947,7 +4959,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4957,8 +4969,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4982,7 +4994,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

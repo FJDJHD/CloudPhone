@@ -270,7 +270,7 @@
         changeGenderSheet.tag = 1002;
         [changeGenderSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 2){
-         [self setBrithSelectView];
+          [self setBrithSelectView];
         CGFloat duration = 0.2;
         [UIView animateWithDuration:duration animations:^{
             CGFloat birthH = birthView.frame.size.height;
