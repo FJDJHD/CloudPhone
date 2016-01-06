@@ -326,107 +326,110 @@
         return;
     }
     
-    switch (voipCall.callStatus) {
-            
-        case ECallProceeding:
-        {
-        }
-            break;
-            
-        case ECallStreaming:
-        {
-            [[ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:NO];
-            self.lblIncoming.text = @"00:00";
-            if (![timer isValid])
+    dispatch_async(dispatch_get_main_queue(), ^{
+        switch (voipCall.callStatus) {
+                
+            case ECallProceeding:
             {
-                timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(updateRealtimeLabel) userInfo:nil repeats:YES];
-                [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-                [timer fire];
             }
-            
-            self.rejectButton.enabled = NO;
-            self.rejectButton.hidden = YES;
-            
-            self.answerButton.enabled = NO;
-            self.answerButton.hidden = YES;
-            
-            self.handfreeButton.enabled = YES;
-            self.handfreeButton.hidden = NO;
-            
-            self.muteButton.enabled = YES;
-            self.muteButton.hidden = NO;
-            
-            self.hangUpButton.enabled = YES;
-            self.hangUpButton.hidden = NO;
-            
-            self.functionAreaView.hidden = NO;
-            backgroundImg.image = [UIImage imageNamed:@"call_bg01.png"];
+                break;
+                
+            case ECallStreaming:
+            {
+                [[ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:NO];
+                self.lblIncoming.text = @"00:00";
+                if (![timer isValid])
+                {
+                    timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(updateRealtimeLabel) userInfo:nil repeats:YES];
+                    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+                    [timer fire];
+                }
+                
+                self.rejectButton.enabled = NO;
+                self.rejectButton.hidden = YES;
+                
+                self.answerButton.enabled = NO;
+                self.answerButton.hidden = YES;
+                
+                self.handfreeButton.enabled = YES;
+                self.handfreeButton.hidden = NO;
+                
+                self.muteButton.enabled = YES;
+                self.muteButton.hidden = NO;
+                
+                self.hangUpButton.enabled = YES;
+                self.hangUpButton.hidden = NO;
+                
+                self.functionAreaView.hidden = NO;
+                backgroundImg.image = [UIImage imageNamed:@"call_bg01.png"];
+            }
+                break;
+                
+            case ECallAlerting:
+            {
+                self.handfreeButton.enabled = YES;
+                self.handfreeButton.hidden = NO;
+                self.muteButton.enabled = YES;
+                self.muteButton.hidden = NO;
+                self.hangUpButton.enabled = YES;
+                self.hangUpButton.hidden =NO;
+                
+            }
+                break;
+                
+            case ECallEnd:
+            {
+                [self releaseCall];
+                [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(exitView) userInfo:nil repeats:NO];
+            }
+                break;
+                
+            case ECallRing:
+            {
+            }
+                break;
+                
+            case ECallPaused:
+            {
+                self.lblIncoming.text = @"呼叫保持...";
+            }
+                break;
+                
+            case ECallPausedByRemote:
+            {
+                self.lblIncoming.text = @"呼叫被对方保持...";
+            }
+                break;
+                
+            case ECallResumed:
+            {
+                self.lblIncoming.text = @"呼叫恢复...";
+            }
+                break;
+                
+            case ECallResumedByRemote:
+            {
+                self.lblIncoming.text = @"呼叫被对方恢复...";
+            }
+                break;
+                
+            case ECallTransfered:
+            {
+                self.lblIncoming.text = @"呼叫被转移...";
+            }
+                break;
+                
+            case ECallFailed:
+            {
+                //   [DemoGlobalClass sharedInstance].isCallBusy = NO;
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
-            
-        case ECallAlerting:
-        {
-            self.handfreeButton.enabled = YES;
-            self.handfreeButton.hidden = NO;
-            self.muteButton.enabled = YES;
-            self.muteButton.hidden = NO;
-            self.hangUpButton.enabled = YES;
-            self.hangUpButton.hidden =NO;
-            
-        }
-            break;
-            
-        case ECallEnd:
-        {
-            [self releaseCall];
-            [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(exitView) userInfo:nil repeats:NO];
-        }
-            break;
-            
-        case ECallRing:
-        {
-        }
-            break;
-            
-        case ECallPaused:
-        {
-            self.lblIncoming.text = @"呼叫保持...";
-        }
-            break;
-            
-        case ECallPausedByRemote:
-        {
-            self.lblIncoming.text = @"呼叫被对方保持...";
-        }
-            break;
-            
-        case ECallResumed:
-        {
-            self.lblIncoming.text = @"呼叫恢复...";
-        }
-            break;
-            
-        case ECallResumedByRemote:
-        {
-            self.lblIncoming.text = @"呼叫被对方恢复...";
-        }
-            break;
-            
-        case ECallTransfered:
-        {
-            self.lblIncoming.text = @"呼叫被转移...";
-        }
-            break;
-            
-        case ECallFailed:
-        {
-         //   [DemoGlobalClass sharedInstance].isCallBusy = NO;
-        }
-            break;
-            
-        default:
-            break;
-    }
+
+    });
 }
 
 //系统的回调事件
@@ -601,7 +604,7 @@
 }
 
 - (void)releaseCall{
-  //  [DemoGlobalClass sharedInstance].isCallBusy = NO;
+   // [DemoGlobalClass sharedInstance].isCallBusy = NO;
     [device.VoIPManager releaseCall:self.callID];
 }
 

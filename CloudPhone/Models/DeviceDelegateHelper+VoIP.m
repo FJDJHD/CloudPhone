@@ -8,43 +8,48 @@
 
 #import "DeviceDelegateHelper.h"
 #import "DeviceDelegateHelper+VoIP.h"
-//#import "VoipIncomingViewController.h"
+#import "VoipIncomingViewController.h"
 #import "AppDelegate.h"
+#import "WifiVoipComingViewController.h"
 
 @implementation DeviceDelegateHelper(VoIP)
 //有呼叫进入
 
-//- (NSString*)onIncomingCallReceived:(NSString*)callid withCallerAccount:(NSString *)caller withCallerPhone:(NSString *)callerphone withCallerName:(NSString *)callername withCallType:(CallType)calltype {
+- (NSString*)onIncomingCallReceived:(NSString*)callid withCallerAccount:(NSString *)caller withCallerPhone:(NSString *)callerphone withCallerName:(NSString *)callername withCallType:(CallType)calltype {
 //    [AppDelegate shareInstance].callid = nil;
 //    if ([DemoGlobalClass sharedInstance].isCallBusy) {
 //        [[ECDevice sharedInstance].VoIPManager rejectCall:callid andReason:ECErrorType_CallBusy];
 //        return @"";
 //    }
-//
-//    UIViewController *incomingCallView = nil;
-//    if (calltype == VIDEO){
-//        VideoViewController *incomingVideoView = [[VideoViewController alloc] initWithCallerName:callername andVoipNo:caller andCallstatus:1];
+
+    UIViewController *incomingCallView = nil;
+    if (calltype == VIDEO){
+//        VideoViewController *incomingVideoView =                                                                                                                                                                                               [[VideoViewController alloc] initWithCallerName:callername andVoipNo:caller andCallstatus:1];
 //        incomingVideoView.callID = callid;
 //        incomingCallView = incomingVideoView;
-//    } else{
+    } else{
+
+        WifiVoipComingViewController *controller = [[WifiVoipComingViewController alloc]initWithName:callername andPhoneNO:callerphone andCallID:callid];
+        controller.contactVoip = caller;
+        controller.status = kIncomingCallStatus_incoming;
+        incomingCallView = controller;
 //        VoipIncomingViewController* incomingVoiplView = [[VoipIncomingViewController alloc] initWithName:callername andPhoneNO:callerphone andCallID:callid];
 //        incomingVoiplView.contactVoip = caller;
 //        incomingVoiplView.status = IncomingCallStatus_incoming;
 //        incomingCallView = incomingVoiplView;
-//    }
-//    
-//    id rootviewcontroller = [AppDelegate shareInstance].window.rootViewController;
-//    if ([rootviewcontroller isKindOfClass:[UINavigationController class]]) {
-//        
-//        [((UINavigationController*)rootviewcontroller).topViewController presentViewController:incomingCallView animated:YES completion:nil];
-//    } else if ([rootviewcontroller isKindOfClass:[UIViewController class]]) {
-//        
-//        [rootviewcontroller presentViewController:incomingCallView animated:YES completion:nil];
-//    }
-//    [DemoGlobalClass sharedInstance].isCallBusy = YES;
-//    return nil;
-//}
-//
+    }
+    
+    id rootviewcontroller = [[[[UIApplication sharedApplication] delegate] window]rootViewController];
+    if ([rootviewcontroller isKindOfClass:[UINavigationController class]]) {
+        
+        [((UINavigationController*)rootviewcontroller).topViewController presentViewController:incomingCallView animated:YES completion:nil];
+    } else if ([rootviewcontroller isKindOfClass:[UIViewController class]]) {
+        
+        [rootviewcontroller presentViewController:incomingCallView animated:YES completion:nil];
+    }
+    return nil;
+}
+
 //呼叫事件
 - (void)onCallEvents:(VoIPCall*)voipCall {
     if (voipCall.callStatus == ECallStreaming) {

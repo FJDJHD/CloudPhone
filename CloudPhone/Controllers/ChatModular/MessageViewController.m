@@ -17,6 +17,7 @@
 #import "EMAudioPlayerUtil.h"
 #import "XMPPvCardTemp.h"
 #import "NSFileManager+Tools.h"
+#import "WifiVoipCallViewController.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -332,14 +333,14 @@
                              content:(NSString *)body messageType:(NSString *)type{
     if ([type isEqualToString:@"image"]) {
         NSString *base64str = [body substringFromIndex:9];
-        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        NSData *data = [base64str base64DecodedData];
         //存到本地
         [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
         
     } else if ([type isEqualToString:@"audio"]) {
         NSArray *array = [body componentsSeparatedByString:@"}"];
         NSString *base64str = array[1];
-        NSData *data = [[NSData alloc]initWithBase64EncodedString:base64str options:0];
+        NSData *data = [base64str base64DecodedData];
         //存到本地
         [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
     }
@@ -478,8 +479,22 @@
     [self keyBoardHidden];
 }
 
+//打电话
 - (void)moreViewAudioCallAction:(DXChatBarMoreView *)moreView
 {
+    NSArray *array = [self.chatJIDStr componentsSeparatedByString:@"@"];
+    NSString *numbers = @"";
+    if (array.count > 0) {
+        numbers = array[0];
+    }
+    if (numbers.length > 0) {
+        WifiVoipCallViewController *controller = [[WifiVoipCallViewController alloc]init];
+        controller.name = self.chatName;
+        controller.number = numbers;
+        [self presentViewController:controller animated:YES completion:nil];
+
+    }
+    
     // 隐藏键盘
     [self keyBoardHidden];
 }

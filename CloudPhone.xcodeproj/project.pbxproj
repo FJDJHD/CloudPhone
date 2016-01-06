@@ -260,7 +260,6 @@
 		6E8172F91C29232E0092B5A8 /* AddFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E8172F81C29232E0092B5A8 /* AddFriendModel.m */; };
 		6E88BC731C33E4E80038CE38 /* chat_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88BC721C33E4E80038CE38 /* chat_location@2x.png */; };
 		6E88BC751C33E71D0038CE38 /* chat_playPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88BC741C33E71D0038CE38 /* chat_playPhone@2x.png */; };
-		6E88BC781C33E8E10038CE38 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E88BC771C33E8E10038CE38 /* LocationViewController.m */; };
 		6E88C8F61C32881C00AD28A3 /* chat_photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F31C32881C00AD28A3 /* chat_photo@2x.png */; };
 		6E88C8F71C32881C00AD28A3 /* chat_takePic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F41C32881C00AD28A3 /* chat_takePic@2x.png */; };
 		6E88C8F81C32881C00AD28A3 /* chat_takePic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E88C8F51C32881C00AD28A3 /* chat_takePic@3x.png */; };
@@ -274,6 +273,10 @@
 		6E9CBF0A1C23F0D600EFFF8D /* chat_addfriend@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E9CBF081C23F0D600EFFF8D /* chat_addfriend@3x.png */; };
 		6E9CBF0D1C24002300EFFF8D /* ItelFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBF0C1C24002300EFFF8D /* ItelFriendModel.m */; };
 		6E9CBF111C2413B800EFFF8D /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E9CBF101C2413B800EFFF8D /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		6EA26ACC1C3CB79200461274 /* AddressAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA26AC71C3CB79200461274 /* AddressAddViewController.m */; };
+		6EA26ACD1C3CB79200461274 /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA26ACA1C3CB79200461274 /* LocationViewController.m */; };
+		6EA26AD31C3CB86E00461274 /* WifiVoipComingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA26AD21C3CB86E00461274 /* WifiVoipComingViewController.m */; };
+		6EA26AD61C3CB8AB00461274 /* WifiVoipCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA26AD51C3CB8AB00461274 /* WifiVoipCallViewController.m */; };
 		6EA464381C0EA88400650524 /* PersonalNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA464371C0EA88400650524 /* PersonalNameViewController.m */; };
 		6EA4643C1C0EE44A00650524 /* PersonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643A1C0EE44A00650524 /* PersonModel.m */; };
 		6EA4643F1C0EE46B00650524 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EA4643E1C0EE46B00650524 /* UserModel.m */; };
@@ -482,7 +485,6 @@
 		6EE1CD4B1C1C2B0E0054B993 /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD491C1C2B0E0054B993 /* MessageModel.m */; };
 		6EE1CD501C1C2B590054B993 /* BuddleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD4D1C1C2B590054B993 /* BuddleButton.m */; };
 		6EE1CD511C1C2B590054B993 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD4F1C1C2B590054B993 /* MessageCell.m */; };
-		6EF3960D1C22C11300E3F1BF /* AddressAddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */; };
 		6EF396101C22C3C100E3F1BF /* AddressObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF3960F1C22C3C100E3F1BF /* AddressObject.m */; };
 		B40FF01C1C1580790077FAC9 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF01B1C1580790077FAC9 /* ChatCell.m */; };
 		B40FF0221C1672200077FAC9 /* FriendDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B40FF0211C1672200077FAC9 /* FriendDetailViewController.m */; };
@@ -1028,8 +1030,6 @@
 		6E8172F81C29232E0092B5A8 /* AddFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendModel.m; sourceTree = "<group>"; };
 		6E88BC721C33E4E80038CE38 /* chat_location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_location@2x.png"; sourceTree = "<group>"; };
 		6E88BC741C33E71D0038CE38 /* chat_playPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_playPhone@2x.png"; sourceTree = "<group>"; };
-		6E88BC761C33E8E10038CE38 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
-		6E88BC771C33E8E10038CE38 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
 		6E88C8F31C32881C00AD28A3 /* chat_photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_photo@2x.png"; sourceTree = "<group>"; };
 		6E88C8F41C32881C00AD28A3 /* chat_takePic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_takePic@2x.png"; sourceTree = "<group>"; };
 		6E88C8F51C32881C00AD28A3 /* chat_takePic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_takePic@3x.png"; sourceTree = "<group>"; };
@@ -1047,6 +1047,14 @@
 		6E9CBF0C1C24002300EFFF8D /* ItelFriendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItelFriendModel.m; sourceTree = "<group>"; };
 		6E9CBF0F1C2413B800EFFF8D /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		6E9CBF101C2413B800EFFF8D /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		6EA26AC61C3CB79200461274 /* AddressAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressAddViewController.h; sourceTree = "<group>"; };
+		6EA26AC71C3CB79200461274 /* AddressAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressAddViewController.m; sourceTree = "<group>"; };
+		6EA26AC91C3CB79200461274 /* LocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		6EA26ACA1C3CB79200461274 /* LocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		6EA26AD11C3CB86E00461274 /* WifiVoipComingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiVoipComingViewController.h; sourceTree = "<group>"; };
+		6EA26AD21C3CB86E00461274 /* WifiVoipComingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiVoipComingViewController.m; sourceTree = "<group>"; };
+		6EA26AD41C3CB8AB00461274 /* WifiVoipCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WifiVoipCallViewController.h; sourceTree = "<group>"; };
+		6EA26AD51C3CB8AB00461274 /* WifiVoipCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WifiVoipCallViewController.m; sourceTree = "<group>"; };
 		6EA464361C0EA88400650524 /* PersonalNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalNameViewController.h; sourceTree = "<group>"; };
 		6EA464371C0EA88400650524 /* PersonalNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalNameViewController.m; sourceTree = "<group>"; };
 		6EA4643A1C0EE44A00650524 /* PersonModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonModel.m; sourceTree = "<group>"; };
@@ -1465,8 +1473,6 @@
 		6EE1CD4D1C1C2B590054B993 /* BuddleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuddleButton.m; sourceTree = "<group>"; };
 		6EE1CD4E1C1C2B590054B993 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		6EE1CD4F1C1C2B590054B993 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
-		6EF3960B1C22C11300E3F1BF /* AddressAddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressAddViewController.h; sourceTree = "<group>"; };
-		6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressAddViewController.m; sourceTree = "<group>"; };
 		6EF3960E1C22C3C100E3F1BF /* AddressObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressObject.h; sourceTree = "<group>"; };
 		6EF3960F1C22C3C100E3F1BF /* AddressObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressObject.m; sourceTree = "<group>"; };
 		B40FF01A1C1580790077FAC9 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
@@ -2601,6 +2607,35 @@
 			path = JsonKit;
 			sourceTree = "<group>";
 		};
+		6EA26AC51C3CB79200461274 /* AddressAddController */ = {
+			isa = PBXGroup;
+			children = (
+				6EA26AC61C3CB79200461274 /* AddressAddViewController.h */,
+				6EA26AC71C3CB79200461274 /* AddressAddViewController.m */,
+			);
+			path = AddressAddController;
+			sourceTree = "<group>";
+		};
+		6EA26AC81C3CB79200461274 /* MapMessageController */ = {
+			isa = PBXGroup;
+			children = (
+				6EA26AC91C3CB79200461274 /* LocationViewController.h */,
+				6EA26ACA1C3CB79200461274 /* LocationViewController.m */,
+			);
+			path = MapMessageController;
+			sourceTree = "<group>";
+		};
+		6EA26ACB1C3CB79200461274 /* VoipMessageController */ = {
+			isa = PBXGroup;
+			children = (
+				6EA26AD41C3CB8AB00461274 /* WifiVoipCallViewController.h */,
+				6EA26AD51C3CB8AB00461274 /* WifiVoipCallViewController.m */,
+				6EA26AD11C3CB86E00461274 /* WifiVoipComingViewController.h */,
+				6EA26AD21C3CB86E00461274 /* WifiVoipComingViewController.m */,
+			);
+			path = VoipMessageController;
+			sourceTree = "<group>";
+		};
 		6EA464391C0EE43B00650524 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -3563,14 +3598,13 @@
 			isa = PBXGroup;
 			children = (
 				6E7D7A921C1934F400B42140 /* ChatTools */,
+				6EA26AC51C3CB79200461274 /* AddressAddController */,
+				6EA26AC81C3CB79200461274 /* MapMessageController */,
+				6EA26ACB1C3CB79200461274 /* VoipMessageController */,
 				6EC0BB351C0BDEB700075A19 /* MainChatViewController.h */,
 				6EC0BB361C0BDEB700075A19 /* MainChatViewController.m */,
 				6E7D7A8F1C19311100B42140 /* MessageViewController.h */,
 				6E7D7A901C19311100B42140 /* MessageViewController.m */,
-				6E88BC761C33E8E10038CE38 /* LocationViewController.h */,
-				6E88BC771C33E8E10038CE38 /* LocationViewController.m */,
-				6EF3960B1C22C11300E3F1BF /* AddressAddViewController.h */,
-				6EF3960C1C22C11300E3F1BF /* AddressAddViewController.m */,
 			);
 			path = ChatModular;
 			sourceTree = "<group>";
@@ -4516,7 +4550,6 @@
 				6EC0BB401C0BDEB700075A19 /* MainChatViewController.m in Sources */,
 				B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */,
 				6E7D7ACF1C1934F400B42140 /* DXFaceView.m in Sources */,
-				6E88BC781C33E8E10038CE38 /* LocationViewController.m in Sources */,
 				6EBA8D581C15248B00BAE5DD /* TURNSocket.m in Sources */,
 				6EBA8D731C15248B00BAE5DD /* XMPPStreamManagementStanzas.m in Sources */,
 				6EBA8D1F1C15248B00BAE5DD /* XMPPPresence.m in Sources */,
@@ -4665,7 +4698,9 @@
 				6EBA8D8F1C15248C00BAE5DD /* DDTTYLogger.m in Sources */,
 				6EBA8D201C15248B00BAE5DD /* XMPPStream.m in Sources */,
 				6E4D372A1C0561A2001573E3 /* AFURLRequestSerialization.m in Sources */,
+				6EA26AD31C3CB86E00461274 /* WifiVoipComingViewController.m in Sources */,
 				6EC98C8B1C3144B5002A4666 /* MWCaptionView.m in Sources */,
+				6EA26AD61C3CB8AB00461274 /* WifiVoipCallViewController.m in Sources */,
 				6E4D37261C0561A2001573E3 /* AFHTTPSessionManager.m in Sources */,
 				6EBA8D6F1C15248B00BAE5DD /* XMPPMessage+XEP_0184.m in Sources */,
 				6EBA8D801C15248C00BAE5DD /* XMPPMessage+XEP_0308.m in Sources */,
@@ -4749,7 +4784,7 @@
 				6EBA8D371C15248B00BAE5DD /* XMPPLastActivity.m in Sources */,
 				6EBA8D3B1C15248B00BAE5DD /* XMPPRoomMessageCoreDataStorageObject.m in Sources */,
 				6EBA8D4C1C15248B00BAE5DD /* XMPPvCardTemp.m in Sources */,
-				6EF3960D1C22C11300E3F1BF /* AddressAddViewController.m in Sources */,
+				6EA26ACD1C3CB79200461274 /* LocationViewController.m in Sources */,
 				6EBA8D901C15248C00BAE5DD /* DDContextFilterLogFormatter.m in Sources */,
 				6E4D37851C056619001573E3 /* AirCloudNetAPIManager.m in Sources */,
 				B47C2E191C1932AE000E2964 /* SaveCostViewController.m in Sources */,
@@ -4770,6 +4805,7 @@
 				6E4D37AD1C0568B1001573E3 /* MJRefreshLegendFooter.m in Sources */,
 				6EC98CA81C3144B5002A4666 /* PSTCollectionViewData.m in Sources */,
 				6EBA8D841C15248C00BAE5DD /* GCDMulticastDelegate.m in Sources */,
+				6EA26ACC1C3CB79200461274 /* AddressAddViewController.m in Sources */,
 				6EBA8D471C15248B00BAE5DD /* XMPPvCard.xcdatamodeld in Sources */,
 				6EBA8D961C15248C00BAE5DD /* DDXMLElement.m in Sources */,
 				6EBA8D7C1C15248C00BAE5DD /* XMPPMessage+XEP_0224.m in Sources */,
@@ -4922,8 +4958,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4947,7 +4983,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -4957,8 +4993,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YongPeng Wang (SPJ738AAND)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = CloudPhone/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -4982,7 +5018,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f5a2d729-c83a-4c1e-984b-8f0214c00534";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

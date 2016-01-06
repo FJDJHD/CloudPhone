@@ -108,8 +108,12 @@
 #import "AppDelegate.h"
 #import "DBOperate.h"
 #import "UniqueUDID.h"
+#import "NSString+Base64.h"
+#import "NSData+Base64.h"
 
 @interface Global : NSObject
+
+@property (nonatomic, assign) BOOL isCallBusy; //打电话忙
 
 +(instancetype)shareInstance;
 

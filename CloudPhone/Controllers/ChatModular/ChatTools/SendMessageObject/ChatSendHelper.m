@@ -67,7 +67,7 @@
     [message addChild:receipt];
     
     //转化base64编码
-    NSString *base64Str = [data base64EncodedStringWithOptions:0];
+    NSString *base64Str = [data base64EncodedString];
     
     NSMutableString *imageString = [[NSMutableString alloc]initWithString:@"ImgBase64"];
     [imageString appendString:base64Str];
@@ -110,7 +110,7 @@
     [message addChild:receipt];
     
     //转化base64编码
-    NSString *base64Str = [data base64EncodedStringWithOptions:0];
+    NSString *base64Str = [data base64EncodedString];
     
     NSMutableString *audioString = [[NSMutableString alloc]initWithFormat:@"AudioBase64{%ld}",(long)duration];
     [audioString appendString:base64Str];
