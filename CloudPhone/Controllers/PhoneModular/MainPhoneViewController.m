@@ -14,7 +14,7 @@
 #import "FriendDetailViewController.h"
 #import "ItelDialingViewController.h"
 #import "DialKeyboard.h"
-
+#import "CallRecordsModel.h"
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>{
     BOOL isShow;
     NSMutableString *labelString;
@@ -25,9 +25,33 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textFiled;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) NSArray *infoArray;
+@property (nonatomic, strong) CallRecordsModel *callRecordModel;
+@property (nonatomic, strong) NSMutableArray *callRecordArray;
 @end
 
 @implementation MainPhoneViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    _infoArray = [DBOperate queryData:T_callRecords theColumn:nil theColumnValue:nil withAll:YES];
+  //  array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
+    self.callRecordArray = [NSMutableArray array];
+    if (_infoArray.count > 0) {
+        for (NSArray *temp in _infoArray) {
+            CallRecordsModel *model = [[CallRecordsModel alloc]init];
+            model.callResult = [temp objectAtIndex:record_callResult];
+            model.callerName = [temp objectAtIndex:record_callerName];
+            model.callerNo = [temp objectAtIndex:record_callerNo];
+            model.usercallTime = [temp objectAtIndex:record_callTime];
+            [self.callRecordArray addObject:model];
+        }
+        [_tableView reloadData];
+    }
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -89,7 +113,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return self.callRecordArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -99,7 +123,11 @@
     if (!cell) {
         cell = [[DailNumberCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
-    cell.dailNameLabel.text = @"刘美兰";
+
+    if (self.callRecordArray.count > 0) {
+        CallRecordsModel *model = [self.callRecordArray objectAtIndex:indexPath.row];
+       [cell cellForDataWithModel:model];
+    }
     return cell;
 }
 
@@ -107,7 +135,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    DialingViewController *dialingVC = [DialingViewController new];
+    CallRecordsModel *model = [self.callRecordArray objectAtIndex:indexPath.row];
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.callerName andCallerNo:model.callerNo andVoipNo:labelString andCallType:1];
     [self presentViewController:dialingVC animated:YES completion:nil];
 
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -174,7 +203,7 @@
 //拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
     //CallType：0 WiFi，1 直拨
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:nil andCallerNo:labelString andVoipNo:labelString andCallType:1];
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:@" " andCallerNo:self.textFiled.text andVoipNo:labelString andCallType:1];
     
     [self presentViewController:dialingVC animated:YES completion:nil];
     [self keyboardHidden];

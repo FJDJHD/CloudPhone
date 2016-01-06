@@ -44,11 +44,11 @@ enum addFriend {
 
 //电话记录表
 #define T_callRecords     @"t_callRecords"
-#define C_T_callRecords   @"create table t_callRecords(callResult TEXT,callerName TEXT,callerAddress TEXT,callTime TEXT)"
+#define C_T_callRecords   @"create table t_callRecords(callResult TEXT,callerName TEXT,callerNo TEXT,callTime TEXT)"
 enum callRecords {
     record_callResult,
     record_callerName,
-    record_callerAddress,
+    record_callerNo,
     record_callTime
 };
 

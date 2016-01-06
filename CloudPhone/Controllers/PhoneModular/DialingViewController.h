@@ -22,13 +22,14 @@
     NSInteger voipCallType; //0:wifi 1:直拨 2:回拨
 }
 
-@property (nonatomic, strong) NSString *callid;
+@property (nonatomic, strong) NSString *callID;
 @property (nonatomic, assign) int callDirection;
 @property (nonatomic, strong) NSString *callerName;
 @property (nonatomic, strong) NSString *callerNo;
 @property (nonatomic, strong) NSString *voipNo;
+@property (nonatomic, strong) NSString *callResult;//0被呼叫方挂机，1，主叫方挂机
 
-@property (nonatomic, strong) NSString *callID;
+
 @property (nonatomic, strong) NSString *sub_account_sid;
 
 

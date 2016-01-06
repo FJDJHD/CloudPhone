@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CallRecordsModel.h"
 @interface DailNumberCell : UITableViewCell
 
 @property (nonatomic, strong) UIImageView *dailImageView;
@@ -19,4 +20,5 @@
 
 @property (nonatomic, setter=isToday:) UILabel *dailDateLable;
 
+- (void)cellForDataWithModel:(CallRecordsModel *)model;
 @end
