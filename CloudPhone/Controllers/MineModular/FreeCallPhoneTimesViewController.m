@@ -48,17 +48,23 @@
     lable.font = [UIFont systemFontOfSize:12];
     [remaineTimeButton addSubview:lable];
     
-    UILabel *baseTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 - 50) / 2.0, 60)];
+    UILabel *baseTimeLabel0 = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 ) / 2.0, 25)];
+    baseTimeLabel0.text = @"基础时长";
+    
+    UILabel *baseTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(baseTimeLabel0.frame), (MainWidth - 40 * 2 ) / 2.0, 25)];
     baseTimeLabel.tag = 4001;
-    baseTimeLabel.text = @"基础时长＊分钟/月";
-    baseTimeLabel.numberOfLines = 2;
-
-    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 - 50) / 2.0, 60)];
+    baseTimeLabel.text = @"＊分钟";
+    
+    UILabel *rewardTimeLabel0 = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 ) / 2.0, 25)];
+    rewardTimeLabel0.text = @"奖励时长";
+   
+    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(rewardTimeLabel0.frame), (MainWidth - 40 * 2 ) / 2.0, 25)];
     rewardTimeLabel.tag = 4002;
-    rewardTimeLabel.text = @"奖励时长＊分钟/月";
-    rewardTimeLabel.numberOfLines = 2;
+    rewardTimeLabel.text = @"＊分钟/月";
     
     [headerView addSubview:remaineTimeButton];
+    [headerView addSubview:baseTimeLabel0];
+    [headerView addSubview:rewardTimeLabel0];
     [headerView addSubview:baseTimeLabel];
     [headerView addSubview:rewardTimeLabel];
     
@@ -158,12 +164,11 @@
                     
                     //基础时长
                     UILabel *baseLabel = (UILabel *)[self.view viewWithTag:4001];
-                    baseLabel.text = [NSString stringWithFormat:@"基础时长%ld分钟/月",(long)give_tel_fare];
+                    baseLabel.text = [NSString stringWithFormat:@"%ld分钟",(long)give_tel_fare];
                     
                     //奖励时长
                     UILabel *rewardLabel = (UILabel *)[self.view viewWithTag:4002];
-                    rewardLabel.text = [NSString stringWithFormat:@"奖励时长%ld分钟/月",(long)recharge_tel_fare];
-                    
+                    rewardLabel.text = [NSString stringWithFormat:@"%ld分钟/月",(long)recharge_tel_fare];
                     [self.tableView reloadData];
                     
                 } else {
