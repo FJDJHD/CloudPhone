@@ -15,16 +15,41 @@
 #import "UIImage+ResizeImage.h"
 #import "FriendCell.h"
 #import "AddressIconButton.h"
+#import "AddressObject.h"
 
-@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
+#import "PersonModel.h"
+#import <MessageUI/MessageUI.h>
+#import "ItelFriendModel.h"
+#import "JSONKit.h"
+#import "AddFriendModel.h"
+#import "AddressIconButton.h"
 
-@property (nonatomic, strong) NSMutableArray *listTitleArray;
-@property (nonatomic, strong) NSMutableArray *listContentArray;
-@property (nonatomic, strong) NSMutableArray *searchArray;
+@interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate,MFMessageComposeViewControllerDelegate>
+
+//@property (nonatomic, strong) NSMutableArray *listTitleArray;
+//@property (nonatomic, strong) NSMutableArray *listContentArray;
+//@property (nonatomic, strong) NSMutableArray *searchArray;
+//@property (nonatomic, strong) UITableView *tableView;
+//@property (nonatomic, strong) UISearchBar *searchBar;
+//@property (nonatomic, strong) UISearchDisplayController *searchControl;
+
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UISearchBar *searchBar;
+
+@property (nonatomic, strong) NSMutableArray *listContentArray;
+
+@property (nonatomic, strong) NSMutableArray *numberArray;
+
+@property (nonatomic, strong) NSMutableArray *friendArray;  //itel好友
+
+@property (nonatomic, strong) NSMutableArray *invateArray;  //注册过的
+
+@property (nonatomic, strong) NSMutableArray *addressArray; //剩下通讯录的
+
+@property (nonatomic, strong) MBProgressHUD *HUD;
+
 @property (nonatomic, strong) UISearchDisplayController *searchControl;
 
+@property (nonatomic, strong) UISearchBar *searchBar;
 
 @end
 
@@ -34,15 +59,19 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
 
-        _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
+//        _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
         _listContentArray = [[NSMutableArray alloc] initWithCapacity:0];
+        _numberArray = [[NSMutableArray alloc]initWithCapacity:0];
+        _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
+        _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
+        _addressArray = [[NSMutableArray alloc]initWithCapacity:0];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [ColorTool backgroundColor];
+    self.view.backgroundColor = [UIColor whiteColor];//[ColorTool backgroundColor];
     self.title = @"通讯录";
     
     //导航栏返回按钮
@@ -61,32 +90,46 @@
     //添加表视图
     [self.view addSubview:self.tableView];
     [self initWithSearchBar];
-    [self loadAddressData];
+    
+    ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, NULL), ^(bool granted, CFErrorRef error) {
+        if (!granted) {
+            NSLog(@"未获得通讯录访问权限！");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CustomMBHud customHudWindow:@"未获取访问通讯录权限"];
+                
+            });
+        } else {
+            [self loadAddressData];
+        }
+    });
+   
 }
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.searchBar.frame) + 10, MainWidth, SCREEN_HEIGHT);
+        CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.rowHeight = 60;
         _tableView.sectionIndexColor = RGB(51, 51, 51);
         _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+        _tableView.tableFooterView = [[UIView alloc]init];
+        _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, CGFLOAT_MIN)];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }
     return _tableView;
+    
 }
-
 
 - (void)initWithSearchBar {
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
     self.searchBar.frame = CGRectMake(0.0f, 0.f, MainWidth, 44.0f);
-    self.searchBar.placeholder=@"搜索";
+    self.searchBar.placeholder=@"查找朋友";
     self.searchBar.delegate = self;
     self.searchBar.backgroundColor = [UIColor clearColor];
     self.searchBar.backgroundImage = [UIImage imageWithColor:[ColorTool backgroundColor] size:self.searchBar.bounds.size];
     
-    //设置为列表头
+    //设置为聊天列表头
     self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 44.0f)];
     [self.tableView.tableHeaderView addSubview:self.searchBar];
     
@@ -95,140 +138,339 @@
     self.searchControl.searchResultsDataSource = self;
     self.searchControl.searchResultsDelegate = self;
     self.searchControl.delegate = self;
-}
-
-
-- (void)loadAddressData {
-     [self initData];
-     [_tableView reloadData];
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//       
-//       
-//        dispatch_sync(dispatch_get_main_queue(), ^{
-//            
-//           
-//        });
-//    });
-}
-
-- (void)initData {
-    self.listContentArray = [self getAllPerson];
-    if (self.listContentArray == nil) {
-        DLog(@"通讯录为空，或未获取访问权限");
-        return;
-    } else {
     
-        UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
-        [self.listTitleArray removeAllObjects];
-        [self.listTitleArray addObjectsFromArray:[theCollation sectionTitles]];
-        
-      
-        NSMutableArray *existTitles = [NSMutableArray array];
-        for (NSInteger i = 0; i < _listContentArray.count; i ++) {
-            PersonModel *person = _listContentArray[i][0];
-            for (NSInteger j = 0; j < _listTitleArray.count; j ++) {
-                if (person.sectionNumber == j) {
-                    [existTitles addObject:_listTitleArray[j]];
-                }
-            }
-        }
-        
-        [self.listTitleArray removeAllObjects];
-        self.listTitleArray = existTitles;
-    }
 }
 
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#pragma mark - UITabvleViewDatasource
 
-    return _listContentArray.count;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView  == self.searchControl.searchResultsTableView) {
-        //搜索栏
-        return _searchArray.count;
-    }else{
-       return [_listContentArray[section] count];
+    if (section == 0) {
+        //itel 好友
+        return _friendArray.count;
+    } else if (section == 1) {
+        //注册 itel
+        return _invateArray.count;
+    } else {
+        //通讯录
+        return _addressArray.count;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView == self.searchControl.searchResultsTableView) {
-        //搜索
-        static NSString *ID = @"SearchCell";
-        FriendCell *searchCell =[tableView dequeueReusableCellWithIdentifier:ID];
-        if (!searchCell) {
-            searchCell = [[FriendCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-        }
-        if (_searchArray.count > 0) {
-            XMPPUserCoreDataStorageObject *user = [_searchArray objectAtIndex:indexPath.row];
-            [searchCell cellForData:user];
-        }
-        return searchCell;
-        
-    } else{
-    static NSString *ID = @"cell";
+    static NSString *ID = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        cell.detailTextLabel.textColor = RGB(102, 102, 102);
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
+        
+        AddressIconButton *button = [AddressIconButton buttonWithTitle:@""];
+        button.tag = 5550;
+        [cell addSubview:button];
+        
+        UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMinY(button.frame) + 2, 150, 20)];
+        title.tag = 5551;
+        title.textColor = [UIColor blackColor];
+        title.font = [UIFont systemFontOfSize:15.0];
+        [cell addSubview:title];
+        
+        UILabel *subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
+        subtitle.tag = 5552;
+        subtitle.textColor = RGB(102, 102, 102);
+        subtitle.font = [UIFont systemFontOfSize:13.0];
+        [cell addSubview:subtitle];
+        
     }
-    if (self.listContentArray && self.listContentArray.count > 0) {
-        NSArray *sectionArr = [_listContentArray objectAtIndex:indexPath.section];
-        PersonModel *model = (PersonModel *)[sectionArr objectAtIndex:indexPath.row];
-        cell.textLabel.text = model.phonename;
-        cell.detailTextLabel.text = model.tel;
-        cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
-       // cell.imageView = [AddressIconButton buttonWithTitle:@"r"];
-        UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];
-        imageView.image = image;
-        cell.accessoryView = imageView;
-        //cell.detailTextLabel.text = model.tel;
+    
+    cell.accessoryView = nil;
+    if (indexPath.section == 0) {
+        //itel 好友 (好友)
+        if (_friendArray.count > 0) {
+            ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:5550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+            
+            cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
+            
+            
+        }
+        
+    } else if (indexPath.section == 1) {
+        //注册itel （添加好友）
+        if (_invateArray.count > 0) {
+            ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:5550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+            
+            cell.accessoryView = [self statusButtonWithTitle:@"加为好友"];
+            
+            
+        }
+        
+    } else {
+        //通讯录 （邀请）
+        if (_addressArray.count > 0) {
+            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+            titleLab.text = model.userName;
+            subtitleLab.text = model.mobile;
+            
+            AddressIconButton *button = [cell viewWithTag:5550];
+            if (model.userName.length > 0) {
+                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
+            } else {
+                [button setTitle:@"" forState:UIControlStateNormal];
+            }
+            
+            
+            cell.accessoryView = [self statusButtonWithTitle:@"邀请"];
+            
+        }
     }
-         return cell;
-  }
-    return nil;
+    return cell;
+    
 }
 
-#pragma mark - UITableViewDelegate 
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 60;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 22.0;
+    if (section == 0) {
+        if (_friendArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
+    } else if (section == 1) {
+        if (_invateArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
+    }  else {
+        if (_addressArray.count > 0) {
+            return 30.0;
+        }
+        return CGFLOAT_MIN;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 1.0;
-}
-
-//开启右侧索引条
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-
-    return self.listTitleArray;
+    
+    return 1;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-   if (self.listTitleArray && self.listTitleArray.count > 0) {
-        UIView *contentView = [[UIView alloc] init];
-        contentView.backgroundColor = RGB(240, 240, 240);
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
-        label.backgroundColor = [UIColor clearColor];
-        NSString *sectionStr = self.listTitleArray[section];
-        [label setText:sectionStr];
-        [contentView addSubview:label];
-        return contentView;
+    
+    if (section == 0) {
+        //itel 好友 (好友)
+        if (_friendArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"itel好友(%lu)",(unsigned long)_friendArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+        
+    } else if (section == 1) {
+        //注册itel （添加好友）
+        if (_invateArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"添加成itel好友(%lu)",(unsigned long)_invateArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+        
     } else {
-        return nil;
+        //通讯录 （邀请）
+        if (_addressArray.count > 0) {
+            NSString *str = [NSString stringWithFormat:@"邀请注册云电话(%lu)",(unsigned long)_addressArray.count];
+            return [self sectionHeaderViewWithTitle:str];
+        }
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.section == 0) {
+        //itel 好友 (好友)
+        
+    } else if (indexPath.section == 1) {
+        //注册itel （添加好友）
+        
+    } else {
+        //通讯录 （邀请）
+//        if (_addressArray.count > 0) {
+//            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
+//            //发送系统信息
+//            [self showMessageView:[NSArray arrayWithObjects:model.mobile, nil]  body:MessageItel];
+//        }
+    }
+}
+
+#pragma mark -
+
+- (UIView *)sectionHeaderViewWithTitle:(NSString *)title {
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 30)];
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(15, 2, 200, 30)];
+    lable.font = [UIFont systemFontOfSize:13.0];
+    lable.textColor = RGB(102, 102, 102);
+    lable.text = title;
+    [view addSubview:lable];
+    return view;
+}
+
+- (UIButton *)statusButtonWithTitle:(NSString *)title {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.userInteractionEnabled = NO;
+    button.frame = CGRectMake(0,0, 53, 30);
+    button.layer.cornerRadius = 5.0;
+    button.layer.masksToBounds = YES;
+    button.layer.borderWidth = 0.5;
+    if ([title isEqualToString:@"加为好友"]) {
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    } else {
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:13.0];
+    }
+    button.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateNormal];
+    
+    return button;
+}
+
+#pragma mark - 网络请求
+
+- (void)loadAddressData {
+    
+    self.listContentArray = [AddressObject shareInstance].allAddress;
+    if (self.listContentArray.count > 0 && self.listContentArray) {
+        for (NSInteger i = 0; i < self.listContentArray.count; i ++) {
+            NSArray *array = [self.listContentArray objectAtIndex:i];
+            for (PersonModel *model in array) {
+                if (model.tel) {
+                    NSString *name = model.phonename ? model.phonename : @"未备注";
+                    NSDictionary *info = @{@"mobile":model.tel,@"username":name};
+                    
+                    [_numberArray addObject:info];
+                }
+            }
+        }
+    }
+    
+    //转化为json字符串
+    if (_numberArray.count > 0 && _numberArray) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self AddHUD];
+        });
+        NSDictionary *dic = @{@"jsonMobile" : [GeneralToolObject dictionaryToJson:_numberArray]};
+        [[AirCloudNetAPIManager sharedManager] postMailListOfParams:dic WithBlock:^(id data, NSError *error) {
+            [self HUDHidden];
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)data;
+                
+                if (dic) {
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        
+                        NSArray *arr = [dic objectForKey:@"data"];
+                        for (NSUInteger i = 0; i < arr.count; i++) {
+                            NSDictionary *tempDic = [arr objectAtIndex:i];
+                            //itel 好友
+                            NSArray *friendArr = [tempDic objectForKey:@"buddy_mobile"];
+                            //itel 但不是好友
+                            NSArray *invateArr = [tempDic objectForKey:@"reg_mobile"];
+                            //itel 没注册，通讯录
+                            NSArray *addressArr = [tempDic objectForKey:@"arr_mobile"];
+                            
+                            if (friendArr.count > 0) {
+                                for (NSDictionary *friDic in friendArr) {
+                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                    model.userName = [friDic objectForKey:@"username"];
+                                    model.mobile = [friDic objectForKey:@"mobile"];
+                                    model.status = kAlreadFriend;
+                                    [_friendArray addObject:model];
+                                }
+                            }
+                            
+                            if (invateArr.count > 0) {
+                                for (NSDictionary *invDic in invateArr) {
+                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                    model.userName = [invDic objectForKey:@"username"];
+                                    model.mobile = [invDic objectForKey:@"mobile"];
+                                    model.status = kInviteFriend;
+                                    [_invateArray addObject:model];
+                                }
+                            }
+                            
+                            if (addressArr.count > 0) {
+                                for (NSDictionary *adsDic in addressArr) {
+                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                    model.userName = [adsDic objectForKey:@"username"];
+                                    model.mobile = [adsDic objectForKey:@"mobile"];
+                                    model.status = kNotFriend;
+                                    [_addressArray addObject:model];
+                                }
+                            }
+                        }
+                        [_tableView reloadData];
+                        
+                    }else {
+                        [CustomMBHud customHudWindow:@"请求失败"];
+                    }
+                }
+            } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+            }
+        }];
+    }
+}
+
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
     }
 }
 
 #pragma mark - ABNewPersonViewControllerDelegate
 //完成新增（点击取消和完成按钮时调用）,注意这里不用做实际的通讯录增加工作，此代理方法调用时已经完成新增，当保存成功的时候参数中得person会返回保存的记录，如果点击取消person为NULL
 - (void)newPersonViewController:(ABNewPersonViewController *)newPersonView didCompleteWithNewPerson:(ABRecordRef)person {
-
+    
     if (person) {
         DLog(@"%@保存信息成功",(__bridge NSString *)ABRecordCopyCompositeName(person));
     } else {
-    
+        
         DLog(@"取消");
     }
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -245,183 +487,384 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
-
-#pragma mark - 获取通讯录内容
-- (NSMutableArray *)getAllPerson {
-
-    NSMutableArray *addressBookArray =[NSMutableArray array];
-    NSMutableArray *listContent = [NSMutableArray array];
-    NSMutableArray *sectionTitleArray = [NSMutableArray array];
-    
-    ABAddressBookRef addressBooks = ABAddressBookCreateWithOptions(NULL, NULL);
-    
-    //获取通讯录访问授权
-    ABAuthorizationStatus authorization = ABAddressBookGetAuthorizationStatus();
-    if (authorization != kABAuthorizationStatusAuthorized) {
-        NSLog(@"未获取通讯录访问授权");
-        return nil;
-    }
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-    //发出访问通讯录的请求
-    ABAddressBookRequestAccessWithCompletion(addressBooks, ^(bool granted, CFErrorRef error) {
-        if (!granted) {
-            NSLog(@"未获取访问权限");
-        }
-        dispatch_semaphore_signal(sema);
-    });
-    
-    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    
-    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
-    for (NSInteger i = 0; i < nPeople; i ++) {
-        PersonModel *model = [[PersonModel alloc]init];
-        ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-        CFStringRef abName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        CFStringRef abLastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-        CFStringRef abFullName = ABRecordCopyCompositeName(person);
-        
-        NSString *nameString = (__bridge NSString *)abName;
-        NSString *lastNameString = (__bridge NSString *)abLastName;
-        
-        if ((__bridge id)abFullName != nil) {
-            nameString = (__bridge NSString *)abFullName;
-        } else {
-        
-            if ((__bridge id)abLastName != nil) {
-                nameString = [NSString stringWithFormat:@"%@ %@",nameString,lastNameString];
-            }
-        }
-        
-        model.name1 = nameString;
-        model.phonename = nameString;
-        model.recordID = (int)ABRecordGetRecordID(person);
-        
-        ABPropertyID mutiProperties[] = {
-            kABPersonPhoneProperty, //电话
-            kABPersonEmailProperty  //邮箱
-        };
-        
-        NSInteger multiPropertiesTotal = sizeof(mutiProperties) / sizeof(ABPropertyID);
-        for (NSInteger j = 0; j < multiPropertiesTotal; j ++) {
-            ABPropertyID property = mutiProperties[j];
-            ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
-            NSInteger valuesCount = 0;
-            if (valuesRef != nil) {
-                valuesCount = ABMultiValueGetCount(valuesRef);
-            }
-            if (valuesCount == 0) {
-                CFRelease(valuesRef);
-                continue;
-            }
-            for (NSInteger k = 0; k < valuesCount; k ++) {
-                CFStringRef value = ABMultiValueCopyValueAtIndex(valuesRef, k);
-                switch (j) {
-                    case 0:  //phone number
-                        model.tel = [(__bridge NSString *)value initTelephoneWithReformat];
-                        break;
-                        
-                    default:
-                        model.email = (__bridge NSString *)value;
-                        break;
-                }
-                CFRelease(value);
-            }
-            CFRelease(valuesRef);
+#pragma mark - MFMessageComposeViewControllerDelegate
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    switch (result) {
+        case MessageComposeResultSent:
+            DLog(@"信息发送成功");
+            break;
             
-        }
-        [addressBookArray addObject:model];
-        if (abName) {
-            CFRelease(abName);
-        }
-        if (abLastName) {
-            CFRelease(abLastName);
-        }
-        if (abFullName) {
-            CFRelease(abFullName);
-        }
+        default:
+            DLog(@"信息发送失败");
+            break;
     }
-    CFRelease(allPeople);
-    CFRelease(addressBooks);
-    
-    //对数组排序，按首字母分类
-    UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
-    [sectionTitleArray removeAllObjects];
-    
-    //得出collation索引的数量，这里是27个（26个字母和1个#）
-    [sectionTitleArray addObjectsFromArray:[theCollation sectionTitles]];
-    
-    for (PersonModel *person in addressBookArray) {
-        if (person.name1 != nil) {
-            NSInteger sect = [theCollation sectionForObject:person collationStringSelector:@selector(name1)];
-            person.sectionNumber = sect;
-        }
-    }
-    
-    NSInteger highSection = [[theCollation sectionTitles] count]; //27
-    NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-    for (NSInteger i = 0; i <= highSection; i ++) {
-        NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:1];
-        [sectionArrays addObject:sectionArray];
-    }
-    
-    //把对应的名字放入这个27个数组中,将每个人按name分到某个section下
-    for (PersonModel *person in addressBookArray) {
-        [sectionArrays[person.sectionNumber] addObject:person];
-    }
-    
-    for (NSMutableArray *temp in sectionArrays) {
-        PersonModel *person = (PersonModel *)temp.firstObject;
-        if (person.name1 == nil || [person.name1 isEqualToString:@""]) {
-            continue;
-        }
-        if (person.name1 != nil) {
-            NSArray *sortedSection = [theCollation sortedArrayFromArray:temp collationStringSelector:@selector(name1)];
-            [listContent addObject:sortedSection];
-        }
-    }
-    return listContent;
 }
 
-#pragma mark UISearchBarDelegate
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    [self.searchBar setShowsCancelButton:YES animated:YES];
-    for (UIView *view in [_searchBar.subviews[0] subviews]) {
-        if ([view isKindOfClass:[UIButton class]]) {
-            UIButton *cancelBtn = (UIButton *)view;
-            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-        }
+- (void)showMessageView:(NSArray*)phones body:(NSString*)body {
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]init];
+        controller.recipients = phones;
+        controller.body = body;
+        controller.messageComposeDelegate = self;
+        [self presentViewController:controller animated:YES completion:nil];
+    } else {
+        UIAlertView*alert=[[UIAlertView alloc]initWithTitle:@"提示信息"
+                                                    message:@"该设备不支持短信功能"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"确定"
+                                          otherButtonTitles:nil,nil];
+        [alert show];
     }
-    return YES;
-}
-
-
-
-// 取消按钮被按下时，执行的方法
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    [self.searchBar resignFirstResponder];
-    searchBar.text = nil;
-    [self.searchBar setShowsCancelButton:NO animated:YES];
-}
-// 键盘中，搜索按钮被按下，执行的方法
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-    NSLog(@"---%@",searchBar.text);
-    searchBar.text = nil;
-    [self.searchBar resignFirstResponder];
-    [self.searchBar setShowsCancelButton:NO animated:YES];
-}
-
-// 当搜索内容变化时，执行该方法。很有用，可以实现时实搜索
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;{
-    NSLog(@"textDidChange---%@",searchBar.text);
-    
 }
 
 
 - (void)popViewController {
-
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+//- (void)initWithSearchBar {
+//    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+//    self.searchBar.frame = CGRectMake(0.0f, 0.f, MainWidth, 44.0f);
+//    self.searchBar.placeholder=@"搜索";
+//    self.searchBar.delegate = self;
+//    self.searchBar.backgroundColor = [UIColor clearColor];
+//    self.searchBar.backgroundImage = [UIImage imageWithColor:[ColorTool backgroundColor] size:self.searchBar.bounds.size];
+//    
+//    //设置为列表头
+//    self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 44.0f)];
+//    [self.tableView.tableHeaderView addSubview:self.searchBar];
+//    
+//    //搜索控制器
+//    self.searchControl = [[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self];
+//    self.searchControl.searchResultsDataSource = self;
+//    self.searchControl.searchResultsDelegate = self;
+//    self.searchControl.delegate = self;
+//}
+//
+//
+//- (void)loadAddressData {
+//     [self initData];
+//     [_tableView reloadData];
+////    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+////       
+////       
+////        dispatch_sync(dispatch_get_main_queue(), ^{
+////            
+////           
+////        });
+////    });
+//}
+//
+//- (void)initData {
+//    self.listContentArray = [self getAllPerson];
+//    if (self.listContentArray == nil) {
+//        DLog(@"通讯录为空，或未获取访问权限");
+//        return;
+//    } else {
+//    
+//        UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
+//        [self.listTitleArray removeAllObjects];
+//        [self.listTitleArray addObjectsFromArray:[theCollation sectionTitles]];
+//        
+//      
+//        NSMutableArray *existTitles = [NSMutableArray array];
+//        for (NSInteger i = 0; i < _listContentArray.count; i ++) {
+//            PersonModel *person = _listContentArray[i][0];
+//            for (NSInteger j = 0; j < _listTitleArray.count; j ++) {
+//                if (person.sectionNumber == j) {
+//                    [existTitles addObject:_listTitleArray[j]];
+//                }
+//            }
+//        }
+//        
+//        [self.listTitleArray removeAllObjects];
+//        self.listTitleArray = existTitles;
+//    }
+//}
+//
+//#pragma mark - UITableViewDataSource
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//
+//    return _listContentArray.count;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    if (tableView  == self.searchControl.searchResultsTableView) {
+//        //搜索栏
+//        return _searchArray.count;
+//    }else{
+//       return [_listContentArray[section] count];
+//    }
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (tableView == self.searchControl.searchResultsTableView) {
+//        //搜索
+//        static NSString *ID = @"SearchCell";
+//        FriendCell *searchCell =[tableView dequeueReusableCellWithIdentifier:ID];
+//        if (!searchCell) {
+//            searchCell = [[FriendCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+//        }
+//        if (_searchArray.count > 0) {
+//            XMPPUserCoreDataStorageObject *user = [_searchArray objectAtIndex:indexPath.row];
+//            [searchCell cellForData:user];
+//        }
+//        return searchCell;
+//        
+//    } else{
+//    static NSString *ID = @"cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+//    if (!cell) {
+//        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+//    }
+//    if (self.listContentArray && self.listContentArray.count > 0) {
+//        NSArray *sectionArr = [_listContentArray objectAtIndex:indexPath.section];
+//        PersonModel *model = (PersonModel *)[sectionArr objectAtIndex:indexPath.row];
+//        cell.textLabel.text = model.phonename;
+//        cell.detailTextLabel.text = model.tel;
+//        cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
+//       // cell.imageView = [AddressIconButton buttonWithTitle:@"r"];
+//        UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
+//        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];
+//        imageView.image = image;
+//        cell.accessoryView = imageView;
+//        //cell.detailTextLabel.text = model.tel;
+//    }
+//         return cell;
+//  }
+//    return nil;
+//}
+//
+//#pragma mark - UITableViewDelegate 
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+//    return 22.0;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    return 1.0;
+//}
+//
+////开启右侧索引条
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//
+//    return self.listTitleArray;
+//}
+//
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//   if (self.listTitleArray && self.listTitleArray.count > 0) {
+//        UIView *contentView = [[UIView alloc] init];
+//        contentView.backgroundColor = RGB(240, 240, 240);
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
+//        label.backgroundColor = [UIColor clearColor];
+//        NSString *sectionStr = self.listTitleArray[section];
+//        [label setText:sectionStr];
+//        [contentView addSubview:label];
+//        return contentView;
+//    } else {
+//        return nil;
+//    }
+//}
+//
+//#pragma mark - ABNewPersonViewControllerDelegate
+////完成新增（点击取消和完成按钮时调用）,注意这里不用做实际的通讯录增加工作，此代理方法调用时已经完成新增，当保存成功的时候参数中得person会返回保存的记录，如果点击取消person为NULL
+//- (void)newPersonViewController:(ABNewPersonViewController *)newPersonView didCompleteWithNewPerson:(ABRecordRef)person {
+//
+//    if (person) {
+//        DLog(@"%@保存信息成功",(__bridge NSString *)ABRecordCopyCompositeName(person));
+//    } else {
+//    
+//        DLog(@"取消");
+//    }
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//}
+//
+//
+////导航栏右按钮
+//- (void)addressButtonClick {
+//    ABNewPersonViewController *newPersonController=[[ABNewPersonViewController alloc]init];
+//    //设置代理
+//    newPersonController.newPersonViewDelegate=self;
+//    //注意ABNewPersonViewController必须包装一层UINavigationController才能使用，否则不会出现取消和完成按钮，无法进行保存等操作
+//    UINavigationController *navigationController=[[UINavigationController alloc]initWithRootViewController:newPersonController];
+//    [self presentViewController:navigationController animated:YES completion:nil];
+//}
+//
+//
+//#pragma mark - 获取通讯录内容
+//- (NSMutableArray *)getAllPerson {
+//
+//    NSMutableArray *addressBookArray =[NSMutableArray array];
+//    NSMutableArray *listContent = [NSMutableArray array];
+//    NSMutableArray *sectionTitleArray = [NSMutableArray array];
+//    
+//    ABAddressBookRef addressBooks = ABAddressBookCreateWithOptions(NULL, NULL);
+//    
+//    //获取通讯录访问授权
+//    ABAuthorizationStatus authorization = ABAddressBookGetAuthorizationStatus();
+//    if (authorization != kABAuthorizationStatusAuthorized) {
+//        NSLog(@"未获取通讯录访问授权");
+//        return nil;
+//    }
+//    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+//    //发出访问通讯录的请求
+//    ABAddressBookRequestAccessWithCompletion(addressBooks, ^(bool granted, CFErrorRef error) {
+//        if (!granted) {
+//            NSLog(@"未获取访问权限");
+//        }
+//        dispatch_semaphore_signal(sema);
+//    });
+//    
+//    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+//    
+//    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
+//    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
+//    for (NSInteger i = 0; i < nPeople; i ++) {
+//        PersonModel *model = [[PersonModel alloc]init];
+//        ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
+//        CFStringRef abName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+//        CFStringRef abLastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+//        CFStringRef abFullName = ABRecordCopyCompositeName(person);
+//        
+//        NSString *nameString = (__bridge NSString *)abName;
+//        NSString *lastNameString = (__bridge NSString *)abLastName;
+//        
+//        if ((__bridge id)abFullName != nil) {
+//            nameString = (__bridge NSString *)abFullName;
+//        } else {
+//        
+//            if ((__bridge id)abLastName != nil) {
+//                nameString = [NSString stringWithFormat:@"%@ %@",nameString,lastNameString];
+//            }
+//        }
+//        
+//        model.name1 = nameString;
+//        model.phonename = nameString;
+//        model.recordID = (int)ABRecordGetRecordID(person);
+//        
+//        ABPropertyID mutiProperties[] = {
+//            kABPersonPhoneProperty, //电话
+//            kABPersonEmailProperty  //邮箱
+//        };
+//        
+//        NSInteger multiPropertiesTotal = sizeof(mutiProperties) / sizeof(ABPropertyID);
+//        for (NSInteger j = 0; j < multiPropertiesTotal; j ++) {
+//            ABPropertyID property = mutiProperties[j];
+//            ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
+//            NSInteger valuesCount = 0;
+//            if (valuesRef != nil) {
+//                valuesCount = ABMultiValueGetCount(valuesRef);
+//            }
+//            if (valuesCount == 0) {
+//                CFRelease(valuesRef);
+//                continue;
+//            }
+//            for (NSInteger k = 0; k < valuesCount; k ++) {
+//                CFStringRef value = ABMultiValueCopyValueAtIndex(valuesRef, k);
+//                switch (j) {
+//                    case 0:  //phone number
+//                        model.tel = [(__bridge NSString *)value initTelephoneWithReformat];
+//                        break;
+//                        
+//                    default:
+//                        model.email = (__bridge NSString *)value;
+//                        break;
+//                }
+//                CFRelease(value);
+//            }
+//            CFRelease(valuesRef);
+//            
+//        }
+//        [addressBookArray addObject:model];
+//        if (abName) {
+//            CFRelease(abName);
+//        }
+//        if (abLastName) {
+//            CFRelease(abLastName);
+//        }
+//        if (abFullName) {
+//            CFRelease(abFullName);
+//        }
+//    }
+//    CFRelease(allPeople);
+//    CFRelease(addressBooks);
+//    
+//    //对数组排序，按首字母分类
+//    UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
+//    [sectionTitleArray removeAllObjects];
+//    
+//    //得出collation索引的数量，这里是27个（26个字母和1个#）
+//    [sectionTitleArray addObjectsFromArray:[theCollation sectionTitles]];
+//    
+//    for (PersonModel *person in addressBookArray) {
+//        if (person.name1 != nil) {
+//            NSInteger sect = [theCollation sectionForObject:person collationStringSelector:@selector(name1)];
+//            person.sectionNumber = sect;
+//        }
+//    }
+//    
+//    NSInteger highSection = [[theCollation sectionTitles] count]; //27
+//    NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
+//    for (NSInteger i = 0; i <= highSection; i ++) {
+//        NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:1];
+//        [sectionArrays addObject:sectionArray];
+//    }
+//    
+//    //把对应的名字放入这个27个数组中,将每个人按name分到某个section下
+//    for (PersonModel *person in addressBookArray) {
+//        [sectionArrays[person.sectionNumber] addObject:person];
+//    }
+//    
+//    for (NSMutableArray *temp in sectionArrays) {
+//        PersonModel *person = (PersonModel *)temp.firstObject;
+//        if (person.name1 == nil || [person.name1 isEqualToString:@""]) {
+//            continue;
+//        }
+//        if (person.name1 != nil) {
+//            NSArray *sortedSection = [theCollation sortedArrayFromArray:temp collationStringSelector:@selector(name1)];
+//            [listContent addObject:sortedSection];
+//        }
+//    }
+//    return listContent;
+//}
+//
+//#pragma mark UISearchBarDelegate
+//- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+//    [self.searchBar setShowsCancelButton:YES animated:YES];
+//    for (UIView *view in [_searchBar.subviews[0] subviews]) {
+//        if ([view isKindOfClass:[UIButton class]]) {
+//            UIButton *cancelBtn = (UIButton *)view;
+//            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+//        }
+//    }
+//    return YES;
+//}
+//
+//
+//
+//// 取消按钮被按下时，执行的方法
+//- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+//    [self.searchBar resignFirstResponder];
+//    searchBar.text = nil;
+//    [self.searchBar setShowsCancelButton:NO animated:YES];
+//}
+//// 键盘中，搜索按钮被按下，执行的方法
+//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+//    NSLog(@"---%@",searchBar.text);
+//    searchBar.text = nil;
+//    [self.searchBar resignFirstResponder];
+//    [self.searchBar setShowsCancelButton:NO animated:YES];
+//}
+//
+//// 当搜索内容变化时，执行该方法。很有用，可以实现时实搜索
+//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;{
+//    NSLog(@"textDidChange---%@",searchBar.text);
+//    
+//}
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
