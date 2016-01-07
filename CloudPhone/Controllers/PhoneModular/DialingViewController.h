@@ -35,6 +35,6 @@
 
 @property (nonatomic,strong) UILabel *dailingLabel;
 
-- (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo andCallType:(NSInteger)type;
+- (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo;
 
 @end

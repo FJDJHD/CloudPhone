@@ -32,7 +32,6 @@
 #import "MessageViewController.h"
 
 #import "OpenShareHeader.h"
-
 @interface AppDelegate (){
     BOOL isShow;
 }

@@ -577,6 +577,7 @@
 		B4A9207D1C1FEF8B0070821F /* phone_teamIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4A9207B1C1FEF8B0070821F /* phone_teamIcon@3x.png */; };
 		B4A920801C1FF3270070821F /* phone_addMore@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4A9207E1C1FF3270070821F /* phone_addMore@3x.png */; };
 		B4A920811C1FF3270070821F /* phone|_addMore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4A9207F1C1FF3270070821F /* phone|_addMore@2x.png */; };
+		B4AF81C81C3E068000D9C282 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B4AF81C71C3E068000D9C282 /* Reachability.m */; };
 		B4B126C21C2BCB7600A0AAEB /* OpenShare+Alipay.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126B61C2BCB7600A0AAEB /* OpenShare+Alipay.m */; };
 		B4B126C31C2BCB7600A0AAEB /* OpenShare+QQ.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126B81C2BCB7600A0AAEB /* OpenShare+QQ.m */; };
 		B4B126C41C2BCB7600A0AAEB /* OpenShare+Renren.m in Sources */ = {isa = PBXBuildFile; fileRef = B4B126BA1C2BCB7600A0AAEB /* OpenShare+Renren.m */; };
@@ -1575,6 +1576,8 @@
 		B4A9207B1C1FEF8B0070821F /* phone_teamIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_teamIcon@3x.png"; sourceTree = "<group>"; };
 		B4A9207E1C1FF3270070821F /* phone_addMore@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_addMore@3x.png"; sourceTree = "<group>"; };
 		B4A9207F1C1FF3270070821F /* phone|_addMore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone|_addMore@2x.png"; sourceTree = "<group>"; };
+		B4AF81C61C3E068000D9C282 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		B4AF81C71C3E068000D9C282 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		B4B126B51C2BCB7600A0AAEB /* OpenShare+Alipay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OpenShare+Alipay.h"; sourceTree = "<group>"; };
 		B4B126B61C2BCB7600A0AAEB /* OpenShare+Alipay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OpenShare+Alipay.m"; sourceTree = "<group>"; };
 		B4B126B71C2BCB7600A0AAEB /* OpenShare+QQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OpenShare+QQ.h"; sourceTree = "<group>"; };
@@ -2021,6 +2024,8 @@
 		6E4D37111C0561A2001573E3 /* UIKit+AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
+				B4AF81C61C3E068000D9C282 /* Reachability.h */,
+				B4AF81C71C3E068000D9C282 /* Reachability.m */,
 				6E4D37121C0561A2001573E3 /* AFNetworkActivityIndicatorManager.h */,
 				6E4D37131C0561A2001573E3 /* AFNetworkActivityIndicatorManager.m */,
 				6E4D37141C0561A2001573E3 /* UIActivityIndicatorView+AFNetworking.h */,
@@ -4184,7 +4189,7 @@
 				TargetAttributes = {
 					6EB2ED4A1C04684A002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = MB56WXZ49W;
+						DevelopmentTeam = 5B6A48P7YX;
 					};
 					6EB2ED631C04684B002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -4629,6 +4634,7 @@
 				6EBA8D481C15248B00BAE5DD /* XMPPvCardAvatarCoreDataStorageObject.m in Sources */,
 				6E4B119C1C1FAA3700CD6CE1 /* XMPPTool.m in Sources */,
 				6EBA8D661C15248B00BAE5DD /* XMPPCapabilities.m in Sources */,
+				B4AF81C81C3E068000D9C282 /* Reachability.m in Sources */,
 				6EBA8D361C15248B00BAE5DD /* XMPPIQ+LastActivity.m in Sources */,
 				6EC98C8C1C3144B5002A4666 /* MWGridCell.m in Sources */,
 				6E9CBF111C2413B800EFFF8D /* JSONKit.m in Sources */,
@@ -4993,7 +4999,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -5028,7 +5034,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.iTal.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};

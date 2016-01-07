@@ -15,6 +15,8 @@
 #import "ItelDialingViewController.h"
 #import "DialKeyboard.h"
 #import "CallRecordsModel.h"
+#import "WifiVoipCallViewController.h"
+
 @interface MainPhoneViewController ()<UITableViewDataSource,UITableViewDelegate,DialKeyboardDelegate,UITextFieldDelegate,UITabBarDelegate>{
     BOOL isShow;
     NSMutableString *labelString;
@@ -37,7 +39,7 @@
     [super viewWillAppear:animated];
     
     _infoArray = [DBOperate queryData:T_callRecords theColumn:nil theColumnValue:nil withAll:YES];
-  //  array = (NSMutableArray *)[[array reverseObjectEnumerator] allObjects];
+    _infoArray   = (NSMutableArray *)[[_infoArray reverseObjectEnumerator] allObjects];
     self.callRecordArray = [NSMutableArray array];
     if (_infoArray.count > 0) {
         for (NSArray *temp in _infoArray) {
@@ -47,7 +49,9 @@
             model.callerNo = [temp objectAtIndex:record_callerNo];
             model.usercallTime = [temp objectAtIndex:record_callTime];
             [self.callRecordArray addObject:model];
+             NSLog(@"%@",model.usercallTime);
         }
+       
         [_tableView reloadData];
     }
 }
@@ -55,12 +59,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initGUI];
+}
+
+- (void)initGUI {
     isShow = NO;
     labelString = [[NSMutableString alloc]init];
-     self.automaticallyAdjustsScrollViewInsets = NO;
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0 , 0, 20, 44)];
     self.titleLabel.text = @"电话";
-                                                               
+    
     
     //导航栏右按钮
     addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -70,11 +77,11 @@
     [addressButton addTarget:self action:@selector(addressButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItem = rightItem;
-    self.automaticallyAdjustsScrollViewInsets = NO;
     //添加列表试图
     [self.view addSubview:self.tableView];
     [self initDialKeyboard];
     [self initTextFiled];
+ 
 }
 
 - (void)initTextFiled{
@@ -84,7 +91,6 @@
     textFiled.enabled = NO;
     self.textFiled = textFiled;
 }
-
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
@@ -96,7 +102,7 @@
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGRect tableViewFrame = CGRectMake(0, STATUS_NAV_BAR_HEIGHT, MainWidth, SCREEN_HEIGHT - TABBAR_HEIGHT);
+        CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.tableFooterView = [[UIView alloc]init];
         _tableView.rowHeight = 60;
@@ -132,13 +138,15 @@
 }
 
 #pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     CallRecordsModel *model = [self.callRecordArray objectAtIndex:indexPath.row];
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.callerName andCallerNo:model.callerNo andVoipNo:labelString andCallType:1];
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.callerName andCallerNo:model.callerNo andVoipNo:labelString];
     [self presentViewController:dialingVC animated:YES completion:nil];
-
+   
+    
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 //    if (indexPath.row == 1){
 //        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
@@ -202,9 +210,7 @@
 
 //拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    //CallType：0 WiFi，1 直拨
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:@" " andCallerNo:self.textFiled.text andVoipNo:labelString andCallType:1];
-    
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:@" " andCallerNo:self.textFiled.text andVoipNo:labelString];
     [self presentViewController:dialingVC animated:YES completion:nil];
     [self keyboardHidden];
 }
