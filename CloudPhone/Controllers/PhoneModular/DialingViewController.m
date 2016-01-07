@@ -23,8 +23,6 @@
 @property (nonatomic,strong) DialKeyboard * keyboard;
 
 - (void)releaseCall;
-- (void)updatedailingLabel;
-- (void)updatedailingStatusLabel;
 @end
 
 @implementation DialingViewController{
@@ -68,35 +66,25 @@
                     //网络电话
                     self.sub_account_sid = [info objectForKey:@"sub_account_sid"];
                     self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:self.sub_account_sid];
-                    if (self.callID.length <= 0)//获取CallID失败，即拨打失败
-                    {
+                    if (self.callID.length <= 0){
+                        //获取CallID失败，即拨打失败
                     }
-                } else {
+                } else if ([[dic objectForKey:@"status"] integerValue] == 0) {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    //拨打直拨电话
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                    self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                    });
+                  
                 }
             }
         }];
+    }else{
+        //无网络，应用不可用
     }
-    else{
-        DLog(@"网络不可用，直拨电话");
-        //直拨
-      //  self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
-
-    }
-
+    
     if (self.callID.length <= 0) {
         //获取CallID失败，即拨打失败
-//        self.realTimeStatusLabel.text = @"对方不在线或网络不给力";
-//        self.handfreeButton.hidden = YES;
-//        self.handfreeButton.enabled = NO;
-//        self.muteButton.hidden = YES;
-//        self.muteButton.enabled = NO;
-//        self.hangUpButton.hidden = NO;
-//        self.hangUpButton.enabled = YES;
-//        self.functionAreaView.hidden = YES;
-//        isShowKeyboard = YES;
-//        [self showKeyboardView];
-      
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallEvents:) name:KNOTIFICATION_onCallEvent object:nil];
@@ -278,25 +266,38 @@
             case ECallFailed: {
                 if( voipCall.reason == ECErrorType_NoResponse) {
                     self.dailingLabel.text = @"网络不给力";
+                    self.callResult = @"2";
+                    [self releaseCall];
+
                 } else if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
                     self.dailingLabel.text = @"您拨叫的用户正忙，请稍后再拨";
+                    self.callResult = @"2";
+                    [self releaseCall];
+
                 } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
                     self.dailingLabel.text = @"对方不在线,转直拨";
+                    //拨打直拨电话
                     self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
-                    
                 } else if ( voipCall.reason == ECErrorType_CallMissed ) {
                     self.dailingLabel.text = @"呼叫超时";
+                    self.callResult = @"2";
+                    [self releaseCall];
+
                 } else if ( voipCall.reason == ECErrorType_SDKUnSupport) {
                     self.dailingLabel.text = @"该版本不支持此功能";
+                    self.callResult = @"2";
+                    [self releaseCall];
+
                 } else if ( voipCall.reason == ECErrorType_CalleeSDKUnSupport ) {
                     self.dailingLabel.text = @"对方版本不支持音频";
+                    self.callResult = @"2";
+                    [self releaseCall];
+
                 } else {
                     self.dailingLabel.text = @"呼叫失败";
+                    self.callResult = @"2";
+                    [self releaseCall];
                 }
-                
-              //    self.callResult = @"2";
-              //  [self releaseCall];
-                
             }
                 break;
                 
@@ -349,10 +350,6 @@
 
         
     }
-}
-
-- (void)updatedailingStatusLabel {
-    self.dailingLabel.text = @"正在挂机...";
 }
 
 - (void)releaseCall{

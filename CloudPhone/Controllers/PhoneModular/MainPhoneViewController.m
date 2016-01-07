@@ -49,7 +49,6 @@
             model.callerNo = [temp objectAtIndex:record_callerNo];
             model.usercallTime = [temp objectAtIndex:record_callTime];
             [self.callRecordArray addObject:model];
-             NSLog(@"%@",model.usercallTime);
         }
        
         [_tableView reloadData];
