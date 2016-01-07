@@ -395,6 +395,8 @@
     return YES;
 }
 
+
+
 // 取消按钮被按下时，执行的方法
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     [self.searchBar resignFirstResponder];
@@ -413,10 +415,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;{
     NSLog(@"textDidChange---%@",searchBar.text);
     
-    
 }
-
-
 
 
 - (void)popViewController {

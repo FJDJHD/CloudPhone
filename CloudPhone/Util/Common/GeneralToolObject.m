@@ -10,7 +10,9 @@
 #import "Global.h"
 #import "NSString+MD5.h"
 
-@implementation GeneralToolObject
+@implementation GeneralToolObject{
+     Reachability *reachablity;
+}
 
 //手机号码验证
 + (BOOL) validateMobile:(NSString *)mobile
@@ -252,6 +254,27 @@
     }
     return result;
 }
+
+
++ (BOOL)isEnableCurrentNetworkingStatus{
+    BOOL isWifi = NO;
+    Reachability *reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    switch ([reach currentReachabilityStatus]) {
+        case NotReachable:
+            isWifi = NO;
+            break;
+        case ReachableViaWWAN:
+            isWifi =YES;
+            break;
+        case ReachableViaWiFi:
+            isWifi = YES;
+            break;
+        default:
+            break;
+    }
+    return isWifi;
+}
+
 
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AppDelegate.h"
-
+#import "Reachability.h"
 @interface GeneralToolObject : NSObject
 
 
@@ -57,5 +57,8 @@
 
 //时间转化成几分钟前
 + (NSString *)compareCurrentTime:(NSDate *)compareDate;
+
+//当前网络状态
++ (BOOL)isEnableCurrentNetworkingStatus;
 
 @end
