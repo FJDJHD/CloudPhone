@@ -71,7 +71,7 @@
 - (void)saveSendMessageOfParams:(NSDictionary *)params
                         WithBlock:(void(^)(id data, NSError *error))block;
 
-//存储openfire发送消息(图片)
+//存储openfire发送消息(图片)（暂时取消了这个接口）
 - (void)saveSendPhotoOfImage:(UIImage *)image
                  params:(NSDictionary *)params
                  WithBlock:(void (^)(id data, NSError *error))block;
@@ -81,7 +81,7 @@
               WithBlock:(void (^)(id data, NSError *error))block;
 
 
-//添加openfire好友，走接口这边
+//添加openfire好友，走接口这边（暂时没用这个接口。。。。）
 - (void)addOpenfireFriendOfParams:(NSDictionary *)params
                         WithBlock:(void (^)(id data, NSError *error))block;
 
@@ -92,6 +92,11 @@
 //链接通话平台
 - (void)linkRongLianInfoOfParams:(NSDictionary *)params
                        WithBlock:(void (^)(id data, NSError *error))block;
+
+
+//话费查询
+- (void)queryTelphoneFareOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block;
 
 
 @end

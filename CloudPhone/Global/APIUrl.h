@@ -69,5 +69,7 @@
 //链接通话平台
 #define API_linkRongLian                                @"?s=/Home/CCPRest/subInfo"
 
+//话费查询接口
+#define API_phonefees                                   @"?s=/Home/User/get_user_tel_fare"
 
 #endif

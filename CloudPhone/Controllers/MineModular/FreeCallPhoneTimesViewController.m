@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *itemArray;
+@property (nonatomic, strong) MBProgressHUD *HUD;
 
 
 @end
@@ -33,7 +34,8 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MainWidth,300)];
     headerView.backgroundColor = [UIColor whiteColor];
     UIButton *remaineTimeButton = [[UIButton alloc] initWithFrame:CGRectMake(85, 40, MainWidth - 85 * 2 ,MainWidth - 85 * 2)];
-    [remaineTimeButton setTitle:@"110" forState:UIControlStateNormal];
+    remaineTimeButton.tag = 4000;
+    [remaineTimeButton setTitle:@"＊" forState:UIControlStateNormal];
     [remaineTimeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     remaineTimeButton.titleLabel.font = [UIFont systemFontOfSize:30];
     [remaineTimeButton setEnabled:NO];
@@ -47,11 +49,13 @@
     [remaineTimeButton addSubview:lable];
     
     UILabel *baseTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 - 50) / 2.0, 60)];
-    baseTimeLabel.text = @"基础时长100分钟/月";
+    baseTimeLabel.tag = 4001;
+    baseTimeLabel.text = @"基础时长＊分钟/月";
     baseTimeLabel.numberOfLines = 2;
 
-    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 - 80) / 2.0, 60)];
-    rewardTimeLabel.text = @"奖励时长10分钟/月";
+    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 - 50) / 2.0, 60)];
+    rewardTimeLabel.tag = 4002;
+    rewardTimeLabel.text = @"奖励时长＊分钟/月";
     rewardTimeLabel.numberOfLines = 2;
     
     [headerView addSubview:remaineTimeButton];
@@ -59,6 +63,8 @@
     [headerView addSubview:rewardTimeLabel];
     
     self.tableView.tableHeaderView = headerView;
+    
+    [self requestPhoneFare];
 
 }
 
@@ -127,6 +133,59 @@
     
 }
 
+#pragma mark - 查询话费接口
+- (void)requestPhoneFare {
+    [self AddHUD];
+    [[AirCloudNetAPIManager sharedManager] queryTelphoneFareOfParams:nil WithBlock:^(id data, NSError *error) {
+        [self HUDHidden];
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            
+            if (dic) {
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                    
+                    NSDictionary *resultDic = [dic objectForKey:@"data"];
+                    //剩余时长
+                    NSInteger count_tel_fare = [[resultDic objectForKey:@"count_tel_fare"] integerValue];
+                    //基础时长
+                    NSInteger give_tel_fare = [[resultDic objectForKey:@"give_tel_fare"] integerValue];
+                    //奖励时长
+                    NSInteger recharge_tel_fare = [[resultDic objectForKey:@"recharge_tel_fare"] integerValue];
+                    
+                    //剩余时长
+                    UIButton *leaveButton = (UIButton *)[self.view  viewWithTag:4000];
+                    [leaveButton setTitle:[NSString stringWithFormat:@"%ld",(long)count_tel_fare] forState:UIControlStateNormal];
+                    
+                    //基础时长
+                    UILabel *baseLabel = (UILabel *)[self.view viewWithTag:4001];
+                    baseLabel.text = [NSString stringWithFormat:@"基础时长%ld分钟/月",(long)give_tel_fare];
+                    
+                    //奖励时长
+                    UILabel *rewardLabel = (UILabel *)[self.view viewWithTag:4002];
+                    rewardLabel.text = [NSString stringWithFormat:@"奖励时长%ld分钟/月",(long)recharge_tel_fare];
+                    
+                    [self.tableView reloadData];
+                    
+                } else {
+                    DLog(@"******%@",[dic objectForKey:@"msg"]);
+                    [CustomMBHud customHudWindow:@"请求失败"];
+                }
+            }
+        }
+    }];
+}
+
+#pragma mark - MBProgressHUD Show or Hidden
+- (void)AddHUD {
+    _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    _HUD.labelText = @"请稍后...";
+}
+
+- (void)HUDHidden {
+    if (_HUD) {
+        _HUD.hidden = YES;
+    }
+}
 
 - (void)popViewController {
     

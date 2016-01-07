@@ -23,11 +23,16 @@
 
 @property (nonatomic, strong) DXMessageToolBar *chatToolBar;
 
-@property (nonatomic, strong) NSMutableArray *dataMessageArray;
-
 @property (nonatomic, strong) CellFrameModel *cellModel;
 
-//@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
+
+@property (nonatomic, strong) NSMutableArray *dataMessageArray;
+@property (nonatomic, strong) NSMutableArray *currentMessagerray; //取10条
+
+@property (nonatomic, strong) NSMutableArray *allMsgArray;
+@property (nonatomic, strong) NSMutableArray *historyMsgArray;
 
 @end
 
@@ -50,6 +55,7 @@
     
     //消息数据源
     _dataMessageArray = [[NSMutableArray alloc]initWithCapacity:0];
+    _currentMessagerray = [[NSMutableArray alloc]initWithCapacity:0];
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.chatToolBar];
@@ -60,7 +66,10 @@
     }
     
     [self.fetchedResultsController performFetch:NULL];
-    [self loadXMPPMessageData];
+    _allMsgArray = [NSMutableArray arrayWithArray:self.fetchedResultsController.fetchedObjects];
+    _historyMsgArray = [NSMutableArray arrayWithArray:self.fetchedResultsController.fetchedObjects];
+    //先获取历史的消息，其实也一样
+    [self loadHistoryXMPPMessageData];
     
     
 }
@@ -102,9 +111,9 @@
         _tableView.backgroundColor = [ColorTool backgroundColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
-//        _refreshControl = [[UIRefreshControl alloc]init];
-//        [_refreshControl addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventValueChanged];
-//        [_tableView addSubview:_refreshControl];
+        _refreshControl = [[UIRefreshControl alloc]init];
+        [_refreshControl addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventValueChanged];
+        [_tableView addSubview:_refreshControl];
         
         UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
         [_tableView addGestureRecognizer:tap];
@@ -112,9 +121,27 @@
     return _tableView;
 }
 
-//- (void)refreshAction {
-//   [_refreshControl endRefreshing];
-//}
+- (void)refreshAction {
+    //取10条出来
+    if (_dataMessageArray.count > 10) {
+        for (NSInteger i = _dataMessageArray.count - 1; i >= _dataMessageArray.count - 10; i--) {
+            [self.currentMessagerray insertObject:_dataMessageArray[i] atIndex:0];
+        }
+        [self.dataMessageArray removeObjectsInArray:_currentMessagerray];
+        [_tableView reloadData];
+        
+    } else if(0 < _dataMessageArray.count && _dataMessageArray.count <= 10){
+        for (NSInteger i = _dataMessageArray.count - 1; i >= 0; i--) {
+            [self.currentMessagerray insertObject:_dataMessageArray[i] atIndex:0];
+        }
+        [self.dataMessageArray removeObjectsInArray:_currentMessagerray];
+        [_tableView reloadData];
+    } else {
+        DLog(@"_currentMessagerray = %@",_currentMessagerray);
+    }
+    
+    [_refreshControl endRefreshing];
+}
 
 - (DXMessageToolBar *)chatToolBar
 {
@@ -166,8 +193,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.fetchedResultsController.fetchedObjects.count;
-//    return _dataMessageArray.count;
+    return _currentMessagerray.count;//self.fetchedResultsController.fetchedObjects.count;
 
 }
 
@@ -179,8 +205,8 @@
         cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
     }
     
-    if (_dataMessageArray.count > 0) {
-        MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+    if (_currentMessagerray.count > 0) {
+        MessageModel *model = [_currentMessagerray objectAtIndex:indexPath.row];
         _cellModel.message = model;
         [cell cellForDataWithModel:_cellModel indexPath:indexPath controller:self];
 
@@ -192,16 +218,11 @@
 
 
 #pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-   
-
-}
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    if (_dataMessageArray.count > 0) {
-        MessageModel *model = [_dataMessageArray objectAtIndex:indexPath.row];
+    if (_currentMessagerray.count > 0) {
+        MessageModel *model = [_currentMessagerray objectAtIndex:indexPath.row];
         _cellModel.message = model;
         return _cellModel.cellHeight;
     }
@@ -212,56 +233,14 @@
     [self keyBoardHidden];
 }
 
-#pragma mark - 保存最后的信息
-- (void)saveLastMessageToFMDB {
-
-    //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
-    if (self.fetchedResultsController.fetchedObjects.count > 0) {
-        
-        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
-        NSString *lastStr = @"";
-        if ([message.body hasPrefix:@"ImgBase64"]) {
-            lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"AudioBase64"]) {
-            lastStr = @"[语音]";
-        } else if ([message.body hasPrefix:@"TextBase64"]){
-            lastStr = [message.message.body substringFromIndex:10];
-        } else if ([message.body hasPrefix:@"LonBase64"]) {
-            lastStr = @"[位置]";
-        } else {
-            lastStr = @"不配配类型。。。。。";
-        }
-
-        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
-
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *number = [defaults objectForKey:UserNumber];
-        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
-        
-        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:self.chatJIDStr theColumn:@"mineNumber" equalValue:number];
-        if (chatArray.count > 0) {
-            
-            //最后一条信息
-            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-            //最后的时间
-             [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-            //红点清零
-             [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-        } else {
-            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
-        }
-    }
-}
-
-
 #pragma mark - NSFetchedResultsControllerDelegate
 //结果调度器有一个代理方法，一旦上下文改变触发，也就是刚加了好友，或删除好友时会触发
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller{
     DLog(@"上下文改变");
-
+    
+    _allMsgArray = [NSMutableArray arrayWithArray:self.fetchedResultsController.fetchedObjects];
+    [_allMsgArray removeObjectsInArray:_historyMsgArray];
+    _historyMsgArray = [NSMutableArray arrayWithArray:self.fetchedResultsController.fetchedObjects];
     [self loadXMPPMessageData];
     
     [self.tableView reloadData];
@@ -270,10 +249,9 @@
 
 
 - (void)loadXMPPMessageData {
-    [_dataMessageArray removeAllObjects];
     
-    if (self.fetchedResultsController.fetchedObjects.count > 0) {
-        for (XMPPMessageArchiving_Message_CoreDataObject *message in self.fetchedResultsController.fetchedObjects) {
+    if (self.allMsgArray.count > 0) {
+        for (XMPPMessageArchiving_Message_CoreDataObject *message in self.allMsgArray) {
             
             MessageModel *messagemodel = [[MessageModel alloc]init];
 
@@ -288,12 +266,19 @@
                 messagemodel.messageType = kImageMessage; //图片类型
                 messagemodel.text = @"照片";
             } else if ([message.body hasPrefix:@"AudioBase64"]) {
-                NSString *timeStr = [self getTimeString:message.body];
-                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"audio"];
-                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+//                NSString *timeStr = [self getTimeString:message.body];
                 
-                messagemodel.voiceTime = timeStr;
-                messagemodel.voiceFilepath = path;
+                NSString *jsonStr = [message.body substringFromIndex:11];
+                if (jsonStr) {
+                    NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                    
+                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                    NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                    
+                    messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
+                    messagemodel.voiceFilepath = path;
+                }
+                
                 messagemodel.messageType = kVoiceMessage; //语音类型
                 messagemodel.text = @"语音";
                 
@@ -312,6 +297,7 @@
                     messagemodel.address = [locDic objectForKey:@"address"];
                 }
                 messagemodel.messageType = kLocationMessage; //地理位置类型
+                messagemodel.text = @"位置";
             
             } else {
                 messagemodel.text = @"不配配类型。。。。";
@@ -321,10 +307,9 @@
             messagemodel.chatJID = self.chatJID;
             messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
             
-            [_dataMessageArray addObject:messagemodel];
+            [_currentMessagerray addObject:messagemodel];
         }
     }
-   
 }
 
 #pragma maek - 发送图片语音存放本地
@@ -338,9 +323,9 @@
         [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
         
     } else if ([type isEqualToString:@"audio"]) {
-        NSArray *array = [body componentsSeparatedByString:@"}"];
-        NSString *base64str = array[1];
-        NSData *data = [base64str base64DecodedData];
+//        NSArray *array = [body componentsSeparatedByString:@"}"];
+//        NSString *base64str = array[1];
+        NSData *data = [body base64DecodedData];
         //存到本地
         [data writeToFile:[self pathForData:jid timestamp:timestamp] atomically:YES];
     }
@@ -451,7 +436,7 @@
     DLog(@"照相");
     BOOL iscamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     if (!iscamera) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"没有相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"不支持相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
         [alert show];
         return;
     }
@@ -539,6 +524,125 @@
 // 点击背景隐藏
 -(void)keyBoardHidden{
     [self.chatToolBar endEditing:YES];
+}
+
+#pragma mark - 保存最后的信息
+- (void)saveLastMessageToFMDB {
+    
+    //如果进来聊天界面，有消息则加入消息前一个界面的消息列表
+    if (self.fetchedResultsController.fetchedObjects.count > 0) {
+        
+        XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
+        NSString *lastStr = @"";
+        if ([message.body hasPrefix:@"ImgBase64"]) {
+            lastStr = @"[图片]";
+        } else if ([message.body hasPrefix:@"AudioBase64"]) {
+            lastStr = @"[语音]";
+        } else if ([message.body hasPrefix:@"TextBase64"]){
+            lastStr = [message.body substringFromIndex:10];
+        } else if ([message.body hasPrefix:@"LonBase64"]) {
+            lastStr = @"[位置]";
+        } else {
+            lastStr = @"不配配类型。。。。。";
+        }
+        
+        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *number = [defaults objectForKey:UserNumber];
+        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
+        
+        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:self.chatJIDStr theColumn:@"mineNumber" equalValue:number];
+        if (chatArray.count > 0) {
+            
+            //最后一条信息
+            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+            //最后的时间
+            [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+            //红点清零
+            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+            
+        } else {
+            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+        }
+    }
+}
+
+
+- (void)loadHistoryXMPPMessageData {
+    if (self.allMsgArray.count > 0) {
+        for (XMPPMessageArchiving_Message_CoreDataObject *message in self.allMsgArray) {
+            
+            MessageModel *messagemodel = [[MessageModel alloc]init];
+            
+            if ([message.body hasPrefix:@"ImgBase64"]) {
+                //先存本地一份（放大图片从本地取不会失真，好神奇）
+                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
+                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                
+                UIImage *image = [UIImage imageWithContentsOfFile:path];
+                messagemodel.image = image;
+                messagemodel.imagePath = path;
+                messagemodel.messageType = kImageMessage; //图片类型
+                messagemodel.text = @"照片";
+            } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                //                NSString *timeStr = [self getTimeString:message.body];
+                
+                NSString *jsonStr = [message.body substringFromIndex:11];
+                if (jsonStr) {
+                    NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                    
+                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                    NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                    
+                    messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
+                    messagemodel.voiceFilepath = path;
+                }
+                
+                messagemodel.messageType = kVoiceMessage; //语音类型
+                messagemodel.text = @"语音";
+                
+            } else if ([message.body hasPrefix:@"TextBase64"]){
+                
+                messagemodel.text = [message.body substringFromIndex:10];
+                messagemodel.messageType = kTextMessage; //文字类型
+                
+            } else if ([message.body hasPrefix:@"LonBase64"]){
+                
+                NSString *jsonStr = [message.body substringFromIndex:9];
+                if (jsonStr) {
+                    NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                    messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
+                    messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
+                    messagemodel.address = [locDic objectForKey:@"address"];
+                }
+                messagemodel.messageType = kLocationMessage; //地理位置类型
+                messagemodel.text = @"位置";
+                
+            } else {
+                messagemodel.text = @"不配配类型。。。。";
+                messagemodel.messageType = kTextMessage; //文字类型
+            }
+            messagemodel.otherPhoto = self.chatPhoto;
+            messagemodel.chatJID = self.chatJID;
+            messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+            
+            [_dataMessageArray addObject:messagemodel];
+        }
+        
+        //取10条出来
+        if (_dataMessageArray.count > 10) {
+            for (NSInteger i = _dataMessageArray.count - 10; i < _dataMessageArray.count; i++) {
+                [self.currentMessagerray addObject:_dataMessageArray[i]];
+            }
+            [self.dataMessageArray removeObjectsInArray:_currentMessagerray];
+        } else {
+            self.currentMessagerray = [NSMutableArray arrayWithArray:_dataMessageArray];
+            [self.dataMessageArray removeAllObjects];
+        }
+    }
 }
 
 #pragma mark ---触摸关闭键盘----

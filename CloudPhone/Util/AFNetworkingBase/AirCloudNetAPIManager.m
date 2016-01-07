@@ -246,9 +246,16 @@
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_linkRongLian serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
         block(data,error);
     }];
-    
 }
 
+//话费查询
+- (void)queryTelphoneFareOfParams:(NSDictionary *)params
+                        WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_phonefees serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
 
+}
 
 @end

@@ -68,7 +68,7 @@
     } else {
         [self requestPersonalInfo];
     }
-    //    [self requestPersonalCenter];
+//        [self requestPersonalCenter];
 }
 
 - (UITableView *)tableView {

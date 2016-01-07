@@ -112,11 +112,16 @@
     //转化base64编码
     NSString *base64Str = [data base64EncodedString];
     
-    NSMutableString *audioString = [[NSMutableString alloc]initWithFormat:@"AudioBase64{%ld}",(long)duration];
-    [audioString appendString:base64Str];
+    NSDictionary *dic = @{@"data":base64Str,@"duration":[NSString stringWithFormat:@"%ld",(long)duration]};
+    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
     
-//    NSDictionary *dic = @{@"messageType":@"audio",@"data":base64Str,@"duration":[NSString stringWithFormat:@"%ld",(long)duration]};
-//    NSString *jsonString = [GeneralToolObject dictionaryToJson:dic];
+    NSMutableString *audioString = [[NSMutableString alloc]initWithString:@"AudioBase64"];
+    [audioString appendString:jsonString];
+    
+//    NSMutableString *audioString = [[NSMutableString alloc]initWithFormat:@"AudioBase64{%ld}",(long)duration];
+//    [audioString appendString:base64Str];
+    
+    
     
     [message addBody:audioString];
     [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
