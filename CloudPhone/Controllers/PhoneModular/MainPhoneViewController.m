@@ -127,11 +127,12 @@
     DailNumberCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[DailNumberCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+       
     }
 
     if (self.callRecordArray.count > 0) {
         CallRecordsModel *model = [self.callRecordArray objectAtIndex:indexPath.row];
-       [cell cellForDataWithModel:model];
+        [cell cellForDataWithModel:model indexPath:indexPath controller:self];
     }
     return cell;
 }
@@ -144,9 +145,8 @@
     CallRecordsModel *model = [self.callRecordArray objectAtIndex:indexPath.row];
     DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.callerName andCallerNo:model.callerNo andVoipNo:labelString];
     [self presentViewController:dialingVC animated:YES completion:nil];
-   
     
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 //    if (indexPath.row == 1){
 //        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
 //        [self.navigationController pushViewController:friDetailVC animated:YES];

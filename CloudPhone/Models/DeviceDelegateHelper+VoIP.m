@@ -8,7 +8,6 @@
 
 #import "DeviceDelegateHelper.h"
 #import "DeviceDelegateHelper+VoIP.h"
-#import "VoipIncomingViewController.h"
 #import "AppDelegate.h"
 #import "WifiVoipComingViewController.h"
 
@@ -24,19 +23,12 @@
 
     UIViewController *incomingCallView = nil;
     if (calltype == VIDEO){
-//        VideoViewController *incomingVideoView =                                                                                                                                                                                               [[VideoViewController alloc] initWithCallerName:callername andVoipNo:caller andCallstatus:1];
-//        incomingVideoView.callID = callid;
-//        incomingCallView = incomingVideoView;
     } else{
 
         WifiVoipComingViewController *controller = [[WifiVoipComingViewController alloc]initWithName:callername andPhoneNO:callerphone andCallID:callid];
         controller.contactVoip = caller;
         controller.status = kIncomingCallStatus_incoming;
         incomingCallView = controller;
-//        VoipIncomingViewController* incomingVoiplView = [[VoipIncomingViewController alloc] initWithName:callername andPhoneNO:callerphone andCallID:callid];
-//        incomingVoiplView.contactVoip = caller;
-//        incomingVoiplView.status = IncomingCallStatus_incoming;
-//        incomingCallView = incomingVoiplView;
     }
     
     id rootviewcontroller = [[[[UIApplication sharedApplication] delegate] window]rootViewController];
@@ -53,7 +45,7 @@
 //呼叫事件
 - (void)onCallEvents:(VoIPCall*)voipCall {
     if (voipCall.callStatus == ECallStreaming) {
-       // [DemoGlobalClass sharedInstance].isCallBusy = YES;
+
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_onCallEvent object:voipCall];
 }

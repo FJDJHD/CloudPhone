@@ -16,6 +16,8 @@
 #import "FriendCell.h"
 #import "AddressIconButton.h"
 #import "AddressObject.h"
+#import "DialingViewController.h"
+#import "FriendDetailViewController.h"
 
 #import "PersonModel.h"
 #import <MessageUI/MessageUI.h>
@@ -23,6 +25,7 @@
 #import "JSONKit.h"
 #import "AddFriendModel.h"
 #import "AddressIconButton.h"
+#import "CallRecordsModel.h"
 
 @interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate,MFMessageComposeViewControllerDelegate>
 
@@ -43,7 +46,6 @@
 
 @property (nonatomic, strong) NSMutableArray *invateArray;  //注册过的
 
-@property (nonatomic, strong) NSMutableArray *addressArray; //剩下通讯录的
 
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
@@ -59,12 +61,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
 
-//        _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
+//      _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
         _listContentArray = [[NSMutableArray alloc] initWithCapacity:0];
         _numberArray = [[NSMutableArray alloc]initWithCapacity:0];
         _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
         _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
-        _addressArray = [[NSMutableArray alloc]initWithCapacity:0];
     }
     return self;
 }
@@ -144,19 +145,16 @@
 #pragma mark - UITabvleViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         //itel 好友
         return _friendArray.count;
-    } else if (section == 1) {
-        //注册 itel
-        return _invateArray.count;
     } else {
         //通讯录
-        return _addressArray.count;
+        return _invateArray.count;
     }
 }
 
@@ -184,6 +182,13 @@
         subtitle.font = [UIFont systemFontOfSize:13.0];
         [cell addSubview:subtitle];
         
+        UIImage *arrowImg = [UIImage imageNamed:@"phone_detail"];
+        CGRect arrowImageFrame = CGRectMake(MainWidth - 60, 0 , 60, 60);
+        UIButton  *arrowImgButton = [[UIButton alloc]initWithFrame:arrowImageFrame];
+        [arrowImgButton setImage:arrowImg forState:UIControlStateNormal];
+        [arrowImgButton setImageEdgeInsets:UIEdgeInsetsMake(0.0,-15.0,0.0,0.0)];
+        [cell addSubview:arrowImgButton];
+        [arrowImgButton addTarget:self action:@selector(arrowButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     
     cell.accessoryView = nil;
@@ -203,10 +208,7 @@
             } else {
                 [button setTitle:@"" forState:UIControlStateNormal];
             }
-            
             cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
-            
-            
         }
         
     } else if (indexPath.section == 1) {
@@ -224,37 +226,23 @@
             } else {
                 [button setTitle:@"" forState:UIControlStateNormal];
             }
-            
-            cell.accessoryView = [self statusButtonWithTitle:@"加为好友"];
-            
-            
+
         }
         
-    } else {
-        //通讯录 （邀请）
-        if (_addressArray.count > 0) {
-            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
-            
-            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-            titleLab.text = model.userName;
-            subtitleLab.text = model.mobile;
-            
-            AddressIconButton *button = [cell viewWithTag:5550];
-            if (model.userName.length > 0) {
-                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
-            } else {
-                [button setTitle:@"" forState:UIControlStateNormal];
-            }
-            
-            
-            cell.accessoryView = [self statusButtonWithTitle:@"邀请"];
-            
-        }
     }
     return cell;
     
 }
+
+- (void)arrowButtonClick{
+    NSLog(@"+++++++");
+    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+    CallRecordsModel *model = [[CallRecordsModel alloc] init];
+   // model.callerNo =
+    friDetailVC.model = model;
+    [self.navigationController pushViewController:friDetailVC animated:YES];
+}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -274,17 +262,13 @@
             return 30.0;
         }
         return CGFLOAT_MIN;
-    }  else {
-        if (_addressArray.count > 0) {
-            return 30.0;
-        }
-        return CGFLOAT_MIN;
     }
+    return CGFLOAT_MIN;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
-    return 1;
+    return 1.0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -299,16 +283,10 @@
     } else if (section == 1) {
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
-            NSString *str = [NSString stringWithFormat:@"添加成itel好友(%lu)",(unsigned long)_invateArray.count];
+            NSString *str = [NSString stringWithFormat:@"手机通讯录(%lu)",(unsigned long)_invateArray.count];
             return [self sectionHeaderViewWithTitle:str];
         }
         
-    } else {
-        //通讯录 （邀请）
-        if (_addressArray.count > 0) {
-            NSString *str = [NSString stringWithFormat:@"邀请注册云电话(%lu)",(unsigned long)_addressArray.count];
-            return [self sectionHeaderViewWithTitle:str];
-        }
     }
     return nil;
 }
@@ -318,17 +296,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         //itel 好友 (好友)
-        
-    } else if (indexPath.section == 1) {
-        //注册itel （添加好友）
-        
-    } else {
-        //通讯录 （邀请）
-//        if (_addressArray.count > 0) {
-//            ItelFriendModel *model = [_addressArray objectAtIndex:indexPath.row];
-//            //发送系统信息
-//            [self showMessageView:[NSArray arrayWithObjects:model.mobile, nil]  body:MessageItel];
-//        }
+        ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
+        DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
+        [self presentViewController:dialingVC animated:YES completion:nil];
+
+    } else{
+        //通讯录
+        ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
+        DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
+        [self presentViewController:dialingVC animated:YES completion:nil];
     }
 }
 
@@ -433,7 +409,7 @@
                                     model.userName = [adsDic objectForKey:@"username"];
                                     model.mobile = [adsDic objectForKey:@"mobile"];
                                     model.status = kNotFriend;
-                                    [_addressArray addObject:model];
+                                    [_invateArray addObject:model];
                                 }
                             }
                         }
@@ -524,26 +500,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-//- (void)initWithSearchBar {
-//    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
-//    self.searchBar.frame = CGRectMake(0.0f, 0.f, MainWidth, 44.0f);
-//    self.searchBar.placeholder=@"搜索";
-//    self.searchBar.delegate = self;
-//    self.searchBar.backgroundColor = [UIColor clearColor];
-//    self.searchBar.backgroundImage = [UIImage imageWithColor:[ColorTool backgroundColor] size:self.searchBar.bounds.size];
-//    
-//    //设置为列表头
-//    self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, MainWidth, 44.0f)];
-//    [self.tableView.tableHeaderView addSubview:self.searchBar];
-//    
-//    //搜索控制器
-//    self.searchControl = [[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self];
-//    self.searchControl.searchResultsDataSource = self;
-//    self.searchControl.searchResultsDelegate = self;
-//    self.searchControl.delegate = self;
-//}
-//
-//
 //- (void)loadAddressData {
 //     [self initData];
 //     [_tableView reloadData];
@@ -584,67 +540,6 @@
 //    }
 //}
 //
-//#pragma mark - UITableViewDataSource
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//
-//    return _listContentArray.count;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    if (tableView  == self.searchControl.searchResultsTableView) {
-//        //搜索栏
-//        return _searchArray.count;
-//    }else{
-//       return [_listContentArray[section] count];
-//    }
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (tableView == self.searchControl.searchResultsTableView) {
-//        //搜索
-//        static NSString *ID = @"SearchCell";
-//        FriendCell *searchCell =[tableView dequeueReusableCellWithIdentifier:ID];
-//        if (!searchCell) {
-//            searchCell = [[FriendCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-//        }
-//        if (_searchArray.count > 0) {
-//            XMPPUserCoreDataStorageObject *user = [_searchArray objectAtIndex:indexPath.row];
-//            [searchCell cellForData:user];
-//        }
-//        return searchCell;
-//        
-//    } else{
-//    static NSString *ID = @"cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-//    if (!cell) {
-//        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-//    }
-//    if (self.listContentArray && self.listContentArray.count > 0) {
-//        NSArray *sectionArr = [_listContentArray objectAtIndex:indexPath.section];
-//        PersonModel *model = (PersonModel *)[sectionArr objectAtIndex:indexPath.row];
-//        cell.textLabel.text = model.phonename;
-//        cell.detailTextLabel.text = model.tel;
-//        cell.imageView.image = [UIImage imageNamed:@"phone_addressicon"];
-//       // cell.imageView = [AddressIconButton buttonWithTitle:@"r"];
-//        UIImage *image = [UIImage imageNamed:@"phone_addressItelFlag"];
-//        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(MainWidth - image.size.width - 15, 15, image.size.width, image.size.height)];
-//        imageView.image = image;
-//        cell.accessoryView = imageView;
-//        //cell.detailTextLabel.text = model.tel;
-//    }
-//         return cell;
-//  }
-//    return nil;
-//}
-//
-//#pragma mark - UITableViewDelegate 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 22.0;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//    return 1.0;
-//}
 //
 ////开启右侧索引条
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -678,17 +573,6 @@
 //        DLog(@"取消");
 //    }
 //    [self dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//
-////导航栏右按钮
-//- (void)addressButtonClick {
-//    ABNewPersonViewController *newPersonController=[[ABNewPersonViewController alloc]init];
-//    //设置代理
-//    newPersonController.newPersonViewDelegate=self;
-//    //注意ABNewPersonViewController必须包装一层UINavigationController才能使用，否则不会出现取消和完成按钮，无法进行保存等操作
-//    UINavigationController *navigationController=[[UINavigationController alloc]initWithRootViewController:newPersonController];
-//    [self presentViewController:navigationController animated:YES completion:nil];
 //}
 //
 //

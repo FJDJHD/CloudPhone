@@ -10,9 +10,13 @@
 #import "Global.h"
 #import "FriendDetailViewController.h"
 
-@implementation DailNumberCell
+@implementation DailNumberCell{
+    UIViewController *temVC;
+}
 
-- (void)cellForDataWithModel:(CallRecordsModel *)model{
+- (void)cellForDataWithModel:(CallRecordsModel *)model indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller{
+    _model = model;
+    temVC = controller;
     _dailNameLabel.text = model.callerName;
     _dailNumberLabel.text= model.callerNo;
     NSRange range = {5,5};
@@ -22,18 +26,21 @@
     _dailTimeLabel.text = detialTime;
     _dailDateLable.text = date;
     
-    if ([model.callResult isEqualToString:@"1"]) {
+    if ([model.callResult isEqualToString:@"0"]) {
         [_dailImageView setImage:[UIImage imageNamed:@"phone_outcall"]];
-    }else if ([model.callResult isEqualToString:@"0"]){
-        [_dailImageView setImage:[UIImage imageNamed:@"phone_incall"]];
+    }else if ([model.callResult isEqualToString:@"1"]){
+        [_dailImageView setImage:[UIImage imageNamed:@"phone_outcallNo"]];
     }else if ([model.callResult isEqualToString:@"2"]){
+        [_dailImageView setImage:[UIImage imageNamed:@"phone_incall"]];
+    }else if ([model.callResult isEqualToString:@"3"]){
         [_dailImageView setImage:[UIImage imageNamed:@"phone_incallNo"]];
     }
+    
+    
 }
 
 
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
 
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -74,16 +81,18 @@
         UIButton  *arrowImgButton = [[UIButton alloc]initWithFrame:arrowImageFrame];
         [arrowImgButton setImage:arrowImg forState:UIControlStateNormal];
         [arrowImgButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 30, 0.0, 0.0)];
-
+        self.arrowImgButton = arrowImgButton;
         [self addSubview:arrowImgButton];
-        [arrowImgButton addTarget:self action:@selector(arrowButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [self.arrowImgButton addTarget:self action:@selector(arrowButtonClick) forControlEvents:UIControlEventTouchUpInside];
+      
     }
     return self;
 }
 
 - (void)arrowButtonClick{
-    DLog(@"++++++++");
-   
+    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+    friDetailVC.model = _model;
+    [temVC.navigationController pushViewController:friDetailVC animated:YES];
 
 }
 

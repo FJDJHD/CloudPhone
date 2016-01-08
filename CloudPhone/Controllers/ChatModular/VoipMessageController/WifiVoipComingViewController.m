@@ -10,7 +10,7 @@
 #import "Global.h"
 #import "DeviceDelegateHelper.h"
 #import "DeviceDelegateHelper+VoIP.h"
-
+#import "CallRecordsModel.h"
 
 
 @interface WifiVoipComingViewController () {
@@ -37,6 +37,7 @@
 
 @property (nonatomic, strong) UIButton *hangupButton; //挂断按钮
 
+@property (nonatomic, strong) NSString *callResult;
 
 
 @end
@@ -268,6 +269,25 @@
     [Global shareInstance].isCallBusy = NO;
     [[ECDevice sharedInstance].VoIPManager releaseCall:self.callID];
     
+    if (ssInt > 0) {
+         self.callResult = @"2";
+    }else{
+         self.callResult = @"3";
+    }
+   
+    CallRecordsModel *callRecordsModel = [[CallRecordsModel alloc] init];
+    callRecordsModel.callResult = self.callResult;
+    callRecordsModel.callerName = self.contactName;
+    callRecordsModel.callerNo = self.contactNum;
+    NSDate *date = [NSDate date];
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:date];
+    NSDate *localeDate = [date dateByAddingTimeInterval:interval];
+    callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",localeDate];
+    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
+    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
+
+    
     [self exitView];
 }
 
@@ -296,6 +316,21 @@
 - (void)releaseCall{
     [Global shareInstance].isCallBusy = NO;
     [[ECDevice sharedInstance].VoIPManager releaseCall:self.callID];
+    
+    self.callResult = @"3";
+    CallRecordsModel *callRecordsModel = [[CallRecordsModel alloc] init];
+    callRecordsModel.callResult = self.callResult;
+    callRecordsModel.callerName = self.contactName;
+    callRecordsModel.callerNo = self.contactNum;
+    NSDate *date = [NSDate date];
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:date];
+    NSDate *localeDate = [date dateByAddingTimeInterval:interval];
+    callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",localeDate];
+    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
+    [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
+
+    
 }
 
 -(void) exitView {

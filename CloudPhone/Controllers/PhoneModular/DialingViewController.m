@@ -116,11 +116,11 @@
     //头像
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_friendiconbg"]];
     iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
-    iconImageView.center = CGPointMake(MainWidth / 2.0, iconImageView.frame.size.height / 2.0);
+    iconImageView.center = CGPointMake(MainWidth / 2.0, iconImageView.frame.size.height / 2.0 + 10);
     [detailView addSubview:iconImageView];
     //姓名
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
-    nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 25 + (nameLabel.frame.size.height) / 2.0);
+    nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 15 + (nameLabel.frame.size.height) / 2.0);
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.textColor = [UIColor whiteColor];
     if (self.callerName) {
@@ -196,13 +196,18 @@
         break;
             
         case 3:{
+            //回拨
         [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
         }
         break;
             
         case 4:{
            //挂断
-            self.callResult = @"1";
+            if (ssInt > 0) {
+                self.callResult = @"0";
+            }else{
+                self.callResult = @"1";
+            }
             [self releaseCall];
         }
         break;
@@ -266,12 +271,12 @@
             case ECallFailed: {
                 if( voipCall.reason == ECErrorType_NoResponse) {
                     self.dailingLabel.text = @"网络不给力";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
 
                 } else if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
                     self.dailingLabel.text = @"您拨叫的用户正忙，请稍后再拨";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
 
                 } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
@@ -280,22 +285,22 @@
                     self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
                 } else if ( voipCall.reason == ECErrorType_CallMissed ) {
                     self.dailingLabel.text = @"呼叫超时";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
 
                 } else if ( voipCall.reason == ECErrorType_SDKUnSupport) {
                     self.dailingLabel.text = @"该版本不支持此功能";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
 
                 } else if ( voipCall.reason == ECErrorType_CalleeSDKUnSupport ) {
                     self.dailingLabel.text = @"对方版本不支持音频";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
 
                 } else {
                     self.dailingLabel.text = @"呼叫失败";
-                    self.callResult = @"2";
+                    self.callResult = @"1";
                     [self releaseCall];
                 }
             }
