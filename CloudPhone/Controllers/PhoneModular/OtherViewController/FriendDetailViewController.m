@@ -50,7 +50,7 @@
     nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 5 + (nameLabel.frame.size.height) / 2.0);
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.textColor = [UIColor blackColor];
-    nameLabel.text = @"刘美兰";
+    nameLabel.text = self.model.callerName;
     nameLabel.font = [UIFont systemFontOfSize:16.0];
     self.nameLabel = nameLabel;
     [self.view addSubview:nameLabel];
@@ -59,7 +59,7 @@
     signayureLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(nameLabel.frame) + 5 + (signayureLabel.frame.size.height) / 2.0);
     signayureLabel.textAlignment = NSTextAlignmentLeft;
     signayureLabel.textColor = [UIColor blackColor];
-    signayureLabel.text = @"刘美兰hahahhahah";
+    signayureLabel.text = @"";
     signayureLabel.font = [UIFont systemFontOfSize:16.0];
     self.signayureLabel = signayureLabel;
     [self.view addSubview:signayureLabel];
@@ -174,7 +174,7 @@
                 mobileLable.font = [UIFont systemFontOfSize:14];
                 mobileLable.textAlignment = NSTextAlignmentLeft;
                 mobileLable.textColor = [UIColor blackColor];
-                mobileLable.text = @"1235469877";
+                mobileLable.text = self.model.callerNo;
                 [cell addSubview:mobileLable];
                 
                 UILabel *mobileLocationLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(freeLabel.frame) + 15, CGRectGetMaxY(mobileLable.frame), 180, 20)];
@@ -208,7 +208,7 @@
         
         if (indexPath.row == 1) {
             cell.textLabel.text = @"简介";
-            self.detLabel.text = @"刘美玲";
+            self.detLabel.text = @"简介";
         }else if (indexPath.row == 2){
             cell.textLabel.text = @"店铺";
             self.detLabel.text = @"没蓝女装品牌专卖店";

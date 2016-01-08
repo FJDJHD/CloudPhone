@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CallRecordsModel.h"
 @interface FriendDetailViewController : UIViewController
-
+@property (nonatomic, strong) CallRecordsModel *model;
 @end

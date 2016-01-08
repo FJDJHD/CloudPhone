@@ -20,5 +20,9 @@
 
 @property (nonatomic, setter=isToday:) UILabel *dailDateLable;
 
-- (void)cellForDataWithModel:(CallRecordsModel *)model;
+@property (nonatomic, strong) UIButton  *arrowImgButton;
+
+@property (nonatomic, strong) CallRecordsModel *model;
+
+- (void)cellForDataWithModel:(CallRecordsModel *)model indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller;
 @end
