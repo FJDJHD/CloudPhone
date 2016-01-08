@@ -15,6 +15,7 @@
 #import "JSONKit.h"
 #import "AddFriendModel.h"
 #import "AddressIconButton.h"
+#import "ChatSendHelper.h"
 
 @interface AddressAddViewController ()<UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 
@@ -356,6 +357,10 @@
                 if ([model.status isEqualToString:@"unagree"]) {
                     XMPPJID *jid = [XMPPJID jidWithString:model.jidStr];
                     [[self appDelegate].xmppRoster acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+                    
+                    //这里再给安卓发一条信息，让安卓添加好友，蛋疼
+                    [ChatSendHelper sendAddFriendMessageWithString:XMPPBodyAgreeFriend to:model.jidStr];
+                    
                     [DBOperate updateData:T_addFriend tableColumn:@"isAgree" columnValue:@"agree" conditionColumn:@"jidStr" conditionColumnValue:model.jidStr];
                     [self loadFriendFromFMDB];
                     [_tableView reloadData];
@@ -373,9 +378,10 @@
                 [CustomMBHud customHudWindow:@"等待对方同意"];
                 ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
                 NSString *jidStr = [NSString stringWithFormat:@"%@%@",model.mobile,XMPPSevser];
-                
-                XMPPJID *jid = [XMPPJID jidWithString:jidStr];
-                [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+
+                [ChatSendHelper sendAddFriendMessageWithString:XMPPBodyAddFriend to:jidStr];
+//                XMPPJID *jid = [XMPPJID jidWithString:jidStr];
+//                [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
             }
         }
     
@@ -438,12 +444,14 @@
     BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
     if (contains) {
         DLog(@"已是好友");
-//        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        [CustomMBHud customHudWindow:@"已是好友"];
+        return YES;
     }
-    [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
+//    [[self appDelegate].xmppRoster subscribePresenceToUser:jid];
     
     if ([[[self appDelegate] xmppStream] isConnected]) {
         if (textField.text.length > 0) {
+            [ChatSendHelper sendAddFriendMessageWithString:XMPPBodyAddFriend to:desUser];
             [CustomMBHud customHudWindow:@"等待对方同意"];
         }
     }
@@ -496,7 +504,6 @@
             BOOL contains = [[self appDelegate].xmppRosterStorage userExistsWithJID:jid xmppStream:[self appDelegate].xmppStream];
             if (contains) {
                 DLog(@"");
-//                [[[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是好友，无需添加" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                 return;
             }
         [[self appDelegate].xmppRoster subscribePresenceToUser:jid];

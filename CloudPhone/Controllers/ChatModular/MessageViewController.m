@@ -252,63 +252,69 @@
     
     if (self.allMsgArray.count > 0) {
         for (XMPPMessageArchiving_Message_CoreDataObject *message in self.allMsgArray) {
-            
-            MessageModel *messagemodel = [[MessageModel alloc]init];
 
-            if ([message.body hasPrefix:@"ImgBase64"]) {
-                //先存本地一份（放大图片从本地取不会失真，好神奇）
-                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
-                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+            //这是添加好友的不做处理
+            if ([message.body hasPrefix:XMPPBodyAgreeFriend] || [message.body hasPrefix:XMPPBodyAddFriend]) {
+                //不算一条信息
+            } else {
                 
-                UIImage *image = [UIImage imageWithContentsOfFile:path];
-                messagemodel.image = image;
-                messagemodel.imagePath = path;
-                messagemodel.messageType = kImageMessage; //图片类型
-                messagemodel.text = @"照片";
-            } else if ([message.body hasPrefix:@"AudioBase64"]) {
-//                NSString *timeStr = [self getTimeString:message.body];
-                
-                NSString *jsonStr = [message.body substringFromIndex:11];
-                if (jsonStr) {
-                    NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
-                    
-                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                MessageModel *messagemodel = [[MessageModel alloc]init];
+                if ([message.body hasPrefix:@"ImgBase64"]) {
+                    //先存本地一份（放大图片从本地取不会失真，好神奇）
+                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
                     NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
                     
-                    messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
-                    messagemodel.voiceFilepath = path;
+                    UIImage *image = [UIImage imageWithContentsOfFile:path];
+                    messagemodel.image = image;
+                    messagemodel.imagePath = path;
+                    messagemodel.messageType = kImageMessage; //图片类型
+                    messagemodel.text = @"照片";
+                } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                    //                NSString *timeStr = [self getTimeString:message.body];
+                    
+                    NSString *jsonStr = [message.body substringFromIndex:11];
+                    if (jsonStr) {
+                        NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                        
+                        [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                        NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                        
+                        messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
+                        messagemodel.voiceFilepath = path;
+                    }
+                    
+                    messagemodel.messageType = kVoiceMessage; //语音类型
+                    messagemodel.text = @"语音";
+                    
+                } else if ([message.body hasPrefix:@"TextBase64"]){
+                    
+                    messagemodel.text = [message.body substringFromIndex:10];
+                    messagemodel.messageType = kTextMessage; //文字类型
+                    
+                } else if ([message.body hasPrefix:@"LonBase64"]){
+                    
+                    NSString *jsonStr = [message.body substringFromIndex:9];
+                    if (jsonStr) {
+                        NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                        messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
+                        messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
+                        messagemodel.address = [locDic objectForKey:@"address"];
+                    }
+                    messagemodel.messageType = kLocationMessage; //地理位置类型
+                    messagemodel.text = @"位置";
+                    
+                } else {
+                    messagemodel.text = @"不配配类型。。。。";
+                    messagemodel.messageType = kTextMessage; //文字类型
                 }
+                messagemodel.otherPhoto = self.chatPhoto;
+                messagemodel.chatJID = self.chatJID;
+                messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
                 
-                messagemodel.messageType = kVoiceMessage; //语音类型
-                messagemodel.text = @"语音";
-                
-            } else if ([message.body hasPrefix:@"TextBase64"]){
-                
-                messagemodel.text = [message.body substringFromIndex:10];
-                messagemodel.messageType = kTextMessage; //文字类型
-                
-            } else if ([message.body hasPrefix:@"LonBase64"]){
-                
-                NSString *jsonStr = [message.body substringFromIndex:9];
-                if (jsonStr) {
-                    NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
-                    messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
-                    messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
-                    messagemodel.address = [locDic objectForKey:@"address"];
-                }
-                messagemodel.messageType = kLocationMessage; //地理位置类型
-                messagemodel.text = @"位置";
-            
-            } else {
-                messagemodel.text = @"不配配类型。。。。";
-                messagemodel.messageType = kTextMessage; //文字类型
+                [_currentMessagerray addObject:messagemodel];
             }
-            messagemodel.otherPhoto = self.chatPhoto;
-            messagemodel.chatJID = self.chatJID;
-            messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-            
-            [_currentMessagerray addObject:messagemodel];
         }
+   
     }
 }
 
@@ -534,39 +540,56 @@
         
         XMPPMessageArchiving_Message_CoreDataObject *message = self.fetchedResultsController.fetchedObjects.lastObject;
         NSString *lastStr = @"";
-        if ([message.body hasPrefix:@"ImgBase64"]) {
-            lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"AudioBase64"]) {
-            lastStr = @"[语音]";
-        } else if ([message.body hasPrefix:@"TextBase64"]){
-            lastStr = [message.body substringFromIndex:10];
-        } else if ([message.body hasPrefix:@"LonBase64"]) {
-            lastStr = @"[位置]";
-        } else {
-            lastStr = @"不配配类型。。。。。";
+        
+        if (message.body.length > 0) {
+            if ([message.body hasPrefix:@"ImgBase64"]) {
+                lastStr = @"[图片]";
+                
+            } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                lastStr = @"[语音]";
+                
+            } else if ([message.body hasPrefix:@"TextBase64"]){
+                
+                lastStr = [message.body substringFromIndex:10];
+                
+            } else if ([message.body hasPrefix:XMPPBodyAgreeFriend]) {
+                //苹果这边不做处理
+                return;
+            } else if ([message.body hasPrefix:XMPPBodyAddFriend]){
+                return;
+                
+            } else if ([message.body hasPrefix:@"LonBase64"]) {
+                lastStr = @"[位置]";
+                
+            } else {
+                lastStr = @"不配配类型。。。。。";
+            }
+            
+            NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *number = [defaults objectForKey:UserNumber];
+            NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
+            
+            NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:self.chatJIDStr theColumn:@"mineNumber" equalValue:number];
+            if (chatArray.count > 0) {
+                //最后一条信息
+                //            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"lastMessage" theColumnValue:lastStr ColumnOne:@"jidStr" valueOne:self.chatJIDStr columnTwo:@"mineNumber" valueTwo:number];
+                
+                //最后的时间
+                //            [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"time" theColumnValue:lastTime ColumnOne:@"jidStr" valueOne:self.chatJIDStr columnTwo:@"mineNumber" valueTwo:number];
+                
+                //红点清零
+                //            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"unreadMessage" theColumnValue:@"0" ColumnOne:@"jidStr" valueOne:self.chatJIDStr columnTwo:@"mineNumber" valueTwo:number];
+                
+            } else {
+                [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
+            }
         }
-        
-        NSString *lastTime = [NSString stringWithFormat:@"%f",[message.timestamp timeIntervalSince1970]];
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *number = [defaults objectForKey:UserNumber];
-        NSArray *messageArray = [NSArray arrayWithObjects:self.chatJIDStr,self.chatName,lastStr,lastTime,@"0",number,nil];
-        
-        NSArray *chatArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:self.chatJIDStr theColumn:@"mineNumber" equalValue:number];
-        if (chatArray.count > 0) {
-            
-            //最后一条信息
-            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-            //最后的时间
-            [DBOperate updateData:T_chatMessage tableColumn:@"time" columnValue:lastTime conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-            //红点清零
-            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:@"0" conditionColumn:@"jidStr" conditionColumnValue:self.chatJIDStr];
-            
-        } else {
-            [DBOperate insertDataWithnotAutoID:messageArray tableName:T_chatMessage];
-        }
+       
     }
 }
 
@@ -575,61 +598,67 @@
     if (self.allMsgArray.count > 0) {
         for (XMPPMessageArchiving_Message_CoreDataObject *message in self.allMsgArray) {
             
-            MessageModel *messagemodel = [[MessageModel alloc]init];
-            
-            if ([message.body hasPrefix:@"ImgBase64"]) {
-                //先存本地一份（放大图片从本地取不会失真，好神奇）
-                [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
-                NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+            //这是添加好友的不做处理
+            if ([message.body hasPrefix:XMPPBodyAgreeFriend] || [message.body hasPrefix:XMPPBodyAddFriend]) {
+                //不算一条信息
+            } else {
                 
-                UIImage *image = [UIImage imageWithContentsOfFile:path];
-                messagemodel.image = image;
-                messagemodel.imagePath = path;
-                messagemodel.messageType = kImageMessage; //图片类型
-                messagemodel.text = @"照片";
-            } else if ([message.body hasPrefix:@"AudioBase64"]) {
-                //                NSString *timeStr = [self getTimeString:message.body];
+                MessageModel *messagemodel = [[MessageModel alloc]init];
                 
-                NSString *jsonStr = [message.body substringFromIndex:11];
-                if (jsonStr) {
-                    NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
-                    
-                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                if ([message.body hasPrefix:@"ImgBase64"]) {
+                    //先存本地一份（放大图片从本地取不会失真，好神奇）
+                    [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:message.body messageType:@"image"];
                     NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
                     
-                    messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
-                    messagemodel.voiceFilepath = path;
+                    UIImage *image = [UIImage imageWithContentsOfFile:path];
+                    messagemodel.image = image;
+                    messagemodel.imagePath = path;
+                    messagemodel.messageType = kImageMessage; //图片类型
+                    messagemodel.text = @"照片";
+                } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                    //                NSString *timeStr = [self getTimeString:message.body];
+                    
+                    NSString *jsonStr = [message.body substringFromIndex:11];
+                    if (jsonStr) {
+                        NSDictionary *audioDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                        
+                        [self saveDataWithJID:self.chatJID.bare timestamp:message.timestamp content:[audioDic objectForKey:@"data"] messageType:@"audio"];
+                        NSString *path = [self pathForData:self.chatJID.bare timestamp:message.timestamp];
+                        
+                        messagemodel.voiceTime = [audioDic objectForKey:@"duration"];
+                        messagemodel.voiceFilepath = path;
+                    }
+                    
+                    messagemodel.messageType = kVoiceMessage; //语音类型
+                    messagemodel.text = @"语音";
+                    
+                } else if ([message.body hasPrefix:@"TextBase64"]){
+                    
+                    messagemodel.text = [message.body substringFromIndex:10];
+                    messagemodel.messageType = kTextMessage; //文字类型
+                    
+                } else if ([message.body hasPrefix:@"LonBase64"]){
+                    
+                    NSString *jsonStr = [message.body substringFromIndex:9];
+                    if (jsonStr) {
+                        NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
+                        messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
+                        messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
+                        messagemodel.address = [locDic objectForKey:@"address"];
+                    }
+                    messagemodel.messageType = kLocationMessage; //地理位置类型
+                    messagemodel.text = @"位置";
+                    
+                } else {
+                    messagemodel.text = @"不配配类型。。。。";
+                    messagemodel.messageType = kTextMessage; //文字类型
                 }
+                messagemodel.otherPhoto = self.chatPhoto;
+                messagemodel.chatJID = self.chatJID;
+                messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
                 
-                messagemodel.messageType = kVoiceMessage; //语音类型
-                messagemodel.text = @"语音";
-                
-            } else if ([message.body hasPrefix:@"TextBase64"]){
-                
-                messagemodel.text = [message.body substringFromIndex:10];
-                messagemodel.messageType = kTextMessage; //文字类型
-                
-            } else if ([message.body hasPrefix:@"LonBase64"]){
-                
-                NSString *jsonStr = [message.body substringFromIndex:9];
-                if (jsonStr) {
-                    NSDictionary *locDic = [GeneralToolObject parseJSONStringToNSDictionary:jsonStr];
-                    messagemodel.lat = [[locDic objectForKey:@"latitude"] doubleValue];
-                    messagemodel.lon = [[locDic objectForKey:@"longitude"] doubleValue];
-                    messagemodel.address = [locDic objectForKey:@"address"];
-                }
-                messagemodel.messageType = kLocationMessage; //地理位置类型
-                messagemodel.text = @"位置";
-                
-            } else {
-                messagemodel.text = @"不配配类型。。。。";
-                messagemodel.messageType = kTextMessage; //文字类型
+                [_dataMessageArray addObject:messagemodel];
             }
-            messagemodel.otherPhoto = self.chatPhoto;
-            messagemodel.chatJID = self.chatJID;
-            messagemodel.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-            
-            [_dataMessageArray addObject:messagemodel];
         }
         
         //取10条出来

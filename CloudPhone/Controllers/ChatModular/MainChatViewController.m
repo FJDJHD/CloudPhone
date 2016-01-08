@@ -16,6 +16,8 @@
 #import "ChatListCell.h"
 #import "UIImage+ResizeImage.h"
 #import "XMPPvCardTemp.h"
+#import "ChatSendHelper.h"
+
 @interface MainChatViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,NSFetchedResultsControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -474,22 +476,6 @@
     return unreadFlag;
 }
 
-//添加好友。。。。。
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        UITextField *userNameField = [alertView textFieldAtIndex:0];
-        if (alertView.tag == 700) {
-            //修改备注
-            if (userNameField.text.length > 0) {
-                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:self.tempIndexPath];
-                [[[self appDelegate] xmppRoster] setNickname:userNameField.text forUser:user.jid];
-            }
-        }
-    } else {
-        DLog(@"取消");
-    }
-}
-
 #pragma mark -- UISearchBarDelegate
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
     self.searchBar.showsCancelButton = YES;
@@ -605,6 +591,22 @@
     });
 }
 
+#pragma mark - UIAlertViewDelegate
+//添加好友。。。。。
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        UITextField *userNameField = [alertView textFieldAtIndex:0];
+        if (alertView.tag == 700) {
+            //修改备注
+            if (userNameField.text.length > 0) {
+                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:self.tempIndexPath];
+                [[[self appDelegate] xmppRoster] setNickname:userNameField.text forUser:user.jid];
+            }
+        }
+    } else {
+        DLog(@"取消");
+    }
+}
 
 #pragma mark - CustomMedth
 
@@ -615,7 +617,6 @@
 - (void)addressButtonClick {
     AddressAddViewController *controller = [[AddressAddViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
-    
 }
 
 //切换状态

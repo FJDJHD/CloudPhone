@@ -398,48 +398,84 @@
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
         //13049340993@cloud.com/8b468676
-        NSArray *array = [message.fromStr componentsSeparatedByString:@"/"];
-        NSString *jidStr = @"";
-        if (array.count > 0) {
-            jidStr = array[0];
-        }
-        
-        NSString *lastStr = @"";
-        if ([message.body hasPrefix:@"ImgBase64"]) {
-            lastStr = @"[图片]";
-        } else if ([message.body hasPrefix:@"AudioBase64"]) {
-            lastStr = @"[语音]";
-        } else if ([message.body hasPrefix:@"TextBase64"]){
-            lastStr = [message.body substringFromIndex:10];
-        } else if ([message.body hasPrefix:@"LonBase64"]) {
-            lastStr = @"[位置]";
-        } else {
-            lastStr = @"不配配类型。。。。。";
-        }
-        //当前时间
-        NSDate *time = [NSDate date];
-        NSString *currentTime = [NSString stringWithFormat:@"%f",[time timeIntervalSince1970]];
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *number = [defaults objectForKey:UserNumber];
-        NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,currentTime,@"1",number,nil];
-        NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:jidStr theColumn:@"mineNumber" equalValue:number];
-        if (mesageArray.count > 0) {
-            //取出原本的小红点 ，之后加一存进去
-            NSString *oriUnread = [mesageArray[0] objectAtIndex:message_unreadMessage];
-            NSInteger temp = [oriUnread integerValue] + 1;
-            NSString *saveUnread = [NSString stringWithFormat:@"%ld",(long)temp];
+        if (message.body.length > 0) {
+            NSArray *array = [message.fromStr componentsSeparatedByString:@"/"];
+            NSString *jidStr = @"";
+            if (array.count > 0) {
+                jidStr = array[0];
+            }
+            DLog(@"什么鬼 = %@ = %@",message.body,message.fromStr);
+            NSString *lastStr = @"";
+            if ([message.body hasPrefix:@"ImgBase64"]) {
+                lastStr = @"[图片]";
+            } else if ([message.body hasPrefix:@"AudioBase64"]) {
+                lastStr = @"[语音]";
+            } else if ([message.body hasPrefix:@"TextBase64"]){
+                lastStr = [message.body substringFromIndex:10];
+            } else if ([message.body hasPrefix:@"LonBase64"]) {
+                lastStr = @"[位置]";
+            } else if ([message.body hasPrefix:XMPPBodyAgreeFriend]) {
+                //苹果这边不做处理
+                return;
+            } else if ([message.body hasPrefix:XMPPBodyAddFriend]) {
+                //添加好友
+                BOOL contains = [xmppRosterStorage userExistsWithJID:[XMPPJID jidWithString:jidStr] xmppStream:xmppStream];
+                if (contains) {
+                    DLog(@"-已是好友");
+                    return;
+                }
+                
+                NSArray *arr = [NSArray arrayWithObjects:jidStr,@"unagree",@"unread",nil];
+                NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
+                if (friendArray.count == 0) {
+                    [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
+                    
+                    //这里是判断新好友的小红点
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
+                    [defaults synchronize];
+                    
+                    //tabbar聊天加个小红点
+                    self.unreadChatLabel.hidden = NO;
+                    DLog(@"添加好友通知呀，来了");
+                    NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotification:notice];
+                }
+                
+                return;
+            } else {
+                lastStr = @"不配配类型。。。。。";
+            }
+            //当前时间
+            NSDate *time = [NSDate date];
+            NSString *currentTime = [NSString stringWithFormat:@"%f",[time timeIntervalSince1970]];
             
-            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:jidStr];
-            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:saveUnread conditionColumn:@"jidStr" conditionColumnValue:jidStr];
-        } else {
-            [DBOperate insertDataWithnotAutoID:saveMessageArray tableName:T_chatMessage];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *number = [defaults objectForKey:UserNumber];
+            NSArray *saveMessageArray = [NSArray arrayWithObjects:jidStr,message.name,lastStr,currentTime,@"1",number,nil];
+            NSArray *mesageArray = [DBOperate queryData:T_chatMessage theColumn:@"jidStr" equalValue:jidStr theColumn:@"mineNumber" equalValue:number];
+            if (mesageArray.count > 0) {
+                //取出原本的小红点 ，之后加一存进去
+                NSString *oriUnread = [mesageArray[0] objectAtIndex:message_unreadMessage];
+                NSInteger temp = [oriUnread integerValue] + 1;
+                NSString *saveUnread = [NSString stringWithFormat:@"%ld",(long)temp];
+                
+                //            [DBOperate updateData:T_chatMessage tableColumn:@"lastMessage" columnValue:lastStr conditionColumn:@"jidStr" conditionColumnValue:jidStr];
+                //            [DBOperate updateData:T_chatMessage tableColumn:@"unreadMessage" columnValue:saveUnread conditionColumn:@"jidStr" conditionColumnValue:jidStr];
+                
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"lastMessage" theColumnValue:lastStr ColumnOne:@"jidStr" valueOne:jidStr columnTwo:@"mineNumber" valueTwo:number];
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"time" theColumnValue:currentTime ColumnOne:@"jidStr" valueOne:jidStr columnTwo:@"mineNumber" valueTwo:number];
+                [DBOperate updateWithTwoConditions:T_chatMessage theColumn:@"unreadMessage" theColumnValue:saveUnread ColumnOne:@"jidStr" valueOne:jidStr columnTwo:@"mineNumber" valueTwo:number];
+                
+            } else {
+                [DBOperate insertDataWithnotAutoID:saveMessageArray tableName:T_chatMessage];
+            }
+            
+            NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
+            
+            [[NSNotificationCenter defaultCenter] postNotification:notice];
+
         }
-
-        NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
-
-        [[NSNotificationCenter defaultCenter] postNotification:notice];
-        
     }
     
     
@@ -471,29 +507,34 @@
 #pragma mark XMPPRosterDelegate
 //接受好友请求时候调用，就是有人加你好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence {
-//    NSLog(@"啊啊啊啊啊啊啊啊啊啊啊啊啊type = %@ from = %@",presence.type,presence.from);
     
-    NSString *msg = [NSString stringWithFormat:@"%@请求添加好友",presence.from];
-    DLog(@"mesg = %@",msg);
+    DLog(@"mesg = %@",[NSString stringWithFormat:@"%@请求添加好友%@",presence.from,presence.type]);
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *number = [defaults objectForKey:UserNumber];
-    NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
-    if (![presence.fromStr isEqualToString:selfJidStr]) {
-        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
-        NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
-        if (friendArray.count == 0) {
-            [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
-            
-            //这里是判断新好友的小红点
-            [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
-            [defaults synchronize];
-            
-            DLog(@"添加好友通知呀，来了");
-            NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
-            [[NSNotificationCenter defaultCenter] postNotification:notice];
-        }
+    if ([presence.type isEqualToString:@"subscribe"]) {
+        [self.xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
+
     }
+    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSString *number = [defaults objectForKey:UserNumber];
+//    NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
+//    if (![presence.fromStr isEqualToString:selfJidStr]) {
+//        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
+//        NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
+//        if (friendArray.count == 0) {
+//            [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
+//            
+//            //这里是判断新好友的小红点
+//            [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
+//            [defaults synchronize];
+//            
+//            //加个小红点
+//            self.unreadChatLabel.hidden = NO;
+//            DLog(@"添加好友通知呀，来了");
+//            NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
+//            [[NSNotificationCenter defaultCenter] postNotification:notice];
+//        }
+//    }
 }
 
 
@@ -501,7 +542,7 @@
 //    DDXMLElement *query = [iq elementsForName:@"query"][0];
 //    DDXMLElement *item = [query elementsForName:@"item"][0];
 //    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
-    DLog(@"全部的全部的全部的iq = %@",iq);
+//    DLog(@"全部的全部的全部的iq = %@",iq);
     
 }
 

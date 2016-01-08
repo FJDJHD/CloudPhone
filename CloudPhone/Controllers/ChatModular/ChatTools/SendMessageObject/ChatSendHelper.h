@@ -23,6 +23,9 @@
 //发送地理位置
 + (void)sendLocationMessageWithLatitude:(double)lat longitude:(double)lon adress:(NSString *)address toUsername:(XMPPJID *)jid;
 
+//发送好友请求(改成发信息为了和安卓)
++ (void)sendAddFriendMessageWithString:(NSString *)str to:(NSString *)username;
+
 //修改xmpp用户头像
 + (void)modifyUserHeadPortraitWithImage:(UIImage *)image nickName:(NSString *)name;
 

@@ -213,7 +213,23 @@
     return image;
 }
 
-
+//发送好友请求
++ (void)sendAddFriendMessageWithString:(NSString *)str to:(NSString *)username {
+    
+    //请求好友标志 /*AddFriendBase64*/
+    //同意好友标志 /*AgreeFriendBase64*/
+    
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:str];
+    
+    NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+    [message addAttributeWithName:@"type" stringValue:@"chat"];
+    NSString *to = username; //发送的目标
+    [message addAttributeWithName:@"to" stringValue:to];
+    [message addChild:body];
+    
+    [[(AppDelegate *)[UIApplication sharedApplication].delegate xmppStream] sendElement:message];
+}
 
 
 @end

@@ -471,6 +471,8 @@
 		6EC98CAF1C3144B5002A4666 /* PSTGridLayoutRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC98C871C3144B5002A4666 /* PSTGridLayoutRow.m */; };
 		6EC98CB01C3144B5002A4666 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC98C891C3144B5002A4666 /* PSTGridLayoutSection.m */; };
 		6EC98CB11C3144B5002A4666 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EC98C8A1C3144B5002A4666 /* MWPhotoBrowser.bundle */; };
+		6EDE4EF41C3E84F5007FAAD1 /* libPushSDK-1.8.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EDE4EF31C3E84F5007FAAD1 /* libPushSDK-1.8.8.a */; };
+		6EDE4EF61C3E860D007FAAD1 /* jpush.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE4EF51C3E860D007FAAD1 /* jpush.plist */; };
 		6EE1CD331C1C22880054B993 /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD221C1C22880054B993 /* MBProgressHUD+Add.m */; };
 		6EE1CD341C1C22880054B993 /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EE1CD231C1C22880054B993 /* MBProgressHUD.bundle */; };
 		6EE1CD351C1C22880054B993 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD251C1C22880054B993 /* MJPhoto.m */; };
@@ -1451,6 +1453,9 @@
 		6EC98C881C3144B5002A4666 /* PSTGridLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSTGridLayoutSection.h; sourceTree = "<group>"; };
 		6EC98C891C3144B5002A4666 /* PSTGridLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSTGridLayoutSection.m; sourceTree = "<group>"; };
 		6EC98C8A1C3144B5002A4666 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MWPhotoBrowser.bundle; sourceTree = "<group>"; };
+		6EDE4EF21C3E84F5007FAAD1 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
+		6EDE4EF31C3E84F5007FAAD1 /* libPushSDK-1.8.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-1.8.8.a"; sourceTree = "<group>"; };
+		6EDE4EF51C3E860D007FAAD1 /* jpush.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = jpush.plist; sourceTree = "<group>"; };
 		6EE1CD211C1C22880054B993 /* MBProgressHUD+Add.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Add.h"; sourceTree = "<group>"; };
 		6EE1CD221C1C22880054B993 /* MBProgressHUD+Add.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Add.m"; sourceTree = "<group>"; };
 		6EE1CD231C1C22880054B993 /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
@@ -1736,9 +1741,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EBA8DA31C15257200BAE5DD /* CFNetwork.framework in Frameworks */,
 				6EBA8D9D1C15253C00BAE5DD /* AudioToolbox.framework in Frameworks */,
 				6E4D36F61C05612D001573E3 /* CoreLocation.framework in Frameworks */,
-				6EBA8DA31C15257200BAE5DD /* CFNetwork.framework in Frameworks */,
 				6E4D36F41C056117001573E3 /* SystemConfiguration.framework in Frameworks */,
 				6E4D36F01C056102001573E3 /* MobileCoreServices.framework in Frameworks */,
 				B48D13371C311B350027254A /* CoreTelephony.framework in Frameworks */,
@@ -1751,6 +1756,7 @@
 				B48D13301C311ACC0027254A /* Accounts.framework in Frameworks */,
 				6EBA8D9B1C15253200BAE5DD /* AVFoundation.framework in Frameworks */,
 				B48D132E1C311A980027254A /* CoreMedia.framework in Frameworks */,
+				6EDE4EF41C3E84F5007FAAD1 /* libPushSDK-1.8.8.a in Frameworks */,
 				6E4D376D1C0564C9001573E3 /* ImageIO.framework in Frameworks */,
 				B48D132C1C311A7D0027254A /* MessageUI.framework in Frameworks */,
 				B48D132A1C311A700027254A /* QuartzCore.framework in Frameworks */,
@@ -1881,6 +1887,7 @@
 		6E4D36E91C055F03001573E3 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				6EDE4EF11C3E84EC007FAAD1 /* JPush */,
 				B4E5E04C1C3B89E200172834 /* Yuntx_FullLib_SDK */,
 				6EC98C321C3144B5002A4666 /* MWPhotoBrowser */,
 				B4B126B41C2BCB7600A0AAEB /* openshare */,
@@ -2697,6 +2704,7 @@
 				B44E90CC1C103FC500CFC003 /* Resource */,
 				6EB2ED5A1C04684A002799BD /* Assets.xcassets */,
 				6EB2ED5F1C04684A002799BD /* Info.plist */,
+				6EDE4EF51C3E860D007FAAD1 /* jpush.plist */,
 				6EBA8B9A1C15212C00BAE5DD /* PrefixHeader.pch */,
 				6EB2ED4E1C04684A002799BD /* Supporting Files */,
 			);
@@ -3774,6 +3782,15 @@
 			path = PSTCollectionView;
 			sourceTree = "<group>";
 		};
+		6EDE4EF11C3E84EC007FAAD1 /* JPush */ = {
+			isa = PBXGroup;
+			children = (
+				6EDE4EF21C3E84F5007FAAD1 /* APService.h */,
+				6EDE4EF31C3E84F5007FAAD1 /* libPushSDK-1.8.8.a */,
+			);
+			path = JPush;
+			sourceTree = "<group>";
+		};
 		6EE1CD201C1C22880054B993 /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -4426,6 +4443,7 @@
 				B4D19A151C18086B0087D0D5 /* find_adv01@3x.png in Resources */,
 				6E7D7A0D1C192CCC00B42140 /* VoiceSearchFeedback006@2x.png in Resources */,
 				6E7D7A551C192CCC00B42140 /* chatBar_moreSelected@2x.png in Resources */,
+				6EDE4EF61C3E860D007FAAD1 /* jpush.plist in Resources */,
 				B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */,
 				6E7D7A3D1C192CCC00B42140 /* chatBar_textBg@2x.png in Resources */,
 				6E7D7A781C192CCC00B42140 /* chat_receiver_audio_playing000@2x.png in Resources */,
@@ -4994,6 +5012,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Vendor/UMSocial_Sdk_4.4",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK/lib",
+					"$(PROJECT_DIR)/CloudPhone/Vendor/JPush",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -5002,6 +5021,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
 			};
 			name = Debug;
 		};
@@ -5029,6 +5049,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Vendor/UMSocial_Sdk_4.4",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK/lib",
+					"$(PROJECT_DIR)/CloudPhone/Vendor/JPush",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -5037,6 +5058,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
 			};
 			name = Release;
 		};

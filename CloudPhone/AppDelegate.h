@@ -60,6 +60,9 @@
 
 @property (nonatomic, strong) UILabel *unreadChatLabel;
 
+//测试
+@property (nonatomic, copy) NSString *testString;
+
 
 - (NSManagedObjectContext *)managedObjectContext_roster;
 
