@@ -19,6 +19,9 @@
     int ssInt;
     NSTimer *timer;
     BOOL isLouder;
+    BOOL isMute;
+    BOOL isRecord;
+    BOOL isShow;
     NSInteger voipCallType; //0:wifi 1:直拨 2:回拨
 }
 

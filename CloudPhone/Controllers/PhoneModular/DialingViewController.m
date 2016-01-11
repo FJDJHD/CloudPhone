@@ -17,6 +17,7 @@
 #import "ECDeviceHeaders.h"
 #import "DeviceDelegateHelper.h"
 #import "DeviceDelegateHelper+VoIP.h"
+#import <AVFoundation/AVFoundation.h>
 
 
 @interface DialingViewController ()<DialKeyboardDelegate>
@@ -26,7 +27,8 @@
 @end
 
 @implementation DialingViewController{
-    BOOL isShow;
+    NSURL *recordedFile;
+    AVAudioRecorder *recorder;
 }
 
 - (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo
@@ -40,6 +42,9 @@
         mmInt = 0;
         ssInt = 0;
         isLouder = NO;
+        isMute = NO;
+        isRecord = NO;
+        isShow = NO;
         [ [ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:isLouder];
         return self;
     }
@@ -52,8 +57,18 @@
     [super viewDidLoad];
     [self initDailingUI];
     [self initDialKeyboard];
-     isShow = NO;
     
+    recordedFile = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingString:@"RecordedFile"]];
+    
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *sessionError;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
+    if(session == nil)
+        NSLog(@"Error creating session: %@", [sessionError description]);
+    else
+        [session setActive:YES error:nil];
+    
+    //打电话
     BOOL isEnableNetWorking = [GeneralToolObject isEnableCurrentNetworkingStatus];
     if (isEnableNetWorking) {
         DLog(@"网络可用,网络电话");
@@ -152,7 +167,9 @@
     UIView *dailingToolBar= [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(detailView.frame), MainWidth, MainHeight * 0.6)];
     [self.view addSubview:dailingToolBar];
     NSArray *imageArray = [NSArray array];
-    imageArray = @[@"callphone_silence",@"callphone_handsfree",@"callphone_recode",@"callphone_callback",@"callphone_hangup",@"callphone_keyboard"];
+    imageArray = @[@"callphone_mute",@"callphone_handsfree",@"callphone_record",@"callphone_callback",@"callphone_hangup",@"callphone_keyboard"];
+    NSArray *imageSelectedArray = [NSArray array];
+    imageSelectedArray = @[@"callphone_mute_sel",@"callphone_handsfree_sel",@"callphone_record_sel",@"callphone_callback_sel",@"callphone_hangup",@"callphone_keyboard_sel"];
     NSArray *nameArray = [NSArray array];
     nameArray = @[@"静音",@"免提",@"录音",@"回拨",@"挂断",@"键盘"];
     
@@ -166,9 +183,13 @@
         
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(btX, btY, btWidth, btHeight)];
         button.tag = i;
+        button.selected = NO;
         [button.titleLabel setTextColor:[UIColor whiteColor]];
         [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
         [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateNormal];
+        
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateSelected];
+        
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         [dailingToolBar addSubview:button];
      }
@@ -179,24 +200,28 @@
     switch (sender.tag) {
         case 0:{
             //静音
-            DLog(@"0");
+            sender.selected = !sender.selected;
+            [self mute];
         }
         break;
             
         case 1:{
             //免提
+            sender.selected = !sender.selected;
             [self handfree];
         }
         break;
             
         case 2:{
             //录音
-            DLog(@"2");
+             sender.selected = !sender.selected;
+            [self startStopRecording];
         }
         break;
             
         case 3:{
             //回拨
+        sender.selected = !sender.selected;
         [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
         }
         break;
@@ -213,6 +238,7 @@
         break;
             
         case 5:{
+             sender.selected = !sender.selected;
             if (isShow) {
                 [self keyboardHidden];
                 }else{
@@ -371,12 +397,32 @@
     callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",localeDate];
     NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
-    
     NSLog(@"通话记录录入数据库");
+    
+   
+    NSArray *callStatisticRecordsArray = [NSArray array];
+    callStatisticRecordsArray = [DBOperate queryData:T_callStatisticRecords theColumn:@"callerNo" theColumnValue:self.callerNo withAll:YES];
+    if (callStatisticRecordsArray.count > 0) {
+        [DBOperate updateData:T_callStatisticRecords tableColumn:@"callResult" columnValue:self.callResult conditionColumn:@"callerNo" conditionColumnValue:self.callerNo];
+        [DBOperate updateData:T_callStatisticRecords tableColumn:@"callTime" columnValue:[NSString stringWithFormat:@"%@",localeDate] conditionColumn:@"callerNo" conditionColumnValue:self.callerNo];
+        NSLog(@"更新统计通话数据库");
+    } else {
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
+        NSLog(@"新数据统计通话数据库");
+    }
+
+    
     [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
     
 }
 
+- (void)mute{
+    //成功时返回0，失败时返回-1
+    NSInteger returnValue = [[ECDevice sharedInstance] .VoIPManager setMute:!isMute];
+    if (0 == returnValue) {
+        isMute = !isMute;
+    }
+}
 - (void)handfree {
     //成功时返回0，失败时返回-1
     NSInteger returnValue = [[ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:!isLouder];
@@ -384,6 +430,29 @@
         isLouder = !isLouder;
     }
 }
+
+- (IBAction)startStopRecording
+{
+    if(!isRecord)
+    {
+        isRecord = YES;
+      //  [self.recordButton setTitle:@"STOP" forState:UIControlStateNormal];
+      //  [self.playButton setEnabled:NO];
+      //  [self.playButton.titleLabel setAlpha:0.5];
+        recorder = [[AVAudioRecorder alloc] initWithURL:recordedFile settings:nil error:nil];
+        [recorder prepareToRecord];
+        [recorder record];
+        }
+    else
+    {
+        isRecord = NO;
+      //  [self.recordButton setTitle:@"REC" forState:UIControlStateNormal];
+      //  [self.playButton setEnabled:YES];
+      //  [self.playButton.titleLabel setAlpha:1];
+        [recorder stop];
+    }
+}
+
 
 - (void)dealloc {
     self.callID = nil;

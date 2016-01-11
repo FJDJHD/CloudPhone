@@ -52,6 +52,16 @@ enum callRecords {
     record_callTime
 };
 
+//电话统计记录表
+#define T_callStatisticRecords     @"t_callStatisticRecords"
+#define C_T_callStatisticRecords   @"create table t_callStatisticRecords(callResult TEXT,callerName TEXT,callerNo TEXT,callTime TEXT)"
+enum callStatisticRecords {
+    statisticRecord_callResult,
+    statisticRecord_callerName,
+    statisticRecord_callerNo,
+    statisticRecord_callTime
+};
+
 
 @interface DBOperate : NSObject {
     

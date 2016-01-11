@@ -19,9 +19,9 @@
 //创建表
 +(BOOL)createTable{
 
-	NSArray *tableListSql=[NSArray arrayWithObjects:C_T_chatMessage,C_T_personalInfo,C_T_addFriend,C_T_callRecords,nil];
+	NSArray *tableListSql=[NSArray arrayWithObjects:C_T_chatMessage,C_T_personalInfo,C_T_addFriend,C_T_callRecords,C_T_callStatisticRecords,nil];
 
-	NSArray *tableList=[NSArray arrayWithObjects:T_chatMessage,T_personalInfo,T_addFriend,T_callRecords,nil];
+	NSArray *tableList=[NSArray arrayWithObjects:T_chatMessage,T_personalInfo,T_addFriend,T_callRecords,T_callStatisticRecords,nil];
 
 	NSString *dbFilePath=[FileManager getFilePath:dataBaseFile];
 	NSLog(@"dbFilePath:---------------- %@",dbFilePath);

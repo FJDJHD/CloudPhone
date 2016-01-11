@@ -55,7 +55,10 @@
 
 @end
 
-@implementation AddressViewController
+@implementation AddressViewController{
+    UILabel *title;
+    UILabel *subtitle;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -170,13 +173,13 @@
         button.tag = 5550;
         [cell addSubview:button];
         
-        UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMinY(button.frame) + 2, 150, 20)];
+        title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMinY(button.frame) + 2, 150, 20)];
         title.tag = 5551;
         title.textColor = [UIColor blackColor];
         title.font = [UIFont systemFontOfSize:15.0];
         [cell addSubview:title];
         
-        UILabel *subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
+        subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
         subtitle.tag = 5552;
         subtitle.textColor = RGB(102, 102, 102);
         subtitle.font = [UIFont systemFontOfSize:13.0];
@@ -197,10 +200,8 @@
         if (_friendArray.count > 0) {
             ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
             
-            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-            titleLab.text = model.userName;
-            subtitleLab.text = model.mobile;
+            title.text = model.userName;
+            subtitle.text = model.mobile;
             
             AddressIconButton *button = [cell viewWithTag:5550];
             if (model.userName.length > 0) {
@@ -215,10 +216,9 @@
         //注册itel （添加好友）
         if (_invateArray.count > 0) {
             ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
-            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-            titleLab.text = model.userName;
-            subtitleLab.text = model.mobile;
+           
+            title.text = model.userName;
+            subtitle.text = model.mobile;
             
             AddressIconButton *button = [cell viewWithTag:5550];
             if (model.userName.length > 0) {
@@ -235,10 +235,10 @@
 }
 
 - (void)arrowButtonClick{
-    NSLog(@"+++++++");
     FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
     CallRecordsModel *model = [[CallRecordsModel alloc] init];
-   // model.callerNo =
+    model.callerNo = subtitle.text;
+    model.callerName = title.text;
     friDetailVC.model = model;
     [self.navigationController pushViewController:friDetailVC animated:YES];
 }
@@ -320,7 +320,7 @@
     [view addSubview:lable];
     return view;
 }
-
+/*
 - (UIButton *)statusButtonWithTitle:(NSString *)title {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.userInteractionEnabled = NO;
@@ -339,7 +339,7 @@
     
     return button;
 }
-
+*/
 #pragma mark - 网络请求
 
 - (void)loadAddressData {

@@ -538,6 +538,11 @@
 		B47C2E691C198B14000E2964 /* CostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B47C2E681C198B14000E2964 /* CostTableViewController.m */; };
 		B47D81851C3F5630001C967A /* phone_outcallNo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47D81841C3F5630001C967A /* phone_outcallNo@2x.png */; };
 		B47D81871C3F568C001C967A /* phone_detail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47D81861C3F568C001C967A /* phone_detail@2x.png */; };
+		B47FE4FE1C40E698000E05C8 /* callphone_callback_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47FE4F91C40E698000E05C8 /* callphone_callback_sel@2x.png */; };
+		B47FE4FF1C40E698000E05C8 /* callphone_mute_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47FE4FA1C40E698000E05C8 /* callphone_mute_sel@2x.png */; };
+		B47FE5001C40E698000E05C8 /* callphone_keyboard_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47FE4FB1C40E698000E05C8 /* callphone_keyboard_sel@2x.png */; };
+		B47FE5011C40E698000E05C8 /* callphone_record_sel@2x_sel.png in Resources */ = {isa = PBXBuildFile; fileRef = B47FE4FC1C40E698000E05C8 /* callphone_record_sel@2x_sel.png */; };
+		B47FE5021C40E698000E05C8 /* callphone_handfree_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47FE4FD1C40E698000E05C8 /* callphone_handfree_sel@2x.png */; };
 		B48D13141C31198F0027254A /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B48D13131C31198F0027254A /* libstdc++.tbd */; };
 		B48D13161C3119A40027254A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B48D13151C3119A40027254A /* libc++.tbd */; };
 		B48D13181C3119B60027254A /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B48D13171C3119B60027254A /* libxml2.2.tbd */; };
@@ -627,8 +632,8 @@
 		B4D76A221C1523970095CB9F /* callphone_handsfree@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */; };
 		B4D76A231C1523970095CB9F /* callphone_hangup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */; };
 		B4D76A241C1523970095CB9F /* callphone_keyboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */; };
-		B4D76A251C1523970095CB9F /* callphone_recode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */; };
-		B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */; };
+		B4D76A251C1523970095CB9F /* callphone_record@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1D1C1523970095CB9F /* callphone_record@2x.png */; };
+		B4D76A261C1523970095CB9F /* callphone_mute@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4D76A1E1C1523970095CB9F /* callphone_mute@2x.png */; };
 		B4D76A291C1559060095CB9F /* UIButton+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D76A281C1559060095CB9F /* UIButton+Category.m */; };
 		B4DAD3F61C1817180092BF8F /* find_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD3F41C1817180092BF8F /* find_add@2x.png */; };
 		B4DAD3F71C1817180092BF8F /* find_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD3F51C1817180092BF8F /* find_add@3x.png */; };
@@ -1539,6 +1544,11 @@
 		B47C2E681C198B14000E2964 /* CostTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CostTableViewController.m; sourceTree = "<group>"; };
 		B47D81841C3F5630001C967A /* phone_outcallNo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_outcallNo@2x.png"; sourceTree = "<group>"; };
 		B47D81861C3F568C001C967A /* phone_detail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_detail@2x.png"; sourceTree = "<group>"; };
+		B47FE4F91C40E698000E05C8 /* callphone_callback_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_callback_sel@2x.png"; sourceTree = "<group>"; };
+		B47FE4FA1C40E698000E05C8 /* callphone_mute_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_mute_sel@2x.png"; sourceTree = "<group>"; };
+		B47FE4FB1C40E698000E05C8 /* callphone_keyboard_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_keyboard_sel@2x.png"; sourceTree = "<group>"; };
+		B47FE4FC1C40E698000E05C8 /* callphone_record_sel@2x_sel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_record_sel@2x_sel.png"; sourceTree = "<group>"; };
+		B47FE4FD1C40E698000E05C8 /* callphone_handfree_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_handfree_sel@2x.png"; sourceTree = "<group>"; };
 		B48D13131C31198F0027254A /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		B48D13151C3119A40027254A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		B48D13171C3119B60027254A /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
@@ -1649,8 +1659,8 @@
 		B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_handsfree@2x.png"; sourceTree = "<group>"; };
 		B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_hangup@2x.png"; sourceTree = "<group>"; };
 		B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_keyboard@2x.png"; sourceTree = "<group>"; };
-		B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_recode@2x.png"; sourceTree = "<group>"; };
-		B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_silence@2x.png"; sourceTree = "<group>"; };
+		B4D76A1D1C1523970095CB9F /* callphone_record@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_record@2x.png"; sourceTree = "<group>"; };
+		B4D76A1E1C1523970095CB9F /* callphone_mute@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_mute@2x.png"; sourceTree = "<group>"; };
 		B4D76A271C1559060095CB9F /* UIButton+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Category.h"; sourceTree = "<group>"; };
 		B4D76A281C1559060095CB9F /* UIButton+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Category.m"; sourceTree = "<group>"; };
 		B4DAD3F41C1817180092BF8F /* find_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_add@2x.png"; sourceTree = "<group>"; };
@@ -4034,13 +4044,18 @@
 				B4D04DAD1C1AA50D008BD608 /* phone_point@3x.png */,
 				B4D04DB81C1AA6B8008BD608 /* callphone_bg@2x.png */,
 				B4D04DB91C1AA6B8008BD608 /* callphone_bg@3x.png */,
-				B4D76A181C1523970095CB9F /* callphone_callback@2x.png */,
 				B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */,
+				B4D76A181C1523970095CB9F /* callphone_callback@2x.png */,
 				B4D76A1A1C1523970095CB9F /* callphone_handsfree@2x.png */,
 				B4D76A1B1C1523970095CB9F /* callphone_hangup@2x.png */,
 				B4D76A1C1C1523970095CB9F /* callphone_keyboard@2x.png */,
-				B4D76A1D1C1523970095CB9F /* callphone_recode@2x.png */,
-				B4D76A1E1C1523970095CB9F /* callphone_silence@2x.png */,
+				B4D76A1D1C1523970095CB9F /* callphone_record@2x.png */,
+				B4D76A1E1C1523970095CB9F /* callphone_mute@2x.png */,
+				B47FE4F91C40E698000E05C8 /* callphone_callback_sel@2x.png */,
+				B47FE4FA1C40E698000E05C8 /* callphone_mute_sel@2x.png */,
+				B47FE4FB1C40E698000E05C8 /* callphone_keyboard_sel@2x.png */,
+				B47FE4FC1C40E698000E05C8 /* callphone_record_sel@2x_sel.png */,
+				B47FE4FD1C40E698000E05C8 /* callphone_handfree_sel@2x.png */,
 				B4B126D51C2E668500A0AAEB /* phone_delete@2x.png */,
 				B4B126D61C2E668500A0AAEB /* phone_dial@2x.png */,
 			);
@@ -4286,6 +4301,7 @@
 				6E88C8F81C32881C00AD28A3 /* chat_takePic@3x.png in Resources */,
 				6E7D7A611C192CCC00B42140 /* chatBar_colorMore_cameraSelected@2x.png in Resources */,
 				B44E90F21C103FC500CFC003 /* mine_icon@2x.png in Resources */,
+				B47FE5021C40E698000E05C8 /* callphone_handfree_sel@2x.png in Resources */,
 				6EE1CD361C1C22880054B993 /* MJPhotoBrowser.bundle in Resources */,
 				6E7D7A7A1C192CCC00B42140 /* chat_receiver_audio_playing001@2x.png in Resources */,
 				6E7D7A741C192CCC00B42140 /* chatBar_more_photoSelected.png in Resources */,
@@ -4320,6 +4336,7 @@
 				B47C2E241C193434000E2964 /* mine_savecosticon@2x.png in Resources */,
 				6EC3ECAC1C16E4B100B27B18 /* btn_face@2x.png in Resources */,
 				6E7D7A7E1C192CCC00B42140 /* chat_receiver_audio_playing003@2x.png in Resources */,
+				B47FE5011C40E698000E05C8 /* callphone_record_sel@2x_sel.png in Resources */,
 				B4488B361C23F7B900D88EFE /* mine_task@2x.png in Resources */,
 				6E7D7A5D1C192CCC00B42140 /* chatBar_recordSelectedBg@2x.png in Resources */,
 				6E7D7A0E1C192CCC00B42140 /* VoiceSearchFeedback007.png in Resources */,
@@ -4364,7 +4381,9 @@
 				6E7D7A221C192CCC00B42140 /* VoiceSearchFeedback017.png in Resources */,
 				6EC98CB11C3144B5002A4666 /* MWPhotoBrowser.bundle in Resources */,
 				B4D04DC51C1BCD13008BD608 /* phone_friends@2x.png in Resources */,
+				B47FE4FE1C40E698000E05C8 /* callphone_callback_sel@2x.png in Resources */,
 				6E7D7A1C1C192CCC00B42140 /* VoiceSearchFeedback014.png in Resources */,
+				B47FE4FF1C40E698000E05C8 /* callphone_mute_sel@2x.png in Resources */,
 				B497DDE41C183F1700AF9BEB /* mine_qq@3x.png in Resources */,
 				B4A920791C1FEF4A0070821F /* phone_itelicon@3x.png in Resources */,
 				B4A920801C1FF3270070821F /* phone_addMore@3x.png in Resources */,
@@ -4411,7 +4430,7 @@
 				6E7D7A051C192CCC00B42140 /* VoiceSearchFeedback002@2x.png in Resources */,
 				6E7D7A8D1C192CCC00B42140 /* chat_sender_bg.png in Resources */,
 				B4D19A0E1C1807D90087D0D5 /* find_adv02@2x.png in Resources */,
-				B4D76A251C1523970095CB9F /* callphone_recode@2x.png in Resources */,
+				B4D76A251C1523970095CB9F /* callphone_record@2x.png in Resources */,
 				6E7D7A691C192CCC00B42140 /* chatBar_colorMore_videoSelected@2x.png in Resources */,
 				6E7D7A411C192CCC00B42140 /* chat_location_detail_disclosure@2x.png in Resources */,
 				B4DAD40B1C18175D0092BF8F /* find_bank@3x.png in Resources */,
@@ -4482,7 +4501,7 @@
 				B4D04DBA1C1AA6B8008BD608 /* callphone_bg@2x.png in Resources */,
 				6E7D7A811C192CCC00B42140 /* chat_receiver_bg.png in Resources */,
 				B497DDDA1C183EE900AF9BEB /* mine_penyouquan@3x.png in Resources */,
-				B4D76A261C1523970095CB9F /* callphone_silence@2x.png in Resources */,
+				B4D76A261C1523970095CB9F /* callphone_mute@2x.png in Resources */,
 				6E7D7A2F1C192CCC00B42140 /* call_silence@2x.png in Resources */,
 				6E7D7A571C192CCC00B42140 /* chatBar_record@2x.png in Resources */,
 				6E7D7A801C192CCC00B42140 /* chat_receiver_audio_playing_full@2x.png in Resources */,
@@ -4501,6 +4520,7 @@
 				6E9244681C350B880012C53F /* chatView_location_map@3x.png in Resources */,
 				6EC3ECA61C16E49B00B27B18 /* btn_photo@2x.png in Resources */,
 				6E7D7A731C192CCC00B42140 /* chatBar_more_photo@2x.png in Resources */,
+				B47FE5001C40E698000E05C8 /* callphone_keyboard_sel@2x.png in Resources */,
 				6E7D7A6A1C192CCC00B42140 /* chatBar_more_camera.png in Resources */,
 				B47C2E131C1930A4000E2964 /* mine_clock@3x.png in Resources */,
 				6E7D7A4E1C192CCC00B42140 /* chatBar_keyboard.png in Resources */,
@@ -5028,7 +5048,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
@@ -5065,7 +5085,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.iTal1.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";

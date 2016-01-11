@@ -7,6 +7,7 @@
 //
 
 #import "DialKeyboard.h"
+#import "Global.h"
 @interface DialKeyboard()
 @end
 
@@ -17,7 +18,11 @@
     UIView * keyboard = [[UIView alloc] init];
     keyboard.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     keyboard.userInteractionEnabled = YES;
-    keyboard.backgroundColor = [UIColor lightGrayColor];
+    UIImage *bgImage = [GeneralToolObject imageWithColor:[UIColor lightGrayColor]];
+    UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
+    bgImageView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height - (keyboard.frame.size.height - 5)/5);
+    [keyboard addSubview:bgImageView];
+   // keyboard.backgroundColor = [UIColor lightGrayColor];
     [self addSubview:keyboard];
     for (int i = 0; i<15; i++) {
         
@@ -42,7 +47,7 @@
                 [ btn addTarget:self action:@selector(numBtnClick:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 12:
-                titleSTR = @"收起";
+                titleSTR = @" ";
                 [ btn addTarget:self action:@selector(removeBtnclick:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 13:
@@ -63,8 +68,8 @@
         [btn setTitle: titleSTR forState:UIControlStateNormal];
         CGFloat dis = 1;
         CGFloat btnW =(keyboard.frame.size.width - (2*dis))/3 ;
-        CGFloat btnH =(keyboard.frame.size.height - (5*dis))/5 ;
-        CGFloat btnY = (i/3)*(btnH + dis);
+        CGFloat btnH = (keyboard.frame.size.height - (5*dis))/5 ;
+        CGFloat btnY = (1 + (i/3)*(btnH + dis));
         CGFloat btnX = (i%3)*(btnW + dis);
         btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
         [keyboard addSubview:btn];
