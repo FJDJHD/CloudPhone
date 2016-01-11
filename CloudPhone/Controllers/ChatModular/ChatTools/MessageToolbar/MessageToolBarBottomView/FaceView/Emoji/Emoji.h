@@ -41,4 +41,9 @@
  @result iOS表情字符串数组
  */
 + (NSArray *)allEmoji;
+
+
++ (NSString*)getExpressionById:(NSInteger)idx;
+
+
 @end

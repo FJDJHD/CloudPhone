@@ -1,14 +1,14 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
-  * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
-  *  
-  * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
-  */
+ *  * EaseMob CONFIDENTIAL
+ * __________________
+ * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of EaseMob Technologies.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from EaseMob Technologies.
+ */
 
 #import "DXFaceView.h"
 
@@ -25,8 +25,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _facialView = [[FacialView alloc] initWithFrame: CGRectMake(5, 5, frame.size.width - 10, self.bounds.size.height - 10)];
-        [_facialView loadFacialView:1 size:CGSizeMake(30, 30)];
+        _facialView = [[FacialView alloc] initWithFrame: CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        [_facialView loadFacialView];
         _facialView.delegate = self;
         [self addSubview:_facialView];
     }

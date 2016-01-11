@@ -31,6 +31,6 @@
 
 @property(strong, nonatomic, readonly) NSArray *faces;
 
--(void)loadFacialView:(int)page size:(CGSize)size;
+-(void)loadFacialView;
 
 @end

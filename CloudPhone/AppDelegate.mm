@@ -32,6 +32,9 @@
 #import "MessageViewController.h"
 
 #import "OpenShareHeader.h"
+#import "APService.h"
+
+
 @interface AppDelegate (){
     BOOL isShow;
 }
@@ -81,19 +84,97 @@
     //openshare分享到微信和QQ注册
     [OpenShare connectQQWithAppId:@"1104965629"];
     [OpenShare connectWeixinWithAppId:@"wx84d7434525d9d63f"];
-
-    //消息推送 ios 8
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert) categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    
     
     //注册融云SDK
     [ECDevice sharedInstance].delegate = [DeviceDelegateHelper sharedInstance];
-   // [self requestLinkRongLianInfo];
-
+    // [self requestLinkRongLianInfo];
+    
     
     [self.window makeKeyAndVisible];
+    
+    //注册极光推送
+    [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
+    [APService setupWithOption:launchOptions];
+    [self initJPush];
+    
     return YES;
+}
+
+- (void)initJPush {
+    
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidSetup:)
+                          name:kJPFNetworkDidSetupNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidClose:)
+                          name:kJPFNetworkDidCloseNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidRegister:)
+                          name:kJPFNetworkDidRegisterNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidLogin:)
+                          name:kJPFNetworkDidLoginNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidReceiveMessage:)
+                          name:kJPFNetworkDidReceiveMessageNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(serviceError:)
+                          name:kJPFServiceErrorNotification
+                        object:nil];
+    
+}
+
+- (void)networkDidSetup:(NSNotification *)notification {
+    NSLog(@"已连接");
+}
+
+- (void)networkDidClose:(NSNotification *)notification {
+    NSLog(@"未连接");
+}
+
+- (void)networkDidRegister:(NSNotification *)notification {
+    NSLog(@"%@", [notification userInfo]);
+    NSLog(@"已注册");
+}
+
+- (void)networkDidLogin:(NSNotification *)notification {
+    
+    if ([APService registrationID]) {
+        NSLog(@"get RegistrationID");
+    }
+}
+
+- (void)networkDidReceiveMessage:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *title = [userInfo valueForKey:@"title"];
+    NSString *content = [userInfo valueForKey:@"content"];
+    NSDictionary *extra = [userInfo valueForKey:@"extras"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    
+    NSString *currentContent = [NSString
+                                stringWithFormat:
+                                @"收到自定义消息:%@\ntitle:%@\ncontent:%@\nextra:%@\n",
+                                [NSDateFormatter localizedStringFromDate:[NSDate date]
+                                                               dateStyle:NSDateFormatterNoStyle
+                                                               timeStyle:NSDateFormatterMediumStyle],
+                                title, content, [self logDic:extra]];
+    NSLog(@"收到消息%@", currentContent);
+    
+}
+
+- (void)serviceError:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *error = [userInfo valueForKey:@"error"];
+    NSLog(@"%@", error);
 }
 
 //openshare分享回调
@@ -108,7 +189,7 @@
 
 - (void)initViewController {
     //这里作为一个登录标志
-   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *value = [defaults objectForKey:isLoginKey];
     if ([value isEqualToString:@"isLogined"]) {
         
@@ -145,7 +226,7 @@
     //开始连接xmpp
     [self connect];
     [self requestLinkRongLianInfo];
-
+    
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
@@ -177,7 +258,7 @@
     rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];
     
-   
+    
     
     //聊天小红点
     CGRect chatNotifyLabelRect = CGRectMake(MainWidth*2/4 - 30, 6, 10, 10);
@@ -210,12 +291,12 @@
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UINavigationController *)viewController{
-        UIViewController *vc = [viewController.viewControllers firstObject];
+    UIViewController *vc = [viewController.viewControllers firstObject];
     if ([vc isKindOfClass:[MainPhoneViewController class]]) {
         if (self.lastSelectedViewController == vc) {
             MainPhoneViewController *tempComtroller = (MainPhoneViewController *)vc;
             if (isShow == NO) {
-                 [tempComtroller keyboardShow];
+                [tempComtroller keyboardShow];
                 isShow = YES;
             }else{
                 [tempComtroller keyboardHidden];
@@ -226,26 +307,9 @@
     self.lastSelectedViewController = vc;
 }
 
-#pragma mark 注册推送通知之后
-//在此接收设备令牌
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
-    NSLog(@"%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]             stringByReplacingOccurrencesOfString: @">" withString: @""]                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
-   
-}
-// 获取device token失败后
--(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    NSLog(@"didFailToRegisterForRemoteNotificationsWithError:%@",error.localizedDescription);
-}
-// 接收到推送通知之后
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    NSLog(@"receiveRemoteNotification,userInfo is %@",userInfo);
-}
-
-
 #pragma mark - XMPP模块。。。。全部放在这里
 - (void)setupStream {
-
+    
     xmppStream = [[XMPPStream alloc] init];
     [xmppStream setHostName:XMPPIP];
     [xmppStream setHostPort:XMPPPORT];
@@ -254,16 +318,16 @@
     xmppReconnect = [[XMPPReconnect alloc] init];
     [xmppReconnect setAutoReconnect:YES];
     [xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
-
+    
     xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
     
-//    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
+    //    xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
     //用这个处理加好友界面卡住不动的情况
     xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:xmppRosterStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     xmppRoster.autoFetchRoster = YES;
     xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = NO;
-
+    
     
     xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
     xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:xmppvCardStorage];
@@ -296,7 +360,7 @@
     
     [xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppRoster addDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];//dispatch_get_main_queue()
-
+    
 }
 
 - (void)goOnline {
@@ -394,7 +458,7 @@
 
 //接受到消息调用这个
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message {
-        
+    
     //有人发聊天消息来了
     if ([message.type isEqualToString:@"chat"]) {
         //13049340993@cloud.com/8b468676
@@ -403,8 +467,8 @@
             NSString *jidStr = @"";
             if (array.count > 0) {
                 jidStr = array[0];
+                
             }
-            DLog(@"什么鬼 = %@ = %@",message.body,message.fromStr);
             NSString *lastStr = @"";
             if ([message.body hasPrefix:@"ImgBase64"]) {
                 lastStr = @"[图片]";
@@ -414,35 +478,6 @@
                 lastStr = [message.body substringFromIndex:10];
             } else if ([message.body hasPrefix:@"LonBase64"]) {
                 lastStr = @"[位置]";
-            } else if ([message.body hasPrefix:XMPPBodyAgreeFriend]) {
-                //苹果这边不做处理
-                return;
-            } else if ([message.body hasPrefix:XMPPBodyAddFriend]) {
-                //添加好友
-                BOOL contains = [xmppRosterStorage userExistsWithJID:[XMPPJID jidWithString:jidStr] xmppStream:xmppStream];
-                if (contains) {
-                    DLog(@"-已是好友");
-                    return;
-                }
-                
-                NSArray *arr = [NSArray arrayWithObjects:jidStr,@"unagree",@"unread",nil];
-                NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:jidStr withAll:NO];
-                if (friendArray.count == 0) {
-                    [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
-                    
-                    //这里是判断新好友的小红点
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
-                    [defaults synchronize];
-                    
-                    //tabbar聊天加个小红点
-                    self.unreadChatLabel.hidden = NO;
-                    DLog(@"添加好友通知呀，来了");
-                    NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
-                    [[NSNotificationCenter defaultCenter] postNotification:notice];
-                }
-                
-                return;
             } else {
                 lastStr = @"不配配类型。。。。。";
             }
@@ -474,7 +509,7 @@
             NSNotification *notice = [NSNotification notificationWithName:ChatMessageComeing object:nil userInfo:@{@"jidStr":jidStr}];
             
             [[NSNotificationCenter defaultCenter] postNotification:notice];
-
+            
         }
     }
     
@@ -510,44 +545,74 @@
     
     DLog(@"mesg = %@",[NSString stringWithFormat:@"%@请求添加好友%@",presence.from,presence.type]);
     
-    if ([presence.type isEqualToString:@"subscribe"]) {
-        [self.xmppRoster acceptPresenceSubscriptionRequestFrom:presence.from andAddToRoster:YES];
-
-    }
     
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSString *number = [defaults objectForKey:UserNumber];
-//    NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
-//    if (![presence.fromStr isEqualToString:selfJidStr]) {
-//        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
-//        NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
-//        if (friendArray.count == 0) {
-//            [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
-//            
-//            //这里是判断新好友的小红点
-//            [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
-//            [defaults synchronize];
-//            
-//            //加个小红点
-//            self.unreadChatLabel.hidden = NO;
-//            DLog(@"添加好友通知呀，来了");
-//            NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
-//            [[NSNotificationCenter defaultCenter] postNotification:notice];
-//        }
-//    }
+    //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //    NSString *number = [defaults objectForKey:UserNumber];
+    //    NSString *selfJidStr = [NSString stringWithFormat:@"%@%@",number,XMPPSevser];
+    //    if (![presence.fromStr isEqualToString:selfJidStr]) {
+    //        DLog(@"根据是谁判断 进来了");
+    //
+    //        NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
+    //        NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
+    //        if (friendArray.count == 0) {
+    //            [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
+    //
+    //            //这里是判断新好友的小红点
+    //            [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
+    //            [defaults synchronize];
+    //
+    //            //加个小红点
+    //            DLog(@"添加好友通知呀，来了");
+    //            NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
+    //            [[NSNotificationCenter defaultCenter] postNotification:notice];
+    //        }
+    //    }
 }
 
+-(void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(DDXMLElement *)item {
+    
+    NSString *subscription = [item attributeStringValueForName:@"subscription"];
+    DLog(@"subscription = %@",subscription);
+    if ([subscription isEqualToString:@"both"]) {
+        DLog(@"双方成为好友！");
+    }
+}
 
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
-//    DDXMLElement *query = [iq elementsForName:@"query"][0];
-//    DDXMLElement *item = [query elementsForName:@"item"][0];
-//    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
-//    DLog(@"全部的全部的全部的iq = %@",iq);
-    
+    //    DDXMLElement *query = [iq elementsForName:@"query"][0];
+    //    DDXMLElement *item = [query elementsForName:@"item"][0];
+    //    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+    //    NSString *ask = [[item attributeForName:@"ask"] stringValue];
+    //    DLog(@"全部的全部的全部的iq = %@  ask = %@",subscription,ask);
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
+    NSString *presenceType = presence.type;
+    NSString *userId = sender.myJID.user;
+    NSString *presenceFromUser = presence.from.user;
+    
+    if (![presenceFromUser isEqualToString:userId]){
+        if ([presenceType isEqualToString:@"subscribe"]){
+            DLog(@"进来了这个");
+            NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
+            NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
+            if (friendArray.count == 0) {
+                [DBOperate insertDataWithnotAutoID:arr tableName:T_addFriend];
+                
+                //这里是判断新好友的小红点
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:@"somebodyAdd" forKey:XMPPAddFriend];
+                [defaults synchronize];
+                
+                //加个小红点
+                DLog(@"添加好友通知呀，来了");
+                NSNotification *notice = [NSNotification notificationWithName:FriendAdding object:nil];
+                [[NSNotificationCenter defaultCenter] postNotification:notice];
+            }
+        }
+    }
+    
     //收到对方取消定阅我得消息
     NSLog(@"presenceType = %@",presence.type);
     if ([presence.type isEqualToString:@"unsubscribed"]) {
@@ -574,7 +639,7 @@
 
 //卸载监听
 - (void)deactivateAutoPing {
-
+    
     [xmppAutoPing deactivate];
     [xmppAutoPing removeDelegate:self];
     xmppAutoPing = nil;
@@ -582,17 +647,17 @@
 
 #pragma mark - 心跳
 - (void)xmppAutoPingDidSendPing:(XMPPAutoPing *)sender {
-
-//    DLog(@"Sendsender = %@",sender);
+    
+    //    DLog(@"Sendsender = %@",sender);
 }
 
 - (void)xmppAutoPingDidReceivePong:(XMPPAutoPing *)sender {
-
-//    DLog(@"Receivesend = %@",sender);
+    
+    //    DLog(@"Receivesend = %@",sender);
 }
 
 - (void)xmppAutoPingDidTimeout:(XMPPAutoPing *)sender {
-
+    
     [CustomMBHud customHudWindow:@"xmpp连接超时"];
 }
 
@@ -692,7 +757,7 @@
                         DLog(@"荣联平台链接成功");
                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                         NSString *value = [defaults objectForKey:UserNumber];
-                       [[ECDevice sharedInstance].VoIPManager setSelfPhoneNumber:value];
+                        [[ECDevice sharedInstance].VoIPManager setSelfPhoneNumber:value];
                     }else{
                         DLog(@"荣联平台链接失败");
                     }
@@ -704,23 +769,83 @@
     }];
 }
 
+#pragma mark 注册推送通知之后
+//在此接收设备令牌
+- (void)application:(UIApplication *)app
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"%@", [NSString stringWithFormat:@"Device Token: %@", deviceToken]);
+    [APService registerDeviceToken:deviceToken];
+    
+}
+// 获取device token失败后
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError:%@",error.localizedDescription);
+}
 
+// 接收到推送通知之后
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [APService handleRemoteNotification:userInfo];
+    NSLog(@"收到通知----:%@", [self logDic:userInfo]);
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo
+fetchCompletionHandler:
+(void (^)(UIBackgroundFetchResult))completionHandler {
+    // IOS 7 Support Required
+    [APService handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
+    NSLog(@"收到通知:%@", [self logDic:userInfo]);
+    
+}
+
+- (void)application:(UIApplication *)application
+didReceiveLocalNotification:(UILocalNotification *)notification {
+    //* 本地推送在前台推送。默认App在前台运行时不会进行弹窗，在程序接收通知调用此接口可实现指定的推送弹窗。
+    
+    [APService showLocalNotificationAtFront:notification identifierKey:nil];
+}
+
+// log NSSet with UTF8
+// if not ,log will be \Uxxx
+- (NSString *)logDic:(NSDictionary *)dic {
+    if (![dic count]) {
+        return nil;
+    }
+    NSString *tempStr1 =
+    [[dic description] stringByReplacingOccurrencesOfString:@"\\u"
+                                                 withString:@"\\U"];
+    NSString *tempStr2 =
+    [tempStr1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *tempStr3 =
+    [[@"\"" stringByAppendingString:tempStr2] stringByAppendingString:@"\""];
+    NSData *tempData = [tempStr3 dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *str =
+    [NSPropertyListSerialization propertyListFromData:tempData
+                                     mutabilityOption:NSPropertyListImmutable
+                                               format:NULL
+                                     errorDescription:NULL];
+    return str;
+}
 
 #pragma mark - 应用程序生命周期
 - (void)applicationWillResignActive:(UIApplication *)application {
-
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-
+    [application setApplicationIconBadgeNumber:0];
+    [application cancelAllLocalNotifications];
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-
+    
     //重新连接
     if ([xmppStream isDisconnected]) {
         [self connect];
@@ -728,7 +853,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-
+    
 }
 
 - (void)dealloc
