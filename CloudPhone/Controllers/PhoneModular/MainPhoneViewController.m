@@ -85,7 +85,7 @@
 
 - (void)initTextFiled{
     UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
-    textFiled.backgroundColor = [ColorTool backgroundColor];
+    textFiled.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
     textFiled.textAlignment = NSTextAlignmentCenter;
     textFiled.enabled = NO;
     self.textFiled = textFiled;

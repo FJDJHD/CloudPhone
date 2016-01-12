@@ -55,13 +55,14 @@
     baseTimeLabel.tag = 4001;
     baseTimeLabel.text = @"＊分钟";
     
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(MainWidth / 2.0, CGRectGetMinY(baseTimeLabel0.frame) + 5, 0.5, 40)];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [headerView addSubview:line];
     
-    
-    
-    UILabel *rewardTimeLabel0 = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 ) / 2.0, 25)];
+    UILabel *rewardTimeLabel0 = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 35, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 ) / 2.0, 25)];
     rewardTimeLabel0.text = @"奖励时长";
    
-    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(rewardTimeLabel0.frame), (MainWidth - 40 * 2 ) / 2.0, 25)];
+    UILabel *rewardTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 35, CGRectGetMaxY(rewardTimeLabel0.frame), (MainWidth - 40 * 2 ) / 2.0, 25)];
     rewardTimeLabel.tag = 4002;
     rewardTimeLabel.text = @"＊分钟/月";
     
@@ -79,7 +80,7 @@
 
 - (NSArray *)itemArray{
     if (!_itemArray) {
-        _itemArray = @[@"做任务获取更多免费通话时长",@"费用说明",@"省钱记录"];
+        _itemArray = @[@"获取免费时长",@"费用说明",@"省钱记录",@"充值中心"];
     }
     return _itemArray;
 }
@@ -171,14 +172,19 @@
                     NSMutableAttributedString *mutableAttString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld分钟",(long)give_tel_fare]];
                     
                     NSUInteger length = [mutableAttString length];
-                   // UIFont *baseFont = [UIFont systemFontOfSize:16.0];
-                    [mutableAttString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(length - 2, 2)];
-                    [mutableAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(length - 2, 2)];
+                    [mutableAttString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20.0] range:NSMakeRange(0,length - 2)];
+                    [mutableAttString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#2cceb7"] range:NSMakeRange(0,length - 2)];
                     baseLabel.attributedText = mutableAttString;
                     
                     //奖励时长
                     UILabel *rewardLabel = (UILabel *)[self.view viewWithTag:4002];
-                    rewardLabel.text = [NSString stringWithFormat:@"%ld分钟/月",(long)recharge_tel_fare];
+                    
+                    NSMutableAttributedString *mutableAttString1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld分钟/月",(long)recharge_tel_fare]];
+                    NSUInteger length1 = [mutableAttString1 length];
+                    [mutableAttString1 addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:22.0] range:NSMakeRange(0,length1 - 4)];
+                    [mutableAttString1 addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#2cceb7"] range:NSMakeRange(0,length1 - 4)];
+                    rewardLabel.attributedText = mutableAttString1;
+                                                                    
                     [self.tableView reloadData];
                     
                 } else {

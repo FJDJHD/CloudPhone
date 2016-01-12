@@ -43,6 +43,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
     self.tableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStyleGrouped];
+    [self.tableView setSeparatorColor:[UIColor colorWithHexString:@"#2cceb7"]];
     self.title = @"费用说明";
     //返回
     UIButton *backButton = [self setBackBarButton:1];
@@ -101,17 +102,17 @@
         if (indexPath.row != 0) {
             cell.backgroundColor = [UIColor whiteColor];
             if (indexPath.row != self.callStyleArray.count) {
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.callStyelLabel.frame), 0, 1, 45)];
-            line.backgroundColor = [UIColor lightGrayColor];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.callStyelLabel.frame), 0, 0.5, 45)];
+            line.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
             [cell addSubview:line];
             
-            UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.friendStyleLabel.frame), 0, 1, 45)];
-            line2.backgroundColor = [UIColor lightGrayColor];
+            UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.friendStyleLabel.frame), 0, 0.5, 45)];
+            line2.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
             [cell addSubview:line2];
             }
 
         }else{
-            cell.backgroundColor = [UIColor colorWithHexString:@"#f8f8f8"];
+            cell.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
             self.callStyelLabel.textColor = [UIColor blackColor];
         }
     }
@@ -129,6 +130,27 @@
         return 90;
     }
     return 45;
+}
+
+-(void)viewDidLayoutSubviews {
+    
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+        
+    }
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])  {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat{
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]){
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
 }
 
 - (void)popViewController {
