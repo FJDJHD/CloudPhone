@@ -78,6 +78,10 @@
 		6E4D37B01C0568B1001573E3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A31C0568B1001573E3 /* UIScrollView+MJRefresh.m */; };
 		6E4D37B11C0568B1001573E3 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */; };
 		6E6D873C1C239DCA007D36DA /* UniqueUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6D873B1C239DCA007D36DA /* UniqueUDID.m */; };
+		6E6F16F61C43A2060030755F /* common_resizable_blue_H@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F21C43A2060030755F /* common_resizable_blue_H@2x.png */; };
+		6E6F16F71C43A2060030755F /* common_resizable_blue_N@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */; };
+		6E6F16F81C43A2060030755F /* emoji_delete_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */; };
+		6E6F16F91C43A2060030755F /* emoji_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F51C43A2060030755F /* emoji_delete@2x.png */; };
 		6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E722F541C0FEC9200A21557 /* DailNumberCell.m */; };
 		6E7A32281C215B4C005C11B8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A32191C215B4C005C11B8 /* NSData+Base64.m */; };
 		6E7A32291C215B4C005C11B8 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A321B1C215B4C005C11B8 /* NSString+Base64.m */; };
@@ -811,6 +815,10 @@
 		6E4D37A51C0568B1001573E3 /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
 		6E6D873A1C239DCA007D36DA /* UniqueUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UniqueUDID.h; sourceTree = "<group>"; };
 		6E6D873B1C239DCA007D36DA /* UniqueUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UniqueUDID.m; sourceTree = "<group>"; };
+		6E6F16F21C43A2060030755F /* common_resizable_blue_H@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "common_resizable_blue_H@2x.png"; sourceTree = "<group>"; };
+		6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "common_resizable_blue_N@2x.png"; sourceTree = "<group>"; };
+		6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji_delete_pressed@2x.png"; sourceTree = "<group>"; };
+		6E6F16F51C43A2060030755F /* emoji_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji_delete@2x.png"; sourceTree = "<group>"; };
 		6E722F531C0FEC9200A21557 /* DailNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailNumberCell.h; sourceTree = "<group>"; };
 		6E722F541C0FEC9200A21557 /* DailNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailNumberCell.m; sourceTree = "<group>"; };
 		6E7A32181C215B4C005C11B8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -2596,6 +2604,10 @@
 		6E9CBF061C23F08600EFFF8D /* RealChat */ = {
 			isa = PBXGroup;
 			children = (
+				6E6F16F21C43A2060030755F /* common_resizable_blue_H@2x.png */,
+				6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */,
+				6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */,
+				6E6F16F51C43A2060030755F /* emoji_delete@2x.png */,
 				6E9244691C351DC00012C53F /* chat_fire@2x.png */,
 				6E92446A1C351DC00012C53F /* chat_palyVedio@2x.png */,
 				6E9244651C350B880012C53F /* chatView_location_map@2x.png */,
@@ -3939,8 +3951,8 @@
 		B4AF81CD1C3E872900D9C282 /* OtherViewController */ = {
 			isa = PBXGroup;
 			children = (
-				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
+				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 				B4AF81CE1C3E872900D9C282 /* AddressViewController.h */,
 				B4AF81CF1C3E872900D9C282 /* AddressViewController.m */,
 				B4AF81D01C3E872900D9C282 /* FriendDetailViewController.h */,
@@ -4209,7 +4221,7 @@
 				TargetAttributes = {
 					6EB2ED4A1C04684A002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = 5B6A48P7YX;
+						DevelopmentTeam = MB56WXZ49W;
 					};
 					6EB2ED631C04684B002799BD = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -4266,6 +4278,7 @@
 				B4DAD4071C1817550092BF8F /* find_tips@3x.png in Resources */,
 				B4DAD40A1C18175D0092BF8F /* find_bank@2x.png in Resources */,
 				6E7D7A2C1C192CCC00B42140 /* call_out_h.png in Resources */,
+				6E6F16F81C43A2060030755F /* emoji_delete_pressed@2x.png in Resources */,
 				6E7D7A201C192CCC00B42140 /* VoiceSearchFeedback016.png in Resources */,
 				6E7D7A8A1C192CCC00B42140 /* chat_sender_audio_playing_003@2x.png in Resources */,
 				B44E90ED1C103FC500CFC003 /* pic_touxiang@2x.png in Resources */,
@@ -4356,6 +4369,7 @@
 				6EC98CB11C3144B5002A4666 /* MWPhotoBrowser.bundle in Resources */,
 				B4D04DC51C1BCD13008BD608 /* phone_friends@2x.png in Resources */,
 				B47FE4FE1C40E698000E05C8 /* callphone_callback_sel@2x.png in Resources */,
+				6E6F16F91C43A2060030755F /* emoji_delete@2x.png in Resources */,
 				6E7D7A1C1C192CCC00B42140 /* VoiceSearchFeedback014.png in Resources */,
 				B47FE4FF1C40E698000E05C8 /* callphone_mute_sel@2x.png in Resources */,
 				B497DDE41C183F1700AF9BEB /* mine_qq@3x.png in Resources */,
@@ -4448,6 +4462,9 @@
 				B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */,
 				6E7D7A3D1C192CCC00B42140 /* chatBar_textBg@2x.png in Resources */,
 				6E7D7A781C192CCC00B42140 /* chat_receiver_audio_playing000@2x.png in Resources */,
+
+				B4C8F1521C22CDBD00957C99 /* login_bag@2x.png in Resources */,
+				6E6F16F61C43A2060030755F /* common_resizable_blue_H@2x.png in Resources */,
 				6E7D7A061C192CCC00B42140 /* VoiceSearchFeedback003.png in Resources */,
 				B44E90F31C103FC500CFC003 /* back@2x.png in Resources */,
 				B40FF02A1C16892B0077FAC9 /* sendmsg@2x.png in Resources */,
@@ -4500,6 +4517,7 @@
 				6E7D7A1E1C192CCC00B42140 /* VoiceSearchFeedback015.png in Resources */,
 				6E9CBF0A1C23F0D600EFFF8D /* chat_addfriend@3x.png in Resources */,
 				6E7D7A651C192CCC00B42140 /* chatBar_colorMore_photoSelected@2x.png in Resources */,
+				6E6F16F71C43A2060030755F /* common_resizable_blue_N@2x.png in Resources */,
 				6E7D7A211C192CCC00B42140 /* VoiceSearchFeedback016@2x.png in Resources */,
 				B44E90F11C103FC500CFC003 /* mine_arrow@2x.png in Resources */,
 				6E88C8F71C32881C00AD28A3 /* chat_takePic@2x.png in Resources */,
@@ -5015,6 +5033,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK/lib",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/JPush",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",
@@ -5052,6 +5071,7 @@
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/Yuntx_FullLib_SDK/lib",
 					"$(PROJECT_DIR)/CloudPhone/Vendor/JPush",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = (
 					"-lxml2",

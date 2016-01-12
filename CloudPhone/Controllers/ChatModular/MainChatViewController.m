@@ -78,7 +78,7 @@
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:addressButton];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
     
-
+    
     //有好友添加的小红点
     _unreadAddLabel = [[UILabel alloc]init];
     _unreadAddLabel.frame = CGRectMake(addressButton.frame.size.width-20, 8, 10, 10);
@@ -120,20 +120,20 @@
     } else {
         _unreadAddLabel.hidden = YES;
     }
-  
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-
+    
     [super viewDidAppear:animated];
     self.kCurrentController = YES; //一个标志
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-
+    
     [super viewDidDisappear:animated];
     self.kCurrentController = NO; //一个标志
-
+    
 }
 
 
@@ -246,7 +246,7 @@
         [self.navigationController pushViewController:controller animated:YES];
         
     } else {
-    
+        
         if (self.selectType == kFriend) {
             //好友
             XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
@@ -268,7 +268,7 @@
                     controller.chatName = user.jid.user;
                 }
             }
-
+            
             
             [self.navigationController pushViewController:controller animated:YES];
         } else {
@@ -288,6 +288,7 @@
                         if ([user.jid isEqualToJID:jid]) {
                             if (user.nickname.length > 0 && user.nickname) {
                                 controller.chatName = user.nickname;
+                                
                             } else {
                                 XMPPvCardTemp *xmppvCardTemp = [[[GeneralToolObject appDelegate] xmppvCardTempModule] vCardTempForJID:user.jid shouldFetch:YES];
                                 if (xmppvCardTemp.nickname.length > 0 && xmppvCardTemp.nickname) {
@@ -302,36 +303,36 @@
                 [self.navigationController pushViewController:controller animated:YES];
             }
         }
-
+        
     }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-//    if (tableView == self.searchControl.searchResultsTableView) {
-//        //搜索 这里还不需要做啥处理
-//        return;
-//    } else {
-//        
-//        if (self.selectType == kFriend) {
-//            //好友
-//            if (editingStyle == UITableViewCellEditingStyleDelete) {
-//                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-//                XMPPJID *jid = user.jid;
-//                [[self appDelegate] deleteFriend:user.jidStr];
-////                [[self appDelegate].xmppRoster removeUser:jid];
-//            }
-//        } else {
-//            //消息
-//            if (editingStyle == UITableViewCellEditingStyleDelete) {
-//                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
-//                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
-//                //删除后重新再更新下数据库
-//                [self loadMessageDataFromFMDB];
-//                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            }
-//        }
-//    }
+    
+    //    if (tableView == self.searchControl.searchResultsTableView) {
+    //        //搜索 这里还不需要做啥处理
+    //        return;
+    //    } else {
+    //
+    //        if (self.selectType == kFriend) {
+    //            //好友
+    //            if (editingStyle == UITableViewCellEditingStyleDelete) {
+    //                XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    //                XMPPJID *jid = user.jid;
+    //                [[self appDelegate] deleteFriend:user.jidStr];
+    ////                [[self appDelegate].xmppRoster removeUser:jid];
+    //            }
+    //        } else {
+    //            //消息
+    //            if (editingStyle == UITableViewCellEditingStyleDelete) {
+    //                NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
+    //                [DBOperate deleteData:T_chatMessage tableColumn:@"jidStr" columnValue:[temp objectAtIndex:message_id]];
+    //                //删除后重新再更新下数据库
+    //                [self loadMessageDataFromFMDB];
+    //                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    //            }
+    //        }
+    //    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -354,7 +355,7 @@
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
         NSLog(@"点击了删除");
         if (self.selectType == kFriend) {
@@ -368,7 +369,7 @@
             [DBOperate deleteData:T_addFriend tableColumn:@"jidStr" columnValue:user.jidStr];
             //删除后重新再更新下数据库
             [self loadMessageDataFromFMDB];
-
+            
         } else {
             //消息
             NSArray *temp = [_chatListArray objectAtIndex:indexPath.row];
@@ -380,7 +381,7 @@
         
         //判断tabbar小红点出现
         [self tabbarUnreadMessageisShow];
-
+        
     }];
     
     UITableViewRowAction *moreRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"备注" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
@@ -393,7 +394,7 @@
     }];
     if (self.selectType == kFriend) {
         return @[deleteRowAction, moreRowAction];
-
+        
     }  else {
         return @[deleteRowAction];
     }
@@ -493,7 +494,7 @@
     
     if (self.searchBar.text.length > 0) {
         for (XMPPUserCoreDataStorageObject *user in self.fetchedResultsController.fetchedObjects) {
-             NSString *friendName = @"";
+            NSString *friendName = @"";
             
             if (user.nickname.length > 0 && user.nickname) {
                 friendName = user.nickname;
@@ -573,14 +574,14 @@
         }
     }
     [DBOperate updateData:T_chatMessage tableColumn:@"name" columnValue:realName conditionColumn:@"jidStr" conditionColumnValue:jidStr];
-
+    
     //出现红点的
     [self appDelegate].unreadChatLabel.hidden = NO;
     if (self.kCurrentController == YES && self.selectType == kMessage) {
         //在当前界面消息
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
-     }
+    }
 }
 
 #pragma mark - 添加好友
@@ -588,6 +589,7 @@
     DLog(@"好友界面，接受通知");
     dispatch_async(dispatch_get_main_queue(), ^{
         _unreadAddLabel.hidden = NO;
+        [self appDelegate].unreadChatLabel.hidden = NO;
     });
 }
 
@@ -621,18 +623,18 @@
 
 //切换状态
 - (void)segmentClick:(UISegmentedControl *)sender {
-
+    
     UISegmentedControl *segment = (UISegmentedControl *)sender;
     if (segment.selectedSegmentIndex == 0) {
         self.selectType = kMessage;  //表示消息列表
         [self loadMessageDataFromFMDB];
         [self.tableView reloadData];
-    
+        
     } else {
         self.selectType = kFriend; //表示朋友列表
-       
+        
         [self.tableView reloadData];
-    
+        
     }
 }
 
