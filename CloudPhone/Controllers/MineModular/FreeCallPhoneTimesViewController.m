@@ -55,6 +55,9 @@
     baseTimeLabel.tag = 4001;
     baseTimeLabel.text = @"＊分钟";
     
+    
+    
+    
     UILabel *rewardTimeLabel0 = [[UILabel alloc] initWithFrame:CGRectMake(MainWidth / 2.0 + 20, CGRectGetMaxY(remaineTimeButton.frame) + 30, (MainWidth - 40 * 2 ) / 2.0, 25)];
     rewardTimeLabel0.text = @"奖励时长";
    
@@ -164,7 +167,14 @@
                     
                     //基础时长
                     UILabel *baseLabel = (UILabel *)[self.view viewWithTag:4001];
-                    baseLabel.text = [NSString stringWithFormat:@"%ld分钟",(long)give_tel_fare];
+                    
+                    NSMutableAttributedString *mutableAttString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld分钟",(long)give_tel_fare]];
+                    
+                    NSUInteger length = [mutableAttString length];
+                   // UIFont *baseFont = [UIFont systemFontOfSize:16.0];
+                    [mutableAttString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(length - 2, 2)];
+                    [mutableAttString addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(length - 2, 2)];
+                    baseLabel.attributedText = mutableAttString;
                     
                     //奖励时长
                     UILabel *rewardLabel = (UILabel *)[self.view viewWithTag:4002];

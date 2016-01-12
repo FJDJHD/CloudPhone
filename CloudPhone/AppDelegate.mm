@@ -125,17 +125,17 @@
     BaseNavigationController *registerLoginNavigationController = [[BaseNavigationController alloc]initWithRootViewController:controller];
     
     if (CURRENT_SYS_VERSION >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:[ColorTool backgroundColor]];
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
-        [[UINavigationBar appearance] setTintColor:[ColorTool backgroundColor]];
+        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
     self.window.rootViewController = registerLoginNavigationController;
 }
 
@@ -176,7 +176,7 @@
     BaseTabBarController *rootTabBarController = [[BaseTabBarController alloc] init];
     rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];
-    
+   
    
     
     //聊天小红点
@@ -191,20 +191,20 @@
     [rootTabBarController.tabBar addSubview:_unreadChatLabel];
     
     if (CURRENT_SYS_VERSION >= 7.0) {
-        [[UINavigationBar appearance] setBarTintColor:[ColorTool backgroundColor]];
+        [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         
     } else {
-        [[UINavigationBar appearance] setTintColor:[ColorTool backgroundColor]];
+        [[UINavigationBar appearance] setTintColor:[ColorTool navigationColor]];
         [[UITabBar appearance] setBackgroundColor:[UIColor whiteColor]];
     }
     
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIColor blackColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
-    //    //不需要tabbar下面文字，先隐藏掉
-    //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0),NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateNormal];
-    //    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:RGBA(255 , 255, 255,0), NSForegroundColorAttributeName,[UIFont systemFontOfSize:0],NSFontAttributeName,nil] forState:UIControlStateSelected];
+                                                           [UIColor whiteColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:19], NSFontAttributeName, nil]];
+        //不需要tabbar下面文字，先隐藏掉
+        [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor],NSForegroundColorAttributeName,[UIFont systemFontOfSize:12],NSFontAttributeName,nil] forState:UIControlStateNormal];
+        [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithHexString:@"#2cceb7"], NSForegroundColorAttributeName,[UIFont systemFontOfSize:12],NSFontAttributeName,nil] forState:UIControlStateSelected];
     
     self.window.rootViewController = rootTabBarController;
 }

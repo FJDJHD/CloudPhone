@@ -59,7 +59,7 @@
         [_alertView addSubview:_label1];
         
         UIButton *sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        sureButton.backgroundColor = [ColorTool navigationColor];
+        sureButton.backgroundColor = [UIColor colorWithHexString:@"#09da61"];
         sureButton.layer.cornerRadius = 2.0;
         sureButton.layer.masksToBounds = YES;
         sureButton.titleLabel.font = [UIFont systemFontOfSize:16.0];

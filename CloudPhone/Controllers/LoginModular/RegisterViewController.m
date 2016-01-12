@@ -51,13 +51,16 @@ static const int kTimeCount             = 60;
     [self setBackBarButtonItem:backButton];
     
     self.title = @"手机号注册";
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0,STATUS_NAV_BAR_HEIGHT + 44, MainWidth, 88)];
+    
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(-1,STATUS_NAV_BAR_HEIGHT + 50, MainWidth+2, 88)];
     backView.backgroundColor = [UIColor whiteColor];
-   
+    backView.layer.borderWidth = 0.5;
+    backView.layer.masksToBounds = YES;
+    backView.layer.borderColor = [[UIColor colorWithHexString:@"#0abf56"] CGColor];
     [self.view addSubview:backView];
     
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 44, MainWidth - 15, 1)];
-    lineView.backgroundColor = [ColorTool backgroundColor];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(15, 44, MainWidth - 15, 0.5)];
+    lineView.backgroundColor = [UIColor colorWithHexString:@"#0abf56"];
     [backView addSubview:lineView];
     
     //手机号
@@ -68,7 +71,7 @@ static const int kTimeCount             = 60;
     [backView addSubview:numberLabel];
     
     _numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberLabel.frame), 0, MainWidth - CGRectGetMaxX(numberLabel.frame), 44)];
-    _numberField.placeholder = @"请输入手机号码";
+    _numberField.placeholder = @"请输入您的手机号码";
     _numberField.font = [UIFont systemFontOfSize:15.0];
     _numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _numberField.borderStyle = UITextBorderStyleNone;
@@ -90,7 +93,7 @@ static const int kTimeCount             = 60;
     [backView addSubview:_verifyField];
     
     _proveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_proveButton setBackgroundColor:[UIColor colorWithHexString:@"#27ad4d"]];
+    [_proveButton setBackgroundColor:[UIColor colorWithHexString:@"#0abf56"]];
     _proveButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
     _proveButton.frame = CGRectMake(CGRectGetMaxX(_verifyField.frame), 44, MainWidth - CGRectGetMaxX(_verifyField.frame), 44);
     
@@ -108,7 +111,7 @@ static const int kTimeCount             = 60;
     
     //注册
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.backgroundColor = [UIColor colorWithHexString:@"049ff1"];
+    registerButton.backgroundColor = [UIColor colorWithHexString:@"#09da61"];
     registerButton.layer.cornerRadius = 2.0;
     registerButton.layer.masksToBounds = YES;
     registerButton.titleLabel.font = [UIFont systemFontOfSize:16.0];

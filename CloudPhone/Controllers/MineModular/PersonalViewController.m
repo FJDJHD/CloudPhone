@@ -152,18 +152,19 @@
         if (indexPath.section == 0) {
             UIImage *image = [UIImage imageNamed:@"mine_icon"];
             UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
-            imageView.frame = CGRectMake(MainWidth - image.size.width - 30, (60 - image.size.height)/2.0, image.size.width, image.size.height);
+            imageView.frame = CGRectMake(MainWidth - image.size.width, 5, 50, 50);
             imageView.tag = 100;
             [cell addSubview:imageView];
         }
       
     }
+    
     if (!(indexPath.section == 1 && indexPath.row == 3)) {
         cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"mine_arrow"]];
     } else {
         cell.accessoryView = [[UIView alloc]init];
     }
-    
+    cell.textLabel.textColor = [UIColor colorWithHexString:@"#2cceb7"];
     UserModel *model = self.user;
     
     if (indexPath.section == 0) {

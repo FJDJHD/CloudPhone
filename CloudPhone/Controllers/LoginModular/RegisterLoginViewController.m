@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  
+    
     //读取沙盒数据
     NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
     NSString *key = [NSString stringWithFormat:@"IsFirstAtVersin: %@", APP_VERSION];
@@ -74,21 +74,18 @@
     bgImageView.image = [UIImage imageNamed:@"login_bg"];
     [self.view addSubview:bgImageView];
     
-    
     //登陆输入
     UIImage *image = [UIImage imageNamed:@"pic_zhanghao"];
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(15,136, MainWidth - 30, 88)];
-    backView.backgroundColor = [UIColor colorWithHexString:@"#ffffff"];
-    backView.alpha = 0.80;
-    backView.layer.cornerRadius = 2.0;
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(25,MainHeight * 0.45, MainWidth - 50, 88)];
+    backView.backgroundColor = [UIColor colorWithHexString:@"#f7f2ee"];
     [self.view addSubview:backView];
     
     //手机号
-    UIImageView *numberImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0, 20, 20)];
+    UIImageView *numberImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, (44 - 20)/2.0, 20, 20)];
     [numberImageView setImage:image];
     [backView addSubview:numberImageView];
     
-    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, 0, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
+    UITextField *numberField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 15, 0, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
     numberField.placeholder = @"请输入手机号码";
     numberField.font = [UIFont systemFontOfSize:TEXTFONT];
     numberField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -97,16 +94,16 @@
     [backView addSubview:numberField];
     self.numberField = numberField;
     
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, backView.frame.size.height / 2.0, MainWidth - 55 - image.size.width, 1)];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(numberImageView.frame) + 10, backView.frame.size.height / 2.0, MainWidth - 75 - image.size.width, 1)];
     lineView.backgroundColor = [UIColor colorWithHexString:@"#aaaaaa"];
     [backView addSubview:lineView];
     
     //密码
-    UIImageView *passwordImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (44 - 20)/2.0 + 44, 20, 20)];
+    UIImageView *passwordImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, (44 - 20)/2.0 + 44, 20, 20)];
     [passwordImageView setImage:[UIImage imageNamed:@"pic_mima"]];
     [backView addSubview:passwordImageView];
     
-    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 10, 44, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
+    UITextField *passwordField = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 15, 44, backView.frame.size.width - numberImageView.frame.size.width - 25, 44)];
     passwordField.placeholder = @"请输入登录密码";
     passwordField.font = [UIFont systemFontOfSize:TEXTFONT];
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -114,39 +111,43 @@
     [backView addSubview:passwordField];
     self.passwordField = passwordField;
     
+    UIView *lineView1 = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(passwordImageView.frame) + 10, backView.frame.size.height, MainWidth - 75 - image.size.width, 1)];
+    lineView1.backgroundColor = [UIColor colorWithHexString:@"#aaaaaa"];
+    [backView addSubview:lineView1];
+
+    
     //忘记密码
     UIButton *forgetPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
     forgetPasswordButton.titleLabel.font = [UIFont systemFontOfSize:14];
-    forgetPasswordButton.frame = CGRectMake(MainWidth - 15 - 80, CGRectGetMaxY(backView.frame), 100, 32);
+    forgetPasswordButton.frame = CGRectMake(MainWidth - 40 - 80, CGRectGetMaxY(backView.frame), 100, 32);
     [forgetPasswordButton setTitle:@"忘记密码 ？" forState:UIControlStateNormal];
-    forgetPasswordButton.titleLabel.textColor = [UIColor lightGrayColor];
     [forgetPasswordButton addTarget:self action:@selector(forgetPasswordButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [forgetPasswordButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [forgetPasswordButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.view addSubview:forgetPasswordButton];
         
     //登陆
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.backgroundColor = [UIColor colorWithHexString:@"#ffffff"];
-    loginButton.alpha = 0.8;
+    loginButton.backgroundColor = [UIColor colorWithHexString:@"#09da61"];
     loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
-    loginButton.frame = CGRectMake(0, 0, 50, 50);
+    loginButton.frame = CGRectMake(0, 0, MainWidth - 120, 33);
     loginButton.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(backView.frame) + 30 + 25);
     [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
-    loginButton.layer.cornerRadius = 25.0;
+    loginButton.layer.cornerRadius = 5.0;
     loginButton.layer.masksToBounds = YES;
     [loginButton addTarget:self action:@selector(loginButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     
     //没有账号，注册
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     registerButton.titleLabel.font = [UIFont systemFontOfSize:15];
     registerButton.frame = CGRectMake(0, 0, 200, 32);
-    registerButton.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(loginButton.frame) + 5 + registerButton.frame.size.height / 2.0);
-    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"没有账号？立即注册"];
-    NSRange strRange = {0,[str length]};
-    [str addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:strRange];
-    [registerButton setAttributedTitle:str forState:UIControlStateNormal];
+    registerButton.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(loginButton.frame) + 15 + registerButton.frame.size.height / 2.0);
+//    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"没有账号？立即注册"];
+//    NSRange strRange = {0,[str length]};
+//    [str addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:strRange];
+//    [registerButton setAttributedTitle:str forState:UIControlStateNormal];
+    [registerButton setTitle:@"没有账号？立即注册" forState:UIControlStateNormal];
     registerButton.titleLabel.textColor = [UIColor colorWithHexString:@"#646464"];
     [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];

@@ -111,7 +111,7 @@
     if (flag == 0) {
         image = [UIImage imageNamed:@"back_whilte"];
     }else {
-        image = [UIImage imageNamed:@"back"];
+        image = [UIImage imageNamed:@"back_whilte"];
     }
    
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];

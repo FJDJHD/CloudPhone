@@ -11,12 +11,12 @@
 @implementation ColorTool
 
 +(UIColor *)navigationColor{
-    return [UIColor colorWithHexString:@"049ff1"];
+    return [UIColor colorWithHexString:@"#2cceb7"];
 }
 
 
 + (UIColor *)backgroundColor{
-    return [UIColor colorWithHexString:@"efeff4"];
+    return [UIColor colorWithHexString:@"#f7f2ee"];
 }
 
 + (UIColor *)textColor{

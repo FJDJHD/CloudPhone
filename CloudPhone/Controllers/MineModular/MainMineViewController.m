@@ -46,7 +46,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *number = [defaults objectForKey:UserNumber];
     self.numberStr = number;
@@ -114,8 +113,9 @@
             UILabel *userLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, 15, 200, 30)];
             userLable.font = [UIFont systemFontOfSize:18];
             userLable.textAlignment = NSTextAlignmentLeft;
-            userLable.textColor = [UIColor blackColor];
+            userLable.textColor = [UIColor colorWithHexString:@"#2cceb7"];
             userLable.tag = 201;
+            
             [cell addSubview:userLable];
             
             UILabel *mobileLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10 , 45, 200, 30)];
