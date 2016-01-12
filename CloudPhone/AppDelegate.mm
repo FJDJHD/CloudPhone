@@ -93,9 +93,11 @@
     [self.window makeKeyAndVisible];
     
     //注册极光推送
-    [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
+    [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                   UIRemoteNotificationTypeSound |
+                                                   UIRemoteNotificationTypeAlert)
+                                       categories:nil];
     [APService setupWithOption:launchOptions];
-    [self initJPush];
     
     return YES;
 }

@@ -82,6 +82,9 @@
 		6E6F16F71C43A2060030755F /* common_resizable_blue_N@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */; };
 		6E6F16F81C43A2060030755F /* emoji_delete_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */; };
 		6E6F16F91C43A2060030755F /* emoji_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16F51C43A2060030755F /* emoji_delete@2x.png */; };
+		6E6F16FF1C44935E0030755F /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F16FE1C44935E0030755F /* PushConfig.plist */; };
+		6E6F17021C44B2F20030755F /* address_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6E6F17011C44B2F20030755F /* address_icon@2x.png */; };
+		6E6F17051C44B4830030755F /* DilingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E6F17041C44B4830030755F /* DilingButton.m */; };
 		6E722F551C0FEC9200A21557 /* DailNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E722F541C0FEC9200A21557 /* DailNumberCell.m */; };
 		6E7A32281C215B4C005C11B8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A32191C215B4C005C11B8 /* NSData+Base64.m */; };
 		6E7A32291C215B4C005C11B8 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E7A321B1C215B4C005C11B8 /* NSString+Base64.m */; };
@@ -475,7 +478,6 @@
 		6EC98CB01C3144B5002A4666 /* PSTGridLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EC98C891C3144B5002A4666 /* PSTGridLayoutSection.m */; };
 		6EC98CB11C3144B5002A4666 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EC98C8A1C3144B5002A4666 /* MWPhotoBrowser.bundle */; };
 		6EDE4EF41C3E84F5007FAAD1 /* libPushSDK-1.8.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EDE4EF31C3E84F5007FAAD1 /* libPushSDK-1.8.8.a */; };
-		6EDE4EF61C3E860D007FAAD1 /* jpush.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE4EF51C3E860D007FAAD1 /* jpush.plist */; };
 		6EE1CD331C1C22880054B993 /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD221C1C22880054B993 /* MBProgressHUD+Add.m */; };
 		6EE1CD341C1C22880054B993 /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6EE1CD231C1C22880054B993 /* MBProgressHUD.bundle */; };
 		6EE1CD351C1C22880054B993 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EE1CD251C1C22880054B993 /* MJPhoto.m */; };
@@ -819,6 +821,10 @@
 		6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "common_resizable_blue_N@2x.png"; sourceTree = "<group>"; };
 		6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji_delete_pressed@2x.png"; sourceTree = "<group>"; };
 		6E6F16F51C43A2060030755F /* emoji_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji_delete@2x.png"; sourceTree = "<group>"; };
+		6E6F16FE1C44935E0030755F /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
+		6E6F17011C44B2F20030755F /* address_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "address_icon@2x.png"; sourceTree = "<group>"; };
+		6E6F17031C44B4830030755F /* DilingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DilingButton.h; sourceTree = "<group>"; };
+		6E6F17041C44B4830030755F /* DilingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DilingButton.m; sourceTree = "<group>"; };
 		6E722F531C0FEC9200A21557 /* DailNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailNumberCell.h; sourceTree = "<group>"; };
 		6E722F541C0FEC9200A21557 /* DailNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailNumberCell.m; sourceTree = "<group>"; };
 		6E7A32181C215B4C005C11B8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1460,7 +1466,6 @@
 		6EC98C8A1C3144B5002A4666 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MWPhotoBrowser.bundle; sourceTree = "<group>"; };
 		6EDE4EF21C3E84F5007FAAD1 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
 		6EDE4EF31C3E84F5007FAAD1 /* libPushSDK-1.8.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-1.8.8.a"; sourceTree = "<group>"; };
-		6EDE4EF51C3E860D007FAAD1 /* jpush.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = jpush.plist; sourceTree = "<group>"; };
 		6EE1CD211C1C22880054B993 /* MBProgressHUD+Add.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Add.h"; sourceTree = "<group>"; };
 		6EE1CD221C1C22880054B993 /* MBProgressHUD+Add.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Add.m"; sourceTree = "<group>"; };
 		6EE1CD231C1C22880054B993 /* MBProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MBProgressHUD.bundle; sourceTree = "<group>"; };
@@ -1873,6 +1878,8 @@
 				B4B126D31C2E65E300A0AAEB /* DialKeyboard.m */,
 				6E92446D1C3528360012C53F /* AddressIconButton.h */,
 				6E92446E1C3528360012C53F /* AddressIconButton.m */,
+				6E6F17031C44B4830030755F /* DilingButton.h */,
+				6E6F17041C44B4830030755F /* DilingButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2604,6 +2611,7 @@
 		6E9CBF061C23F08600EFFF8D /* RealChat */ = {
 			isa = PBXGroup;
 			children = (
+				6E6F17011C44B2F20030755F /* address_icon@2x.png */,
 				6E6F16F21C43A2060030755F /* common_resizable_blue_H@2x.png */,
 				6E6F16F31C43A2060030755F /* common_resizable_blue_N@2x.png */,
 				6E6F16F41C43A2060030755F /* emoji_delete_pressed@2x.png */,
@@ -2713,7 +2721,7 @@
 				B44E90CC1C103FC500CFC003 /* Resource */,
 				6EB2ED5A1C04684A002799BD /* Assets.xcassets */,
 				6EB2ED5F1C04684A002799BD /* Info.plist */,
-				6EDE4EF51C3E860D007FAAD1 /* jpush.plist */,
+				6E6F16FE1C44935E0030755F /* PushConfig.plist */,
 				6EBA8B9A1C15212C00BAE5DD /* PrefixHeader.pch */,
 				6EB2ED4E1C04684A002799BD /* Supporting Files */,
 			);
@@ -4311,6 +4319,7 @@
 				B4A920711C1FEF3B0070821F /* phone_addressicon@3x.png in Resources */,
 				B4B126D71C2E668500A0AAEB /* phone_delete@2x.png in Resources */,
 				B490FC1D1C43BA5A009CAC9A /* mine_clock@2x.png in Resources */,
+				6E6F16FF1C44935E0030755F /* PushConfig.plist in Resources */,
 				B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */,
 				6E7D7A3C1C192CCC00B42140 /* chatBar_textBg.png in Resources */,
 				6E7D7A361C192CCC00B42140 /* chatBar_more_cardSelected.png in Resources */,
@@ -4392,6 +4401,7 @@
 				6EBA8D931C15248C00BAE5DD /* README.txt in Resources */,
 				6E7D7A491C192CCC00B42140 /* messageSendFail@2x.png in Resources */,
 				6E7D7AE91C1982C600B42140 /* chat_send_nor@2x.png in Resources */,
+				6E6F17021C44B2F20030755F /* address_icon@2x.png in Resources */,
 				B4DAD3FE1C18172D0092BF8F /* find_miaomiao @3x.png in Resources */,
 				B490FC1B1C43AF04009CAC9A /* mine_icon@2x.png in Resources */,
 				6E7D7A071C192CCC00B42140 /* VoiceSearchFeedback003@2x.png in Resources */,
@@ -4458,12 +4468,9 @@
 				B4D19A151C18086B0087D0D5 /* find_adv01@3x.png in Resources */,
 				6E7D7A0D1C192CCC00B42140 /* VoiceSearchFeedback006@2x.png in Resources */,
 				6E7D7A551C192CCC00B42140 /* chatBar_moreSelected@2x.png in Resources */,
-				6EDE4EF61C3E860D007FAAD1 /* jpush.plist in Resources */,
 				B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */,
 				6E7D7A3D1C192CCC00B42140 /* chatBar_textBg@2x.png in Resources */,
 				6E7D7A781C192CCC00B42140 /* chat_receiver_audio_playing000@2x.png in Resources */,
-
-				B4C8F1521C22CDBD00957C99 /* login_bag@2x.png in Resources */,
 				6E6F16F61C43A2060030755F /* common_resizable_blue_H@2x.png in Resources */,
 				6E7D7A061C192CCC00B42140 /* VoiceSearchFeedback003.png in Resources */,
 				B44E90F31C103FC500CFC003 /* back@2x.png in Resources */,
@@ -4708,6 +4715,7 @@
 				6E9CBF0D1C24002300EFFF8D /* ItelFriendModel.m in Sources */,
 				B4E5E0901C3B8CD500172834 /* DeviceDelegateHelper+VoIP.m in Sources */,
 				6E4D37A81C0568B1001573E3 /* MJRefreshConst.m in Sources */,
+				6E6F17051C44B4830030755F /* DilingButton.m in Sources */,
 				6EBA8D0D1C15248B00BAE5DD /* XMPPAnonymousAuthentication.m in Sources */,
 				6EBA8D2A1C15248B00BAE5DD /* XMPPResourceCoreDataStorageObject.m in Sources */,
 				6EBA8D921C15248C00BAE5DD /* DDMultiFormatter.m in Sources */,
@@ -5039,7 +5047,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
@@ -5077,7 +5085,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
