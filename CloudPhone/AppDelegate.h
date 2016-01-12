@@ -60,7 +60,6 @@
 
 @property (nonatomic, strong) UILabel *unreadChatLabel;
 
-//测试
 @property (nonatomic, assign) BOOL isBothFriend;
 
 - (NSManagedObjectContext *)managedObjectContext_roster;
