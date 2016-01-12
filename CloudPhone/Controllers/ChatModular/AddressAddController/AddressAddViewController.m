@@ -540,44 +540,51 @@
                     if ([[dic objectForKey:@"status"] integerValue] == 1) {
                         
                         NSArray *arr = [dic objectForKey:@"data"];
+                        NSArray *friendArr = [NSArray array];
+                        NSArray *invateArr = [NSArray array];
+                        NSArray *addressArr = [NSArray array];
                         for (NSUInteger i = 0; i < arr.count; i++) {
                             NSDictionary *tempDic = [arr objectAtIndex:i];
                             //itel 好友
-                            NSArray *friendArr = [tempDic objectForKey:@"buddy_mobile"];
+                            friendArr = [tempDic objectForKey:@"buddy_mobile"];
                             //itel 但不是好友
-                            NSArray *invateArr = [tempDic objectForKey:@"reg_mobile"];
+                            invateArr = [tempDic objectForKey:@"reg_mobile"];
                             //itel 没注册，通讯录
-                            NSArray *addressArr = [tempDic objectForKey:@"arr_mobile"];
+                            addressArr = [tempDic objectForKey:@"arr_mobile"];
                             
-                            if (friendArr.count > 0) {
-                                for (NSDictionary *friDic in friendArr) {
-                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
-                                    model.userName = [friDic objectForKey:@"username"];
-                                    model.mobile = [friDic objectForKey:@"mobile"];
-                                    model.status = kAlreadFriend;
-                                    [_friendArray addObject:model];
-                                }
-                            }
                             
-                            if (invateArr.count > 0) {
-                                for (NSDictionary *invDic in invateArr) {
-                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
-                                    model.userName = [invDic objectForKey:@"username"];
-                                    model.mobile = [invDic objectForKey:@"mobile"];
-                                    model.status = kInviteFriend;
-                                    [_invateArray addObject:model];
-                                }
+                         }
+                        
+                        if (friendArr.count > 0) {
+                            for (NSDictionary *friDic in friendArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [friDic objectForKey:@"username"];
+                                model.mobile = [friDic objectForKey:@"mobile"];
+                                model.status = kAlreadFriend;
+                                [_friendArray addObject:model];
                             }
-                            
-                            if (addressArr.count > 0) {
-                                for (NSDictionary *adsDic in addressArr) {
-                                    ItelFriendModel *model = [[ItelFriendModel alloc]init];
-                                    model.userName = [adsDic objectForKey:@"username"];
-                                    model.mobile = [adsDic objectForKey:@"mobile"];
-                                    model.status = kNotFriend;
-                                    [_addressArray addObject:model];
-                                }
+                        }
+                        
+                        if (invateArr.count > 0) {
+                            for (NSDictionary *invDic in invateArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [invDic objectForKey:@"username"];
+                                model.mobile = [invDic objectForKey:@"mobile"];
+                                model.status = kInviteFriend;
+                                [_invateArray addObject:model];
                             }
+                        }
+                        
+                        if (addressArr.count > 0) {
+                            for (NSDictionary *adsDic in addressArr) {
+                                ItelFriendModel *model = [[ItelFriendModel alloc]init];
+                                model.userName = [adsDic objectForKey:@"username"];
+                                model.mobile = [adsDic objectForKey:@"mobile"];
+                                model.status = kNotFriend;
+                                [_addressArray addObject:model];
+                            }
+
+                        
                         }
                         [_tableView reloadData];
                         

@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger,ItelFriendStatus) {
 
 @property (nonatomic, assign) ItelFriendStatus status;
 
+@property (nonatomic,assign) NSInteger sectionNumber;
+
 + (instancetype)modelForData:(NSDictionary *)dic;
 
 @end

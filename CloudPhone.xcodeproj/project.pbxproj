@@ -3972,8 +3972,8 @@
 		B4AF81CD1C3E872900D9C282 /* OtherViewController */ = {
 			isa = PBXGroup;
 			children = (
-				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 				B4D04DA21C1A7935008BD608 /* SpitTableViewController.h */,
+				B4D04DA31C1A7935008BD608 /* SpitTableViewController.m */,
 				B4AF81CE1C3E872900D9C282 /* AddressViewController.h */,
 				B4AF81CF1C3E872900D9C282 /* AddressViewController.m */,
 				B4AF81D01C3E872900D9C282 /* FriendDetailViewController.h */,

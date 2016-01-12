@@ -326,7 +326,7 @@
     xmppRoster = [[XMPPRoster alloc]initWithRosterStorage:xmppRosterStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
     xmppRoster.autoFetchRoster = YES;
-    xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = NO;
+    xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
     
     
     xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
@@ -573,17 +573,22 @@
     
     NSString *subscription = [item attributeStringValueForName:@"subscription"];
     DLog(@"subscription = %@",subscription);
-    if ([subscription isEqualToString:@"both"]) {
-        DLog(@"双方成为好友！");
+//    if ([subscription isEqualToString:@"both"]) {
+//        DLog(@"双方成为好友！");
+//    } else
+    if ([subscription isEqualToString:@"to"]) {
+        self.isBothFriend = YES;
+    } else {
+        self.isBothFriend = NO;
     }
 }
 
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterPush:(XMPPIQ *)iq {
-    //    DDXMLElement *query = [iq elementsForName:@"query"][0];
-    //    DDXMLElement *item = [query elementsForName:@"item"][0];
-    //    NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
-    //    NSString *ask = [[item attributeForName:@"ask"] stringValue];
-    //    DLog(@"全部的全部的全部的iq = %@  ask = %@",subscription,ask);
+//        DDXMLElement *query = [iq elementsForName:@"query"][0];
+//        DDXMLElement *item = [query elementsForName:@"item"][0];
+//        NSString *subscription = [[item attributeForName:@"subscription"] stringValue];
+//        NSString *ask = [[item attributeForName:@"ask"] stringValue];
+//        DLog(@"全部的全部的全部的iq = %@  ask = %@",subscription,ask);
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
@@ -591,9 +596,9 @@
     NSString *presenceType = presence.type;
     NSString *userId = sender.myJID.user;
     NSString *presenceFromUser = presence.from.user;
-    
+    NSLog(@"presenceType =========== %@",presence.type);
     if (![presenceFromUser isEqualToString:userId]){
-        if ([presenceType isEqualToString:@"subscribe"]){
+        if ([presenceType isEqualToString:@"subscribe"] && self.isBothFriend == NO){
             DLog(@"进来了这个");
             NSArray *arr = [NSArray arrayWithObjects:presence.fromStr,@"unagree",@"unread",nil];
             NSArray *friendArray = [DBOperate queryData:T_addFriend theColumn:@"jidStr" theColumnValue:presence.fromStr withAll:NO];
