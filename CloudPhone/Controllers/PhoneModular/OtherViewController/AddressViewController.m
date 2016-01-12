@@ -26,6 +26,7 @@
 #import "AddFriendModel.h"
 #import "AddressIconButton.h"
 #import "CallRecordsModel.h"
+#import "DilingButton.h"
 
 @interface AddressViewController ()<UITableViewDataSource,UITableViewDelegate,ABNewPersonViewControllerDelegate,UISearchBarDelegate,UISearchDisplayDelegate,MFMessageComposeViewControllerDelegate>
 
@@ -37,18 +38,14 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSMutableArray *listContentArray;
-
-@property (nonatomic, strong) NSMutableArray *numberArray;
-
-//@property (nonatomic, strong) NSMutableArray *friendArray;  //itel好友
-//
-//@property (nonatomic, strong) NSMutableArray *invateArray;  //注册过的
 
 //索引
 @property (nonatomic, strong) NSMutableArray *listTitleArray;
 
+@property (nonatomic, strong) NSMutableArray *listContentArray;
+
 @property (nonatomic, strong) NSMutableArray *allArray; //所有的人
+
 
 
 @property (nonatomic, strong) MBProgressHUD *HUD;
@@ -67,13 +64,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
 
+        _listContentArray = [[NSMutableArray alloc]initWithCapacity:0];
         _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
         _allArray = [[NSMutableArray alloc]initWithCapacity:0];
-        
-        _listContentArray = [[NSMutableArray alloc] initWithCapacity:0];
-        _numberArray = [[NSMutableArray alloc]initWithCapacity:0];
-//        _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
-//        _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
     }
     return self;
 }
@@ -168,81 +161,58 @@
         cell.detailTextLabel.textColor = RGB(102, 102, 102);
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
         
-        AddressIconButton *button = [AddressIconButton buttonWithTitle:@"6"];
-        button.tag = 5550;
-        [cell addSubview:button];
+        UIImage *image = [UIImage imageNamed:@"address_icon@2x.png"];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (60 - 40)/2.0, 40, 40)];
+        imageView.image = image;
+        [cell addSubview:imageView];
         
-        UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMinY(button.frame) + 2, 150, 20)];
+        UILabel *title = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, CGRectGetMinY(imageView.frame) + 2, 150, 20)];
         title.tag = 5551;
         title.textColor = [UIColor blackColor];
         title.font = [UIFont systemFontOfSize:15.0];
         [cell addSubview:title];
         
-        UILabel *subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(button.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
+        UILabel *subtitle = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 10, CGRectGetMaxY(title.frame) + 2, 150, 20)];
         subtitle.tag = 5552;
         subtitle.textColor = RGB(102, 102, 102);
         subtitle.font = [UIFont systemFontOfSize:13.0];
         [cell addSubview:subtitle];
         
-        UIImage *arrowImg = [UIImage imageNamed:@"phone_detail"];
-        CGRect arrowImageFrame = CGRectMake(MainWidth - 60, 0 , 60, 60);
-        UIButton  *arrowImgButton = [[UIButton alloc]initWithFrame:arrowImageFrame];
-        [arrowImgButton setImage:arrowImg forState:UIControlStateNormal];
-        [arrowImgButton setImageEdgeInsets:UIEdgeInsetsMake(0.0,-15.0,0.0,0.0)];
+        CGRect arrowImageFrame = CGRectMake(MainWidth - 80, 0 , 60, 60);
+        DilingButton  *arrowImgButton = [[DilingButton alloc]initWithFrame:arrowImageFrame];
+        arrowImgButton.tag = 5553;
         [cell addSubview:arrowImgButton];
-        [arrowImgButton addTarget:self action:@selector(arrowButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [arrowImgButton addTarget:self action:@selector(arrowButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
     ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
     
     UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+    UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+    DilingButton *arrowBtn = (DilingButton *)[cell viewWithTag:5553];
+    
+    arrowBtn.model = model;
+    
+    //名字
     titleLab.text = model.userName;
     
-//    cell.accessoryView = nil;
-//    if (indexPath.section == 0) {
-//        //itel 好友 (好友)
-//        if (_friendArray.count > 0) {
-//            ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
-//            
-//            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-//            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-//            titleLab.text = model.userName;
-//            subtitleLab.text = model.mobile;
-//            
-//            AddressIconButton *button = [cell viewWithTag:5550];
-//            if (model.userName.length > 0) {
-//                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
-//            } else {
-//                [button setTitle:@"" forState:UIControlStateNormal];
-//            }
-//            cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"phone_addressItelFlag"]];
-//        }
-//        
-//    } else if (indexPath.section == 1) {
-//        //注册itel （添加好友）
-//        if (_invateArray.count > 0) {
-//            ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
-//           
-//            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-//            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-//            titleLab.text = model.userName;
-//            subtitleLab.text = model.mobile;
-//            
-//            AddressIconButton *button = [cell viewWithTag:5550];
-//            if (model.userName.length > 0) {
-//                [button setTitle:[model.userName substringToIndex:1] forState:UIControlStateNormal];
-//            } else {
-//                [button setTitle:@"" forState:UIControlStateNormal];
-//            }
-//
-//        }
-//        
-//    }
+    //手机号
+    subtitleLab.text = model.mobile;
+    
+    //状态
+    if (model.status == kAlreadFriend) {
+        [arrowBtn setImage:[UIImage imageNamed:@"phone_addressItelFlag"] forState:UIControlStateNormal];
+    } else {
+        [arrowBtn setImage:[UIImage imageNamed:@"phone_detail"] forState:UIControlStateNormal];
+    }
+
     return cell;
     
 }
 
-- (void)arrowButtonClick{
+- (void)arrowButtonClick:(UIButton *)sender{
+    DilingButton *button = (DilingButton *)sender;
+    NSLog(@"number = %@",button.model.mobile);
 //    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
 //    CallRecordsModel *model = [[CallRecordsModel alloc] init];
 //    model.callerNo = subtitle.text;
@@ -324,27 +294,28 @@
 
 - (void)loadAddressData {
     
-    self.listContentArray = [AddressObject shareInstance].allAddress;
-    if (self.listContentArray.count > 0 && self.listContentArray) {
-        for (NSInteger i = 0; i < self.listContentArray.count; i ++) {
-            NSArray *array = [self.listContentArray objectAtIndex:i];
+    NSMutableArray *number = [NSMutableArray array];
+    NSMutableArray *adressArray = [AddressObject shareInstance].allAddress;
+    if (adressArray.count > 0) {
+        for (NSInteger i = 0; i < adressArray.count; i ++) {
+            NSArray *array = [adressArray objectAtIndex:i];
             for (PersonModel *model in array) {
                 if (model.tel) {
                     NSString *name = model.phonename ? model.phonename : @"未备注";
                     NSDictionary *info = @{@"mobile":model.tel,@"username":name};
                     
-                    [_numberArray addObject:info];
+                    [number addObject:info];
                 }
             }
         }
     }
     
     //转化为json字符串
-    if (_numberArray.count > 0 && _numberArray) {
+    if (number.count > 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self AddHUD];
         });
-        NSDictionary *dic = @{@"jsonMobile" : [GeneralToolObject dictionaryToJson:_numberArray]};
+        NSDictionary *dic = @{@"jsonMobile" : [GeneralToolObject dictionaryToJson:number]};
         [[AirCloudNetAPIManager sharedManager] postMailListOfParams:dic WithBlock:^(id data, NSError *error) {
             [self HUDHidden];
             if (!error) {
@@ -416,7 +387,6 @@
 
 - (void)sortForAdressFirstLitter {
 
-    NSMutableArray *listContent = [NSMutableArray array];
     NSMutableArray *sectionTitleArray = [NSMutableArray array];
     //对数组排序，按首字母分类
     UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
@@ -428,11 +398,13 @@
         if (model.userName != nil) {
             NSInteger sect = [theCollation sectionForObject:model collationStringSelector:@selector(userName)];
             model.sectionNumber = sect;
+
         }
     }
     
     NSInteger highSection = [[theCollation sectionTitles] count]; //27
     NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
+    
     for (NSInteger i = 0; i <= highSection; i ++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:0];
         [sectionArrays addObject:sectionArray];
@@ -440,7 +412,7 @@
     
     //把对应的名字放入这个27个数组中,将每个人按name分到某个section下
     for (ItelFriendModel *model in _allArray) {
-        [sectionArrays[model.sectionNumber] addObject:model];
+        [[sectionArrays objectAtIndex:model.sectionNumber] addObject:model];
     }
 
     for (NSMutableArray *temp in sectionArrays) {
@@ -450,21 +422,25 @@
         }
         if (model.userName != nil) {
             NSArray *sortedSection = [theCollation sortedArrayFromArray:temp collationStringSelector:@selector(userName)];
-            [listContent addObject:sortedSection];
+            [_listContentArray addObject:sortedSection];
         }
     }
     
-    
-    self.listContentArray = listContent;
-    //取数据排序
-    [_listTitleArray addObjectsFromArray:[theCollation sectionTitles]];
-    NSMutableArray *existTitles = [NSMutableArray array];
-    if (listContent.count > 0) {
-        for (NSInteger i = 0; i < listContent.count; i ++) {
-            ItelFriendModel *model = listContent[i][0];
+    //继续分类
+    if (_listContentArray.count > 0) {
+        //取数据排序
+        UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
+        [_listTitleArray addObjectsFromArray:[collation sectionTitles]];
+        NSMutableArray *existTitles = [NSMutableArray array];
+        
+        for (NSInteger i = 0; i < _listContentArray.count; i ++) {
             
-            for (NSInteger j = 0; j < listContent.count; j ++) {
+            ItelFriendModel *model = _listContentArray[i][0];
+            
+            for (NSInteger j = 0; j < _listTitleArray.count; j ++) {
+                
                 if (model.sectionNumber == j) {
+
                     [existTitles addObject:_listTitleArray[j]];
                 }
             }
@@ -473,6 +449,7 @@
         self.listTitleArray = existTitles;
     }
 }
+
 
 
 #pragma mark - MBProgressHUD Show or Hidden
