@@ -21,7 +21,7 @@
     [self setBackBarButtonItem:backButton];
     //头像
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mine_savecosticon"]];
-    iconImageView.frame = CGRectMake(122,STATUS_NAV_BAR_HEIGHT + 25, MainWidth - 122 * 2, MainWidth - 122 * 2);
+    iconImageView.frame = CGRectMake(122, 25, MainWidth - 122 * 2, MainWidth - 122 * 2);
     [self.view addSubview:iconImageView];
     //姓名
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(iconImageView.frame) + 18, MainWidth, 15)];
@@ -33,7 +33,7 @@
     //标题
     UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(nameLabel.frame), MainWidth, 20)];
     titleLable.textAlignment = NSTextAlignmentCenter;
-    titleLable.textColor = [UIColor colorWithHexString:@"#049ff1"];
+    titleLable.textColor = [UIColor colorWithHexString:@"#2cceb7"];
     titleLable.text = @"省钱记录";
     titleLable.font = [UIFont systemFontOfSize:18.0];
     [self.view addSubview:titleLable];
@@ -71,12 +71,12 @@
     
     UILabel *calltimeTextLable = [[UILabel alloc] initWithFrame:CGRectMake(LABELX, 50, 80, 20)];
     calltimeTextLable.textAlignment = NSTextAlignmentCenter;
-    calltimeTextLable.textColor = [UIColor colorWithHexString:@"#049ff1"];
+    calltimeTextLable.textColor = [UIColor colorWithHexString:@"#ef7a3a"];
     calltimeTextLable.text = @"2分钟";
     calltimeTextLable.font = [UIFont systemFontOfSize:16.0];
     [calltimeImageView addSubview:calltimeTextLable];
     
-    CGRect rect = CGRectMake(15, MainHeight + 10, MainWidth - 15*2.0, 44);
+    CGRect rect = CGRectMake(44, MainHeight - 75, MainWidth - 44*2.0, 44);
     UIButton *button = [self getButtonWithString:@"把省钱妙方分享给大家" rect:rect taget:self action:@selector(buttonClick) ];
     [self.view addSubview:button];
 
@@ -84,7 +84,7 @@
 
 - (UIButton *)getButtonWithString:(NSString *)title rect:(CGRect)rect taget:(id)target action:(SEL)action {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.backgroundColor = [ColorTool navigationColor];
+    button.backgroundColor = [UIColor colorWithHexString:@"#09da61"];
     button.layer.cornerRadius = 2.0;
     button.layer.masksToBounds = YES;
     button.titleLabel.font = [UIFont systemFontOfSize:16.0];

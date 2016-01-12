@@ -102,7 +102,7 @@
     if (!cell) {
         if (indexPath.section == 0) {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-            UIImage *image = [UIImage imageNamed:@"pic_touxiang@2x.png"];
+            UIImage *image = [UIImage imageNamed:@"mine_icon"];
             UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
             imageView.layer.cornerRadius = image.size.height/2.0;
             imageView.layer.masksToBounds = YES;

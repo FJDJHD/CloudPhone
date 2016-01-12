@@ -79,7 +79,7 @@
     cell.backgroundColor = [UIColor colorWithHexString:@"#f8f8f8"];
     cell.textLabel.text = @"分享云电话，奖励30分钟";
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(MainWidth - 60, 10, 40, 30)];
-    label.textColor = [UIColor colorWithHexString:@"#049ff1"];
+    label.textColor = [UIColor colorWithHexString:@"#2cceb7"];
     label.text = @"说明";
     cell.accessoryView = label;
     }
@@ -91,7 +91,9 @@
     imageArray = @[@"mine_penyouquan",@"mine_qqspace",@"mine_qq",@"mine_weixin"];
     NSArray *nameArray = [NSArray array];
     nameArray = @[@"盆友圈",@"空间",@"QQ",@"微信"];
-    
+    NSArray *addTimesArray = [NSArray array];
+    addTimesArray = @[@"+10分钟",@"+10分钟",@"+5分钟",@"+5分钟"];
+
     UIView *line= [[UIView alloc] initWithFrame:CGRectMake(15, 60, MainWidth - 2*15, 1)];
     line.backgroundColor = [UIColor colorWithHexString:@"#e2e2e2"];
     [self.shareBar addSubview:line];
@@ -120,9 +122,9 @@
         
         CGRect detailTextLableFrame = CGRectMake(CGRectGetMaxX(button.frame) + 5,CGRectGetMaxY(textLabel.frame), 50, 10);
         UILabel *detailTextLable = [[UILabel alloc]initWithFrame:detailTextLableFrame];
-        detailTextLable.text = @"+10分钟";
+        detailTextLable.text = addTimesArray[i];
         detailTextLable.font = [UIFont systemFontOfSize:10.0];
-        detailTextLable.textColor = [UIColor blackColor];
+        detailTextLable.textColor = [UIColor lightGrayColor];
         [self.shareBar addSubview:detailTextLable];
         
     }
@@ -157,11 +159,11 @@
     switch (sender.tag) {
         case 0:{
             OSMessage *msg=[[OSMessage alloc]init];
-            msg.title=@"Hello msg.title";
-            msg.extInfo=@"app自己的扩展消息，当从微信打开app的时候，会传给app";
+            msg.title=@"iTel云电话，0话费0流量 ";
+            msg.extInfo = @"注册云电话赠送100分钟通话时长，免费拨打国内电话。";
             msg.link=@"http://www.baidu.com/";//分享到朋友圈以后，微信就不会调用app了，跟news类型分享到朋友圈一样。
-            // msg.image=testImage;
-            // msg.thumbnail=testThumbImage;
+            msg.image=[UIImage imageNamed:@"itel_logo"];
+            msg.thumbnail=[UIImage imageNamed:@"itel_logo"];
             msg.multimediaType=OSMultimediaTypeApp;
             
             [OpenShare shareToWeixinTimeline:msg Success:^(OSMessage *message) {
@@ -174,10 +176,10 @@
             
         case 1:{
             OSMessage *msg=[[OSMessage alloc] init];
-            msg.title=[NSString stringWithFormat:@"Hello OpenShare (msg.title) %f",[[NSDate date] timeIntervalSince1970]];
-          //  msg.image=testImage;
-          //  msg.thumbnail=testThumbImage;
-            msg.desc=[NSString stringWithFormat:@"这里写的是msg.description %f",[[NSDate date] timeIntervalSince1970]];
+            msg.title=[NSString stringWithFormat:@"iTel云电话，0话费0流量"];
+            msg.image=[UIImage imageNamed:@"itel_logo"];
+            msg.thumbnail=[UIImage imageNamed:@"itel_logo"];
+            msg.desc=[NSString stringWithFormat:@"注册云电话赠送100分钟通话时长，免费拨打国内电话"];
            // msg.link=@"http://sports.qq.com/a/20120510/000650.htm";
 
 
@@ -192,11 +194,10 @@
             
         case 2:{
             OSMessage *msg=[[OSMessage alloc] init];
-            msg.title=[NSString stringWithFormat:@"Hello OpenShare (msg.title) %f",[[NSDate date] timeIntervalSince1970]];
-         //   msg.image=testImage;
-         //   msg.thumbnail=testThumbImage;
-            msg.desc=[NSString stringWithFormat:@"这里写的是msg.description %f",[[NSDate date] timeIntervalSince1970]];
-            
+            msg.title=[NSString stringWithFormat:@"iTel云电话，0话费0流量"];
+            msg.image=[UIImage imageNamed:@"itel_logo"];
+            msg.thumbnail=[UIImage imageNamed:@"itel_logo"];
+            msg.desc=[NSString stringWithFormat:@"注册云电话赠送100分钟通话时长，免费拨打国内电话"];
            // msg.link=@"http://sports.qq.com/a/20120510/000650.htm";
 
             [OpenShare shareToQQFriends:msg Success:^(OSMessage *message) {
@@ -209,11 +210,11 @@
             
         case 3:{
             OSMessage *msg=[[OSMessage alloc]init];
-            msg.title=@"Hello msg.title";
-            msg.extInfo=@"app自己的扩展消息，当从微信打开app的时候，会传给app";
+            msg.title=@"iTel云电话，0话费0流量";
+            msg.desc=@"注册云电话赠送100分钟通话时长，免费拨打国内电话。";
             msg.link=@"http://www.baidu.com/";//分享到朋友圈以后，微信就不会调用app了，跟news类型分享到朋友圈一样。
-            // msg.image=testImage;
-            // msg.thumbnail=testThumbImage;
+            msg.image=[UIImage imageNamed:@"itel_logo"];
+            msg.thumbnail=[UIImage imageNamed:@"itel_logo"];
             msg.multimediaType=OSMultimediaTypeApp;
             [OpenShare shareToWeixinSession:msg Success:^(OSMessage *message) {
                DLog(@"微信分享到会话成功：\n%@",message);

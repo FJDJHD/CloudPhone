@@ -436,9 +436,6 @@
     if(!isRecord)
     {
         isRecord = YES;
-      //  [self.recordButton setTitle:@"STOP" forState:UIControlStateNormal];
-      //  [self.playButton setEnabled:NO];
-      //  [self.playButton.titleLabel setAlpha:0.5];
         recorder = [[AVAudioRecorder alloc] initWithURL:recordedFile settings:nil error:nil];
         [recorder prepareToRecord];
         [recorder record];
@@ -446,9 +443,6 @@
     else
     {
         isRecord = NO;
-      //  [self.recordButton setTitle:@"REC" forState:UIControlStateNormal];
-      //  [self.playButton setEnabled:YES];
-      //  [self.playButton.titleLabel setAlpha:1];
         [recorder stop];
     }
 }
