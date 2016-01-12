@@ -213,12 +213,13 @@
 - (void)arrowButtonClick:(UIButton *)sender{
     DilingButton *button = (DilingButton *)sender;
     NSLog(@"number = %@",button.model.mobile);
-//    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
-//    CallRecordsModel *model = [[CallRecordsModel alloc] init];
-//    model.callerNo = subtitle.text;
-//    model.callerName = title.text;
-//    friDetailVC.model = model;
-//    [self.navigationController pushViewController:friDetailVC animated:YES];
+    
+    FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
+    CallRecordsModel *model = [[CallRecordsModel alloc] init];
+    model.callerNo = button.model.mobile;
+    model.callerName = button.model.userName;
+    friDetailVC.model = model;
+    [self.navigationController pushViewController:friDetailVC animated:YES];
 }
 
 
@@ -239,20 +240,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    if (indexPath.section == 0) {
-//        //itel 好友 (好友)
-//        ItelFriendModel *model = [_friendArray objectAtIndex:indexPath.row];
-//        DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
-//        [self presentViewController:dialingVC animated:YES completion:nil];
-//
-//    } else{
-//        //通讯录
-//        ItelFriendModel *model = [_invateArray objectAtIndex:indexPath.row];
-//        DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
-//        [self presentViewController:dialingVC animated:YES completion:nil];
-//    }
+    
+    NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
+    ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
+    
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
+    [self presentViewController:dialingVC animated:YES completion:nil];
 }
 
 //开启右侧索引条

@@ -27,7 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
     [self setupAppBar];
     [self setupadScrollView];
     [self setupPageControl];
@@ -57,7 +57,7 @@
 
 - (void)setupadScrollView {
     CGFloat adScrollViewX = 0;
-    CGFloat adScrollViewY = STATUS_NAV_BAR_HEIGHT;
+    CGFloat adScrollViewY = 0;
     CGFloat adScrollViewH = 140;
     CGFloat adScrollViewW = self.view.frame.size.width;
     UIScrollView *adScrollView = [[UIScrollView alloc] init];

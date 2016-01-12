@@ -260,10 +260,6 @@
     rootTabBarController.delegate = self;
     rootTabBarController.viewControllers = [NSArray arrayWithObjects:phoneNav, chatNav, discoverNav, mineNav, nil];
 
-    
-    
-
-    
     //聊天小红点
     CGRect chatNotifyLabelRect = CGRectMake(MainWidth*2/4 - 30, 6, 10, 10);
     _unreadChatLabel = [[UILabel alloc]initWithFrame:chatNotifyLabelRect];
@@ -277,6 +273,7 @@
     
     if (CURRENT_SYS_VERSION >= 7.0) {
         [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
+        [[UINavigationBar appearance] setTranslucent:NO];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         

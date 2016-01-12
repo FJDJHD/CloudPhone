@@ -5047,7 +5047,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.itel.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";
@@ -5085,7 +5085,7 @@
 					"-lxml2",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.itel.CloudPhone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itel1.CloudPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CloudPhone/Vendor/JPush";

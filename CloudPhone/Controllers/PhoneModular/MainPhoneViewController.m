@@ -62,7 +62,7 @@
 }
 
 - (void)initGUI {
-    isShow = NO;
+    isShow = YES;
     labelString = [[NSMutableString alloc]init];
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0 , 0, 20, 44)];
     self.titleLabel.text = @"电话";
@@ -80,7 +80,7 @@
     [self.view addSubview:self.tableView];
     [self initDialKeyboard];
     [self initTextFiled];
- 
+    [self keyboardShow];
 }
 
 - (void)initTextFiled{
@@ -93,7 +93,7 @@
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT - 30 + 150, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT - 30 + 80, MainWidth, 300);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -147,11 +147,6 @@
     [self presentViewController:dialingVC animated:YES completion:nil];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    if (indexPath.row == 1){
-//        FriendDetailViewController *friDetailVC = [FriendDetailViewController new];
-//        [self.navigationController pushViewController:friDetailVC animated:YES];
-//    }
-    
 }
 
 - (void)addressButtonClick {

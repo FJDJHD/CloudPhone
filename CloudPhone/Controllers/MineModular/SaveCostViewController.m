@@ -21,7 +21,7 @@
     [self setBackBarButtonItem:backButton];
     //头像
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mine_savecosticon"]];
-    iconImageView.frame = CGRectMake(122,STATUS_NAV_BAR_HEIGHT + 25, MainWidth - 122 * 2, MainWidth - 122 * 2);
+    iconImageView.frame = CGRectMake(122, 25, MainWidth - 122 * 2, MainWidth - 122 * 2);
     [self.view addSubview:iconImageView];
     //姓名
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(iconImageView.frame) + 18, MainWidth, 15)];
@@ -76,7 +76,7 @@
     calltimeTextLable.font = [UIFont systemFontOfSize:16.0];
     [calltimeImageView addSubview:calltimeTextLable];
     
-    CGRect rect = CGRectMake(44, MainHeight - 10, MainWidth - 44*2.0, 44);
+    CGRect rect = CGRectMake(44, MainHeight - 75, MainWidth - 44*2.0, 44);
     UIButton *button = [self getButtonWithString:@"把省钱妙方分享给大家" rect:rect taget:self action:@selector(buttonClick) ];
     [self.view addSubview:button];
 

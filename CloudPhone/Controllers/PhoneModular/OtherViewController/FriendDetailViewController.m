@@ -42,7 +42,7 @@
     //头像
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
-    iconImageView.center = CGPointMake(MainWidth / 2.0,STATUS_NAV_BAR_HEIGHT + 10 + iconImageView.frame.size.height / 2.0);
+    iconImageView.center = CGPointMake(MainWidth / 2.0, 10 + iconImageView.frame.size.height / 2.0);
     [self.view addSubview:iconImageView];
     
     //姓名
@@ -55,7 +55,7 @@
     self.nameLabel = nameLabel;
     [self.view addSubview:nameLabel];
     
-    UILabel *signayureLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 40)];
+    UILabel *signayureLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 25)];
     signayureLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(nameLabel.frame) + 5 + (signayureLabel.frame.size.height) / 2.0);
     signayureLabel.textAlignment = NSTextAlignmentLeft;
     signayureLabel.textColor = [UIColor blackColor];
@@ -77,9 +77,8 @@
     [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
     [dialDetailButton setTitle:@"通话详情" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
-    dialDetailButton.backgroundColor = [UIColor whiteColor];
-    dialDetailButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
-    dialDetailButton.layer.borderWidth = 0.5;
+    dialDetailButton.backgroundColor = [ColorTool navigationColor];
+    dialDetailButton.layer.cornerRadius = 2.0;
     [dialDetailButton addTarget:self action:@selector(dialDetailButtonClick) forControlEvents:UIControlEventTouchUpInside];
     self.dialDetailButton = dialDetailButton;
     [self.view addSubview:dialDetailButton];
@@ -100,7 +99,7 @@
     [self.view insertSubview:self.dialDetailTableView belowSubview:buttonBg];
    
     //发消息
-    CGRect rect = CGRectMake(15, MainHeight + 10, MainWidth - 15*2.0, 44);
+    CGRect rect = CGRectMake(15, MainHeight - 50, MainWidth - 15*2.0, 44);
     UIButton *sendInfoButton = [self getButtonWithString:@"发消息" rect:rect taget:self action:@selector(sendInfoButtonClick) ];
     [self.view addSubview:sendInfoButton];
 }
