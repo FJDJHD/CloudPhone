@@ -12,7 +12,10 @@
 #import "GuidePageView.h"
 #import "LoginPasswordViewController.h"
 #import "CallbackPasswordViewController.h"
+
+
 #define TEXTFONT 15.0
+
 @interface RegisterLoginViewController ()
 
 @property (nonatomic,strong) GuidePageView *guideView;
@@ -26,6 +29,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"welcome@2x.png"]];
+    
+    logoImageView.frame = [UIScreen mainScreen].bounds;
+    [self.view addSubview:logoImageView];
+    
+
     
     //读取沙盒数据
     NSUserDefaults * setting = [NSUserDefaults standardUserDefaults];
@@ -47,6 +57,29 @@
         [_guideView.startButton addTarget:self action:@selector(startButtonHandle:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_guideView];
     } else {
+    //登录
+    UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    loginButton.backgroundColor = [ColorTool backgroundColor];
+    loginButton.layer.cornerRadius = 2.0;
+    loginButton.layer.masksToBounds = YES;
+    loginButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    loginButton.frame = CGRectMake(20, SCREEN_HEIGHT - 200, MainWidth - 20*2.0, 45);
+    [loginButton setTitle:@"登 录" forState:UIControlStateNormal];
+    [loginButton addTarget:self action:@selector(loginButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [loginButton setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
+    [self.view addSubview:loginButton];
+    
+    //注册
+    UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    registerButton.backgroundColor = [ColorTool backgroundColor];
+    registerButton.layer.cornerRadius = 2.0;
+    registerButton.layer.masksToBounds = YES;
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    registerButton.frame = CGRectMake(20, CGRectGetMaxY(loginButton.frame) + 25, MainWidth - 20*2.0, 45);
+    [registerButton setTitle:@"注 册" forState:UIControlStateNormal];
+    [registerButton addTarget:self action:@selector(registerButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [registerButton setTitleColor:[UIColor colorWithHexString:@"#323232"] forState:UIControlStateNormal];
+    [self.view addSubview:registerButton];
     
         //加载登录界面
         [self initUI];
