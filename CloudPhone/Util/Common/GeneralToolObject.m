@@ -152,6 +152,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:num forKey:UserNumber];
     [defaults setObject:pwd forKey:UserPassword];
+    [defaults setObject:num forKey:OtherLoginNumber];
     [defaults synchronize];
 }
 

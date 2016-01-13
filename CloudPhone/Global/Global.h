@@ -84,6 +84,9 @@
 /* --NSUserDefaults 的key --*/
 #define isLoginKey                @"isLoginKey"    //判断是否登录过(isLogined.....notLogined)
 #define UserNumber                @"UserNumber"    //手机号码 （作为xmpp的聊天昵称）
+#define OtherLogin                @"OtherLogin"    //判断手机是否换号登录了
+#define OtherLoginNumber          @"OtherLoginNumber" //上一个人登录的号码
+
 #define UserPassword              @"UserPassword"  //
 #define RegisterFail              @"RegisterFail"  //xmpp注册失败
 #define ResetPassword             @"ResetPassword" //重置密码

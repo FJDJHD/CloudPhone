@@ -514,7 +514,6 @@
 		B44E90771C0FD4B000CFC003 /* PersonSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */; };
 		B44E90E91C103FC500CFC003 /* chance_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90CE1C103FC500CFC003 /* chance_@2x.png */; };
 		B44E90EA1C103FC500CFC003 /* chance_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90CF1C103FC500CFC003 /* chance_selected@2x.png */; };
-		B44E90EB1C103FC500CFC003 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90D01C103FC500CFC003 /* icon@2x.png */; };
 		B44E90ED1C103FC500CFC003 /* pic_touxiang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90D21C103FC500CFC003 /* pic_touxiang@2x.png */; };
 		B44E90EF1C103FC500CFC003 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90D41C103FC500CFC003 /* welcome@2x.png */; };
 		B44E90F11C103FC500CFC003 /* mine_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E90D71C103FC500CFC003 /* mine_arrow@2x.png */; };
@@ -1532,7 +1531,6 @@
 		B44E90761C0FD4B000CFC003 /* PersonSignatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonSignatureViewController.m; sourceTree = "<group>"; };
 		B44E90CE1C103FC500CFC003 /* chance_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chance_@2x.png"; sourceTree = "<group>"; };
 		B44E90CF1C103FC500CFC003 /* chance_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chance_selected@2x.png"; sourceTree = "<group>"; };
-		B44E90D01C103FC500CFC003 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		B44E90D21C103FC500CFC003 /* pic_touxiang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_touxiang@2x.png"; sourceTree = "<group>"; };
 		B44E90D41C103FC500CFC003 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
 		B44E90D71C103FC500CFC003 /* mine_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_arrow@2x.png"; sourceTree = "<group>"; };
@@ -3918,7 +3916,6 @@
 				B490FC0A1C435EC9009CAC9A /* login_bg@2x.png */,
 				B44E90CE1C103FC500CFC003 /* chance_@2x.png */,
 				B44E90CF1C103FC500CFC003 /* chance_selected@2x.png */,
-				B44E90D01C103FC500CFC003 /* icon@2x.png */,
 				B43FA0811C45EBCD00A899C5 /* pic_mima@2x.png */,
 				B44E90D21C103FC500CFC003 /* pic_touxiang@2x.png */,
 				B490FC0C1C436462009CAC9A /* pic_zhanghao@2x.png */,
@@ -4581,7 +4578,6 @@
 				6E7D7A621C192CCC00B42140 /* chatBar_colorMore_location@2x.png in Resources */,
 				6E7D7A841C192CCC00B42140 /* chat_sender_audio_playing_000@2x.png in Resources */,
 				6E7D7A521C192CCC00B42140 /* chatBar_more.png in Resources */,
-				B44E90EB1C103FC500CFC003 /* icon@2x.png in Resources */,
 				B497DDDF1C183EF200AF9BEB /* mine_weixin@2x.png in Resources */,
 				6E7D7A181C192CCC00B42140 /* VoiceSearchFeedback012.png in Resources */,
 				6E7D7A381C192CCC00B42140 /* chatBar_more_face.png in Resources */,

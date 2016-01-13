@@ -207,6 +207,22 @@
                  if ([[dic objectForKey:@"status"] integerValue] == 1) {
                      DLog(@"登录成功------%@",[dic objectForKey:@"msg"]);
                      
+                     //添加一个判断上次是不是自己登录的（如果是别人则清空数据库，自己就不用）
+                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                     NSString *proNumber = [defaults objectForKey:OtherLoginNumber];
+                     
+                     if (proNumber.length == 0) {
+                         [defaults setObject:@"otherNotLogin" forKey:OtherLogin];
+                     } else {
+                         if ([self.numberField.text isEqualToString:proNumber]) {
+                             [defaults setObject:@"otherNotLogin" forKey:OtherLogin];
+                         } else {
+                             [defaults setObject:@"otherLogin" forKey:OtherLogin];
+                         }
+                     }
+                    
+                     [defaults synchronize];
+                     
                      //保存帐号和密码，做xmpp连接用
                      [GeneralToolObject saveuserNumber:self.numberField.text password:self.passwordField.text];
                      

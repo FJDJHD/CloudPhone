@@ -145,6 +145,16 @@
     //注册极光推送
     [self initJPush];
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *otherLoginStr = [defaults objectForKey:OtherLogin];
+    if (otherLoginStr.length > 0 && [otherLoginStr isEqualToString:@"otherLogin"]) {
+        //清空数据库
+        NSArray *tableList=[NSArray arrayWithObjects:T_chatMessage,T_personalInfo,T_addFriend,T_callRecords,T_callStatisticRecords,nil];
+        for (NSString *tableStr in tableList) {
+            [DBOperate deleteData:tableStr];
+        }
+    }
+    
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
