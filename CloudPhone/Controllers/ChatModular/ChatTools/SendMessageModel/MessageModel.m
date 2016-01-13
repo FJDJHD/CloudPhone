@@ -67,48 +67,48 @@
 //    _cellModel.message = _messageModel;
 
 
-- (instancetype)initWithXMPPObject:(XMPPMessageArchiving_Message_CoreDataObject *)message {
-    
-    if (self = [super init]) {
-        if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
-            message.messageStr = [message.message compactXMLString];
-            [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
-        }
-        NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
-        if ([message.body isEqualToString:@"image"]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:path];
-            self.image = image;
-            self.messageType = kImageMessage; //图片类型
-
-        }else if ([message.body hasPrefix:@"audio"]) {
-            
-            NSString *timeStr = [message.body substringFromIndex:5];
-            self.voiceTime = timeStr;
-            self.voiceFilepath = path; //音频路径
-            self.messageType = kVoiceMessage; //语音类型
-            
-        } else {
-            self.messageType = kTextMessage; //文字类型
-        }
-
-        self.text = message.body;
-//        self.otherPhoto = self.chatPhoto;
-//        self.chatJID = self.chatJID;
-        self.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
-
-        
-    }
-    return self;
-}
-
-+ (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object {
-
-    return [[self alloc]initWithXMPPObject:object];
-}
-
-
-- (AppDelegate *)appDelegate {
-    return (AppDelegate *)[UIApplication sharedApplication].delegate;
-}
+//- (instancetype)initWithXMPPObject:(XMPPMessageArchiving_Message_CoreDataObject *)message {
+//    
+//    if (self = [super init]) {
+//        if ([message.message saveAttachmentJID:self.chatJID.bare timestamp:message.timestamp]) {
+//            message.messageStr = [message.message compactXMLString];
+//            [[self appDelegate].xmppMessageArchivingCoreDataStorage.mainThreadManagedObjectContext save:NULL];
+//        }
+//        NSString *path = [message.message pathForAttachment:self.chatJID.bare timestamp:message.timestamp];
+//        if ([message.body isEqualToString:@"image"]) {
+//            UIImage *image = [UIImage imageWithContentsOfFile:path];
+//            self.image = image;
+//            self.messageType = kImageMessage; //图片类型
+//
+//        }else if ([message.body hasPrefix:@"audio"]) {
+//            
+//            NSString *timeStr = [message.body substringFromIndex:5];
+//            self.voiceTime = timeStr;
+//            self.voiceFilepath = path; //音频路径
+//            self.messageType = kVoiceMessage; //语音类型
+//            
+//        } else {
+//            self.messageType = kTextMessage; //文字类型
+//        }
+//
+//        self.text = message.body;
+////        self.otherPhoto = self.chatPhoto;
+////        self.chatJID = self.chatJID;
+//        self.type = (message.outgoing.intValue == 1) ? kMessageModelTypeOther : kMessageModelTypeMe;
+//
+//        
+//    }
+//    return self;
+//}
+//
+//+ (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object {
+//
+//    return [[self alloc]initWithXMPPObject:object];
+//}
+//
+//
+//- (AppDelegate *)appDelegate {
+//    return (AppDelegate *)[UIApplication sharedApplication].delegate;
+//}
 
 @end

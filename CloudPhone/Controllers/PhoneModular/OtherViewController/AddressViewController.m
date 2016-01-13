@@ -161,7 +161,7 @@
         cell.detailTextLabel.textColor = RGB(102, 102, 102);
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0];
         
-        UIImage *image = [UIImage imageNamed:@"address_icon@2x.png"];
+        UIImage *image = [UIImage imageNamed:@"mine_icon.png"];
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, (60 - 40)/2.0, 40, 40)];
         imageView.image = image;
         [cell addSubview:imageView];

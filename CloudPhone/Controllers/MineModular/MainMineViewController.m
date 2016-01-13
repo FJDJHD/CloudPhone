@@ -102,7 +102,7 @@
     if (!cell) {
         if (indexPath.section == 0) {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-            UIImage *image = [UIImage imageNamed:@"mine_icon"];
+            UIImage *image = [UIImage imageNamed:@"mine_savecosticon"];
             UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
             imageView.layer.cornerRadius = image.size.height/2.0;
             imageView.layer.masksToBounds = YES;
@@ -155,13 +155,13 @@
             if (_infoArray.count > 0) {
                 
                 if ([model.userIcon hasPrefix:@"http://"]) {
-                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
+                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_savecosticon@2x.png"]];
                 } else {
                     UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
                     if (iconImage) {
                         imageView.image = iconImage;
                     } else {
-                        imageView.image = [UIImage imageNamed:@"mine_icon"];
+                        imageView.image = [UIImage imageNamed:@"mine_savecosticon@2x.png"];
                     }
                 }
                 

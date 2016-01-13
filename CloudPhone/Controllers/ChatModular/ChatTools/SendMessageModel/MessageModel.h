@@ -53,7 +53,7 @@ typedef enum {
 @property (nonatomic, assign) MessageType messageType;
 
 
-+ (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object;
+//+ (instancetype)modelForData:(XMPPMessageArchiving_Message_CoreDataObject *)object;
 
 
 

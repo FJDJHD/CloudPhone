@@ -9,10 +9,10 @@
 #import "CellFrameModel.h"
 #import "UIImage+ResizeImage.h"
 
-#define padding 10
-#define iconW   ChatIconSize
-#define iconH   iconW
-#define textW   150
+#define padding    10
+#define iconW      ChatIconSize
+#define iconH      iconW
+#define textW      150
 
 @implementation CellFrameModel
 
@@ -51,6 +51,7 @@
 
     } else if (_message.messageType == kLocationMessage) {
        //********地理位置******//
+        
         UIImage *locImage = [UIImage imageNamed:@"chatView_location_map"];
         CGFloat textFrameX = message.type ? (2 * padding + iconFrameW) : (frame.size.width - 2 * padding - iconFrameW - locImage.size.width - 35);
         _textFrame = CGRectMake(textFrameX, textFrameY - 3, locImage.size.width + 35, locImage.size.height+35);

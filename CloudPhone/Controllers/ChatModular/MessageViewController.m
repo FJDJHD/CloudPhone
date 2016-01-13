@@ -18,6 +18,7 @@
 #import "XMPPvCardTemp.h"
 #import "NSFileManager+Tools.h"
 #import "WifiVoipCallViewController.h"
+#import "ChatMessageFactory.h"
 
 @interface MessageViewController ()<UITableViewDataSource,UITableViewDelegate,DXChatBarMoreViewDelegate, DXMessageToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,NSFetchedResultsControllerDelegate>
 
@@ -198,21 +199,32 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *ID = @"cell";
-    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (!cell) {
-        cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-    }
+    OriginMessageCell *cell = [ChatMessageFactory configureDataWithModel:_cellModel indexPath:indexPath controller:self table:tableView];
     
     if (_currentMessagerray.count > 0) {
         MessageModel *model = [_currentMessagerray objectAtIndex:indexPath.row];
         _cellModel.message = model;
         [cell cellForDataWithModel:_cellModel indexPath:indexPath controller:self];
-        
     }
-    
-    
+   
     return cell;
+    
+    
+//    static NSString *ID = @"cell";
+//    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+//    if (!cell) {
+//        cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+//    }
+//    
+//    if (_currentMessagerray.count > 0) {
+//        MessageModel *model = [_currentMessagerray objectAtIndex:indexPath.row];
+//        _cellModel.message = model;
+//        [cell cellForDataWithModel:_cellModel indexPath:indexPath controller:self];
+//        
+//    }
+    
+    
+//    return cell;
 }
 
 
