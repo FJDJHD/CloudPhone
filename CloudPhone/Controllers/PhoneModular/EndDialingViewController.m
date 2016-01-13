@@ -44,25 +44,17 @@
     [self.view addSubview:tipsLabel];
 
     //品牌图像
-    UIImageView *brandImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_friendiconbg"]];
-    brandImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
-    brandImageView.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(tipsLabel.frame) + 45 + (brandImageView.frame.size.height) / 2.0);
+    UIImageView *brandImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"endPhone_ad"]];
+    brandImageView.frame = CGRectMake(0, 0, MainWidth * 0.60,  MainWidth * 0.5);
+    brandImageView.center = CGPointMake(MainWidth / 2.0, CGRectGetMaxY(tipsLabel.frame) + 25 + (brandImageView.frame.size.height) / 2.0);
     [self.view addSubview:brandImageView];
     
-    //adlabel
-    UILabel *adLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 44)];
-    adLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(brandImageView.frame) + 27 + (adLabel.frame.size.height) / 2.0);
-    adLabel.textAlignment = NSTextAlignmentCenter;
-    adLabel.textColor = [UIColor whiteColor];
-    adLabel.text = @"可视电商第一品牌";
-    adLabel.font = [UIFont systemFontOfSize:16.0];
-    [self.view addSubview:adLabel];
-    
+
     //查看按钮
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    button.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(adLabel.frame) + 10 + (button.frame.size.height) / 2.0);
+    button.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(brandImageView.frame) + 20 + (button.frame.size.height) / 2.0);
     button.layer.masksToBounds = YES;
-    button.layer.borderWidth = 1.0;
+    button.layer.borderWidth = 0.5;
     button.layer.borderColor = [UIColor whiteColor].CGColor;
     [button.titleLabel setTextColor:[UIColor whiteColor]];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
@@ -105,7 +97,6 @@
             break;
             
         case 1:{
-            
             UIViewController * controller = self.presentingViewController;
             [self dismissViewControllerAnimated:NO completion:^{
                 UIViewController * c = controller.presentingViewController;
@@ -117,7 +108,7 @@
             break;
             
         case 2:{
-            [self presentViewController:[SpitTableViewController new] animated:YES completion:nil];
+           // [self presentViewController:[SpitTableViewController new] animated:YES completion:nil];
         }
             break;
         default:

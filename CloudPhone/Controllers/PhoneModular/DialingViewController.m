@@ -155,7 +155,7 @@
     if (self.callerName) {
         nameLabel.text = self.callerName;
     }else{
-        nameLabel.text = @"";
+        nameLabel.text = @"未知号码";
     }
     nameLabel.font = [UIFont systemFontOfSize:14.0];
     [detailView addSubview:nameLabel];
@@ -418,15 +418,15 @@
     NSArray *callStatisticRecordsArray = [NSArray array];
     callStatisticRecordsArray = [DBOperate queryData:T_callStatisticRecords theColumn:@"callerNo" theColumnValue:self.callerNo withAll:YES];
     if (callStatisticRecordsArray.count > 0) {
-        [DBOperate updateData:T_callStatisticRecords tableColumn:@"callResult" columnValue:self.callResult conditionColumn:@"callerNo" conditionColumnValue:self.callerNo];
-        [DBOperate updateData:T_callStatisticRecords tableColumn:@"callTime" columnValue:[NSString stringWithFormat:@"%@",localeDate] conditionColumn:@"callerNo" conditionColumnValue:self.callerNo];
+        [DBOperate deleteData:T_callStatisticRecords tableColumn:@"callerNo" columnValue:self.callerNo];
+        
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
         NSLog(@"更新统计通话数据库");
     } else {
         [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
         NSLog(@"新数据统计通话数据库");
     }
 
-    
     [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
     
 }

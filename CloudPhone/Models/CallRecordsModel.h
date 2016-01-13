@@ -13,4 +13,5 @@
 @property (nonatomic, copy) NSString *callerName;
 @property (nonatomic, copy) NSString *callerNo;
 @property (nonatomic, copy) NSString *usercallTime;
+@property (nonatomic) NSInteger callerFrequence;
 @end
