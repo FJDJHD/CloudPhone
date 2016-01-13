@@ -78,9 +78,6 @@
     //打开数据库
     [DBOperate createTable];
     
-    //注册极光推送
-    [self initJPush];
-    
     //显示小红点
     [self tabbarUnreadMessageisShow];
     
@@ -146,6 +143,9 @@
     //开始连接xmpp
     [self connect];
     [self requestLinkRongLianInfo];
+    
+    //注册极光推送
+    [self initJPush];
     
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
@@ -753,6 +753,18 @@
     
     if ([APService registrationID]) {
         DLog(@"RegistrationID = %@",[APService registrationID]);
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *value = [defaults objectForKey:isLoginKey];
+        //登录后
+        if ([value isEqualToString:@"isLogined"]) {
+            [[AirCloudNetAPIManager sharedManager] postPushRegistrationIDOfParams:@{@"reg_id":[APService registrationID]} WithBlock:^(id data, NSError *error) {
+                if (!error) {
+                    DLog(@"上传成功RegistrationID");
+                } else {
+                    DLog(@"上传失败RegistrationID");
+                }
+            }];
+        }
     }
 }
 

@@ -72,4 +72,19 @@
 //话费查询接口
 #define API_phonefees                                   @"?s=/Home/User/get_user_tel_fare"
 
+//上传推送registrationID
+#define API_update_reg_id                               @"?s=/Home/User/update_reg_id"
+
+//电话聊天推送
+#define API_chat_push                                   @"?s=/Home/push/chat_push"
+
 #endif
+
+
+
+
+
+
+
+
+

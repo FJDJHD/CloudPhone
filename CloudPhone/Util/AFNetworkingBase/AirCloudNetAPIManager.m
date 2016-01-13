@@ -255,6 +255,24 @@
     [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_phonefees serviceType:HTTPURLPREFIX withParams:params withMethodType:Get andBlock:^(id data, NSError *error) {
         block(data,error);
     }];
+}
+
+//上传推送registrationID
+- (void)postPushRegistrationIDOfParams:(NSDictionary *)params
+                             WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_update_reg_id serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+}
+
+//电话聊天推送
+- (void)postPushMessageOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block {
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_chat_push serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
 
 }
 

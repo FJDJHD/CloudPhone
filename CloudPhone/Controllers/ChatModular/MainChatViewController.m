@@ -61,7 +61,7 @@
     
     UISegmentedControl *titleSegment = [[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"消息",@"好友",nil]];
     titleSegment.frame = CGRectMake(0, 0, 120, 30);
-    titleSegment.tintColor = [UIColor colorWithHexString:@"#049ff1"];
+    titleSegment.tintColor = [UIColor whiteColor];
     [titleSegment addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
     titleSegment.selectedSegmentIndex = 0;
     self.navigationItem.titleView = titleSegment;

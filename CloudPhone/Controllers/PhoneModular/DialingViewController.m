@@ -81,14 +81,16 @@
                     //网络电话
                     self.sub_account_sid = [info objectForKey:@"sub_account_sid"];
                     self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:self.sub_account_sid];
-                    if (self.callID.length <= 0){
-                        //获取CallID失败，即拨打失败
+                    if (self.callID.length > 0){
+                        //推送你打的人
+                        [self requestPushMessage];
                     }
                 } else if ([[dic objectForKey:@"status"] integerValue] == 0) {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     //拨打直拨电话
                     dispatch_async(dispatch_get_main_queue(), ^{
-                    self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                       self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                        [self requestPushMessage];
                     });
                   
                 }
@@ -103,6 +105,18 @@
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallEvents:) name:KNOTIFICATION_onCallEvent object:nil];
+}
+
+//增加一个推送接口
+- (void)requestPushMessage {
+    NSString *userName = self.callerName ? self.callerName : self.callerNo;
+    NSDictionary *dic = @{@"mobile":self.callerNo,@"re_user_name":userName,@"con":@"你有来电了"};
+    [[AirCloudNetAPIManager sharedManager] postPushMessageOfParams:dic WithBlock:^(id data, NSError *error) {
+        if (!error) {
+        }else {
+            DLog(@"通知推送失败");
+        }
+    }];
 }
 
 - (void)initDialKeyboard{
@@ -277,6 +291,7 @@
                     self.dailingLabel.text = @"等待对方接听";
                 });
                 if (voipCallType!=1){
+                    DLog(@"----");
                 }
             }
                 break;

@@ -98,5 +98,13 @@
 - (void)queryTelphoneFareOfParams:(NSDictionary *)params
                         WithBlock:(void (^)(id data, NSError *error))block;
 
+//上传推送registrationID
+- (void)postPushRegistrationIDOfParams:(NSDictionary *)params
+                             WithBlock:(void (^)(id data, NSError *error))block;
+
+//电话聊天推送
+- (void)postPushMessageOfParams:(NSDictionary *)params
+                             WithBlock:(void (^)(id data, NSError *error))block;
+
 
 @end
