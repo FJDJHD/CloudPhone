@@ -773,6 +773,11 @@
     
     if ([APService registrationID]) {
         DLog(@"RegistrationID = %@",[APService registrationID]);
+        [[AirCloudNetAPIManager sharedManager] postPushRegistrationIDOfParams:@{@"reg_id":[APService registrationID]} WithBlock:^(id data, NSError *error) {
+            if (!error) {
+                DLog(@"上传RegistrationID成功");
+            }
+        }];
     }
 }
 
