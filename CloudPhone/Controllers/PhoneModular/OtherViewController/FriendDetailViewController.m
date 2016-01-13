@@ -34,7 +34,7 @@
     editButton.frame = CGRectMake(0, 0, 44, 44);
     editButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [editButton setTitle:@"编辑" forState:UIControlStateNormal];
-    [editButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [editButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [editButton addTarget:self action:@selector(editClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:editButton];
     self.navigationItem.rightBarButtonItem = rightItem;

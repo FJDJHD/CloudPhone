@@ -17,7 +17,7 @@
 - (void)cellForDataWithModel:(CallRecordsModel *)model indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller{
     _model = model;
     temVC = controller;
-    _dailNameLabel.text = model.callerName;
+    _dailNameLabel.text = [NSString stringWithFormat:@"%@ (%ld)",model.callerName,model.callerFrequence];
     _dailNumberLabel.text= model.callerNo;
     NSRange range = {5,5};
     NSString *date =  [model.usercallTime substringWithRange:range];

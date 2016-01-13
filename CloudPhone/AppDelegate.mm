@@ -164,8 +164,8 @@
     
     //发现
     MainDiscoverViewController *discoverController = [[MainDiscoverViewController alloc] initWithNibName:nil bundle:nil];
-    discoverController.title = @"发现";
-    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[[UIImage imageNamed:@"tabbar_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_findSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    discoverController.title = @"活动";
+    discoverController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"活动" image:[[UIImage imageNamed:@"tabbar_find"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_findSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *discoverNav = [[BaseNavigationController alloc] initWithRootViewController:discoverController];
     
     //我的

@@ -38,21 +38,27 @@
     
     [super viewWillAppear:animated];
     
-    _infoArray = [DBOperate queryData:T_callRecords theColumn:nil theColumnValue:nil withAll:YES];
-    _infoArray   = (NSMutableArray *)[[_infoArray reverseObjectEnumerator] allObjects];
-    self.callRecordArray = [NSMutableArray array];
-    if (_infoArray.count > 0) {
-        for (NSArray *temp in _infoArray) {
-            CallRecordsModel *model = [[CallRecordsModel alloc]init];
-            model.callResult = [temp objectAtIndex:record_callResult];
-            model.callerName = [temp objectAtIndex:record_callerName];
-            model.callerNo = [temp objectAtIndex:record_callerNo];
-            model.usercallTime = [temp objectAtIndex:record_callTime];
-            [self.callRecordArray addObject:model];
-        }
-       
+        _infoArray = [DBOperate queryData:T_callStatisticRecords theColumn:nil theColumnValue:nil withAll:YES];
+        _infoArray   = (NSMutableArray *)[[_infoArray reverseObjectEnumerator] allObjects];
+        self.callRecordArray = [NSMutableArray array];
+        if (_infoArray.count > 0) {
+            for (NSArray *temp in _infoArray) {
+                CallRecordsModel *model = [[CallRecordsModel alloc]init];
+                model.callResult = [temp objectAtIndex:record_callResult];
+                model.callerName = [temp objectAtIndex:record_callerName];
+                model.callerNo = [temp objectAtIndex:record_callerNo];
+                model.usercallTime = [temp objectAtIndex:record_callTime];
+                model.callerFrequence = [self getCallerFrequence:(NSString *)[temp objectAtIndex:record_callerNo]];
+                [self.callRecordArray addObject:model];
+            }
+
         [_tableView reloadData];
     }
+}
+
+- (NSInteger *)getCallerFrequence:(NSString *)callerNo{
+    _infoArray = [DBOperate queryData:T_callRecords theColumn:@"callerNo" theColumnValue:callerNo withAll:NO];
+    return (NSInteger *)_infoArray.count;
 }
 
 
@@ -156,6 +162,15 @@
     AddressViewController *controller = [[AddressViewController alloc]init];
     [self.navigationController pushViewController:controller animated:YES];
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+//    if (isShow == NO) {
+//         [self keyboardHidden];
+//    }
+//   
+}
+
 
 #pragma DialKeyboradDelegate
 - (void)keyboardShow{
