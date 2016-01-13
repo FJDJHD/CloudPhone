@@ -352,7 +352,7 @@
     self.coverView = coverView;
     [self.view addSubview:coverView];
     
-    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight - STATUS_BAR_HEIGHT, MainWidth, 88)];
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight - 100, MainWidth, 132)];
     signatureView.layer.cornerRadius = 3.0;
     signatureView.layer.masksToBounds = YES;
     signatureView.backgroundColor = [UIColor whiteColor];
@@ -457,7 +457,7 @@
     self.coverView = coverView;
     [self.view addSubview:coverView];
     
-    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.86, MainWidth, MainHeight *0.3)];
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.7, MainWidth, MainHeight *0.3)];
     signatureView.layer.cornerRadius = 3.0;
     signatureView.layer.masksToBounds = YES;
     signatureView.backgroundColor = [UIColor whiteColor];

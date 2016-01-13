@@ -66,7 +66,8 @@
     labelString = [[NSMutableString alloc]init];
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0 , 0, 20, 44)];
     self.titleLabel.text = @"电话";
-    
+    self.titleLabel.textColor = [UIColor whiteColor];
+
     
     //导航栏右按钮
     addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -86,6 +87,8 @@
 - (void)initTextFiled{
     UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
     textFiled.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
+    textFiled.font = [UIFont systemFontOfSize:25.0];
+    textFiled.textColor = [UIColor whiteColor];
     textFiled.textAlignment = NSTextAlignmentCenter;
     textFiled.enabled = NO;
     self.textFiled = textFiled;
@@ -157,7 +160,6 @@
 #pragma DialKeyboradDelegate
 - (void)keyboardShow{
     isShow = !isShow;
-    [addressButton setHidden:YES];
     [self.view addSubview:self.keyboard];
     self.navigationItem.titleView = self.textFiled;
     CGFloat duration = 0.5;
@@ -169,7 +171,6 @@
 
 - (void)keyboardHidden{
     isShow = !isShow;
-    [addressButton setHidden:NO];
     self.navigationItem.titleView = self.titleLabel;
     NSInteger  count = labelString.length;
     NSRange range = {0,count};

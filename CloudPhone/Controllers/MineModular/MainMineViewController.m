@@ -166,7 +166,7 @@
                 }
                 
             } else {
-                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"pic_touxiang@2x.png"]];
+                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
             }
         }
 

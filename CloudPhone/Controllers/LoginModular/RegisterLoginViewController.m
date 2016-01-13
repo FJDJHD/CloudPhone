@@ -76,7 +76,7 @@
     
     //登陆输入
     UIImage *image = [UIImage imageNamed:@"pic_zhanghao"];
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(25,MainHeight * 0.45, MainWidth - 50, 88)];
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(25,MainHeight * 0.40, MainWidth - 50, 88)];
     backView.backgroundColor = [UIColor colorWithHexString:@"#f7f2ee"];
     [self.view addSubview:backView];
     
