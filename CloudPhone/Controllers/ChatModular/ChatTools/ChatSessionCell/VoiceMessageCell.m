@@ -85,6 +85,7 @@
 - (void)buddleBtnClick:(UIButton *)sender {
     
     BuddleButton *tempButton = (BuddleButton *)sender;
+
     //播放语音
     [self playClickAudio:tempButton.model.voiceFilepath];
 }
@@ -99,10 +100,12 @@
     MessageViewController *tempControl = (MessageViewController *)self.tempController;
     NSArray *indexPaths = [tempControl.tableView indexPathsForVisibleRows];
     for (NSIndexPath *visibleIndexPath in indexPaths) {
-        VoiceMessageCell *cell = [tempControl.tableView cellForRowAtIndexPath:visibleIndexPath];
-        [cell stopAudioAnimation];
+        OriginMessageCell *cell = [tempControl.tableView cellForRowAtIndexPath:visibleIndexPath];
+        if ([cell isKindOfClass:[VoiceMessageCell class]]) {
+            VoiceMessageCell *voiceCell = (VoiceMessageCell *)cell;
+            [voiceCell stopAudioAnimation];
+        }
     }
-    
     
     //语音动画
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -139,10 +142,6 @@
 -(void)stopAudioAnimation
 {
     [_animationImageView stopAnimating];
-}
-
-- (AppDelegate *)appDelegate {
-    return (AppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
 //懒加载

@@ -45,8 +45,8 @@
     
     self.messageModel = model.message;
     
-    //model 传给button（方便点击获取值）
-    _buddleBtn.model = model.message;
+    //给button穿值，方便点击取值
+    self.buddleBtn.model = model.message;
     
     //气泡
     NSString *buddleBackImage = _messageModel.type ? @"chat_recive_nor" : @"chat_send_nor";
@@ -66,12 +66,8 @@
     //头像
     if (_messageModel.type) {
         //他人
-        if (_messageModel.otherPhoto != nil){
-            _iconImgView.image = _messageModel.otherPhoto;
-        }else{
-            UIImage *image = [ChatSendHelper getPhotoWithJID:_messageModel.chatJID];
-            _iconImgView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
-        }
+        UIImage *image = [ChatSendHelper getPhotoWithJID:_messageModel.chatJID];
+        _iconImgView.image = image ? image :[UIImage imageNamed:@"mine_icon"];
         
     } else{
         //自己
@@ -82,8 +78,6 @@
 }
 
 - (void)buddleBtnClick:(UIButton *)sender {
-
-    DLog(@"我是源头")
 
 }
 

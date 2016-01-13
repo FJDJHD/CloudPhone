@@ -278,7 +278,7 @@
     
     //消息回执，判断是否发送成功
     deliveryReceiptsMoodule = [[XMPPMessageDeliveryReceipts alloc] init];
-    deliveryReceiptsMoodule.autoSendMessageDeliveryReceipts = YES;
+    deliveryReceiptsMoodule.autoSendMessageDeliveryReceipts = NO;
     
     [xmppReconnect         activate:xmppStream];
     [xmppRoster            activate:xmppStream];

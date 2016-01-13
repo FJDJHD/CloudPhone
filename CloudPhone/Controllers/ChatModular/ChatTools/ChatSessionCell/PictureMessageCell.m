@@ -37,7 +37,7 @@
     [super cellForDataWithModel:model indexPath:indexPath controller:controller];
     
     self.tempController = controller;
-    
+  
     //赋值
     [self.buddleBtn setImage:self.messageModel.image forState:UIControlStateNormal];
     self.buddleBtn.imageView.layer.cornerRadius = 7.0;
@@ -49,6 +49,7 @@
 - (void)buddleBtnClick:(UIButton *)sender {
     
     BuddleButton *tempButton = (BuddleButton *)sender;
+
     
     [self browserClickImage:tempButton.model.imagePath];
 }

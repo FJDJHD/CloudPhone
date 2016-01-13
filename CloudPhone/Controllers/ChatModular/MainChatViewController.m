@@ -242,7 +242,6 @@
         MessageViewController *controller = [[MessageViewController alloc]init];
         controller.chatJIDStr = user.jidStr;
         controller.chatJID = user.jid;
-        controller.chatPhoto = user.photo;
         [self.navigationController pushViewController:controller animated:YES];
         
     } else {
@@ -254,7 +253,6 @@
             controller.scrollType = ScrollToBottomType;
             controller.chatJIDStr = user.jidStr;
             controller.chatJID = user.jid;
-            controller.chatPhoto = user.photo;
             
             //名字有优先级
             if (user.nickname.length > 0 && user.nickname) {

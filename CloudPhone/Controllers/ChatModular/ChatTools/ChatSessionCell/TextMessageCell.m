@@ -29,4 +29,10 @@
     
 }
 
+- (void)buddleBtnClick:(UIButton *)sender {
+    
+    BuddleButton *tempButton = (BuddleButton *)sender;
+    
+}
+
 @end
