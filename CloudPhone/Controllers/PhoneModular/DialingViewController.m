@@ -83,14 +83,14 @@
                     self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:self.sub_account_sid];
                     if (self.callID.length > 0){
                         //推送你打的人
-                        [self requestPushMessage];
+//                        [self requestPushMessage];
                     }
                 } else if ([[dic objectForKey:@"status"] integerValue] == 0) {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     //拨打直拨电话
                     dispatch_async(dispatch_get_main_queue(), ^{
                        self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
-                        [self requestPushMessage];
+//                        [self requestPushMessage];
                     });
                   
                 }

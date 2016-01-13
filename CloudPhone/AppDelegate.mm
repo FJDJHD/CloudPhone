@@ -78,9 +78,6 @@
     //打开数据库
     [DBOperate createTable];
     
-    //注册极光推送
-    [self initJPush];
-    
     //显示小红点
     [self tabbarUnreadMessageisShow];
     
@@ -90,7 +87,6 @@
     
     //注册融云SDK
     [ECDevice sharedInstance].delegate = [DeviceDelegateHelper sharedInstance];
-    // [self requestLinkRongLianInfo];
     
     
     [self.window makeKeyAndVisible];
@@ -146,6 +142,8 @@
     //开始连接xmpp
     [self connect];
     [self requestLinkRongLianInfo];
+    //注册极光推送
+    [self initJPush];
     
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
