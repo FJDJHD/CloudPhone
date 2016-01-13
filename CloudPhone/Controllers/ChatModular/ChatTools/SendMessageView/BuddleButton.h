@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MessageModel.h"
 
-typedef void(^TapButtonActionBlock) (UIButton *button);
+//typedef void(^TapButtonActionBlock) (UIButton *button);
 
 @interface BuddleButton : UIButton
 

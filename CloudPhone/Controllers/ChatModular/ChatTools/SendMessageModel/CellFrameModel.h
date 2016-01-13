@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MessageModel.h"
-#define textPadding 18
 
+#define textPadding 18
 
 @interface CellFrameModel : NSObject
 
