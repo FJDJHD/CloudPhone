@@ -78,6 +78,9 @@
     //打开数据库
     [DBOperate createTable];
     
+    //注册极光推送
+    [self initJPush];
+    
     //显示小红点
     [self tabbarUnreadMessageisShow];
     
@@ -144,13 +147,12 @@
     [self connect];
     [self requestLinkRongLianInfo];
     
-    //注册极光推送
-    [self initJPush];
-    
     //电话
     MainPhoneViewController *phoneController = [[MainPhoneViewController alloc] initWithNibName:nil bundle:nil];
     phoneController.title = @"电话";
-    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tabbar_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tabbar_phoneSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    self.lastSelectedViewController = phoneController;
+    isShow = YES;
+    phoneController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"电话" image:[[UIImage imageNamed:@"keyboard"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"keyboard_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     BaseNavigationController *phoneNav = [[BaseNavigationController alloc] initWithRootViewController:phoneController];
     
     
@@ -216,9 +218,19 @@
             MainPhoneViewController *tempComtroller = (MainPhoneViewController *)vc;
             if (isShow == NO) {
                 [tempComtroller keyboardShow];
+                [vc.tabBarItem setTitle:@"拨号"];
+                UIImage *image = [[UIImage imageNamed:@"keyboard_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                UIImage *image1 = [[UIImage imageNamed:@"keyboard"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                [vc.tabBarItem setImage:image1];
+                [vc.tabBarItem setSelectedImage:image];
                 isShow = YES;
             }else{
                 [tempComtroller keyboardHidden];
+                [vc.tabBarItem setTitle:@"电话"];
+                UIImage *image = [[UIImage imageNamed:@"tabbar_phoneSelected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                UIImage *image1 = [[UIImage imageNamed:@"tabbar_phone"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+                [vc.tabBarItem setImage:image1];
+                [vc.tabBarItem setSelectedImage:image];
                 isShow = NO;
             }
         }
@@ -753,18 +765,6 @@
     
     if ([APService registrationID]) {
         DLog(@"RegistrationID = %@",[APService registrationID]);
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *value = [defaults objectForKey:isLoginKey];
-        //登录后
-        if ([value isEqualToString:@"isLogined"]) {
-            [[AirCloudNetAPIManager sharedManager] postPushRegistrationIDOfParams:@{@"reg_id":[APService registrationID]} WithBlock:^(id data, NSError *error) {
-                if (!error) {
-                    DLog(@"上传成功RegistrationID");
-                } else {
-                    DLog(@"上传失败RegistrationID");
-                }
-            }];
-        }
     }
 }
 
