@@ -526,6 +526,9 @@
 		B44E91041C113E5200CFC003 /* guide_page_33@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E91011C113E5200CFC003 /* guide_page_33@2x.png */; };
 		B44E91051C113E5200CFC003 /* guide_page_11@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E91021C113E5200CFC003 /* guide_page_11@2x.png */; };
 		B44E91071C113E8100CFC003 /* wating@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B44E91061C113E8100CFC003 /* wating@2x.png */; };
+		B468D4C51C473CA100CE2713 /* callphone_redial@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B468D4C21C473CA100CE2713 /* callphone_redial@2x.png */; };
+		B468D4C61C473CA100CE2713 /* callphone_spit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B468D4C31C473CA100CE2713 /* callphone_spit@2x.png */; };
+		B468D4C71C473CA100CE2713 /* callphone_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B468D4C41C473CA100CE2713 /* callphone_close@2x.png */; };
 		B47C2E191C1932AE000E2964 /* SaveCostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B47C2E181C1932AE000E2964 /* SaveCostViewController.m */; };
 		B47C2E201C193434000E2964 /* mine_calltimeline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47C2E1A1C193434000E2964 /* mine_calltimeline@2x.png */; };
 		B47C2E211C193434000E2964 /* mine_calltimeline@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B47C2E1B1C193434000E2964 /* mine_calltimeline@3x.png */; };
@@ -1543,6 +1546,9 @@
 		B44E91011C113E5200CFC003 /* guide_page_33@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "guide_page_33@2x.png"; path = "../guide_page_33@2x.png"; sourceTree = "<group>"; };
 		B44E91021C113E5200CFC003 /* guide_page_11@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "guide_page_11@2x.png"; path = "../guide_page_11@2x.png"; sourceTree = "<group>"; };
 		B44E91061C113E8100CFC003 /* wating@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wating@2x.png"; sourceTree = "<group>"; };
+		B468D4C21C473CA100CE2713 /* callphone_redial@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_redial@2x.png"; sourceTree = "<group>"; };
+		B468D4C31C473CA100CE2713 /* callphone_spit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_spit@2x.png"; sourceTree = "<group>"; };
+		B468D4C41C473CA100CE2713 /* callphone_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "callphone_close@2x.png"; sourceTree = "<group>"; };
 		B47C2E171C1932AE000E2964 /* SaveCostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveCostViewController.h; sourceTree = "<group>"; };
 		B47C2E181C1932AE000E2964 /* SaveCostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveCostViewController.m; sourceTree = "<group>"; };
 		B47C2E1A1C193434000E2964 /* mine_calltimeline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_calltimeline@2x.png"; sourceTree = "<group>"; };
@@ -3996,6 +4002,13 @@
 			path = tempImage;
 			sourceTree = "<group>";
 		};
+		B4AB5C4B1C0832D000143D29 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		B4AF81CD1C3E872900D9C282 /* OtherViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -4082,6 +4095,9 @@
 				B4D04DAB1C1AA50D008BD608 /* phone_itelhangup@3x.png */,
 				B4D04DAC1C1AA50D008BD608 /* phone_point@2x.png */,
 				B4D04DAD1C1AA50D008BD608 /* phone_point@3x.png */,
+				B468D4C21C473CA100CE2713 /* callphone_redial@2x.png */,
+				B468D4C31C473CA100CE2713 /* callphone_spit@2x.png */,
+				B468D4C41C473CA100CE2713 /* callphone_close@2x.png */,
 				B4D04DB81C1AA6B8008BD608 /* callphone_bg@2x.png */,
 				B4D04DB91C1AA6B8008BD608 /* callphone_bg@3x.png */,
 				B4D76A191C1523970095CB9F /* callphone_friendiconbg@2x.png */,
@@ -4138,6 +4154,7 @@
 			isa = PBXGroup;
 			children = (
 				B4E5E05C1C3B89E200172834 /* ECEnumDefs.h */,
+				B4AB5C4B1C0832D000143D29 /* Resource */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -4399,6 +4416,7 @@
 				6E7D7A821C192CCC00B42140 /* chat_receiver_bg@2x.png in Resources */,
 				6E7D7A391C192CCC00B42140 /* chatBar_more_face@2x.png in Resources */,
 				6E7D7A451C192CCC00B42140 /* chat_location_preview@2x.png in Resources */,
+				B468D4C51C473CA100CE2713 /* callphone_redial@2x.png in Resources */,
 				6E7D7A581C192CCC00B42140 /* chatBar_recordBg.png in Resources */,
 				6E7D7A3E1C192CCC00B42140 /* chat_location_annotation_someone.png in Resources */,
 				6E7D7A351C192CCC00B42140 /* chatBar_more_card@2x.png in Resources */,
@@ -4410,6 +4428,7 @@
 				6E7D7A8C1C192CCC00B42140 /* chat_sender_audio_playing_full@2x.png in Resources */,
 				6EBA8D981C15248C00BAE5DD /* build-libidn.sh in Resources */,
 				6E7D7A4C1C192CCC00B42140 /* chatBar_faceSelected.png in Resources */,
+				B468D4C61C473CA100CE2713 /* callphone_spit@2x.png in Resources */,
 				6EC3ECAA1C16E4A900B27B18 /* btn_key@2x.png in Resources */,
 				6E7D7A321C192CCC00B42140 /* callBg@2x.png in Resources */,
 				B4D04DB21C1AA50D008BD608 /* phone_point@2x.png in Resources */,
@@ -4431,6 +4450,7 @@
 				6E7D7A301C192CCC00B42140 /* call_silence_h.png in Resources */,
 				6E7D7A471C192CCC00B42140 /* faceDelete@2x.png in Resources */,
 				6E7D7A401C192CCC00B42140 /* chat_location_detail_disclosure.png in Resources */,
+				B468D4C71C473CA100CE2713 /* callphone_close@2x.png in Resources */,
 				6E7D7A511C192CCC00B42140 /* chatBar_keyboardSelected@2x.png in Resources */,
 				6E7D7A1B1C192CCC00B42140 /* VoiceSearchFeedback013@2x.png in Resources */,
 				B4DAD40F1C18178F0092BF8F /* find_flight@3x.png in Resources */,

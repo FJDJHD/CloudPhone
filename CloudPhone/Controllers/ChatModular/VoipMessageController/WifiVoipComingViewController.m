@@ -14,11 +14,13 @@
 
 
 @interface WifiVoipComingViewController () {
-
+    
     int hhInt;
     int mmInt;
     int ssInt;
     NSTimer *timer;
+    UIView *dailingToolBar;
+    UILabel *dailingLabel;
 }
 
 @property (nonatomic, copy) NSString *callID;
@@ -75,7 +77,7 @@
 
 
 #pragma mark - UI界面
-- (void)initGUI {
+- (void)initGUIoo {
     
     //名字
     _contactNameLabel = [[UILabel alloc] initWithFrame:CGRectMake((MainWidth - 200)/2.0, 50.0f, 200.0f, 20.0f)];
@@ -95,20 +97,97 @@
     _contactNumLabel.text = self.contactNum ? self.contactNum : self.contactVoip;
     [self.view addSubview:_contactNumLabel];
     
-    //连接状态提示
-    _contactStatusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_contactNumLabel.frame) + 5, MainWidth, 40)];
-    _contactStatusLabel.numberOfLines = 2;
-    _contactStatusLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    _contactStatusLabel.text = @"正在呼叫...";
-    _contactStatusLabel.textColor = [UIColor whiteColor];
-    _contactStatusLabel.backgroundColor = [UIColor clearColor];
-    _contactStatusLabel.textAlignment = NSTextAlignmentCenter;
-    _contactStatusLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-    [self.view addSubview:_contactStatusLabel];
+}
+
+- (void)initGUI{
+    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_bg"]];
+    [self.view addSubview:bgView];
+    //流量消耗提示
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 15)];
+    label.center = CGPointMake(MainWidth / 2.0, (37 + label.frame.size.height) / 2.0);
+    label.text = @"每分钟消耗流量300KB";
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:14.0];
+    [self.view addSubview:label];
+    
+    //拨打View
+    UIView *detailView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(label.frame), MainWidth, MainHeight * 0.45)];
+    [self.view addSubview:detailView];
+    //头像
+    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_friendiconbg"]];
+    iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
+    iconImageView.center = CGPointMake(MainWidth / 2.0, iconImageView.frame.size.height / 2.0 + 10);
+    [detailView addSubview:iconImageView];
+    //姓名
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
+    nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 15 + (nameLabel.frame.size.height) / 2.0);
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    nameLabel.textColor = [UIColor whiteColor];
+    if (self.contactName) {
+        nameLabel.text = self.contactName ;
+    }else{
+        nameLabel.text = @"未知号码";
+    }
+    nameLabel.font = [UIFont systemFontOfSize:14.0];
+    [detailView addSubview:nameLabel];
+    //电话号码
+    UILabel *numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
+    numberLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(nameLabel.frame) + 8 + (numberLabel.frame.size.height) / 2.0);
+    numberLabel.textAlignment = NSTextAlignmentCenter;
+    numberLabel.textColor = [UIColor lightGrayColor];
+    numberLabel.text = self.contactNum;
+    numberLabel.font = [UIFont systemFontOfSize:14.0];
+    [detailView addSubview:numberLabel];
+    
+    //拨打提示
+    dailingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
+    dailingLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(numberLabel.frame) + 8 + (dailingLabel.frame.size.height) / 2.0);
+    dailingLabel.textAlignment = NSTextAlignmentCenter;
+    dailingLabel.textColor = [UIColor whiteColor];
+    dailingLabel.text = @"正在呼叫...";
+    dailingLabel.font = [UIFont systemFontOfSize:14.0];
+    [detailView addSubview:dailingLabel];
+    
+    
+    
+    //拨打工具栏
+    dailingToolBar= [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(detailView.frame), MainWidth, MainHeight * 0.3)];
+    [self.view addSubview:dailingToolBar];
+    NSArray *imageArray = [NSArray array];
+    imageArray = @[@"callphone_mute",@"callphone_handsfree",@"callphone_record"];
+    NSArray *imageSelectedArray = [NSArray array];
+    imageSelectedArray = @[@"callphone_mute_sel",@"callphone_handsfree_sel",@"callphone_record_sel"];
+    NSArray *nameArray = [NSArray array];
+    nameArray = @[@"静音",@"免提",@"录音"];
+    
+    for (int i = 0; i < 3; i++) {
+        int col = i % 3;
+        int row = i / 3;
+        CGFloat  btWidth = (MainWidth - 32 *2 - 15 * 2) / 3.0;
+        CGFloat  btHeight = btWidth;
+        CGFloat  btX = 32 + col * (btWidth +15);
+        CGFloat  btY = 15 + row * (btWidth + 20 + 20);
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(btX, btY, btWidth, btHeight)];
+        button.tag = i;
+        button.selected = NO;
+        
+        UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(btX, btY + btHeight + 5, btWidth, 20)];
+        [titleLable setTextColor:[UIColor whiteColor]];
+        [titleLable setTextAlignment:NSTextAlignmentCenter];
+        titleLable.text = nameArray[i];
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]]forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]]forState:UIControlStateSelected];
+        
+        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+        [dailingToolBar addSubview:button];
+        [dailingToolBar addSubview:titleLable];
+    }
     
     //挂断电话
     _hangupButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _hangupButton.frame = CGRectMake(50, SCREEN_HEIGHT - 70 - 30, 70, 70);
+    _hangupButton.frame = CGRectMake(32, CGRectGetMaxY(dailingToolBar.frame), 70, 70);
     _hangupButton.layer.cornerRadius = 35;
     _hangupButton.layer.masksToBounds = YES;
     _hangupButton.backgroundColor = [UIColor redColor];
@@ -118,22 +197,20 @@
     
     //接听电话
     _anwserButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _anwserButton.frame = CGRectMake(MainWidth - 70 - 44, SCREEN_HEIGHT - 70 - 30, 70, 70);
+    _anwserButton.frame = CGRectMake(MainWidth - 32 - 70, CGRectGetMaxY(dailingToolBar.frame), 70, 70);
     _anwserButton.layer.cornerRadius = 35;
     _anwserButton.layer.masksToBounds = YES;
-    _anwserButton.backgroundColor = [UIColor redColor];
+    _anwserButton.backgroundColor = [UIColor greenColor];
     [_anwserButton setTitle:@"接听" forState:UIControlStateNormal];
     [_anwserButton addTarget:self action:@selector(anwserButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_anwserButton];
-    
     
     
 }
 
 
 #pragma mark - 按钮点击
-- (void)updateRealtimeLabel
-{
+- (void)updateRealtimeLabel{
     ssInt +=1;
     if (ssInt >= 60) {
         mmInt += 1;
@@ -249,6 +326,33 @@
     });
 }
 
+- (void)clickButton:(UIButton *)sender{
+    switch (sender.tag) {
+        case 0:{
+            //静音
+            sender.selected = !sender.selected;
+            // [self mute];
+        }
+            break;
+            
+        case 1:{
+            //免提
+            sender.selected = !sender.selected;
+            // [self handfree];
+        }
+            break;
+            
+        case 2:{
+            //录音
+            sender.selected = !sender.selected;
+            // [self startStopRecording];
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
 
 
 //接听
@@ -256,7 +360,7 @@
     
     [UIView animateWithDuration:0.5 animations:^{
         _anwserButton.hidden = YES;
-        _hangupButton.frame = CGRectMake((MainWidth - 70)/2.0, SCREEN_HEIGHT - 70 - 30, 70, 70);
+        _hangupButton.frame = CGRectMake((MainWidth - 70)/2.0, CGRectGetMaxY(dailingToolBar.frame), 70, 70);
     }];
     
     self.status = kIncomingCallStatus_accepting;
@@ -265,16 +369,16 @@
 
 //挂断
 - (void)hangupButtonClick {
-
+    
     [Global shareInstance].isCallBusy = NO;
     [[ECDevice sharedInstance].VoIPManager releaseCall:self.callID];
     
     if (ssInt > 0) {
-         self.callResult = @"2";
+        self.callResult = @"2";
     }else{
-         self.callResult = @"3";
+        self.callResult = @"3";
     }
-   
+    
     CallRecordsModel *callRecordsModel = [[CallRecordsModel alloc] init];
     callRecordsModel.callResult = self.callResult;
     callRecordsModel.callerName = self.contactName;
@@ -284,13 +388,23 @@
     NSInteger interval = [zone secondsFromGMTForDate:date];
     NSDate *localeDate = [date dateByAddingTimeInterval:interval];
     callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",localeDate];
-    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
+    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerNo,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
-
+    
+    NSArray *callStatisticRecordsArray = [NSArray array];
+    callStatisticRecordsArray = [DBOperate queryData:T_callStatisticRecords theColumn:@"callerNo" theColumnValue:self.contactNum withAll:YES];
+    if (callStatisticRecordsArray.count > 0) {
+        [DBOperate deleteData:T_callStatisticRecords tableColumn:@"callerNo" columnValue:self.contactNum];
+        
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
+        NSLog(@"更新统计通话数据库");
+    } else {
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
+        NSLog(@"新数据统计通话数据库");
+    }
     
     [self exitView];
 }
-
 
 - (void)refreshView{
     if (self.status == kIncomingCallStatus_accepting){
@@ -327,10 +441,21 @@
     NSInteger interval = [zone secondsFromGMTForDate:date];
     NSDate *localeDate = [date dateByAddingTimeInterval:interval];
     callRecordsModel.usercallTime = [NSString stringWithFormat:@"%@",localeDate];
-    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerName,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
+    NSArray *infoArray = [NSArray arrayWithObjects:callRecordsModel.callResult,callRecordsModel.callerNo,callRecordsModel.callerNo, callRecordsModel.usercallTime,nil];
     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
-
     
+    
+    NSArray *callStatisticRecordsArray = [NSArray array];
+    callStatisticRecordsArray = [DBOperate queryData:T_callStatisticRecords theColumn:@"callerNo" theColumnValue:self.contactNum withAll:YES];
+    if (callStatisticRecordsArray.count > 0) {
+        [DBOperate deleteData:T_callStatisticRecords tableColumn:@"callerNo" columnValue:self.contactNum];
+        
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
+        NSLog(@"更新统计通话数据库");
+    } else {
+        [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
+        NSLog(@"新数据统计通话数据库");
+    }
 }
 
 -(void) exitView {
