@@ -655,8 +655,6 @@
 		B4DAD40B1C18175D0092BF8F /* find_bank@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD4091C18175D0092BF8F /* find_bank@3x.png */; };
 		B4DAD40E1C18178F0092BF8F /* find_flight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD40C1C18178F0092BF8F /* find_flight@2x.png */; };
 		B4DAD40F1C18178F0092BF8F /* find_flight@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4DAD40D1C18178F0092BF8F /* find_flight@3x.png */; };
-		B4AB5C4D1C0832F900143D29 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B4AB5C4C1C0832F900143D29 /* welcome@2x.png */; };
-		B4DEF6D21C06B0360001407D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D11C06B0360001407D /* LoginViewController.m */; };
 		B4DEF6D81C06BF730001407D /* LoginPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */; };
 		B4DEF6DB1C06E1640001407D /* CallbackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DA1C06E1640001407D /* CallbackPasswordViewController.m */; };
 		B4DEF6DE1C06E4920001407D /* ResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4DEF6DD1C06E4920001407D /* ResetPasswordViewController.m */; };
@@ -1698,9 +1696,6 @@
 		B4DAD4091C18175D0092BF8F /* find_bank@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "find_bank@3x.png"; path = "CloudPhone/Resource/find_bank@3x.png"; sourceTree = SOURCE_ROOT; };
 		B4DAD40C1C18178F0092BF8F /* find_flight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_flight@2x.png"; sourceTree = "<group>"; };
 		B4DAD40D1C18178F0092BF8F /* find_flight@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "find_flight@3x.png"; sourceTree = "<group>"; };
-		B4AB5C4C1C0832F900143D29 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
-		B4DEF6D01C06B0360001407D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		B4DEF6D11C06B0360001407D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		B4DEF6D61C06BF730001407D /* LoginPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPasswordViewController.h; sourceTree = "<group>"; };
 		B4DEF6D71C06BF730001407D /* LoginPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPasswordViewController.m; sourceTree = "<group>"; };
 		B4DEF6D91C06E1640001407D /* CallbackPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallbackPasswordViewController.h; sourceTree = "<group>"; };
@@ -4001,6 +3996,13 @@
 			path = tempImage;
 			sourceTree = "<group>";
 		};
+		B4AB5C4B1C0832D000143D29 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		B4AF81CD1C3E872900D9C282 /* OtherViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -4143,18 +4145,7 @@
 			isa = PBXGroup;
 			children = (
 				B4E5E05C1C3B89E200172834 /* ECEnumDefs.h */,
-				6EB2ED511C04684A002799BD /* AppDelegate.h */,
-				6EB2ED521C04684A002799BD /* AppDelegate.m */,
-				6E4D36DF1C055D93001573E3 /* Global */,
-				6E4D36E61C055EAE001573E3 /* Models */,
-				6E4D36E71C055EAE001573E3 /* Views */,
-				6E4D36E51C055EAE001573E3 /* Controllers */,
-				6E4D36E81C055EFE001573E3 /* Util */,
-				6E4D36E91C055F03001573E3 /* Vendor */,
 				B4AB5C4B1C0832D000143D29 /* Resource */,
-				6EB2ED5A1C04684A002799BD /* Assets.xcassets */,
-				6EB2ED5F1C04684A002799BD /* Info.plist */,
-				6EB2ED4E1C04684A002799BD /* Supporting Files */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -4218,14 +4209,6 @@
 				B4E5E0871C3B89E200172834 /* VoipCall.h */,
 			);
 			path = types;
-			sourceTree = "<group>";
-		};
-		B4AB5C4B1C0832D000143D29 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				B4AB5C4C1C0832F900143D29 /* welcome@2x.png */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -4390,7 +4373,6 @@
 				B4D76A201C1523970095CB9F /* callphone_callback@2x.png in Resources */,
 				6E7D7A3C1C192CCC00B42140 /* chatBar_textBg.png in Resources */,
 				6E7D7A361C192CCC00B42140 /* chatBar_more_cardSelected.png in Resources */,
-				B4AB5C4D1C0832F900143D29 /* welcome@2x.png in Resources */,
 				6E4D37A61C0568B1001573E3 /* MJRefresh.bundle in Resources */,
 				B497DDD91C183EE900AF9BEB /* mine_penyouquan@2x.png in Resources */,
 				6E7D7A3B1C192CCC00B42140 /* chatBar_more_faceSelected@2x.png in Resources */,
