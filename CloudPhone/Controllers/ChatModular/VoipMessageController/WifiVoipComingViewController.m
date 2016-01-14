@@ -172,13 +172,17 @@
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(btX, btY, btWidth, btHeight)];
         button.tag = i;
         button.selected = NO;
-        [button.titleLabel setTextColor:[UIColor whiteColor]];
-        [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateNormal];
         
-        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateSelected];
+        UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(btX, btY + btHeight + 5, btWidth, 20)];
+        [titleLable setTextColor:[UIColor whiteColor]];
+        [titleLable setTextAlignment:NSTextAlignmentCenter];
+        titleLable.text = nameArray[i];
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]]forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]]forState:UIControlStateSelected];
+        
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         [dailingToolBar addSubview:button];
+        [dailingToolBar addSubview:titleLable];
     }
     
     //挂断电话

@@ -42,7 +42,7 @@
     //头像
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
-    iconImageView.center = CGPointMake(MainWidth / 2.0, 10 + iconImageView.frame.size.height / 2.0);
+    iconImageView.center = CGPointMake(MainWidth / 2.0,STATUS_NAV_BAR_HEIGHT + 10 + iconImageView.frame.size.height / 2.0);
     [self.view addSubview:iconImageView];
     
     //姓名
@@ -74,7 +74,7 @@
     dialDetailButton.frame = CGRectMake(61, CGRectGetMaxY(self.signayureLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
     dialDetailButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [dialDetailButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
+    [dialDetailButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [dialDetailButton setTitle:@"详情信息" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
     dialDetailButton.backgroundColor = [ColorTool navigationColor];
@@ -85,9 +85,10 @@
     
     UIButton *detailInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     detailInfoButton.frame = CGRectMake(CGRectGetMaxX(dialDetailButton.frame), CGRectGetMaxY(self.signayureLabel.frame) + 20, (MainWidth - 61 * 2) / 2.0, 44);
+    detailInfoButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     detailInfoButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [detailInfoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [detailInfoButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
+    [detailInfoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [detailInfoButton setTitle:@"通话详情" forState:UIControlStateNormal];
     detailInfoButton.selected = NO;
     [detailInfoButton addTarget:self action:@selector(detailInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];

@@ -70,10 +70,6 @@
 - (void)initGUI {
     isShow = YES;
     labelString = [[NSMutableString alloc]init];
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0 , 0, 20, 44)];
-    self.titleLabel.text = @"电话";
-    self.titleLabel.textColor = [UIColor whiteColor];
-
     
     //导航栏右按钮
     addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -220,7 +216,7 @@
 
 //拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:@" " andCallerNo:self.textFiled.text andVoipNo:labelString];
+    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:self.textFiled.text andCallerNo:self.textFiled.text andVoipNo:labelString];
     [self presentViewController:dialingVC animated:YES completion:nil];
     [self keyboardHidden];
 }
