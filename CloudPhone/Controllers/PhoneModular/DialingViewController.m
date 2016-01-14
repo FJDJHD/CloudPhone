@@ -1,4 +1,4 @@
- //
+//
 //  DialingViewController.m
 //  CloudPhone
 //
@@ -83,16 +83,16 @@
                     self.callID = [[ECDevice sharedInstance].VoIPManager makeCallWithType:VOICE andCalled:self.sub_account_sid];
                     if (self.callID.length > 0){
                         //推送你打的人
-//                        [self requestPushMessage];
+                        //                        [self requestPushMessage];
                     }
                 } else if ([[dic objectForKey:@"status"] integerValue] == 0) {
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
                     //拨打直拨电话
                     dispatch_async(dispatch_get_main_queue(), ^{
-                       self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
-//                        [self requestPushMessage];
+                        self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                        //                        [self requestPushMessage];
                     });
-                  
+                    
                 }
             }
         }];
@@ -103,7 +103,7 @@
     if (self.callID.length <= 0) {
         //获取CallID失败，即拨打失败
     }
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallEvents:) name:KNOTIFICATION_onCallEvent object:nil];
 }
 
@@ -198,15 +198,18 @@
         UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(btX, btY, btWidth, btHeight)];
         button.tag = i;
         button.selected = NO;
-        [button.titleLabel setTextColor:[UIColor whiteColor]];
-        [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateNormal];
         
-        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]] withTitle:[NSString stringWithFormat:@"%@",nameArray[i]] forState:UIControlStateSelected];
+        UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(btX, btY + btHeight + 5, btWidth, 20)];
+        [titleLable setTextColor:[UIColor whiteColor]];
+        [titleLable setTextAlignment:NSTextAlignmentCenter];
+        titleLable.text = nameArray[i];
+        [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageArray[i]]]forState:UIControlStateNormal];
+         [button setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imageSelectedArray[i]]]forState:UIControlStateSelected];
         
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         [dailingToolBar addSubview:button];
-     }
+        [dailingToolBar addSubview:titleLable];
+    }
     
 }
 
@@ -217,31 +220,31 @@
             sender.selected = !sender.selected;
             [self mute];
         }
-        break;
+            break;
             
         case 1:{
             //免提
             sender.selected = !sender.selected;
             [self handfree];
         }
-        break;
+            break;
             
         case 2:{
             //录音
-             sender.selected = !sender.selected;
+            sender.selected = !sender.selected;
             [self startStopRecording];
         }
-        break;
+            break;
             
         case 3:{
             //回拨
-        sender.selected = !sender.selected;
-        [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
+            sender.selected = !sender.selected;
+            [self presentViewController:[ItelDialingViewController new] animated:YES completion:nil];
         }
-        break;
+            break;
             
         case 4:{
-           //挂断
+            //挂断
             if (ssInt > 0) {
                 self.callResult = @"0";
             }else{
@@ -249,13 +252,13 @@
             }
             [self releaseCall];
         }
-        break;
+            break;
             
         case 5:{
-             sender.selected = !sender.selected;
+            sender.selected = !sender.selected;
             if (isShow) {
                 [self keyboardHidden];
-                }else{
+            }else{
                 [self keyboardShow];
             }
         }
@@ -314,12 +317,12 @@
                     self.dailingLabel.text = @"网络不给力";
                     self.callResult = @"1";
                     [self releaseCall];
-
+                    
                 } else if ( voipCall.reason == ECErrorType_CallBusy || voipCall.reason == ECErrorType_Declined ) {
                     self.dailingLabel.text = @"您拨叫的用户正忙，请稍后再拨";
                     self.callResult = @"1";
                     [self releaseCall];
-
+                    
                 } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
                     self.dailingLabel.text = @"对方不在线,转直拨";
                     //拨打直拨电话
@@ -328,17 +331,17 @@
                     self.dailingLabel.text = @"呼叫超时";
                     self.callResult = @"1";
                     [self releaseCall];
-
+                    
                 } else if ( voipCall.reason == ECErrorType_SDKUnSupport) {
                     self.dailingLabel.text = @"该版本不支持此功能";
                     self.callResult = @"1";
                     [self releaseCall];
-
+                    
                 } else if ( voipCall.reason == ECErrorType_CalleeSDKUnSupport ) {
                     self.dailingLabel.text = @"对方版本不支持音频";
                     self.callResult = @"1";
                     [self releaseCall];
-
+                    
                 } else {
                     self.dailingLabel.text = @"呼叫失败";
                     self.callResult = @"1";
@@ -364,7 +367,7 @@
             default:
                 break;
         }
-
+        
     });
     
 }
@@ -387,13 +390,13 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.dailingLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d",hhInt,mmInt,ssInt];
         });
-
+        
         
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
-           self.dailingLabel.text = [NSString stringWithFormat:@"%02d:%02d",mmInt,ssInt];
+            self.dailingLabel.text = [NSString stringWithFormat:@"%02d:%02d",mmInt,ssInt];
         });
-
+        
         
     }
 }
@@ -414,7 +417,7 @@
     [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callRecords];
     NSLog(@"通话记录录入数据库");
     
-   
+    
     NSArray *callStatisticRecordsArray = [NSArray array];
     callStatisticRecordsArray = [DBOperate queryData:T_callStatisticRecords theColumn:@"callerNo" theColumnValue:self.callerNo withAll:YES];
     if (callStatisticRecordsArray.count > 0) {
@@ -426,8 +429,10 @@
         [DBOperate insertDataWithnotAutoID:infoArray tableName:T_callStatisticRecords];
         NSLog(@"新数据统计通话数据库");
     }
-
-    [self presentViewController:[EndDialingViewController new] animated:YES completion:nil];
+    
+    UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:[EndDialingViewController new]];
+    [self presentViewController:naviVC animated:YES completion:nil];
+    
     
 }
 
@@ -454,7 +459,7 @@
         recorder = [[AVAudioRecorder alloc] initWithURL:recordedFile settings:nil error:nil];
         [recorder prepareToRecord];
         [recorder record];
-        }
+    }
     else
     {
         isRecord = NO;
@@ -473,7 +478,7 @@
 
 #pragma DialKeyboradDelegate
 - (void)keyboardShow{
-     isShow = !isShow;
+    isShow = !isShow;
     [self.view addSubview:self.keyboard];
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
@@ -483,7 +488,7 @@
 }
 
 - (void)keyboardHidden{
-     isShow = !isShow;
+    isShow = !isShow;
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
         CGFloat keyboardH = self.keyboard.frame.size.height;

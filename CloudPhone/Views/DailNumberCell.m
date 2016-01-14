@@ -76,8 +76,8 @@
         _dailDateLable.textColor = [UIColor blackColor];
         [self addSubview:_dailDateLable];
 
-        UIImage *arrowImg = [UIImage imageNamed:@"mine_arrow"];
-        CGRect arrowImageFrame = CGRectMake(MainWidth - 60, 0 , 60, 60);
+        UIImage *arrowImg = [UIImage imageNamed:@"phone_detail"];
+        CGRect arrowImageFrame = CGRectMake(MainWidth - 65, 0 , 65, 60);
         UIButton  *arrowImgButton = [[UIButton alloc]initWithFrame:arrowImageFrame];
         [arrowImgButton setImage:arrowImg forState:UIControlStateNormal];
         [arrowImgButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 30, 0.0, 0.0)];

@@ -113,7 +113,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-
+    
     [super viewWillDisappear:animated];
     [self HUDHidden];
 }
@@ -138,7 +138,7 @@
     if (section == 0) {
         return 1;
     }else{
-    return  self.itemArray.count;
+        return  self.itemArray.count;
     }
 }
 
@@ -150,13 +150,13 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
         if (indexPath.section == 0) {
-            UIImage *image = [UIImage imageNamed:@"mine_icon"];
+            UIImage *image = [UIImage imageNamed:@"mine_big_icon"];
             UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
             imageView.frame = CGRectMake(MainWidth - image.size.width, 5, 50, 50);
             imageView.tag = 100;
             [cell addSubview:imageView];
         }
-      
+        
     }
     
     if (!(indexPath.section == 1 && indexPath.row == 3)) {
@@ -177,18 +177,18 @@
             if (_infoArray.count > 0) {
                 
                 if ([model.userIcon hasPrefix:@"http://"]) {
-                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
+                    [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_big_icon"]];
                 } else {
                     UIImage *iconImage = [UIImage imageWithContentsOfFile:model.userIcon];
                     if (iconImage) {
                         imageView.image = iconImage;
                     } else {
-                        imageView.image = [UIImage imageNamed:@"mine_icon"];
+                        imageView.image = [UIImage imageNamed:@"mine_big_icon"];
                     }
                 }
                 
             } else {
-                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_icon"]];
+                [imageView sd_setImageWithURL:[NSURL URLWithString:model.userIcon] placeholderImage:[UIImage imageNamed:@"mine_big_icon"]];
             }
         }
         
@@ -204,7 +204,7 @@
                     cell.detailTextLabel.text = model.userName;
                 }
             }
-
+            
         }else if (indexPath.row == 1){
             //性别
             cell.detailTextLabel.text = model.userGender;
@@ -218,7 +218,7 @@
             } else {
                 cell.detailTextLabel.text = model.userNumber;
             }
-
+            
         }else if(indexPath.row == 4){
             //个性签名
             if (model.userSignature == nil || model.userSignature.length == 0 || [model.userSignature isEqualToString:@""]) {
@@ -228,7 +228,7 @@
             }
         }
     }
-
+    
     return cell;
 }
 
@@ -253,7 +253,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     return 60;
 }
 
@@ -271,15 +271,15 @@
         changeGenderSheet.tag = 1002;
         [changeGenderSheet showInView:self.view];
     }else if (indexPath.section == 1 && indexPath.row == 2){
-          [self setBrithSelectView];
+        [self setBrithSelectView];
         CGFloat duration = 0.2;
         [UIView animateWithDuration:duration animations:^{
             CGFloat birthH = birthView.frame.size.height;
             birthView.transform = CGAffineTransformMakeTranslation(0, - birthH);
         }];
-
+        
     }else if (indexPath.section == 1 && indexPath.row == 3){
-      //电话号码不可更改
+        //电话号码不可更改
     }else if (indexPath.section == 1 && indexPath.row == 4){
         [self addSignatureView];
     }
@@ -288,61 +288,61 @@
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (actionSheet.tag == 1001) {
-    switch (buttonIndex) {
-        case 0:
-        {
-            BOOL iscamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-            if (!iscamera) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"没有相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
-                [alert show];
-                return;
+        switch (buttonIndex) {
+            case 0:
+            {
+                BOOL iscamera = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+                if (!iscamera) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"没有相机" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+                    [alert show];
+                    return;
+                }
+                UIImagePickerController *pick = [[UIImagePickerController alloc]init];
+                pick.delegate = self;
+                pick.sourceType = UIImagePickerControllerSourceTypeCamera;
+                pick.allowsEditing = YES;
+                [self presentViewController:pick animated:YES completion:NULL];
+                
             }
-            UIImagePickerController *pick = [[UIImagePickerController alloc]init];
-            pick.delegate = self;
-            pick.sourceType = UIImagePickerControllerSourceTypeCamera;
-            pick.allowsEditing = YES;
-            [self presentViewController:pick animated:YES completion:NULL];
-            
+                break;
+            case 1:
+            {
+                UIImagePickerController *pickController = [[UIImagePickerController alloc]init];
+                pickController.allowsEditing = YES;
+                pickController.delegate = self;
+                pickController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                [self presentViewController:pickController animated:YES completion:^{}];
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
-        case 1:
-        {
-            UIImagePickerController *pickController = [[UIImagePickerController alloc]init];
-            pickController.allowsEditing = YES;
-            pickController.delegate = self;
-            pickController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            [self presentViewController:pickController animated:YES completion:^{}];
-        }
-            break;
-            
-        default:
-            break;
-       }
-    
+        
     }else if (actionSheet.tag == 1002){
         if(buttonIndex!=2){
-        NSDictionary *dic = @{@"field":@"gender",@"fieval":[NSNumber numberWithInteger:buttonIndex + 1]};
-        [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
-            if (!error) {
-                NSDictionary *dic = (NSDictionary *)data;
-                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [CustomMBHud customHudWindow:@"修改成功"];
-                    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-                    if (buttonIndex == 0) {
-                        cell.detailTextLabel.text = @"男";
-                    }else if (buttonIndex == 1){
-                        cell.detailTextLabel.text = @"女";
-                    }
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    NSString *number = [defaults objectForKey:UserNumber];
-                    [DBOperate updateData:T_personalInfo tableColumn:@"sex" columnValue:cell.detailTextLabel.text conditionColumn:@"phoneNum" conditionColumnValue:number];
-                  };
+            NSDictionary *dic = @{@"field":@"gender",@"fieval":[NSNumber numberWithInteger:buttonIndex + 1]};
+            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+                if (!error) {
+                    NSDictionary *dic = (NSDictionary *)data;
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        [CustomMBHud customHudWindow:@"修改成功"];
+                        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+                        if (buttonIndex == 0) {
+                            cell.detailTextLabel.text = @"男";
+                        }else if (buttonIndex == 1){
+                            cell.detailTextLabel.text = @"女";
+                        }
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *number = [defaults objectForKey:UserNumber];
+                        [DBOperate updateData:T_personalInfo tableColumn:@"sex" columnValue:cell.detailTextLabel.text conditionColumn:@"phoneNum" conditionColumnValue:number];
+                    };
                 } else {
                     [CustomMBHud customHudWindow:@"修改失败"];
-            }
-        }];
+                }
+            }];
+        }
     }
-  }
 }
 
 - (void)addSetPersonName{
@@ -352,7 +352,7 @@
     self.coverView = coverView;
     [self.view addSubview:coverView];
     
-    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight - 100, MainWidth, 132)];
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight - 68, MainWidth, 132)];
     signatureView.layer.cornerRadius = 3.0;
     signatureView.layer.masksToBounds = YES;
     signatureView.backgroundColor = [UIColor whiteColor];
@@ -433,7 +433,7 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(sureButton.frame), MainWidth, 1)];
     line.backgroundColor = [UIColor lightGrayColor];
     [birthView addSubview:line];
-
+    
     UIDatePicker *datePicker = [[UIDatePicker alloc] init];
     self.datePicker = datePicker;
     datePicker.frame = CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth,150);
@@ -457,7 +457,7 @@
     self.coverView = coverView;
     [self.view addSubview:coverView];
     
-    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.7, MainWidth, MainHeight *0.3)];
+    signatureView = [[UIView alloc] initWithFrame:CGRectMake(0, MainHeight * 0.85, MainWidth, MainHeight *0.3)];
     signatureView.layer.cornerRadius = 3.0;
     signatureView.layer.masksToBounds = YES;
     signatureView.backgroundColor = [UIColor whiteColor];
@@ -488,8 +488,8 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(sureButton.frame), MainWidth, 1)];
     line.backgroundColor = [UIColor lightGrayColor];
     [signatureView addSubview:line];
-
-
+    
+    
     UITextView *setSignatureView = [[UITextView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(line.frame) +1, MainWidth, MainWidth * 0.3 - 45)];
     setSignatureView.backgroundColor = [UIColor whiteColor];
     setSignatureView.font = [UIFont systemFontOfSize:20];
@@ -504,7 +504,7 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-
+    
     [self AddHUD];
     [[AirCloudNetAPIManager sharedManager] updatePhotoOfImage:image params:nil WithBlock:^(id data, NSError *error) {
         DLog(@"data = %@",data);
@@ -523,7 +523,7 @@
                 NSString *iconPath = [GeneralToolObject personalIconFilePath:number];
                 [UIImagePNGRepresentation(image) writeToFile:iconPath atomically:YES];
                 DLog(@"%@",iconPath);
-
+                
                 [DBOperate updateData:T_personalInfo tableColumn:@"iconPath" columnValue:iconPath conditionColumn:@"phoneNum" conditionColumnValue:number];
                 
                 //这里把xmpp的个人信息修改一下
@@ -533,7 +533,7 @@
                 [CustomMBHud customHudWindow:@"上传图片失败"];
             }
         }
-
+        
     }];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -567,7 +567,7 @@
                     
                     [_tableView reloadData];
                 }
-
+                
                 
             } else {
                 DLog(@"******%@",[dic objectForKey:@"msg"]);
@@ -581,60 +581,60 @@
 - (void)sureButtonClick:(UIButton *)sender{
     if (sender.tag == 1001) {
         if (self.setBirthStr.length > 0) {
-    NSDictionary *dic = @{@"field":@"birthday",@"fieval":self.setBirthStr};
-    [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
-        if (!error) {
-            NSDictionary *dic = (NSDictionary *)data;
-            
-            if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                [CustomMBHud customHudWindow:@"修改成功"];
-                UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
-                cell.detailTextLabel.text = self.setBirthStr;
+            NSDictionary *dic = @{@"field":@"birthday",@"fieval":self.setBirthStr};
+            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+                if (!error) {
+                    NSDictionary *dic = (NSDictionary *)data;
+                    
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        [CustomMBHud customHudWindow:@"修改成功"];
+                        UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+                        cell.detailTextLabel.text = self.setBirthStr;
+                        
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        NSString *number = [defaults objectForKey:UserNumber];
+                        [DBOperate updateData:T_personalInfo tableColumn:@"birthday" columnValue:self.setBirthStr conditionColumn:@"phoneNum" conditionColumnValue:number];
+                        
+                    } else {
+                        DLog(@"******%@",[dic objectForKey:@"msg"]);
+                        [CustomMBHud customHudWindow:@"修改失败"];
+                    }
+                }
                 
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                NSString *number = [defaults objectForKey:UserNumber];
-                [DBOperate updateData:T_personalInfo tableColumn:@"birthday" columnValue:self.setBirthStr conditionColumn:@"phoneNum" conditionColumnValue:number];
-
-            } else {
-                DLog(@"******%@",[dic objectForKey:@"msg"]);
-                [CustomMBHud customHudWindow:@"修改失败"];
-            }
+            }];
+            [self removeBirthCoverView];
+            NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1];
+            NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
+            [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+        }else{
+            [self removeBirthCoverView];
         }
-        
-    }];
-    [self removeBirthCoverView];
-    NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:2 inSection:1];
-    NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
-    [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
-    }else{
-       [self removeBirthCoverView];
-      }
     }else if(sender.tag == 2001){
         if (self.setSignatureView.text.length > 0){
-        NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setSignatureView.text};
-        [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
-            if (!error) {
-                NSDictionary *dic = (NSDictionary *)data;
-                if ([[dic objectForKey:@"status"] integerValue] == 1) {
-                    [self.setSignatureView resignFirstResponder];
-                    [CustomMBHud customHudWindow:@"个性签名修改成功"];
+            NSDictionary *dic = @{@"field":@"signature",@"fieval":self.setSignatureView.text};
+            [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
+                if (!error) {
+                    NSDictionary *dic = (NSDictionary *)data;
+                    if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                        [self.setSignatureView resignFirstResponder];
+                        [CustomMBHud customHudWindow:@"个性签名修改成功"];
                         UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:1]];
                         cell.detailTextLabel.text = self.setSignatureView.text;
                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                         NSString *number = [defaults objectForKey:UserNumber];
                         [DBOperate updateData:T_personalInfo tableColumn:@"signature" columnValue:self.setSignatureView.text conditionColumn:@"phoneNum" conditionColumnValue:number];
                     }else{
-                    DLog(@"******%@",[dic objectForKey:@"msg"]);
-                    [CustomMBHud customHudWindow:@"个性签名修改失败"];
+                        DLog(@"******%@",[dic objectForKey:@"msg"]);
+                        [CustomMBHud customHudWindow:@"个性签名修改失败"];
+                    }
                 }
+            }];
+            [self.coverView removeFromSuperview];
+            NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:4 inSection:1];
+            NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
+            [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
         }
-    }];
-        [self.coverView removeFromSuperview];
-        NSIndexPath *indexPath_1=[NSIndexPath indexPathForRow:4 inSection:1];
-        NSArray *indexArray=[NSArray arrayWithObject:indexPath_1];
-        [self.tableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
-  }
-}else if (sender.tag == 3001){
+    }else if (sender.tag == 3001){
         if (self.setPersonName.text.length > 0) {
             NSDictionary *dic = @{@"field":@"nick_name",@"fieval":self.setPersonName.text};
             [[AirCloudNetAPIManager sharedManager] updateUserOfParams:dic WithBlock:^(id data, NSError *error){
@@ -671,9 +671,9 @@
 
 - (void)cancelButtonClick:(UIButton *)sender{
     if (sender.tag == 1002) {
-    [self removeBirthCoverView];
+        [self removeBirthCoverView];
     }else if (sender.tag == 2002 | sender.tag == 3002){
-    [self.coverView removeFromSuperview];
+        [self.coverView removeFromSuperview];
     }
 }
 
@@ -696,7 +696,7 @@
     }completion:^(BOOL finished) {
         [self.coverView removeFromSuperview];
     }];
-
+    
 }
 #pragma mark - MBProgressHUD Show or Hidden
 - (void)AddHUD {
