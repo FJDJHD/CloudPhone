@@ -201,7 +201,6 @@
     
     if (CURRENT_SYS_VERSION >= 7.0) {
         [[UINavigationBar appearance] setBarTintColor:[ColorTool navigationColor]];
-        [[UINavigationBar appearance] setTranslucent:NO];
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
         [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
         

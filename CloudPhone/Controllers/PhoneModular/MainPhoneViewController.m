@@ -92,7 +92,7 @@
 
 - (void)initTextFiled{
     UITextField  *textFiled = [[UITextField alloc] initWithFrame:CGRectMake(0, 20, MainWidth, 44)];
-    textFiled.backgroundColor = [UIColor colorWithHexString:@"#2cceb7"];
+    textFiled.backgroundColor = [UIColor clearColor];
     textFiled.font = [UIFont systemFontOfSize:25.0];
     textFiled.textColor = [UIColor whiteColor];
     textFiled.textAlignment = NSTextAlignmentCenter;
@@ -102,7 +102,7 @@
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT - 30 + 80, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT + 105, MainWidth, 300);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;

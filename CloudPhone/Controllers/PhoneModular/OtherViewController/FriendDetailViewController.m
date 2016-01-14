@@ -75,7 +75,7 @@
     dialDetailButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [dialDetailButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [dialDetailButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
-    [dialDetailButton setTitle:@"通话详情" forState:UIControlStateNormal];
+    [dialDetailButton setTitle:@"详情信息" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
     dialDetailButton.backgroundColor = [ColorTool navigationColor];
     dialDetailButton.layer.cornerRadius = 2.0;
@@ -88,16 +88,19 @@
     detailInfoButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [detailInfoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [detailInfoButton setTitleColor:[UIColor colorWithHexString:@"#049ff1"] forState:UIControlStateSelected];
-    [detailInfoButton setTitle:@"详情信息" forState:UIControlStateNormal];
+    [detailInfoButton setTitle:@"通话详情" forState:UIControlStateNormal];
     detailInfoButton.selected = NO;
     [detailInfoButton addTarget:self action:@selector(detailInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
     self.detailInfoButton = detailInfoButton;
     [self.view addSubview:detailInfoButton];
     
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.dialDetailButton.frame), MainWidth, 1.0)];
+    line.backgroundColor =  [ColorTool navigationColor];
+    [self.view addSubview:line];
     
     [self.view insertSubview:self.tableView belowSubview:buttonBg];
     [self.view insertSubview:self.dialDetailTableView belowSubview:buttonBg];
-   
+    
     //发消息
     CGRect rect = CGRectMake(15, MainHeight - 50, MainWidth - 15*2.0, 44);
     UIButton *sendInfoButton = [self getButtonWithString:@"发消息" rect:rect taget:self action:@selector(sendInfoButtonClick) ];
@@ -114,7 +117,7 @@
         _tableView.bounces = NO;
         _tableView.allowsSelection = NO;
         _tableView.backgroundColor = [ColorTool backgroundColor];
-        }
+    }
     return _tableView;
 }
 
@@ -135,11 +138,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView.tag == 9002) {
-         return 3;
+        return 3;
     }else{
         return 20;
     }
-   
+    
 }
 
 
@@ -213,7 +216,7 @@
             self.detLabel.text = @"没蓝女装品牌专卖店";
         }
         return cell;
-
+        
     }else{
         static NSString *ID = @"Cell1";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
@@ -223,8 +226,8 @@
             cell.detailTextLabel.text = @"通话时长";
         }
         
-    return cell;
-     }
+        return cell;
+    }
 }
 
 //编辑按钮
@@ -233,25 +236,25 @@
     coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     self.coverView = coverView;
     [self.view addSubview:coverView];
- 
+    
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, STATUS_NAV_BAR_HEIGHT + 120, MainWidth, MainHeight *0.45)];
     view.layer.cornerRadius = 3.0;
     view.layer.masksToBounds = YES;
     view.backgroundColor = [UIColor whiteColor];
     [coverView addSubview:view];
     
-        //修改备注
-        CGRect rect = CGRectMake(15, 20 + (44 + 10) * 0, MainWidth - 15*2.0, 44);
-        UIButton *modifyButton = [self getButtonWithString:@"修改备注" rect:rect taget:self action:@selector(modifyButtonClick)];
-        [view addSubview:modifyButton];
-        //屏蔽此人
-        rect = CGRectMake(15, 20 + (44 + 10) * 1, MainWidth - 15*2.0, 44);
-        UIButton *forbidButton = [self getButtonWithString:@"屏蔽此人" rect:rect taget:self action:@selector(forbidButtonClick)];
-        [view addSubview:forbidButton];
-        //取消
-        rect = CGRectMake(15, 20 + (44 + 10) * 2, MainWidth - 15*2.0, 44);
-        UIButton *cancelButton = [self getButtonWithString:@"取消" rect:rect taget:self action:@selector(cancelButtonClick)];
-        [view addSubview:cancelButton];
+    //修改备注
+    CGRect rect = CGRectMake(15, 20 + (44 + 10) * 0, MainWidth - 15*2.0, 44);
+    UIButton *modifyButton = [self getButtonWithString:@"修改备注" rect:rect taget:self action:@selector(modifyButtonClick)];
+    [view addSubview:modifyButton];
+    //屏蔽此人
+    rect = CGRectMake(15, 20 + (44 + 10) * 1, MainWidth - 15*2.0, 44);
+    UIButton *forbidButton = [self getButtonWithString:@"屏蔽此人" rect:rect taget:self action:@selector(forbidButtonClick)];
+    [view addSubview:forbidButton];
+    //取消
+    rect = CGRectMake(15, 20 + (44 + 10) * 2, MainWidth - 15*2.0, 44);
+    UIButton *cancelButton = [self getButtonWithString:@"取消" rect:rect taget:self action:@selector(cancelButtonClick)];
+    [view addSubview:cancelButton];
 }
 
 - (UIButton *)getButtonWithString:(NSString *)title rect:(CGRect)rect taget:(id)target action:(SEL)action {
@@ -277,32 +280,23 @@
 - (void)detailInfoButtonClick{
     self.detailInfoButton.selected = YES;
     self.dialDetailButton.selected = NO;
-    self.tableView.hidden = NO;
-    self.dialDetailTableView.hidden = YES;
+    self.tableView.hidden = YES;
+    self.dialDetailTableView.hidden = NO;
     
-    self.detailInfoButton.backgroundColor = [UIColor whiteColor];
-    self.detailInfoButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
-    self.detailInfoButton.layer.borderWidth = 0.5;
-    
+    self.detailInfoButton.backgroundColor = [ColorTool navigationColor];
     self.dialDetailButton.backgroundColor = [ColorTool backgroundColor];
-    self.dialDetailButton.layer.borderWidth = 0;
     
-
+    
 }
 
 - (void)dialDetailButtonClick{
     self.detailInfoButton.selected = NO;
     self.dialDetailButton.selected = YES;
-    self.tableView.hidden = YES;
-    self.dialDetailTableView.hidden = NO;
+    self.tableView.hidden = NO;
+    self.dialDetailTableView.hidden = YES;
     
-    self.dialDetailButton.backgroundColor = [UIColor whiteColor];
-    self.dialDetailButton.layer.borderColor = [UIColor colorWithHexString:@"#049ff1"].CGColor;
-    self.dialDetailButton.layer.borderWidth = 0.5;
-
-    
+    self.dialDetailButton.backgroundColor = [ColorTool navigationColor];
     self.detailInfoButton.backgroundColor = [ColorTool backgroundColor];
-    self.detailInfoButton.layer.borderWidth = 0;
 }
 
 - (void)modifyButtonClick{
