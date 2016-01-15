@@ -29,6 +29,7 @@
 @implementation DialingViewController{
     NSURL *recordedFile;
     AVAudioRecorder *recorder;
+    UIImageView *iconImageView;
 }
 
 - (DialingViewController *)initWithCallerName:(NSString *)name andCallerNo:(NSString *)phoneNo andVoipNo:(NSString *)voipNo
@@ -142,14 +143,27 @@
     //拨打View
     UIView *detailView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(label.frame), MainWidth, MainHeight * 0.45)];
     [self.view addSubview:detailView];
+    
     //头像
-    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_friendiconbg"]];
-    iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.3,  MainWidth * 0.3);
+    iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"callphone_friendiconbg"]];
+    iconImageView.frame = CGRectMake(0, 0, MainWidth * 0.45,  MainWidth * 0.45);
     iconImageView.center = CGPointMake(MainWidth / 2.0, iconImageView.frame.size.height / 2.0 + 10);
+    iconImageView.backgroundColor = [UIColor redColor];
     [detailView addSubview:iconImageView];
+    
+    //拨打提示
+    UILabel *dailingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, iconImageView.center.y - 10, MainWidth * 0.45, 20)];
+   // dailingLabel.backgroundColor = [UIColor greenColor];
+    dailingLabel.textAlignment = NSTextAlignmentCenter;
+    dailingLabel.textColor = [UIColor blackColor];
+    dailingLabel.text = @"正在呼叫";
+    dailingLabel.font = [UIFont systemFontOfSize:18.0];
+    self.dailingLabel = dailingLabel;
+    [iconImageView addSubview:dailingLabel];
+    
     //姓名
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
-    nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 15 + (nameLabel.frame.size.height) / 2.0);
+    nameLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(iconImageView.frame) + 5 + (nameLabel.frame.size.height) / 2.0);
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.textColor = [UIColor whiteColor];
     if (self.callerName) {
@@ -157,25 +171,17 @@
     }else{
         nameLabel.text = @"未知号码";
     }
-    nameLabel.font = [UIFont systemFontOfSize:14.0];
+    nameLabel.font = [UIFont systemFontOfSize:20.0];
     [detailView addSubview:nameLabel];
+    
     //电话号码
     UILabel *numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
     numberLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(nameLabel.frame) + 8 + (numberLabel.frame.size.height) / 2.0);
     numberLabel.textAlignment = NSTextAlignmentCenter;
-    numberLabel.textColor = [UIColor lightGrayColor];
+    numberLabel.textColor = [UIColor whiteColor];
     numberLabel.text = self.callerNo;
-    numberLabel.font = [UIFont systemFontOfSize:14.0];
+    numberLabel.font = [UIFont systemFontOfSize:20.0];
     [detailView addSubview:numberLabel];
-    //拨打提示
-    UILabel *dailingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, MainWidth, 15)];
-    dailingLabel.center = CGPointMake(MainWidth / 2.0,CGRectGetMaxY(numberLabel.frame) + 8 + (dailingLabel.frame.size.height) / 2.0);
-    dailingLabel.textAlignment = NSTextAlignmentCenter;
-    dailingLabel.textColor = [UIColor whiteColor];
-    dailingLabel.text = @"正在呼叫...";
-    dailingLabel.font = [UIFont systemFontOfSize:14.0];
-    self.dailingLabel = dailingLabel;
-    [detailView addSubview:dailingLabel];
     
     //拨打工具栏
     UIView *dailingToolBar= [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(detailView.frame), MainWidth, MainHeight * 0.6)];
@@ -283,7 +289,8 @@
         switch (voipCall.callStatus){
             case ECallProceeding: {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.dailingLabel.text = @"呼叫中...";
+                    //self.dailingLabel.text = @"正在呼叫";
+                  //  [self addStatusAnimate:@"正在呼叫"];
                 });
             }
                 break;
@@ -291,7 +298,8 @@
             case ECallAlerting: {
                 [[ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:NO];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.dailingLabel.text = @"等待对方接听";
+                  //  self.dailingLabel.text = @"等待接听";
+                    [self addStatusAnimate:@"等待接听"];
                 });
                 if (voipCallType!=1){
                     DLog(@"----");
@@ -324,7 +332,8 @@
                     [self releaseCall];
                     
                 } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
-                    self.dailingLabel.text = @"对方不在线,转直拨";
+                   // self.dailingLabel.text = @"对方不在线,转直拨";
+                    [self addStatusAnimate:@"对方不在线,转直拨"];
                     //拨打直拨电话
                     self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
                 } else if ( voipCall.reason == ECErrorType_CallMissed ) {
@@ -355,7 +364,7 @@
                     [timer invalidate];
                     timer = nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.dailingLabel.text = @"正在挂机...";
+                        self.dailingLabel.text = @"正在挂机";
                     });
                     self.callResult = @"0";
                     [self releaseCall];
@@ -443,6 +452,7 @@
         isMute = !isMute;
     }
 }
+
 - (void)handfree {
     //成功时返回0，失败时返回-1
     NSInteger returnValue = [[ECDevice sharedInstance].VoIPManager enableLoudsSpeaker:!isLouder];
@@ -451,8 +461,7 @@
     }
 }
 
-- (IBAction)startStopRecording
-{
+- (IBAction)startStopRecording{
     if(!isRecord)
     {
         isRecord = YES;
@@ -464,6 +473,20 @@
     {
         isRecord = NO;
         [recorder stop];
+    }
+}
+
+#pragma mark - dong hua
+- (void)addStatusAnimate:(NSString *)str {
+    
+    if (str.length != 0) {
+        CGFloat duration = 2.0;
+        [UIView animateWithDuration:duration animations:^{
+            self.dailingLabel.frame = CGRectMake(0, iconImageView.center.y - 10 - 20, MainWidth * 0.45, 20);
+            self.dailingLabel.textColor = [UIColor whiteColor];
+            self.dailingLabel.font = [UIFont systemFontOfSize:22.0];
+            self.dailingLabel.text = str;
+        }];
     }
 }
 
@@ -495,6 +518,7 @@
         self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH);
     }];
 }
+
 //点击空白收键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     if (isShow == 1) {

@@ -17,9 +17,37 @@
 @property (nonatomic, strong)  UIButton *detailInfoButton;
 @property (nonatomic, strong)  UIView *coverView;
 @property (nonatomic, strong) UILabel *signayureLabel;
+
+@property (nonatomic, strong) NSArray *infoArray;
+@property (nonatomic, strong) CallRecordsModel *callRecordModel;
+@property (nonatomic, strong) NSMutableArray *callRecordArray;
+
 @end
 
 @implementation FriendDetailViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    _infoArray = [DBOperate queryData:T_callRecords theColumn:@"callerNo" theColumnValue:self.model.callerNo withAll:NO];
+    _infoArray   = (NSMutableArray *)[[_infoArray reverseObjectEnumerator] allObjects];
+    self.callRecordArray = [NSMutableArray array];
+    if (_infoArray.count > 0) {
+        for (NSArray *temp in _infoArray) {
+            CallRecordsModel *model = [[CallRecordsModel alloc]init];
+            model.callResult = [temp objectAtIndex:record_callResult];
+            model.callerName = [temp objectAtIndex:record_callerName];
+            model.callerNo = [temp objectAtIndex:record_callerNo];
+            model.usercallTime = [temp objectAtIndex:record_callTime];
+            [self.callRecordArray addObject:model];
+        }
+        
+        [_tableView reloadData];
+    }
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [ColorTool backgroundColor];
@@ -75,7 +103,7 @@
     dialDetailButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     [dialDetailButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [dialDetailButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [dialDetailButton setTitle:@"详情信息" forState:UIControlStateNormal];
+    [dialDetailButton setTitle:@"通话详情" forState:UIControlStateNormal];
     dialDetailButton.selected = YES;
     dialDetailButton.backgroundColor = [ColorTool navigationColor];
     dialDetailButton.layer.cornerRadius = 2.0;
@@ -89,7 +117,7 @@
     detailInfoButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [detailInfoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [detailInfoButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [detailInfoButton setTitle:@"通话详情" forState:UIControlStateNormal];
+    [detailInfoButton setTitle:@"详情信息" forState:UIControlStateNormal];
     detailInfoButton.selected = NO;
     [detailInfoButton addTarget:self action:@selector(detailInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
     self.detailInfoButton = detailInfoButton;
@@ -110,7 +138,7 @@
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.dialDetailButton.frame) - 36, MainWidth, SCREEN_HEIGHT);
+        CGRect tableViewFrame = CGRectMake(0, CGRectGetMaxY(self.dialDetailButton.frame)-38, MainWidth, SCREEN_HEIGHT);
         _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -141,7 +169,7 @@
     if (tableView.tag == 9002) {
         return 3;
     }else{
-        return 20;
+        return self.callRecordArray.count;
     }
     
 }
@@ -223,10 +251,10 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
         if (!cell) {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
-            cell.textLabel.text = @"通话时刻";
-            cell.detailTextLabel.text = @"通话时长";
         }
-        
+        CallRecordsModel *model = self.callRecordArray[indexPath.row];
+        cell.textLabel.text = model.callResult;
+        cell.detailTextLabel.text = model.usercallTime;
         return cell;
     }
 }
