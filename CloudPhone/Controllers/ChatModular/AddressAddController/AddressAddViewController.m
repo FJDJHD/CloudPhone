@@ -33,6 +33,10 @@
 
 @property (nonatomic, strong) NSMutableArray *addressArray; //剩下通讯录的
 
+//索引
+@property (nonatomic, strong) NSArray *sectionTitleArray;
+
+
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
 
@@ -64,6 +68,10 @@
     _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
     _invateArray = [[NSMutableArray alloc]initWithCapacity:0];
     _addressArray = [[NSMutableArray alloc]initWithCapacity:0];
+    
+    //索引的27个字母和＃
+    UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
+    self.sectionTitleArray = [theCollation sectionTitles];
     
     //请求添加好友的
     [self loadFriendFromFMDB];
@@ -389,9 +397,13 @@
     }
 }
 
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self.view endEditing:YES];
 }
+
+
 
 #pragma mark - ios8方法 －－－－－－－－－－－－－－－－
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -425,6 +437,20 @@
     
     return @[deleteRowAction];
 }
+
+
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//
+//    return self.sectionTitleArray;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+//    NSString *key = nil;
+//    if (index < self.sectionTitleArray.count) {
+//        key = [self.sectionTitleArray objectAtIndex:index];
+//        NSArray *sourceArr =[self.sortDic objectForKey:key];
+//    }
+//}
 
 #pragma mark - UITextFelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

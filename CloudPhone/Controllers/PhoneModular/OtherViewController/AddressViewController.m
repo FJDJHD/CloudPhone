@@ -46,6 +46,8 @@
 
 @property (nonatomic, strong) NSMutableArray *allArray; //所有的人
 
+@property (nonatomic, strong) NSMutableArray *friendArray; //好友
+
 
 
 @property (nonatomic, strong) MBProgressHUD *HUD;
@@ -67,6 +69,7 @@
         _listContentArray = [[NSMutableArray alloc]initWithCapacity:0];
         _listTitleArray = [[NSMutableArray alloc]initWithCapacity:0];
         _allArray = [[NSMutableArray alloc]initWithCapacity:0];
+        _friendArray = [[NSMutableArray alloc]initWithCapacity:0];
     }
     return self;
 }
@@ -110,7 +113,7 @@
 - (UITableView *)tableView {
     if (!_tableView) {
         CGRect tableViewFrame = CGRectMake(0, 0, MainWidth, SCREEN_HEIGHT);
-        _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:tableViewFrame style:UITableViewStylePlain];
         _tableView.rowHeight = 60;
         _tableView.sectionIndexColor = RGB(51, 51, 51);
         _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
@@ -146,10 +149,20 @@
 #pragma mark - UITabvleViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (_friendArray.count > 0) {
+        return [_listContentArray count] + 1;
+    }
     return [_listContentArray count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (_friendArray.count > 0) {
+        if (section == 0) {
+            return _friendArray.count;
+        } else {
+            return [_listContentArray[section -1] count];
+        }
+    }
     return [_listContentArray[section] count];
 }
 
@@ -184,30 +197,88 @@
         [cell addSubview:arrowImgButton];
         [arrowImgButton addTarget:self action:@selector(arrowButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-    NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
-    ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
     
-    UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
-    UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
-    DilingButton *arrowBtn = (DilingButton *)[cell viewWithTag:5553];
-    
-    arrowBtn.model = model;
-    
-    //名字
-    titleLab.text = model.userName;
-    
-    //手机号
-    subtitleLab.text = model.mobile;
-    
-    //状态
-    if (model.status == kAlreadFriend) {
-        [arrowBtn setImage:[UIImage imageNamed:@"phone_addressItelFlag"] forState:UIControlStateNormal];
-    } else {
-        [arrowBtn setImage:[UIImage imageNamed:@"phone_detail"] forState:UIControlStateNormal];
-    }
+    if (_friendArray.count > 0) {
+        if (indexPath.section == 0) {
+            
+            ItelFriendModel *model = (ItelFriendModel *)[_friendArray objectAtIndex:indexPath.row];
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+            DilingButton *arrowBtn = (DilingButton *)[cell viewWithTag:5553];
+            
+            arrowBtn.model = model;
+            
+            //名字
+            titleLab.text = model.userName;
+            
+            //手机号
+            subtitleLab.text = model.mobile;
+            
+            //状态
+            if (model.status == kAlreadFriend) {
+                [arrowBtn setImage:[UIImage imageNamed:@"phone_addressItelFlag"] forState:UIControlStateNormal];
+            } else {
+                [arrowBtn setImage:[UIImage imageNamed:@"phone_detail"] forState:UIControlStateNormal];
+            }
 
-    return cell;
+            
+        } else {
+            
+            NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section - 1];
+            ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
+            
+            UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+            UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+            DilingButton *arrowBtn = (DilingButton *)[cell viewWithTag:5553];
+            
+            arrowBtn.model = model;
+            
+            //名字
+            titleLab.text = model.userName;
+            
+            //手机号
+            subtitleLab.text = model.mobile;
+            
+            //状态
+            if (model.status == kAlreadFriend) {
+                [arrowBtn setImage:[UIImage imageNamed:@"phone_addressItelFlag"] forState:UIControlStateNormal];
+            } else {
+                [arrowBtn setImage:[UIImage imageNamed:@"phone_detail"] forState:UIControlStateNormal];
+            }
+
+        
+        }
+        
+        
     
+    } else {
+    
+        NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
+        ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
+        
+        UILabel *titleLab = (UILabel *)[cell viewWithTag:5551];
+        UILabel *subtitleLab = (UILabel *)[cell viewWithTag:5552];
+        DilingButton *arrowBtn = (DilingButton *)[cell viewWithTag:5553];
+        
+        arrowBtn.model = model;
+        
+        //名字
+        titleLab.text = model.userName;
+        
+        //手机号
+        subtitleLab.text = model.mobile;
+        
+        //状态
+        if (model.status == kAlreadFriend) {
+            [arrowBtn setImage:[UIImage imageNamed:@"phone_addressItelFlag"] forState:UIControlStateNormal];
+        } else {
+            [arrowBtn setImage:[UIImage imageNamed:@"phone_detail"] forState:UIControlStateNormal];
+        }
+
+    }
+    
+    return cell;
 }
 
 - (void)arrowButtonClick:(UIButton *)sender{
@@ -242,11 +313,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
-    ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
-    
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
-    [self presentViewController:dialingVC animated:YES completion:nil];
+//    NSArray *sectionArr=[_listContentArray objectAtIndex:indexPath.section];
+//    ItelFriendModel *model = (ItelFriendModel *)[sectionArr objectAtIndex:indexPath.row];
+//    
+//    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:model.userName andCallerNo:model.mobile andVoipNo:@" "];
+//    [self presentViewController:dialingVC animated:YES completion:nil];
 }
 
 //开启右侧索引条
@@ -256,18 +327,60 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.listTitleArray && self.listTitleArray.count > 0) {
-        UIView *contentView = [[UIView alloc] init];
-        contentView.backgroundColor = RGB(240, 240, 240);
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
-        label.backgroundColor = [UIColor clearColor];
-        NSString *sectionStr = self.listTitleArray[section];
-        [label setText:sectionStr];
-        [contentView addSubview:label];
-        return contentView;
+    
+    if (_friendArray.count > 0) {
+        if (section == 0) {
+            return nil;
+        } else {
+        
+            if (self.listTitleArray && self.listTitleArray.count > 0) {
+                UIView *contentView = [[UIView alloc] init];
+                contentView.backgroundColor = RGB(240, 240, 240);
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
+                label.backgroundColor = [UIColor clearColor];
+                NSString *sectionStr = self.listTitleArray[section - 1];
+                [label setText:sectionStr];
+                [contentView addSubview:label];
+                return contentView;
+            } else {
+                return nil;
+            }
+
+        }
+        
     } else {
-        return nil;
+    
+        if (self.listTitleArray && self.listTitleArray.count > 0) {
+            UIView *contentView = [[UIView alloc] init];
+            contentView.backgroundColor = RGB(240, 240, 240);
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
+            label.backgroundColor = [UIColor clearColor];
+            NSString *sectionStr = self.listTitleArray[section];
+            [label setText:sectionStr];
+            [contentView addSubview:label];
+            return contentView;
+        } else {
+            return nil;
+        }
     }
+    return nil;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    NSString *key = nil;
+    if (index < self.listTitleArray.count) {
+        key = [self.listTitleArray objectAtIndex:index];
+        NSInteger desIndex = index;
+        if (_friendArray.count > 0) {
+            ++desIndex;
+        }
+        DLog(@"key = %@ ----%@",key,@(desIndex));
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:desIndex];
+        [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    return index;
+    
 }
 
 
@@ -339,7 +452,7 @@
                                 model.userName = [friDic objectForKey:@"username"];
                                 model.mobile = [friDic objectForKey:@"mobile"];
                                 model.status = kAlreadFriend;
-                                [_allArray addObject:model];
+                                [_friendArray addObject:model];
                             }
                         }
                         
@@ -518,256 +631,6 @@
     
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-//- (void)loadAddressData {
-//     [self initData];
-//     [_tableView reloadData];
-////    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-////       
-////       
-////        dispatch_sync(dispatch_get_main_queue(), ^{
-////            
-////           
-////        });
-////    });
-//}
-//
-//- (void)initData {
-//    self.listContentArray = [self getAllPerson];
-//    if (self.listContentArray == nil) {
-//        DLog(@"通讯录为空，或未获取访问权限");
-//        return;
-//    } else {
-//    
-//        UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
-//        [self.listTitleArray removeAllObjects];
-//        [self.listTitleArray addObjectsFromArray:[theCollation sectionTitles]];
-//        
-//      
-//        NSMutableArray *existTitles = [NSMutableArray array];
-//        for (NSInteger i = 0; i < _listContentArray.count; i ++) {
-//            PersonModel *person = _listContentArray[i][0];
-//            for (NSInteger j = 0; j < _listTitleArray.count; j ++) {
-//                if (person.sectionNumber == j) {
-//                    [existTitles addObject:_listTitleArray[j]];
-//                }
-//            }
-//        }
-//        
-//        [self.listTitleArray removeAllObjects];
-//        self.listTitleArray = existTitles;
-//    }
-//}
-//
-//
-////开启右侧索引条
-//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-//
-//    return self.listTitleArray;
-//}
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//   if (self.listTitleArray && self.listTitleArray.count > 0) {
-//        UIView *contentView = [[UIView alloc] init];
-//        contentView.backgroundColor = RGB(240, 240, 240);
-//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
-//        label.backgroundColor = [UIColor clearColor];
-//        NSString *sectionStr = self.listTitleArray[section];
-//        [label setText:sectionStr];
-//        [contentView addSubview:label];
-//        return contentView;
-//    } else {
-//        return nil;
-//    }
-//}
-//
-//#pragma mark - ABNewPersonViewControllerDelegate
-////完成新增（点击取消和完成按钮时调用）,注意这里不用做实际的通讯录增加工作，此代理方法调用时已经完成新增，当保存成功的时候参数中得person会返回保存的记录，如果点击取消person为NULL
-//- (void)newPersonViewController:(ABNewPersonViewController *)newPersonView didCompleteWithNewPerson:(ABRecordRef)person {
-//
-//    if (person) {
-//        DLog(@"%@保存信息成功",(__bridge NSString *)ABRecordCopyCompositeName(person));
-//    } else {
-//    
-//        DLog(@"取消");
-//    }
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//
-//#pragma mark - 获取通讯录内容
-//- (NSMutableArray *)getAllPerson {
-//
-//    NSMutableArray *addressBookArray =[NSMutableArray array];
-//    NSMutableArray *listContent = [NSMutableArray array];
-//    NSMutableArray *sectionTitleArray = [NSMutableArray array];
-//    
-//    ABAddressBookRef addressBooks = ABAddressBookCreateWithOptions(NULL, NULL);
-//    
-//    //获取通讯录访问授权
-//    ABAuthorizationStatus authorization = ABAddressBookGetAuthorizationStatus();
-//    if (authorization != kABAuthorizationStatusAuthorized) {
-//        NSLog(@"未获取通讯录访问授权");
-//        return nil;
-//    }
-//    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-//    //发出访问通讯录的请求
-//    ABAddressBookRequestAccessWithCompletion(addressBooks, ^(bool granted, CFErrorRef error) {
-//        if (!granted) {
-//            NSLog(@"未获取访问权限");
-//        }
-//        dispatch_semaphore_signal(sema);
-//    });
-//    
-//    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-//    
-//    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
-//    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
-//    for (NSInteger i = 0; i < nPeople; i ++) {
-//        PersonModel *model = [[PersonModel alloc]init];
-//        ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
-//        CFStringRef abName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-//        CFStringRef abLastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-//        CFStringRef abFullName = ABRecordCopyCompositeName(person);
-//        
-//        NSString *nameString = (__bridge NSString *)abName;
-//        NSString *lastNameString = (__bridge NSString *)abLastName;
-//        
-//        if ((__bridge id)abFullName != nil) {
-//            nameString = (__bridge NSString *)abFullName;
-//        } else {
-//        
-//            if ((__bridge id)abLastName != nil) {
-//                nameString = [NSString stringWithFormat:@"%@ %@",nameString,lastNameString];
-//            }
-//        }
-//        
-//        model.name1 = nameString;
-//        model.phonename = nameString;
-//        model.recordID = (int)ABRecordGetRecordID(person);
-//        
-//        ABPropertyID mutiProperties[] = {
-//            kABPersonPhoneProperty, //电话
-//            kABPersonEmailProperty  //邮箱
-//        };
-//        
-//        NSInteger multiPropertiesTotal = sizeof(mutiProperties) / sizeof(ABPropertyID);
-//        for (NSInteger j = 0; j < multiPropertiesTotal; j ++) {
-//            ABPropertyID property = mutiProperties[j];
-//            ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
-//            NSInteger valuesCount = 0;
-//            if (valuesRef != nil) {
-//                valuesCount = ABMultiValueGetCount(valuesRef);
-//            }
-//            if (valuesCount == 0) {
-//                CFRelease(valuesRef);
-//                continue;
-//            }
-//            for (NSInteger k = 0; k < valuesCount; k ++) {
-//                CFStringRef value = ABMultiValueCopyValueAtIndex(valuesRef, k);
-//                switch (j) {
-//                    case 0:  //phone number
-//                        model.tel = [(__bridge NSString *)value initTelephoneWithReformat];
-//                        break;
-//                        
-//                    default:
-//                        model.email = (__bridge NSString *)value;
-//                        break;
-//                }
-//                CFRelease(value);
-//            }
-//            CFRelease(valuesRef);
-//            
-//        }
-//        [addressBookArray addObject:model];
-//        if (abName) {
-//            CFRelease(abName);
-//        }
-//        if (abLastName) {
-//            CFRelease(abLastName);
-//        }
-//        if (abFullName) {
-//            CFRelease(abFullName);
-//        }
-//    }
-//    CFRelease(allPeople);
-//    CFRelease(addressBooks);
-//    
-//    //对数组排序，按首字母分类
-//    UILocalizedIndexedCollation *theCollation = [UILocalizedIndexedCollation currentCollation];
-//    [sectionTitleArray removeAllObjects];
-//    
-//    //得出collation索引的数量，这里是27个（26个字母和1个#）
-//    [sectionTitleArray addObjectsFromArray:[theCollation sectionTitles]];
-//    
-//    for (PersonModel *person in addressBookArray) {
-//        if (person.name1 != nil) {
-//            NSInteger sect = [theCollation sectionForObject:person collationStringSelector:@selector(name1)];
-//            person.sectionNumber = sect;
-//        }
-//    }
-//    
-//    NSInteger highSection = [[theCollation sectionTitles] count]; //27
-//    NSMutableArray *sectionArrays = [NSMutableArray arrayWithCapacity:highSection];
-//    for (NSInteger i = 0; i <= highSection; i ++) {
-//        NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:1];
-//        [sectionArrays addObject:sectionArray];
-//    }
-//    
-//    //把对应的名字放入这个27个数组中,将每个人按name分到某个section下
-//    for (PersonModel *person in addressBookArray) {
-//        [sectionArrays[person.sectionNumber] addObject:person];
-//    }
-//    
-//    for (NSMutableArray *temp in sectionArrays) {
-//        PersonModel *person = (PersonModel *)temp.firstObject;
-//        if (person.name1 == nil || [person.name1 isEqualToString:@""]) {
-//            continue;
-//        }
-//        if (person.name1 != nil) {
-//            NSArray *sortedSection = [theCollation sortedArrayFromArray:temp collationStringSelector:@selector(name1)];
-//            [listContent addObject:sortedSection];
-//        }
-//    }
-//    return listContent;
-//}
-//
-//#pragma mark UISearchBarDelegate
-//- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-//    [self.searchBar setShowsCancelButton:YES animated:YES];
-//    for (UIView *view in [_searchBar.subviews[0] subviews]) {
-//        if ([view isKindOfClass:[UIButton class]]) {
-//            UIButton *cancelBtn = (UIButton *)view;
-//            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-//        }
-//    }
-//    return YES;
-//}
-//
-//
-//
-//// 取消按钮被按下时，执行的方法
-//- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-//    [self.searchBar resignFirstResponder];
-//    searchBar.text = nil;
-//    [self.searchBar setShowsCancelButton:NO animated:YES];
-//}
-//// 键盘中，搜索按钮被按下，执行的方法
-//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-//    NSLog(@"---%@",searchBar.text);
-//    searchBar.text = nil;
-//    [self.searchBar resignFirstResponder];
-//    [self.searchBar setShowsCancelButton:NO animated:YES];
-//}
-//
-//// 当搜索内容变化时，执行该方法。很有用，可以实现时实搜索
-//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText;{
-//    NSLog(@"textDidChange---%@",searchBar.text);
-//    
-//}
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
