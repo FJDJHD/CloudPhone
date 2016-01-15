@@ -132,7 +132,6 @@
     DailNumberCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[DailNumberCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-       
     }
 
     if (self.callRecordArray.count > 0) {
