@@ -51,7 +51,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 30;
+    return 60;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -59,18 +59,26 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
+        
+        UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(MainWidth - 30, 0, 30, 30)];
+        button.tag = indexPath.row;
+        [button setBackgroundImage:[UIImage imageNamed:@"phone_spit"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"phone_spit_selected"] forState:UIControlStateSelected];
+        button.selected = NO;
     }
     cell.textLabel.text = self.tipsArray[indexPath.row];
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(MainWidth - 25, 0, 15, 15)];
-    [button setBackgroundImage:[UIImage imageNamed:@"mine_buttonbg"] forState:UIControlStateNormal];
-#warning fix image
-    [button setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateSelected];
-    button.selected = NO;
-    cell.accessoryView = button;
+    UIButton *btn = (UIButton*)[tableView viewWithTag:indexPath.row];
+    cell.accessoryView = btn;
     return cell;
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    UIButton *btn = (UIButton*)[tableView viewWithTag:indexPath.row];
+    NSLog(@"%ld",btn.tag);
+    btn.selected = !btn.selected;
+}
 
 - (void)popViewController {
     

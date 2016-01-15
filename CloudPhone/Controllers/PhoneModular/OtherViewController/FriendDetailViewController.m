@@ -39,7 +39,14 @@
             model.callResult = [temp objectAtIndex:record_callResult];
             model.callerName = [temp objectAtIndex:record_callerName];
             model.callerNo = [temp objectAtIndex:record_callerNo];
-            model.usercallTime = [temp objectAtIndex:record_callTime];
+            
+            NSString *timeStr = [temp objectAtIndex:record_callTime];
+            NSDate *date1 = [self convertDateFromString:timeStr];
+            NSInteger interval = 8 * 3600;
+            NSDate *localeDate = [date1 dateByAddingTimeInterval:-interval];
+            NSString *dateStr = [GeneralToolObject compareCurrentTime:localeDate];
+            model.usercallTime = dateStr;
+            
             [self.callRecordArray addObject:model];
         }
         
@@ -47,6 +54,13 @@
     }
 }
 
+
+- (NSDate*) convertDateFromString:(NSString*)uiDate{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss zzz"];
+    NSDate *destDate= [dateFormatter dateFromString:uiDate];
+    return destDate;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -127,8 +141,9 @@
     line.backgroundColor =  [ColorTool navigationColor];
     [self.view addSubview:line];
     
-    [self.view insertSubview:self.tableView belowSubview:buttonBg];
+    
     [self.view insertSubview:self.dialDetailTableView belowSubview:buttonBg];
+    [self.view insertSubview:self.tableView belowSubview:buttonBg];
     
     //发消息
     CGRect rect = CGRectMake(15, MainHeight - 50, MainWidth - 15*2.0, 44);

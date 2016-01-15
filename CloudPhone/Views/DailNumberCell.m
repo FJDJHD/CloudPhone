@@ -17,7 +17,16 @@
 - (void)cellForDataWithModel:(CallRecordsModel *)model indexPath:(NSIndexPath *)indexPath controller:(UIViewController *)controller{
     _model = model;
     temVC = controller;
-    _dailNameLabel.text = [NSString stringWithFormat:@"%@ (%ld)",model.callerName,model.callerFrequence];
+    if ([model.callerName isEqualToString:@" "]|(model.callerName.length == 0)) {
+        model.callerName = @"陌生人";
+    }
+    
+    if (model.callerFrequence == 1) {
+        _dailNameLabel.text = [NSString stringWithFormat:@"%@",model.callerName];
+    }else{
+       _dailNameLabel.text = [NSString stringWithFormat:@"%@ (%ld)",model.callerName,model.callerFrequence];
+    }
+    
     _dailNumberLabel.text= model.callerNo;
     NSRange range = {5,5};
     NSString *date =  [model.usercallTime substringWithRange:range];
@@ -33,10 +42,8 @@
     }else if ([model.callResult isEqualToString:@"2"]){
         [_dailImageView setImage:[UIImage imageNamed:@"phone_incall"]];
     }else if ([model.callResult isEqualToString:@"3"]){
-        [_dailImageView setImage:[UIImage imageNamed:@"phone_incallNo"]];
+        [_dailImageView setImage:[UIImage imageNamed:@"phone_outcallNo"]];
     }
-    
-    
 }
 
 

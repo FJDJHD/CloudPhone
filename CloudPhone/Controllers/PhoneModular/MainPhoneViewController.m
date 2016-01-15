@@ -98,7 +98,7 @@
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT + 105, MainWidth, 300);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT + 110, MainWidth, 275);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -196,7 +196,15 @@
 }
 
 - (void)keyboard:(DialKeyboard *)keyboard didClickButton:(UIButton *)button {
-    [labelString appendString:button.titleLabel.text];
+    if (button.tag == 10) {
+        [labelString appendString:@"*"];
+    }else if (button.tag == 11){
+        [labelString appendString:@"0"];
+    }else if (button.tag == 12){
+        [labelString appendString:@"#"];
+    }else{
+    [labelString appendString:[NSString stringWithFormat:@"%ld",button.tag]];
+    }
     self.textFiled.text = labelString;
 }
 
@@ -215,14 +223,18 @@
 
 //拨号拨打
 - (void)keyboard:(DialKeyboard *)keyboard didClickDialBtn:(UIButton *)deleteBtn {
-    DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:self.textFiled.text andCallerNo:self.textFiled.text andVoipNo:labelString];
-    [self presentViewController:dialingVC animated:YES completion:nil];
-    [self keyboardHidden];
+    if (self.textFiled.text.length > 4) {
+        DialingViewController *dialingVC = [[DialingViewController alloc] initWithCallerName:self.textFiled.text andCallerNo:self.textFiled.text andVoipNo:labelString];
+        [self presentViewController:dialingVC animated:YES completion:nil];
+        [self keyboardHidden];
+    }else {
+        [CustomMBHud customHudWindow:@"请输入正确的电话号码"];
+    }
 }
 
 //点击空白收键盘
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-       [self keyboardHidden];
+    [self keyboardHidden];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -20,7 +20,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 
-@interface DialingViewController ()<DialKeyboardDelegate>
+@interface DialingViewController ()<DialKeyboardDelegate,UIAlertViewDelegate>
 @property (nonatomic,strong) DialKeyboard * keyboard;
 
 - (void)releaseCall;
@@ -72,7 +72,7 @@
     //打电话
     BOOL isEnableNetWorking = [GeneralToolObject isEnableCurrentNetworkingStatus];
     if (isEnableNetWorking) {
-        DLog(@"网络可用,网络电话");
+        
         NSDictionary *dic = @{@"imei":[UniqueUDID shareInstance].udid,@"re_mobile":self.callerNo};
         [[AirCloudNetAPIManager sharedManager] linkRongLianInfoOfParams:dic WithBlock:^(id data, NSError *error){
             if (!error) {
@@ -87,12 +87,10 @@
                         //                        [self requestPushMessage];
                     }
                 } else if ([[dic objectForKey:@"status"] integerValue] == 0) {
+            
                     DLog(@"******%@",[dic objectForKey:@"msg"]);
-                    //拨打直拨电话
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
-                        //                        [self requestPushMessage];
-                    });
+                    //拨打直拨电话需要查询话余额
+                    [self requestPhoneFare];
                     
                 }
             }
@@ -106,6 +104,10 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCallEvents:) name:KNOTIFICATION_onCallEvent object:nil];
+}
+
+- (void)dialLandingCall{
+    
 }
 
 //增加一个推送接口
@@ -276,6 +278,42 @@
     
 }
 
+#pragma mark - 查询话费接口
+- (void)requestPhoneFare {
+    [[AirCloudNetAPIManager sharedManager] queryTelphoneFareOfParams:nil WithBlock:^(id data, NSError *error) {
+        if (!error) {
+            NSDictionary *dic = (NSDictionary *)data;
+            if (dic) {
+                if ([[dic objectForKey:@"status"] integerValue] == 1) {
+                
+                NSDictionary *resultDic = [dic objectForKey:@"data"];
+                //剩余时长
+                NSInteger count_tel_fare = [[resultDic objectForKey:@"count_tel_fare"] integerValue];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //直播电话
+                    if (count_tel_fare > 0) {
+                        self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                        NSLog(@"话费剩余%ld",count_tel_fare);
+                    //  [self requestPushMessage];
+                        
+                    }else{
+                        //没话费啦
+                        UIAlertView *alterView = [[UIAlertView alloc] initWithTitle:@"没有话费啦，赶紧去充值吧！" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"去充值", nil];
+                        [alterView show];
+                    }
+                });
+
+                
+                } else {
+                DLog(@"******%@",[dic objectForKey:@"msg"]);
+                [CustomMBHud customHudWindow:@"请求失败"];
+            }
+          }
+        }
+    }];
+}
+
 
 //处理通话回调事件
 - (void)onCallEvents:(NSNotification *)notification {
@@ -334,8 +372,8 @@
                 } else if ( voipCall.reason == ECErrorType_OtherSideOffline) {
                    // self.dailingLabel.text = @"对方不在线,转直拨";
                     [self addStatusAnimate:@"对方不在线,转直拨"];
-                    //拨打直拨电话
-                    self.callID =[[ECDevice sharedInstance].VoIPManager makeCallWithType: LandingCall andCalled:self.callerNo];
+                    //查话费并拨打直拨电话
+                    [self requestPhoneFare];
                 } else if ( voipCall.reason == ECErrorType_CallMissed ) {
                     self.dailingLabel.text = @"呼叫超时";
                     self.callResult = @"1";
@@ -517,6 +555,20 @@
         CGFloat keyboardH = self.keyboard.frame.size.height;
         self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH);
     }];
+}
+
+#pragma UIAlterViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"%ld",buttonIndex);
+    if (buttonIndex == 0) {
+        UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:[EndDialingViewController new]];
+        [self presentViewController:naviVC animated:YES completion:nil];
+    }else{
+        UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:[EndDialingViewController new]];
+        [self presentViewController:naviVC animated:YES completion:nil];
+    }
+
+    
 }
 
 //点击空白收键盘
