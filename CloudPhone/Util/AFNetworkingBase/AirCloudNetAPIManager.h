@@ -106,5 +106,9 @@
 - (void)postPushMessageOfParams:(NSDictionary *)params
                              WithBlock:(void (^)(id data, NSError *error))block;
 
+//吐槽
+- (void)postMockAddOfParams:(NSDictionary *)params
+                      WithBlock:(void (^)(id data, NSError *error))block;
+
 
 @end

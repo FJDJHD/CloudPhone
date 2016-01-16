@@ -78,6 +78,9 @@
 //电话聊天推送
 #define API_chat_push                                   @"?s=/Home/push/chat_push"
 
+//吐槽
+#define API_mock_push                                   @"?s=home/User/mockAdd"
+
 #endif
 
 

@@ -98,7 +98,7 @@
 
 - (void)initDialKeyboard{
     //初始化自定义键盘
-    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT + 110, MainWidth, 275);
+    CGRect frame = CGRectMake(0, MainHeight - TABBAR_HEIGHT + 110, MainWidth , 275);
     DialKeyboard * keyboard = [[DialKeyboard alloc] initWithFrame:frame];
     self.keyboard = keyboard;
     self.keyboard.delegate = self;
@@ -175,7 +175,7 @@
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
         CGFloat keyboardH = self.keyboard.frame.size.height;
-        self.keyboard.transform = CGAffineTransformMakeTranslation(0, -keyboardH - TABBAR_HEIGHT);
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0, -keyboardH - TABBAR_HEIGHT + 2);
     }];
 }
 
@@ -191,7 +191,7 @@
     CGFloat duration = 0.5;
     [UIView animateWithDuration:duration animations:^{
         CGFloat keyboardH = self.keyboard.frame.size.height;
-        self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH + TABBAR_HEIGHT);
+        self.keyboard.transform = CGAffineTransformMakeTranslation(0,keyboardH + TABBAR_HEIGHT - 2);
     }];
 }
 

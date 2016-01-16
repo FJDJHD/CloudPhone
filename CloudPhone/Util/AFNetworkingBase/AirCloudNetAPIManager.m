@@ -276,4 +276,12 @@
 
 }
 
+- (void)postMockAddOfParams:(NSDictionary *)params WithBlock:(void (^)(id, NSError *))block{
+
+    [[AirCloudNetAPIClient sharedJsonClient].requestSerializer setValue:[GeneralToolObject requestHeaderValue] forHTTPHeaderField:@"User-Agent"];
+    [[AirCloudNetAPIClient sharedJsonClient] requestJsonDataWithPath:API_mock_push serviceType:HTTPURLPREFIX withParams:params withMethodType:Post andBlock:^(id data, NSError *error) {
+        block(data,error);
+    }];
+
+}
 @end

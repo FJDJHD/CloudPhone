@@ -22,12 +22,12 @@
     UIView * keyboard = [[UIView alloc] init];
     keyboard.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     keyboard.userInteractionEnabled = YES;
-   // UIImage *bgImage = [GeneralToolObject imageWithColor:[UIColor whiteColor]];
-    UIImage *bgImage = [UIImage imageNamed:@"seperateline"];
+    
+    UIImage *bgImage = [GeneralToolObject imageWithColor:[UIColor colorWithHexString:@"#cccccc"]];
     UIImageView *bgImageView = [[UIImageView alloc] initWithImage:bgImage];
-    bgImageView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height - (keyboard.frame.size.height - 5)/5);
+    bgImageView.frame = CGRectMake(0, 5, frame.size.width, frame.size.height);
     [keyboard addSubview:bgImageView];
-   // keyboard.backgroundColor = [UIColor lightGrayColor];
+    
     [self addSubview:keyboard];
     for (int i = 0; i<15; i++) {
         
@@ -35,8 +35,7 @@
         btn.tag = i +1;
         btn.backgroundColor = [UIColor whiteColor];
         btn.showsTouchWhenHighlighted = YES;
-        btn.titleLabel.font = [UIFont systemFontOfSize:30.0];
-        switch (i) {
+            switch (i) {
             case 9:
                 [btn setImage:[UIImage imageNamed:@"-"] forState:UIControlStateHighlighted];
                 [btn setImage:[UIImage imageNamed:@"-n"] forState:UIControlStateNormal];
@@ -72,13 +71,25 @@
                 break;
         }
         
-        CGFloat dis = 0.0;
-        CGFloat btnW =(keyboard.frame.size.width - (2*dis))/3 ;
-        CGFloat btnH = (keyboard.frame.size.height - (5*dis))/5 ;
-        CGFloat btnY = (1 + (i/3)*(btnH + dis));
-        CGFloat btnX = (i%3)*(btnW + dis);
-        btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
-        [keyboard addSubview:btn];
+        if (i<12) {
+            CGFloat dis = 0.5;
+            CGFloat btnW =(keyboard.frame.size.width - (2*dis))/3 ;
+            CGFloat btnH = (keyboard.frame.size.height - (5*dis))/5 ;
+            CGFloat btnY = (1 + (i/3)*(btnH + dis));
+            CGFloat btnX = (i%3)*(btnW + dis);
+            btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
+            [keyboard addSubview:btn];
+        }else{
+            CGFloat dis = 0.0;
+            CGFloat btnW =(keyboard.frame.size.width - (2*dis))/3 ;
+            CGFloat btnH = (keyboard.frame.size.height - (5*dis))/5 ;
+            CGFloat btnY = (1 + (i/3)*(btnH + dis));
+            CGFloat btnX = (i%3)*(btnW + dis);
+            btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
+            [keyboard addSubview:btn];
+        }
+        
+        
     }
    
     return self;
